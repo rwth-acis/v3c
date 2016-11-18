@@ -72,7 +72,7 @@
       <br><br>
     <div class='container'>
       <div class='row'>
-        <div class='col-md-6 non-overflow-div'>   
+        <div class='col-md-12 non-overflow-div'>
           <div class="col-sm-8">            
             <?php if(!(filter_input(INPUT_GET, "widget") == "true")) { ?>
               <a id="enter-course-a" href="#" data-rolespace="<?php echo $entry->role_url; ?>">
@@ -105,23 +105,6 @@
             <label class="col-sm-3">Links:</label>
             <p class="col-sm-9 output-element"><?php echo replaceLinks($entry->links); ?></p>
           </div>
-
-        </div>
-        <div class='col-md-6'>
-            
-          <h3>Models</h3>
-          <?php
-          //create model overview in course
-          $query = $db->query("SELECT * FROM course_models
-                INNER JOIN models ON course_models.model_id = models.id
-                WHERE course_models.course_id = $arg");
-          $result = $query->fetchAll();
-
-          $html = createTable($result,'model');
-
-          echo $html;
-          ?>
-            
         </div>
         <div class="col-sm-12 middle-btn-div">
           <div class=" col-sm-5">

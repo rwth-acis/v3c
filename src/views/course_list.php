@@ -39,7 +39,9 @@
 
     $subject_id = filter_input(INPUT_GET, "id");
     $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObject();
-    $courses = $db->query("SELECT courses.*, users.given_name, users.family_name FROM courses JOIN users ON courses.creator=users.id WHERE subject_id='$subject_id'")->fetchAll();
+    $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, users.family_name AS creator_lastname 
+                           FROM courses JOIN users ON courses.creator=users.id 
+                           WHERE subject_id='$subject_id'")->fetchAll();
   ?>
   <header id='head' class='secondary'>
     <div class='container'>
@@ -73,7 +75,7 @@
                 <tr>
                   <th>Course name</th>
                   <th>Created by</th>
-                  <th>Last edited</th>
+                  <th>Start Dates</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -81,13 +83,24 @@
               <tbody data-link="row" class="rowlink">
                 <?php
                   foreach ($courses as $course) {
+                    // Add line brake after each date for more readability in the table
+                    $course_dates_array = explode("\n", $course["dates"]);
                 ?>
                 <tr>
                   <td><a href="course.php?id=<?php echo $course["id"]; ?>"><?php echo $course["name"]; ?></a></td>
-                  <td><?php echo $course["given_name"]." ".$course["family_name"]; ?></td>
-                  <td><?php echo $course["edit_date"]; ?></td>
+                  <td><?php echo $course["creator_firstname"]." ".$course["creator_lastname"]; ?></td>
+                  <td><?php foreach ($course_dates_array as $start_date) { echo $start_date . "<br>"; }  ?></td>
                   <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"];?>" class="btn btn-edit btn-sm btn-success btn-block" value="Edit"/></td>
                   <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"];?>" class="btn btn-delete btn-sm btn-warning btn-block" value="Delete"</td>
+                </tr>
+                <tr>
+                    <!-- Collapse div for course description -->
+                    <td colspan="5">
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#course-list-description">Description</button>
+                        <div id="course-list-description" class="collapse">
+                            <?php echo $course["description"]; ?>
+                        </div>
+                    </td>
                 </tr>
                 <?php
                   }

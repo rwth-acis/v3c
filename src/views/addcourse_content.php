@@ -58,12 +58,24 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label" for="targetDomain">Course Domain:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" rows="1" name="domain" id="targetDomain" placeholder="Enter your course domain" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="targetProfession">Course Profession:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" rows="1" name="profession" id="targetProfession" placeholder="Enter your course profession" required>
+            </div>
+        </div>
+        <!--<div class="form-group">
             <label class="col-sm-2 control-label" for="targetContact">Contact:</label>
             <div class="col-sm-10">
                 <textarea class="form-control" rows="3" name="contact" id="targetContact"
                           placeholder="Enter your contact details, e.g. enter university name, department, address, phone number, fax number"></textarea>
             </div>
-        </div>
+        </div>-->
         <div class="form-group">
             <label class="col-sm-2 control-label" for="targetText">Description:</label>
             <div class="col-sm-10">
@@ -71,20 +83,20 @@
                           placeholder="Enter course description"></textarea>
             </div>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label class="col-sm-2 control-label" for="targetDates">Dates:</label>
             <div class="col-sm-10">
                 <textarea class="form-control" rows="3" name="dates" id="targetDates"
                           placeholder="Enter dates for online appointments which are relevant for your students"></textarea>
             </div>
-        </div>
-        <div class="form-group">
+        </div>-->
+        <!--<div class="form-group">
             <label class="col-sm-2 control-label" for="targetLinks">Links:</label>
             <div class="col-sm-10">
                 <textarea class="form-control" rows="3" name="links" id="targetLinks"
                           placeholder="Enter external links which provide additional information, e.g. links to Campus Office, L2P"></textarea>
             </div>
-        </div>
+        </div>-->
         <input hidden id="subject_input" name="subject_id">
         <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save</button>
     </form>

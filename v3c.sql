@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `id`          INT(11)     NOT NULL
   COMMENT 'find corresponding models with this id',
   `name`        VARCHAR(64) NOT NULL,
+  `domain` varchar(64) NOT NULL,
+  `profession` varchar(64) NOT NULL,
   `description` TEXT,
   `creator`     INT(11)     NOT NULL
   COMMENT 'correlates with user table',
@@ -43,11 +45,9 @@ CREATE TABLE IF NOT EXISTS `courses` (
 -- Daten für Tabelle `courses`
 --
 
-INSERT INTO `courses` (`id`, `name`, `description`, `creator`, `role_url`, `contact`, `dates`, `links`, `edit_date`, `subject_id`)
-VALUES
-  (1, 'Social Entrepreneurship 101', 'This course introduces the basic principles of Social Entrepreneurship', 132,
-   'se101', 'Peter Sommerhoff', 'Nov 23, 2016\r\nNov 30, 2016\r\nDez 13, 2016', 'http://petersommerhoff.com',
-   '2016-11-18 10:04:51', 1);
+INSERT INTO `courses` (`id`, `name`,`domain` ,`profession` , `description`, `creator`, `role_url`, `contact`, `dates`, `links`, `edit_date`, `subject_id`) VALUES
+  (1, 'Social Entrepreneurship 101', 'Tourism & Holiday Services', 'Travel Agent', 'This course introduces the basic principles of Social Entrepreneurship', 132, 'se101', 'Peter Sommerhoff', 'Nov 23, 2016\r\nNov 30, 2016\r\nDez 13, 2016', 'http://petersommerhoff.com', '2016-11-18 10:04:51', 1);
+
 
 -- --------------------------------------------------------
 

@@ -90,21 +90,30 @@ function replaceLinks($text)
                         <a href="mailto:<?php echo $entry->email; ?>"><?php echo $entry->email; ?></a>
                     </div>
                     <div class="col-xs-12">
+                        <label class="col-sm-3">Domain:</label>
+                        <p class="col-sm-9 output-element"><?php echo $entry->domain; ?></p>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <label class="col-sm-3">Profession:</label>
+                        <p class="col-sm-9 output-element"><?php echo $entry->profession; ?></p>
+                    </div>
+                    <!--<div class="col-xs-12">
                         <label class="col-sm-3">Contact:</label>
                         <p class="col-sm-9 output-element"><?php echo $entry->contact; ?></p>
-                    </div>
+                    </div>-->
                     <div class="col-xs-12">
                         <label class="col-sm-3">Description:</label>
                         <p class="col-sm-9 output-element"><?php echo $entry->description; ?></p>
                     </div>
-                    <div class="col-xs-12">
+                    <!--<div class="col-xs-12">
                         <label class="col-sm-3">Dates:</label>
                         <p class="col-sm-9 output-element"><?php echo $entry->dates; ?></p>
-                    </div>
-                    <div class="col-xs-12">
+                    </div>-->
+                    <!--<div class="col-xs-12">
                         <label class="col-sm-3">Links:</label>
                         <p class="col-sm-9 output-element"><?php echo replaceLinks($entry->links); ?></p>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="col-sm-12 middle-btn-div">
                     <div class=" col-sm-5">

@@ -72,26 +72,34 @@ try {
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="targetDomain">Course Domain:</label>
+                            <input type="text" class="form-control" rows="1" name="domain" id="targetDomain" value="<?php echo htmlentities($entry['domain']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="targetProfession">Course Profession:</label>
+                            <input type="text" class="form-control" rows="1" name="profession" id="targetProfession" value="<?php echo htmlentities($entry['profession']); ?>" required>
+                        </div>
+                        <!--<div class="form-group">
                             <label for="targetContact">Contact:</label>
                             <textarea class="form-control" rows="3" name="contact" id="targetContact"
                                       placeholder="Enter your contact details, e.g. enter university name, department, address, phone number, fax number""><?php echo htmlentities($entry['contact']); ?></textarea>
-                        </div>
+                        </div>-->
                         <div class="form-group">
                             <label for="targetText">Description:</label>
                             <textarea class="form-control" rows="3" name="text" id="targetText"
                                       placeholder="Enter course description"><?php echo htmlentities($entry['description']); ?></textarea>
                         </div>
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label for="targetDates">Dates:</label>
                             <textarea class="form-control" rows="3" name="dates" id="targetDates"
                                       placeholder="Enter dates for online appointments which are relevant for your students"><?php echo htmlentities($entry['dates']); ?></textarea>
-                        </div>
-                        <div class="form-group">
+                        </div>-->
+                        <!--<div class="form-group">
                             <label for="targetLinks">Links:</label>
                             <textarea class="form-control" rows="3" name="links"
                                       placeholder="Enter external links which provide additional information, e.g. links to Campus Office, L2P"
                                       id="targetLinks"><?php echo htmlentities($entry['links']); ?></textarea>
-                        </div>
+                        </div>-->
                         <button type="submit" class="btn btn-success col-xs-6" id="SubmitButton" value="Upload">Save
                         </button>
                     </form>

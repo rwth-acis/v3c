@@ -37,6 +37,8 @@ $role_link = filter_input(INPUT_POST, 'roleLink');
 $contact = filter_input(INPUT_POST, 'contact');
 $dates = filter_input(INPUT_POST, 'dates');
 $links = filter_input(INPUT_POST, 'links');
+$profession = filter_input(INPUT_POST, 'profession');
+$domain = filter_input(INPUT_POST, 'domain');
 $subject_id = filter_input(INPUT_POST, 'subject_id');
 
 // Get the ID (of our DB) of the currently logged in user. Required, because this 
@@ -47,7 +49,7 @@ ob_end_clean();
 $creator = $user_database_entry['id'];
 
 // Create database-entry
-$sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
+$sql = "INSERT INTO courses (name, domain, profession, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name', '$domain', '$profession', '$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
 
 $conn->query($sql);
 

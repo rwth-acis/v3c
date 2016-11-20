@@ -23,7 +23,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collaborative Viewing of 3D Models </title>
+  <title>V3C</title>
 </head>
 
 <body>
@@ -73,17 +73,14 @@
     <div class='container'>
       <div class='row'>
         <div class='col-md-12 non-overflow-div'>
-          <div class="col-sm-8">            
+          <div class="col-sm-12">
             <?php if(!(filter_input(INPUT_GET, "widget") == "true")) { ?>
               <a id="enter-course-a" href="#" data-rolespace="<?php echo $entry->role_url; ?>">
                 <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room</button>
               </a>
             <?php } ?>
           </div>
-          <div class="col-sm-4 margin-top">
-            <a href="http://www.x3dom.org/check/">Test my browser</a>
-          </div>
-        
+
             <div class="col-xs-12 margin-top">
             <label class="col-sm-3">Created by:</label>
             <p class="col-sm-3 output-element"><?php echo $entry->given_name ." ". $entry->family_name; ?></p>

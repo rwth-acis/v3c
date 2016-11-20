@@ -20,44 +20,44 @@
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta http-equiv='X-UA-Compatible' content='IE=edge' charset='utf8'/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Edit Your Course</title>
 
     <!-- Additional styles -->
     <link rel="stylesheet" href="../css/editcourse.css">
-    
-  </head>
 
-  <body>
-    <?php include "menu.php"; ?>
-    
-    <header id='head' class='secondary'>
+</head>
+
+<body>
+<?php include "menu.php"; ?>
+
+<header id='head' class='secondary'>
     <div class='container'>
-      <div class='row'>
-        <h1>Edit Your Course</h1>
-      </div>
+        <div class='row'>
+            <h1>Edit Your Course</h1>
+        </div>
     </div>
-    </header>
-    <?php
-      // Check whether the currently logged in user is allowed to edit courses
-      require '../php/access_control.php';
-      $course_id = filter_input(INPUT_GET, 'id');
-      $accessControl = new AccessControl();
-      $canEditCourse = $accessControl->canUpdateCourse($course_id);
+</header>
+<?php
+// Check whether the currently logged in user is allowed to edit courses
+require '../php/access_control.php';
+$course_id = filter_input(INPUT_GET, 'id');
+$accessControl = new AccessControl();
+$canEditCourse = $accessControl->canUpdateCourse($course_id);
 
-      if($canEditCourse) {		
-        include 'editcourse_content.php';
-      } else {
-        include 'not_authorized.php';
-      }
+if ($canEditCourse) {
+    include 'editcourse_content.php';
+} else {
+    include 'not_authorized.php';
+}
 
-      include("footer.php");
-    ?>
+include("footer.php");
+?>
 
-    <script src="../js/editcourse.js"></script>
-    <script src="../js/search.js"></script>
+<script src="../js/editcourse.js"></script>
+<script src="../js/search.js"></script>
 
-  </body>
+</body>
 </html>

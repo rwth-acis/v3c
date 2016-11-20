@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
  *
@@ -16,9 +16,9 @@
  *
  * @file register_redirect_url.php
  * Registers a url in $_SESSION["currentPage"].
- * This is used to be able to redirect users to the page they came from after 
+ * This is used to be able to redirect users to the page they came from after
  * using learning layers service to authenticate
  */
 
 session_start();
-$_SESSION["currentPage"] = filter_input(INPUT_POST,'requestUri');
+$_SESSION["currentPage"] = filter_input(INPUT_POST, 'requestUri');

@@ -21,17 +21,17 @@
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-/** 
+/**
  * kjur's class library name space
  * <p>
  * This name space provides following name spaces:
  * <ul>
  * <li>{@link KJUR.asn1} - ASN.1 primitive hexadecimal encoder</li>
  * <li>{@link KJUR.asn1.x509} - ASN.1 structure for X.509 certificate and CRL</li>
- * <li>{@link KJUR.crypto} - Java Cryptographic Extension(JCE) style MessageDigest/Signature 
+ * <li>{@link KJUR.crypto} - Java Cryptographic Extension(JCE) style MessageDigest/Signature
  * class and utilities</li>
  * </ul>
- * </p> 
+ * </p>
  * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
  * @name KJUR
  * @namespace kjur's class library name space
@@ -42,8 +42,8 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * kjur's ASN.1 class library name space
  * <p>
  * This is ITU-T X.690 ASN.1 DER encoder class library and
- * class structure and methods is very similar to 
- * org.bouncycastle.asn1 package of 
+ * class structure and methods is very similar to
+ * org.bouncycastle.asn1 package of
  * well known BouncyCaslte Cryptography Library.
  * <h4>PROVIDING ASN.1 PRIMITIVES</h4>
  * Here are ASN.1 DER primitive classes.
@@ -82,7 +82,7 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>{@link KJUR.asn1.x509} - RFC 5280 X.509 certificate and CRL</li>
  * </ul>
  * </p>
- * NOTE: Please ignore method summary and document of this namespace. 
+ * NOTE: Please ignore method summary and document of this namespace.
  * This caused by a bug of jsdoc2.
  * @name KJUR.asn1
  * @namespace
@@ -95,19 +95,19 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * @class ASN1 utilities class
  * @since asn1 1.0.2
  */
-KJUR.asn1.ASN1Util = new function() {
-    this.integerToByteHex = function(i) {
+KJUR.asn1.ASN1Util = new function () {
+    this.integerToByteHex = function (i) {
         var h = i.toString(16);
         if ((h.length % 2) == 1) h = '0' + h;
         return h;
     };
-    this.bigIntToMinTwosComplementsHex = function(bigIntegerValue) {
+    this.bigIntToMinTwosComplementsHex = function (bigIntegerValue) {
         var h = bigIntegerValue.toString(16);
         if (h.substr(0, 1) != '-') {
             if (h.length % 2 == 1) {
                 h = '0' + h;
             } else {
-                if (! h.match(/^[0-7]/)) {
+                if (!h.match(/^[0-7]/)) {
                     h = '00' + h;
                 }
             }
@@ -117,7 +117,7 @@ KJUR.asn1.ASN1Util = new function() {
             if (xorLen % 2 == 1) {
                 xorLen += 1;
             } else {
-                if (! h.match(/^[0-7]/)) {
+                if (!h.match(/^[0-7]/)) {
                     xorLen += 2;
                 }
             }
@@ -147,14 +147,14 @@ KJUR.asn1.ASN1Util = new function() {
      * YWFh
      * -----END PRIVATE KEY-----
      */
-    this.getPEMStringFromHex = function(dataHex, pemHeader) {
+    this.getPEMStringFromHex = function (dataHex, pemHeader) {
         var ns1 = KJUR.asn1;
         var dataWA = CryptoJS.enc.Hex.parse(dataHex);
         var dataB64 = CryptoJS.enc.Base64.stringify(dataWA);
         var pemBody = dataB64.replace(/(.{64})/g, "$1\r\n");
         pemBody = pemBody.replace(/\r\n$/, '');
-        return "-----BEGIN " + pemHeader + "-----\r\n" + 
-            pemBody + 
+        return "-----BEGIN " + pemHeader + "-----\r\n" +
+            pemBody +
             "\r\n-----END " + pemHeader + "-----\r\n";
     };
 
@@ -208,7 +208,7 @@ KJUR.asn1.ASN1Util = new function() {
      *                      {'prnstr': 'aaa'}]}
      *                   ]});
      */
-    this.newObject = function(param) {
+    this.newObject = function (param) {
         var ns1 = KJUR.asn1;
         var keys = Object.keys(param);
         if (keys.length != 1)
@@ -285,9 +285,9 @@ KJUR.asn1.ASN1Util = new function() {
      * As for ASN.1 object representation of JSON object,
      * please see {@link newObject}.
      * @example
-     * jsonToASN1HEX({'prnstr': 'aaa'}); 
+     * jsonToASN1HEX({'prnstr': 'aaa'});
      */
-    this.jsonToASN1HEX = function(param) {
+    this.jsonToASN1HEX = function (param) {
         var asn1Obj = this.newObject(param);
         return asn1Obj.getEncodedHex();
     };
@@ -302,12 +302,12 @@ KJUR.asn1.ASN1Util = new function() {
  * @return {String} dot noted string of object identifier
  * @since jsrsasign 4.8.3 asn1 1.0.7
  * @description
- * This static method converts from hexadecimal string representation of 
+ * This static method converts from hexadecimal string representation of
  * ASN.1 value of object identifier to oid number string.
  * @example
  * KJUR.asn1.ASN1Util.oidHexToInt('550406') &rarr; "2.5.4.6"
  */
-KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
+KJUR.asn1.ASN1Util.oidHexToInt = function (hex) {
     var s = "";
     var i01 = parseInt(hex.substr(0, 2), 16);
     var i0 = Math.floor(i01 / 40);
@@ -316,15 +316,16 @@ KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
 
     var binbuf = "";
     for (var i = 2; i < hex.length; i += 2) {
-	var value = parseInt(hex.substr(i, 2), 16);
-        var bin = ("00000000" + value.toString(2)).slice(- 8);
-	binbuf = binbuf + bin.substr(1, 7);
-	if (bin.substr(0, 1) == "0") {
-	    var bi = new BigInteger(binbuf, 2);
-	    s = s + "." + bi.toString(10);
-	    binbuf = "";
-	}
-    };
+        var value = parseInt(hex.substr(i, 2), 16);
+        var bin = ("00000000" + value.toString(2)).slice(-8);
+        binbuf = binbuf + bin.substr(1, 7);
+        if (bin.substr(0, 1) == "0") {
+            var bi = new BigInteger(binbuf, 2);
+            s = s + "." + bi.toString(10);
+            binbuf = "";
+        }
+    }
+    ;
 
     return s;
 };
@@ -343,14 +344,14 @@ KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
  * @example
  * KJUR.asn1.ASN1Util.oidIntToHex("2.5.4.6") &rarr; "550406"
  */
-KJUR.asn1.ASN1Util.oidIntToHex = function(oidString) {
-    var itox = function(i) {
+KJUR.asn1.ASN1Util.oidIntToHex = function (oidString) {
+    var itox = function (i) {
         var h = i.toString(16);
         if (h.length == 1) h = '0' + h;
         return h;
     };
 
-    var roidtox = function(roid) {
+    var roidtox = function (roid) {
         var h = '';
         var bi = new BigInteger(roid, 10);
         var b = bi.toString(2);
@@ -366,8 +367,8 @@ KJUR.asn1.ASN1Util.oidIntToHex = function(oidString) {
         }
         return h;
     };
-    
-    if (! oidString.match(/^[0-9.]+$/)) {
+
+    if (!oidString.match(/^[0-9.]+$/)) {
         throw "malformed oid string: " + oidString;
     }
     var h = '';
@@ -399,7 +400,7 @@ KJUR.asn1.ASN1Util.oidIntToHex = function(oidString) {
  * @property {String} hV hexadecimal string of ASN.1 TLV value(V)
  * @description
  */
-KJUR.asn1.ASN1Object = function() {
+KJUR.asn1.ASN1Object = function () {
     var isModified = true;
     var hTLV = null;
     var hT = '00';
@@ -413,7 +414,7 @@ KJUR.asn1.ASN1Object = function() {
      * @function
      * @return {String} hexadecimal string of ASN.1 TLV length(L)
      */
-    this.getLengthHexFromValue = function() {
+    this.getLengthHexFromValue = function () {
         if (typeof this.hV == "undefined" || this.hV == null) {
             throw "this.hV is null or undefined.";
         }
@@ -444,7 +445,7 @@ KJUR.asn1.ASN1Object = function() {
      * @function
      * @return {String} hexadecimal string of ASN.1 TLV
      */
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.hTLV == null || this.isModified) {
             this.hV = this.getFreshValueHex();
             this.hL = this.getLengthHexFromValue();
@@ -462,12 +463,12 @@ KJUR.asn1.ASN1Object = function() {
      * @function
      * @return {String} hexadecimal string of ASN.1 TLV value(V) bytes
      */
-    this.getValueHex = function() {
+    this.getValueHex = function () {
         this.getEncodedHex();
         return this.hV;
     }
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return '';
     };
 };
@@ -490,7 +491,7 @@ KJUR.asn1.ASN1Object = function() {
  * </ul>
  * NOTE: 'params' can be omitted.
  */
-KJUR.asn1.DERAbstractString = function(params) {
+KJUR.asn1.DERAbstractString = function (params) {
     KJUR.asn1.DERAbstractString.superclass.constructor.call(this);
     var s = null;
     var hV = null;
@@ -502,7 +503,7 @@ KJUR.asn1.DERAbstractString = function(params) {
      * @function
      * @return {String} string value of this string object
      */
-    this.getString = function() {
+    this.getString = function () {
         return this.s;
     };
 
@@ -513,7 +514,7 @@ KJUR.asn1.DERAbstractString = function(params) {
      * @function
      * @param {String} newS value by a string to set
      */
-    this.setString = function(newS) {
+    this.setString = function (newS) {
         this.hTLV = null;
         this.isModified = true;
         this.s = newS;
@@ -527,14 +528,14 @@ KJUR.asn1.DERAbstractString = function(params) {
      * @function
      * @param {String} newHexString value by a hexadecimal string to set
      */
-    this.setStringHex = function(newHexString) {
+    this.setStringHex = function (newHexString) {
         this.hTLV = null;
         this.isModified = true;
         this.s = null;
         this.hV = newHexString;
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return this.hV;
     };
 
@@ -561,13 +562,13 @@ YAHOO.lang.extend(KJUR.asn1.DERAbstractString, KJUR.asn1.ASN1Object);
  * @description
  * @see KJUR.asn1.ASN1Object - superclass
  */
-KJUR.asn1.DERAbstractTime = function(params) {
+KJUR.asn1.DERAbstractTime = function (params) {
     KJUR.asn1.DERAbstractTime.superclass.constructor.call(this);
     var s = null;
     var date = null;
 
     // --- PRIVATE METHODS --------------------
-    this.localDateToUTC = function(d) {
+    this.localDateToUTC = function (d) {
         utc = d.getTime() + (d.getTimezoneOffset() * 60000);
         var utcDate = new Date(utc);
         return utcDate;
@@ -583,7 +584,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @description
      * 'withMillis' flag is supported from asn1 1.0.6.
      */
-    this.formatDate = function(dateObject, type, withMillis) {
+    this.formatDate = function (dateObject, type, withMillis) {
         var pad = this.zeroPadding;
         var d = this.localDateToUTC(dateObject);
         var year = String(d.getFullYear());
@@ -605,7 +606,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
         return s + "Z";
     };
 
-    this.zeroPadding = function(s, len) {
+    this.zeroPadding = function (s, len) {
         if (s.length >= len) return s;
         return new Array(len - s.length + 1).join('0') + s;
     };
@@ -618,7 +619,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @function
      * @return {String} string value of this time object
      */
-    this.getString = function() {
+    this.getString = function () {
         return this.s;
     };
 
@@ -629,7 +630,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @function
      * @param {String} newS value by a string to set such like "130430235959Z"
      */
-    this.setString = function(newS) {
+    this.setString = function (newS) {
         this.hTLV = null;
         this.isModified = true;
         this.s = newS;
@@ -648,12 +649,12 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @param {Integer} min minutes of date
      * @param {Integer} sec seconds of date
      */
-    this.setByDateValue = function(year, month, day, hour, min, sec) {
+    this.setByDateValue = function (year, month, day, hour, min, sec) {
         var dateObject = new Date(Date.UTC(year, month - 1, day, hour, min, sec, 0));
         this.setByDate(dateObject);
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return this.hV;
     };
 };
@@ -670,7 +671,7 @@ YAHOO.lang.extend(KJUR.asn1.DERAbstractTime, KJUR.asn1.ASN1Object);
  * @description
  * @see KJUR.asn1.ASN1Object - superclass
  */
-KJUR.asn1.DERAbstractStructured = function(params) {
+KJUR.asn1.DERAbstractStructured = function (params) {
     KJUR.asn1.DERAbstractString.superclass.constructor.call(this);
     var asn1Array = null;
 
@@ -681,7 +682,7 @@ KJUR.asn1.DERAbstractStructured = function(params) {
      * @function
      * @param {array} asn1ObjectArray array of ASN1Object to set
      */
-    this.setByASN1ObjectArray = function(asn1ObjectArray) {
+    this.setByASN1ObjectArray = function (asn1ObjectArray) {
         this.hTLV = null;
         this.isModified = true;
         this.asn1Array = asn1ObjectArray;
@@ -694,7 +695,7 @@ KJUR.asn1.DERAbstractStructured = function(params) {
      * @function
      * @param {ASN1Object} asn1Object to add
      */
-    this.appendASN1Object = function(asn1Object) {
+    this.appendASN1Object = function (asn1Object) {
         this.hTLV = null;
         this.isModified = true;
         this.asn1Array.push(asn1Object);
@@ -723,7 +724,7 @@ YAHOO.lang.extend(KJUR.asn1.DERAbstractStructured, KJUR.asn1.ASN1Object);
  * @description
  * @see KJUR.asn1.ASN1Object - superclass
  */
-KJUR.asn1.DERBoolean = function() {
+KJUR.asn1.DERBoolean = function () {
     KJUR.asn1.DERBoolean.superclass.constructor.call(this);
     this.hT = "01";
     this.hTLV = "0101ff";
@@ -747,7 +748,7 @@ YAHOO.lang.extend(KJUR.asn1.DERBoolean, KJUR.asn1.ASN1Object);
  * </ul>
  * NOTE: 'params' can be omitted.
  */
-KJUR.asn1.DERInteger = function(params) {
+KJUR.asn1.DERInteger = function (params) {
     KJUR.asn1.DERInteger.superclass.constructor.call(this);
     this.hT = "02";
 
@@ -758,7 +759,7 @@ KJUR.asn1.DERInteger = function(params) {
      * @function
      * @param {BigInteger} bigIntegerValue to set
      */
-    this.setByBigInteger = function(bigIntegerValue) {
+    this.setByBigInteger = function (bigIntegerValue) {
         this.hTLV = null;
         this.isModified = true;
         this.hV = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(bigIntegerValue);
@@ -771,7 +772,7 @@ KJUR.asn1.DERInteger = function(params) {
      * @function
      * @param {Integer} integer value to set
      */
-    this.setByInteger = function(intValue) {
+    this.setByInteger = function (intValue) {
         var bi = new BigInteger(String(intValue), 10);
         this.setByBigInteger(bi);
     };
@@ -791,11 +792,11 @@ KJUR.asn1.DERInteger = function(params) {
      * new KJUR.asn1.DERInteger({'int': 123});
      * new KJUR.asn1.DERInteger({'hex': '1fad'});
      */
-    this.setValueHex = function(newHexString) {
+    this.setValueHex = function (newHexString) {
         this.hV = newHexString;
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return this.hV;
     };
 
@@ -819,7 +820,7 @@ YAHOO.lang.extend(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
  * @name KJUR.asn1.DERBitString
  * @class class for ASN.1 DER encoded BitString primitive
  * @extends KJUR.asn1.ASN1Object
- * @description 
+ * @description
  * <br/>
  * As for argument 'params' for constructor, you can specify one of
  * following properties:
@@ -830,7 +831,7 @@ YAHOO.lang.extend(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
  * </ul>
  * NOTE: 'params' can be omitted.
  */
-KJUR.asn1.DERBitString = function(params) {
+KJUR.asn1.DERBitString = function (params) {
     KJUR.asn1.DERBitString.superclass.constructor.call(this);
     this.hT = "03";
 
@@ -841,7 +842,7 @@ KJUR.asn1.DERBitString = function(params) {
      * @function
      * @param {String} newHexStringIncludingUnusedBits
      */
-    this.setHexValueIncludingUnusedBits = function(newHexStringIncludingUnusedBits) {
+    this.setHexValueIncludingUnusedBits = function (newHexStringIncludingUnusedBits) {
         this.hTLV = null;
         this.isModified = true;
         this.hV = newHexStringIncludingUnusedBits;
@@ -855,7 +856,7 @@ KJUR.asn1.DERBitString = function(params) {
      * @param {Integer} unusedBits
      * @param {String} hValue
      */
-    this.setUnusedBitsAndHexValue = function(unusedBits, hValue) {
+    this.setUnusedBitsAndHexValue = function (unusedBits, hValue) {
         if (unusedBits < 0 || 7 < unusedBits) {
             throw "unused bits shall be from 0 to 7: u = " + unusedBits;
         }
@@ -872,11 +873,11 @@ KJUR.asn1.DERBitString = function(params) {
      * @function
      * @param {String} binaryString binary value string (i.e. '10111')
      * @description
-     * Its unused bits will be calculated automatically by length of 
+     * Its unused bits will be calculated automatically by length of
      * 'binaryValue'. <br/>
      * NOTE: Trailing zeros '0' will be ignored.
      */
-    this.setByBinaryString = function(binaryString) {
+    this.setByBinaryString = function (binaryString) {
         binaryString = binaryString.replace(/0+$/, '');
         var unusedBits = 8 - binaryString.length % 8;
         if (unusedBits == 8) unusedBits = 0;
@@ -888,7 +889,7 @@ KJUR.asn1.DERBitString = function(params) {
             var b = binaryString.substr(i, 8);
             var x = parseInt(b, 2).toString(16);
             if (x.length == 1) x = '0' + x;
-            h += x;  
+            h += x;
         }
         this.hTLV = null;
         this.isModified = true;
@@ -904,7 +905,7 @@ KJUR.asn1.DERBitString = function(params) {
      * @description
      * NOTE: Trailing falses will be ignored.
      */
-    this.setByBooleanArray = function(booleanArray) {
+    this.setByBooleanArray = function (booleanArray) {
         var s = '';
         for (var i = 0; i < booleanArray.length; i++) {
             if (booleanArray[i] == true) {
@@ -926,7 +927,7 @@ KJUR.asn1.DERBitString = function(params) {
      * @description
      * This static method may be useful to initialize boolean array.
      */
-    this.newFalseArray = function(nLength) {
+    this.newFalseArray = function (nLength) {
         var a = new Array(nLength);
         for (var i = 0; i < nLength; i++) {
             a[i] = false;
@@ -934,7 +935,7 @@ KJUR.asn1.DERBitString = function(params) {
         return a;
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return this.hV;
     };
 
@@ -962,7 +963,7 @@ YAHOO.lang.extend(KJUR.asn1.DERBitString, KJUR.asn1.ASN1Object);
  * @description
  * @see KJUR.asn1.DERAbstractString - superclass
  */
-KJUR.asn1.DEROctetString = function(params) {
+KJUR.asn1.DEROctetString = function (params) {
     KJUR.asn1.DEROctetString.superclass.constructor.call(this, params);
     this.hT = "04";
 };
@@ -977,7 +978,7 @@ YAHOO.lang.extend(KJUR.asn1.DEROctetString, KJUR.asn1.DERAbstractString);
  * @description
  * @see KJUR.asn1.ASN1Object - superclass
  */
-KJUR.asn1.DERNull = function() {
+KJUR.asn1.DERNull = function () {
     KJUR.asn1.DERNull.superclass.constructor.call(this);
     this.hT = "05";
     this.hTLV = "0500";
@@ -1001,13 +1002,13 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  * </ul>
  * NOTE: 'params' can be omitted.
  */
-KJUR.asn1.DERObjectIdentifier = function(params) {
-    var itox = function(i) {
+KJUR.asn1.DERObjectIdentifier = function (params) {
+    var itox = function (i) {
         var h = i.toString(16);
         if (h.length == 1) h = '0' + h;
         return h;
     };
-    var roidtox = function(roid) {
+    var roidtox = function (roid) {
         var h = '';
         var bi = new BigInteger(roid, 10);
         var b = bi.toString(2);
@@ -1034,7 +1035,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * @function
      * @param {String} newHexString hexadecimal value of OID bytes
      */
-    this.setValueHex = function(newHexString) {
+    this.setValueHex = function (newHexString) {
         this.hTLV = null;
         this.isModified = true;
         this.s = null;
@@ -1048,8 +1049,8 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * @function
      * @param {String} oidString OID string (ex. 2.5.4.13)
      */
-    this.setValueOidString = function(oidString) {
-        if (! oidString.match(/^[0-9.]+$/)) {
+    this.setValueOidString = function (oidString) {
+        if (!oidString.match(/^[0-9.]+$/)) {
             throw "malformed oid string: " + oidString;
         }
         var h = '';
@@ -1077,7 +1078,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.
      * Otherwise raise error.
      */
-    this.setValueName = function(oidName) {
+    this.setValueName = function (oidName) {
         if (typeof KJUR.asn1.x509.OID.name2oidList[oidName] != "undefined") {
             var oid = KJUR.asn1.x509.OID.name2oidList[oidName];
             this.setValueOidString(oid);
@@ -1086,7 +1087,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
         }
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return this.hV;
     };
 
@@ -1122,7 +1123,7 @@ YAHOO.lang.extend(KJUR.asn1.DERObjectIdentifier, KJUR.asn1.ASN1Object);
  * </ul>
  * NOTE: 'params' can be omitted.
  */
-KJUR.asn1.DEREnumerated = function(params) {
+KJUR.asn1.DEREnumerated = function (params) {
     KJUR.asn1.DEREnumerated.superclass.constructor.call(this);
     this.hT = "0a";
 
@@ -1133,7 +1134,7 @@ KJUR.asn1.DEREnumerated = function(params) {
      * @function
      * @param {BigInteger} bigIntegerValue to set
      */
-    this.setByBigInteger = function(bigIntegerValue) {
+    this.setByBigInteger = function (bigIntegerValue) {
         this.hTLV = null;
         this.isModified = true;
         this.hV = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(bigIntegerValue);
@@ -1146,7 +1147,7 @@ KJUR.asn1.DEREnumerated = function(params) {
      * @function
      * @param {Integer} integer value to set
      */
-    this.setByInteger = function(intValue) {
+    this.setByInteger = function (intValue) {
         var bi = new BigInteger(String(intValue), 10);
         this.setByBigInteger(bi);
     };
@@ -1166,11 +1167,11 @@ KJUR.asn1.DEREnumerated = function(params) {
      * new KJUR.asn1.DEREnumerated({'int': 123});
      * new KJUR.asn1.DEREnumerated({'hex': '1fad'});
      */
-    this.setValueHex = function(newHexString) {
+    this.setValueHex = function (newHexString) {
         this.hV = newHexString;
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return this.hV;
     };
 
@@ -1196,7 +1197,7 @@ YAHOO.lang.extend(KJUR.asn1.DEREnumerated, KJUR.asn1.ASN1Object);
  * @description
  * @see KJUR.asn1.DERAbstractString - superclass
  */
-KJUR.asn1.DERUTF8String = function(params) {
+KJUR.asn1.DERUTF8String = function (params) {
     KJUR.asn1.DERUTF8String.superclass.constructor.call(this, params);
     this.hT = "0c";
 };
@@ -1212,7 +1213,7 @@ YAHOO.lang.extend(KJUR.asn1.DERUTF8String, KJUR.asn1.DERAbstractString);
  * @description
  * @see KJUR.asn1.DERAbstractString - superclass
  */
-KJUR.asn1.DERNumericString = function(params) {
+KJUR.asn1.DERNumericString = function (params) {
     KJUR.asn1.DERNumericString.superclass.constructor.call(this, params);
     this.hT = "12";
 };
@@ -1228,7 +1229,7 @@ YAHOO.lang.extend(KJUR.asn1.DERNumericString, KJUR.asn1.DERAbstractString);
  * @description
  * @see KJUR.asn1.DERAbstractString - superclass
  */
-KJUR.asn1.DERPrintableString = function(params) {
+KJUR.asn1.DERPrintableString = function (params) {
     KJUR.asn1.DERPrintableString.superclass.constructor.call(this, params);
     this.hT = "13";
 };
@@ -1244,7 +1245,7 @@ YAHOO.lang.extend(KJUR.asn1.DERPrintableString, KJUR.asn1.DERAbstractString);
  * @description
  * @see KJUR.asn1.DERAbstractString - superclass
  */
-KJUR.asn1.DERTeletexString = function(params) {
+KJUR.asn1.DERTeletexString = function (params) {
     KJUR.asn1.DERTeletexString.superclass.constructor.call(this, params);
     this.hT = "14";
 };
@@ -1260,7 +1261,7 @@ YAHOO.lang.extend(KJUR.asn1.DERTeletexString, KJUR.asn1.DERAbstractString);
  * @description
  * @see KJUR.asn1.DERAbstractString - superclass
  */
-KJUR.asn1.DERIA5String = function(params) {
+KJUR.asn1.DERIA5String = function (params) {
     KJUR.asn1.DERIA5String.superclass.constructor.call(this, params);
     this.hT = "16";
 };
@@ -1292,7 +1293,7 @@ YAHOO.lang.extend(KJUR.asn1.DERIA5String, KJUR.asn1.DERAbstractString);
  * var d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
  * var d4 = new KJUR.asn1.DERUTCTime('130430125959Z');
  */
-KJUR.asn1.DERUTCTime = function(params) {
+KJUR.asn1.DERUTCTime = function (params) {
     KJUR.asn1.DERUTCTime.superclass.constructor.call(this, params);
     this.hT = "17";
 
@@ -1303,7 +1304,7 @@ KJUR.asn1.DERUTCTime = function(params) {
      * @function
      * @param {Date} dateObject Date object to set ASN.1 value(V)
      */
-    this.setByDate = function(dateObject) {
+    this.setByDate = function (dateObject) {
         this.hTLV = null;
         this.isModified = true;
         this.date = dateObject;
@@ -1311,7 +1312,7 @@ KJUR.asn1.DERUTCTime = function(params) {
         this.hV = stohex(this.s);
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         if (typeof this.date == "undefined" && typeof this.s == "undefined") {
             this.date = new Date();
             this.s = this.formatDate(this.date, 'utc');
@@ -1355,7 +1356,7 @@ YAHOO.lang.extend(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
  * NOTE1: 'params' can be omitted.
  * NOTE2: 'withMillis' property is supported from asn1 1.0.6.
  */
-KJUR.asn1.DERGeneralizedTime = function(params) {
+KJUR.asn1.DERGeneralizedTime = function (params) {
     KJUR.asn1.DERGeneralizedTime.superclass.constructor.call(this, params);
     this.hT = "18";
     this.withMillis = false;
@@ -1372,7 +1373,7 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
      * var date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59
      * o.setByDate(date);
      */
-    this.setByDate = function(dateObject) {
+    this.setByDate = function (dateObject) {
         this.hTLV = null;
         this.isModified = true;
         this.date = dateObject;
@@ -1380,7 +1381,7 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
         this.hV = stohex(this.s);
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         if (this.date === undefined && this.s === undefined) {
             this.date = new Date();
             this.s = this.formatDate(this.date, 'gen', this.withMillis);
@@ -1421,10 +1422,10 @@ YAHOO.lang.extend(KJUR.asn1.DERGeneralizedTime, KJUR.asn1.DERAbstractTime);
  * </ul>
  * NOTE: 'params' can be omitted.
  */
-KJUR.asn1.DERSequence = function(params) {
+KJUR.asn1.DERSequence = function (params) {
     KJUR.asn1.DERSequence.superclass.constructor.call(this, params);
     this.hT = "30";
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         var h = '';
         for (var i = 0; i < this.asn1Array.length; i++) {
             var asn1Obj = this.asn1Array[i];
@@ -1453,11 +1454,11 @@ YAHOO.lang.extend(KJUR.asn1.DERSequence, KJUR.asn1.DERAbstractStructured);
  * NOTE1: 'params' can be omitted.<br/>
  * NOTE2: sortflag is supported since 1.0.5.
  */
-KJUR.asn1.DERSet = function(params) {
+KJUR.asn1.DERSet = function (params) {
     KJUR.asn1.DERSet.superclass.constructor.call(this, params);
     this.hT = "31";
     this.sortFlag = true; // item shall be sorted only in ASN.1 DER
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         var a = new Array();
         for (var i = 0; i < this.asn1Array.length; i++) {
             var asn1Obj = this.asn1Array[i];
@@ -1485,13 +1486,13 @@ YAHOO.lang.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
  * @description
  * <br/>
  * Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.
- * For example, if you find '[1]' tag in a ASN.1 dump, 
+ * For example, if you find '[1]' tag in a ASN.1 dump,
  * 'tagNoHex' will be 'a1'.
  * <br/>
  * As for optional argument 'params' for constructor, you can specify *ANY* of
  * following properties:
  * <ul>
- * <li>explicit - specify true if this is explicit tag otherwise false 
+ * <li>explicit - specify true if this is explicit tag otherwise false
  *     (default is 'true').</li>
  * <li>tag - specify tag (default is 'a0' which means [0])</li>
  * <li>obj - specify ASN1Object which is tagged</li>
@@ -1501,7 +1502,7 @@ YAHOO.lang.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
  * d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
  * hex = d2.getEncodedHex();
  */
-KJUR.asn1.DERTaggedObject = function(params) {
+KJUR.asn1.DERTaggedObject = function (params) {
     KJUR.asn1.DERTaggedObject.superclass.constructor.call(this);
     this.hT = "a0";
     this.hV = '';
@@ -1517,7 +1518,7 @@ KJUR.asn1.DERTaggedObject = function(params) {
      * @param {Integer} tagNoHex hexadecimal string of ASN.1 tag
      * @param {ASN1Object} asn1Object ASN.1 to encapsulate
      */
-    this.setASN1Object = function(isExplicitFlag, tagNoHex, asn1Object) {
+    this.setASN1Object = function (isExplicitFlag, tagNoHex, asn1Object) {
         this.hT = tagNoHex;
         this.isExplicit = isExplicitFlag;
         this.asn1Object = asn1Object;
@@ -1533,7 +1534,7 @@ KJUR.asn1.DERTaggedObject = function(params) {
         }
     };
 
-    this.getFreshValueHex = function() {
+    this.getFreshValueHex = function () {
         return this.hV;
     };
 

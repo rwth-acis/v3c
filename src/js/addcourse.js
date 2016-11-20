@@ -18,11 +18,11 @@
  */
 
 // Fill in the subject id in views/addcourse.php by reading the id from the URL
-$(document).ready(function(){
-  $("#subject_input").val( URI().query(true).id )
-    
-  tools.addCourseNameInputListener();
-  tools.addCreateCourseRoomListener();
+$(document).ready(function () {
+    $("#subject_input").val(URI().query(true).id)
+
+    tools.addCourseNameInputListener();
+    tools.addCreateCourseRoomListener();
 });
 
 

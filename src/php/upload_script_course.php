@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  * @file upload_script_course.php
- * 
+ *
  * Adss new course to the course database on the server
  * adds metadata about it database.
  */
@@ -27,7 +27,7 @@ $conn = require '../php/db_connect.php';
 require_once '../php/tools.php';
 
 if ((include '../config/config.php') === false) {
-  throw new Exception("The config.php is missing! Cannot create widget automatically.");
+    throw new Exception("The config.php is missing! Cannot create widget automatically.");
 }
 
 //Get input data from form
@@ -55,7 +55,7 @@ $last_id = $conn->lastInsertId();
 
 $html = "";
 if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
-  $html = "&widget=true";
+    $html = "&widget=true";
 }
 
 // After creating a course, the user is redirected to the edit page. The reason

@@ -1,63 +1,77 @@
 <html>
 <head>
-<title>Sample JWS Signing With PKCS#1 private key</title>
-<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+    <title>Sample JWS Signing With PKCS#1 private key</title>
+    <script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
 
-<style type="text/css">
-TD  {vertical-align: top; border: solid 1px #000000; }
-</style>
-<script language="JavaScript" type="text/javascript">
+    <style type="text/css">
+        TD {
+            vertical-align: top;
+            border: solid 1px #000000;
+        }
+    </style>
+    <script language="JavaScript" type="text/javascript">
 
-function SecureRandom() { }
+        function SecureRandom() {
+        }
 
-SecureRandom.prototype.nextBytes = function(ba) {
-    var ua = new Uint8Array(ba.length), i;
+        SecureRandom.prototype.nextBytes = function (ba) {
+            var ua = new Uint8Array(ba.length), i;
 
-    window.crypto.getRandomValues(ua);
+            window.crypto.getRandomValues(ua);
 
-    for (i = 0; i < ba.length; i += 1) {
-        ba[i] = ua[i];
-    }
-};
+            for (i = 0; i < ba.length; i += 1) {
+                ba[i] = ua[i];
+            }
+        };
 
-function _genJWS() {
-  var sHead = newline_toDos(document.form1.jwshead1.value);
-  var sPayload = newline_toDos(document.form1.jwspayload1.value);
-  var sPemPrvKey = document.form1.pemprvkey1.value;
+        function _genJWS() {
+            var sHead = newline_toDos(document.form1.jwshead1.value);
+            var sPayload = newline_toDos(document.form1.jwspayload1.value);
+            var sPemPrvKey = document.form1.pemprvkey1.value;
 
-  var jws = new KJUR.jws.JWS();
-  var sResult = null;
-  try {
-    var key = new RSAKey();
-    key.readPrivateKeyFromPEMString(sPemPrvKey);
-    sResult = jws.generateJWSByKey(sHead, sPayload, key);
-    document.form1.jwsgenerated1.value = sResult;
-  } catch (ex) {
-    alert("Error: " + ex);
-  }
-}
-</script>
+            var jws = new KJUR.jws.JWS();
+            var sResult = null;
+            try {
+                var key = new RSAKey();
+                key.readPrivateKeyFromPEMString(sPemPrvKey);
+                sResult = jws.generateJWSByKey(sHead, sPayload, key);
+                document.form1.jwsgenerated1.value = sResult;
+            } catch (ex) {
+                alert("Error: " + ex);
+            }
+        }
+    </script>
 </head>
 
 <body>
 <h1>Sample JWS Signing Application</h1>
 
 <p>
-Default values are cited from <a href="http://tools.ietf.org/html/draft-jones-json-web-signature-04#appendix-A.2" target="_blank">
-"draft-jones-json-web-signature-04 Annex.2"</a>.
+    Default values are cited from <a href="http://tools.ietf.org/html/draft-jones-json-web-signature-04#appendix-A.2"
+                                     target="_blank">
+    "draft-jones-json-web-signature-04 Annex.2"</a>.
 </p>
 
 <form name="form1">
-<table width="100%">
-<tbody>
-<tr><td rowspan="3">Input</td><td>JWS Header</td><td colspan="2">
-<textarea name="jwshead1" rows="3" cols="100">{"alg":"PS256"}</textarea></td></tr>
-<tr><td>JWS Payload</td><td colspan="2">
+    <table width="100%">
+        <tbody>
+        <tr>
+            <td rowspan="3">Input</td>
+            <td>JWS Header</td>
+            <td colspan="2">
+                <textarea name="jwshead1" rows="3" cols="100">{"alg":"PS256"}</textarea></td>
+        </tr>
+        <tr>
+            <td>JWS Payload</td>
+            <td colspan="2">
 <textarea name="jwspayload1" rows="3" cols="100">{"iss":"joe",
  "exp":1300819380,
  "http://example.com/is_root":true}</textarea>
-</td></tr>
-<tr><td>Signing PKCS#1 RSA Private Key</td><td colspan="2">
+            </td>
+        </tr>
+        <tr>
+            <td>Signing PKCS#1 RSA Private Key</td>
+            <td colspan="2">
 <textarea name="pemprvkey1" rows="10" cols="65">-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEA4qiw8PWs7PpnnC2BUEoDRcwXF8pq8XT1/3Hc3cuUJwX/otNe
 fr/Bomr3dtM0ERLN3DrepCXvuzEU5FcJVDUB3sI+pFtjjLBXD/zJmuL3Afg91J9p
@@ -85,41 +99,49 @@ kp+AgfXpg8an4ujAUP7mu8xaxns7zsNzr+BCgYwXmIlhWz2Aiz2UeL/IsfOpRwuV
 T4mvpSeYDJkBD8Hxr3fB1YNDWNbgwrNPGZnUTBNhxIsNLPnV8WySiW57LqVXlggH
 vjFmyDdU5Hh6ma4q+BeAqbXZSJz0cfkBcBLCSe2gIJ/QJ3YJVQI=
 -----END RSA PRIVATE KEY-----</textarea>
-</td></tr>
-<tr><td colspan="4">
-<input type="button" value="Generate JWS Signature&darr;" onClick="_genJWS();"/>
-</td></tr>
-<tr><td colspan="2">Output JWS Signature</td><td colspan="2">
-<textarea name="jwsgenerated1" cols="100" rows="6" readonly></textarea>
-</td></tr>
-</tbody>
-</table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input type="button" value="Generate JWS Signature&darr;" onClick="_genJWS();"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">Output JWS Signature</td>
+            <td colspan="2">
+                <textarea name="jwsgenerated1" cols="100" rows="6" readonly></textarea>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 </form>
 <h3>USAGE</h3>
 <ol>
-<li>Just press "Generate JWS Signature" button.</li>
-<li>You can specify signature algorithm name such as "RS256"(SHA256withRSA), "RS512"(SHA512withRSA), "PS256"(SHA256withRSAPSS), "PS512"(SHA512withRSAPSS). 
-If it isn't un-supported value, it will raise an error.</li>
-<li>If malformed JWS Head is specified, it will raise an error.</li>
-<li>As for JWS signature verification, please see <a href="sample_verify3.html">this sample</a>.</li>
+    <li>Just press "Generate JWS Signature" button.</li>
+    <li>You can specify signature algorithm name such as "RS256"(SHA256withRSA), "RS512"(SHA512withRSA),
+        "PS256"(SHA256withRSAPSS), "PS512"(SHA512withRSAPSS).
+        If it isn't un-supported value, it will raise an error.
+    </li>
+    <li>If malformed JWS Head is specified, it will raise an error.</li>
+    <li>As for JWS signature verification, please see <a href="sample_verify3.html">this sample</a>.</li>
 </ol>
 
 <center>
-Copyright &copy; 2013-2015 Kenji Urushima, Dave All Rights Reserved.
+    Copyright &copy; 2013-2015 Kenji Urushima, Dave All Rights Reserved.
 </center>
 
 <div align="right">
-<a href="index.html">Go back to index</a>
+    <a href="index.html">Go back to index</a>
 </div>
 
 <div align="right">
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
+    <a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+        <img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+    </a>
+    <a href="http://x5.choumusubi.com/bin/gg?069823300">
+        <img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+    </a>
 </div>
 </body>
 </html>

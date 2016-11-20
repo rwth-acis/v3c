@@ -1,61 +1,64 @@
 <html>
 <head>
-<title>Sample JWS-JS Generator</title>
-<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+    <title>Sample JWS-JS Generator</title>
+    <script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
 
-<style type="text/css">
-TD  {vertical-align: top; border: solid 1px #000000; }
-</style>
-<script language="JavaScript" type="text/javascript">
-var jwsjs = null;
+    <style type="text/css">
+        TD {
+            vertical-align: top;
+            border: solid 1px #000000;
+        }
+    </style>
+    <script language="JavaScript" type="text/javascript">
+        var jwsjs = null;
 
-function addSignature() {
-  if (jwsjs == null) {
-    jwsjs = new KJUR.jws.JWSJS();
-  }
+        function addSignature() {
+            if (jwsjs == null) {
+                jwsjs = new KJUR.jws.JWSJS();
+            }
 
-  var sHeader = newline_toDos(document.form1.jwshead1.value);
-  var sPayload = newline_toDos(document.form1.jwspayload1.value);
-  var sPrvKey = document.form1.pemprvkey1.value;
-  
-  if (jwsjs.isEmpty()) {
-    jwsjs.addSignatureByHeaderPayloadKey(sHeader, sPayload, sPrvKey);
-  } else {
-    jwsjs.addSignatureByHeaderKey(sHeader, sPrvKey);
-  }
-  document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
-}
+            var sHeader = newline_toDos(document.form1.jwshead1.value);
+            var sPayload = newline_toDos(document.form1.jwspayload1.value);
+            var sPrvKey = document.form1.pemprvkey1.value;
 
-function doInit() {
-  jwsjs = new KJUR.jws.JWSJS();
-  document.form1.jwsjs1.value = "";
-}
-</script>
+            if (jwsjs.isEmpty()) {
+                jwsjs.addSignatureByHeaderPayloadKey(sHeader, sPayload, sPrvKey);
+            } else {
+                jwsjs.addSignatureByHeaderKey(sHeader, sPrvKey);
+            }
+            document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
+        }
+
+        function doInit() {
+            jwsjs = new KJUR.jws.JWSJS();
+            document.form1.jwsjs1.value = "";
+        }
+    </script>
 </head>
 
 <body>
 
 <form name="form1">
-<h1>Sample JWS-JS Generator</h1>
+    <h1>Sample JWS-JS Generator</h1>
 
-<h3>(STEP1) specify fields for each one of JWS-JS parallel signature</h3>
+    <h3>(STEP1) specify fields for each one of JWS-JS parallel signature</h3>
 
-<p>
-<b><i>addding JWS Header</i></b><br/>
-<textarea name="jwshead1" rows="3" cols="100">{"alg":"RS256"}</textarea>
-<br/>
-</p>
+    <p>
+        <b><i>addding JWS Header</i></b><br/>
+        <textarea name="jwshead1" rows="3" cols="100">{"alg":"RS256"}</textarea>
+        <br/>
+    </p>
 
-<p>
-<b><i>adding JWS Payload for the first time</i></b><br/>
-<textarea name="jwspayload1" rows="3" cols="100">{"iss":"joe",
+    <p>
+        <b><i>adding JWS Payload for the first time</i></b><br/>
+        <textarea name="jwspayload1" rows="3" cols="100">{"iss":"joe",
  "exp":1300819380,
  "http://example.com/is_root":true}</textarea><br/>
-<i>NOTE: This field will be ignored when this is 2nd time and later since existing payload will be used.</i>
-</p>
+        <i>NOTE: This field will be ignored when this is 2nd time and later since existing payload will be used.</i>
+    </p>
 
-<b><i>signing private key</i></b><br/>
-<textarea name="pemprvkey1" rows="10" cols="65">-----BEGIN RSA PRIVATE KEY-----
+    <b><i>signing private key</i></b><br/>
+    <textarea name="pemprvkey1" rows="10" cols="65">-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEA4qiw8PWs7PpnnC2BUEoDRcwXF8pq8XT1/3Hc3cuUJwX/otNe
 fr/Bomr3dtM0ERLN3DrepCXvuzEU5FcJVDUB3sI+pFtjjLBXD/zJmuL3Afg91J9p
 79+Dm+43cR6wuKywVJx5DJIdswF6oQDDzhwu89d2V5x02aXB9LqdXkPwiO0eR5s/
@@ -82,40 +85,40 @@ kp+AgfXpg8an4ujAUP7mu8xaxns7zsNzr+BCgYwXmIlhWz2Aiz2UeL/IsfOpRwuV
 T4mvpSeYDJkBD8Hxr3fB1YNDWNbgwrNPGZnUTBNhxIsNLPnV8WySiW57LqVXlggH
 vjFmyDdU5Hh6ma4q+BeAqbXZSJz0cfkBcBLCSe2gIJ/QJ3YJVQI=
 -----END RSA PRIVATE KEY-----</textarea>
-</p>
+    </p>
 
-<h3>(STEP 2)Append multiple parallel signature to a JWS-JS</h3>
-<p>
-<input type="button" value="Append Signature" onClick="addSignature();"/>
-<input type="button" value="Initialize" onClick="doInit();"/>
-<br/>
-<i>NOTE: You can press 'Append Signature' one or more times to add
-multiple parallel signatures to a JWS-JS. If you want to change
-JWS Header and signing key for each signatures, please modify
-above 'JWS Header' and 'signing key' fields then push 'Append Signature'.</i>
-</p>
+    <h3>(STEP 2)Append multiple parallel signature to a JWS-JS</h3>
+    <p>
+        <input type="button" value="Append Signature" onClick="addSignature();"/>
+        <input type="button" value="Initialize" onClick="doInit();"/>
+        <br/>
+        <i>NOTE: You can press 'Append Signature' one or more times to add
+            multiple parallel signatures to a JWS-JS. If you want to change
+            JWS Header and signing key for each signatures, please modify
+            above 'JWS Header' and 'signing key' fields then push 'Append Signature'.</i>
+    </p>
 
-<h2>Result of JWS-JS parallsl signature</h2>
-<p>
-<textarea name="jwsjs1" rows="100" cols="65"></textarea>
-</p>
+    <h2>Result of JWS-JS parallsl signature</h2>
+    <p>
+        <textarea name="jwsjs1" rows="100" cols="65"></textarea>
+    </p>
 </form>
 
 <center>
-Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
+    Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
 </center>
 
 <div align="right">
-<a href="index.html">Go back to index</a>
+    <a href="index.html">Go back to index</a>
 </div>
 
 <div align="right">
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
+    <a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+        <img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+    </a>
+    <a href="http://x5.choumusubi.com/bin/gg?069823300">
+        <img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+    </a>
 </div>
 </body>
 </html>

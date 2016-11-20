@@ -53,7 +53,7 @@ function X509() {
      * @memberOf X509#
      * @function
      */
-    this.getSerialNumberHex = function() {
+    this.getSerialNumberHex = function () {
         return ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 1]);
     };
 
@@ -63,7 +63,7 @@ function X509() {
      * @memberOf X509#
      * @function
      */
-    this.getIssuerHex = function() {
+    this.getIssuerHex = function () {
         return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]);
     };
 
@@ -73,7 +73,7 @@ function X509() {
      * @memberOf X509#
      * @function
      */
-    this.getIssuerString = function() {
+    this.getIssuerString = function () {
         return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]));
     };
 
@@ -83,7 +83,7 @@ function X509() {
      * @memberOf X509#
      * @function
      */
-    this.getSubjectHex = function() {
+    this.getSubjectHex = function () {
         return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]);
     };
 
@@ -93,7 +93,7 @@ function X509() {
      * @memberOf X509#
      * @function
      */
-    this.getSubjectString = function() {
+    this.getSubjectString = function () {
         return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]));
     };
 
@@ -103,7 +103,7 @@ function X509() {
      * @memberOf X509#
      * @function
      */
-    this.getNotBefore = function() {
+    this.getNotBefore = function () {
         var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 0]);
         s = s.replace(/(..)/g, "%$1");
         s = decodeURIComponent(s);
@@ -116,7 +116,7 @@ function X509() {
      * @memberOf X509#
      * @function
      */
-    this.getNotAfter = function() {
+    this.getNotAfter = function () {
         var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 1]);
         s = s.replace(/(..)/g, "%$1");
         s = decodeURIComponent(s);
@@ -133,7 +133,7 @@ function X509() {
      * @function
      * @param {String} sCertPEM string for PEM formatted X.509 certificate
      */
-    this.readCertPEM = function(sCertPEM) {
+    this.readCertPEM = function (sCertPEM) {
         var hCert = X509.pemToHex(sCertPEM);
         var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
         var rsa = new RSAKey();
@@ -144,7 +144,7 @@ function X509() {
         this.hex = hCert;
     };
 
-    this.readCertPEMWithoutRSAInit = function(sCertPEM) {
+    this.readCertPEMWithoutRSAInit = function (sCertPEM) {
         var hCert = X509.pemToHex(sCertPEM);
         var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
         this.subjectPublicKeyRSA.setPublic(a[0], a[1]);
@@ -154,7 +154,7 @@ function X509() {
     };
 };
 
-X509.pemToBase64 = function(sCertPEM) {
+X509.pemToBase64 = function (sCertPEM) {
     var s = sCertPEM;
     s = s.replace("-----BEGIN CERTIFICATE-----", "");
     s = s.replace("-----END CERTIFICATE-----", "");
@@ -162,31 +162,31 @@ X509.pemToBase64 = function(sCertPEM) {
     return s;
 };
 
-X509.pemToHex = function(sCertPEM) {
+X509.pemToHex = function (sCertPEM) {
     var b64Cert = X509.pemToBase64(sCertPEM);
     var hCert = b64tohex(b64Cert);
     return hCert;
 };
 
 // NOTE: Without BITSTRING encapsulation.
-X509.getSubjectPublicKeyPosFromCertHex = function(hCert) {
+X509.getSubjectPublicKeyPosFromCertHex = function (hCert) {
     var pInfo = X509.getSubjectPublicKeyInfoPosFromCertHex(hCert);
-    if (pInfo == -1) return -1;    
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pInfo); 
+    if (pInfo == -1) return -1;
+    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pInfo);
     if (a.length != 2) return -1;
     var pBitString = a[1];
     if (hCert.substring(pBitString, pBitString + 2) != '03') return -1;
     var pBitStringV = ASN1HEX.getStartPosOfV_AtObj(hCert, pBitString);
-    
+
     if (hCert.substring(pBitStringV, pBitStringV + 2) != '00') return -1;
     return pBitStringV + 2;
 };
 
 // NOTE: privateKeyUsagePeriod field of X509v2 not supported.
 // NOTE: v1 and v3 supported
-X509.getSubjectPublicKeyInfoPosFromCertHex = function(hCert) {
+X509.getSubjectPublicKeyInfoPosFromCertHex = function (hCert) {
     var pTbsCert = ASN1HEX.getStartPosOfV_AtObj(hCert, 0);
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pTbsCert); 
+    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pTbsCert);
     if (a.length < 1) return -1;
     if (hCert.substring(a[0], a[0] + 10) == "a003020102") { // v3
         if (a.length < 6) return -1;
@@ -197,9 +197,9 @@ X509.getSubjectPublicKeyInfoPosFromCertHex = function(hCert) {
     }
 };
 
-X509.getPublicKeyHexArrayFromCertHex = function(hCert) {
+X509.getPublicKeyHexArrayFromCertHex = function (hCert) {
     var p = X509.getSubjectPublicKeyPosFromCertHex(hCert);
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, p); 
+    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, p);
     if (a.length != 2) return [];
     var hN = ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
     var hE = ASN1HEX.getHexOfV_AtObj(hCert, a[1]);
@@ -210,18 +210,18 @@ X509.getPublicKeyHexArrayFromCertHex = function(hCert) {
     }
 };
 
-X509.getHexTbsCertificateFromCert = function(hCert) {
+X509.getHexTbsCertificateFromCert = function (hCert) {
     var pTbsCert = ASN1HEX.getStartPosOfV_AtObj(hCert, 0);
     return pTbsCert;
 };
 
-X509.getPublicKeyHexArrayFromCertPEM = function(sCertPEM) {
+X509.getPublicKeyHexArrayFromCertPEM = function (sCertPEM) {
     var hCert = X509.pemToHex(sCertPEM);
     var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
     return a;
 };
 
-X509.hex2dn = function(hDN) {
+X509.hex2dn = function (hDN) {
     var s = "";
     var a = ASN1HEX.getPosArrayOfChildren_AtObj(hDN, 0);
     for (var i = 0; i < a.length; i++) {
@@ -231,11 +231,15 @@ X509.hex2dn = function(hDN) {
     return s;
 };
 
-X509.hex2rdn = function(hRDN) {
+X509.hex2rdn = function (hRDN) {
     var hType = ASN1HEX.getDecendantHexTLVByNthList(hRDN, 0, [0, 0]);
     var hValue = ASN1HEX.getDecendantHexVByNthList(hRDN, 0, [0, 1]);
     var type = "";
-    try { type = X509.DN_ATTRHEX[hType]; } catch (ex) { type = hType; }
+    try {
+        type = X509.DN_ATTRHEX[hType];
+    } catch (ex) {
+        type = hType;
+    }
     hValue = hValue.replace(/(..)/g, "%$1");
     var value = decodeURIComponent(hValue);
     return type + "=" + value;
@@ -262,7 +266,7 @@ X509.DN_ATTRHEX = {
  * @description
  * NOTE: DSA is also supported since x509 1.1.2.
  */
-X509.getPublicKeyFromCertPEM = function(sCertPEM) {
+X509.getPublicKeyFromCertPEM = function (sCertPEM) {
     var info = X509.getPublicKeyInfoPropOfCertPEM(sCertPEM);
 
     if (info.algoid == "2a864886f70d010101") { // RSA
@@ -283,9 +287,9 @@ X509.getPublicKeyFromCertPEM = function(sCertPEM) {
         y = y.substr(2);
         var key = new KJUR.crypto.DSA();
         key.setPublic(new BigInteger(p, 16),
-                      new BigInteger(q, 16),
-                      new BigInteger(g, 16),
-                      new BigInteger(y, 16));
+            new BigInteger(q, 16),
+            new BigInteger(g, 16),
+            new BigInteger(y, 16));
         return key;
     } else {
         throw "unsupported key";
@@ -309,13 +313,13 @@ X509.getPublicKeyFromCertPEM = function(sCertPEM) {
  * </ul>
  * @since x509 1.1.1
  */
-X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
+X509.getPublicKeyInfoPropOfCertPEM = function (sCertPEM) {
     var result = {};
     result.algparam = null;
     var hCert = X509.pemToHex(sCertPEM);
 
     // 1. Certificate ASN.1
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
+    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0);
     if (a1.length != 3)
         throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
 
@@ -323,19 +327,19 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     if (hCert.substr(a1[0], 2) != "30")
         throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
 
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
+    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]);
 
     // 3. subjectPublicKeyInfo
     if (a2.length < 7)
         throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
 
-    var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[6]); 
+    var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[6]);
 
     if (a3.length != 2)
         throw "malformed X.509 certificate PEM (code:004)"; // not AlgId and PubKey
 
     // 4. AlgId
-    var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]); 
+    var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]);
 
     if (a4.length != 2)
         throw "malformed X.509 certificate PEM (code:005)"; // not 2 item in AlgId
@@ -370,9 +374,9 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
  * get position for SubjectPublicKeyInfo field in the hexadecimal string of
  * certificate.
  */
-X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
+X509.getPublicKeyInfoPosOfCertHEX = function (hCert) {
     // 1. Certificate ASN.1
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
+    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0);
     if (a1.length != 3)
         throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
 
@@ -380,12 +384,12 @@ X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
     if (hCert.substr(a1[0], 2) != "30")
         throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
 
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
+    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]);
 
     // 3. subjectPublicKeyInfo
     if (a2.length < 7)
         throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
-    
+
     return a2[6];
 };
 
@@ -414,9 +418,9 @@ X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
  * [{posTLV: 1952, oid: "2.5.29.35", critical: false, posV: 1968},
  *  {posTLV: 1974, oid: "2.5.29.19", critical: true, posV: 1986}, ...]
  */
-X509.getV3ExtInfoListOfCertHex = function(hCert) {
+X509.getV3ExtInfoListOfCertHex = function (hCert) {
     // 1. Certificate ASN.1
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
+    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0);
     if (a1.length != 3)
         throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
 
@@ -424,7 +428,7 @@ X509.getV3ExtInfoListOfCertHex = function(hCert) {
     if (hCert.substr(a1[0], 2) != "30")
         throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
 
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
+    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]);
 
     // 3. v3Extension EXPLICIT Tag [3]
     // ver, seri, alg, iss, validity, subj, spki, (iui,) (sui,) ext
@@ -448,7 +452,7 @@ X509.getV3ExtInfoListOfCertHex = function(hCert) {
     var numExt = a4.length;
     var aInfo = new Array(numExt);
     for (var i = 0; i < numExt; i++) {
-	aInfo[i] = X509.getV3ExtItemInfo_AtObj(hCert, a4[i]);
+        aInfo[i] = X509.getV3ExtItemInfo_AtObj(hCert, a4[i]);
     }
     return aInfo;
 };
@@ -463,9 +467,9 @@ X509.getV3ExtInfoListOfCertHex = function(hCert) {
  * @return {Object} properties for the extension
  * @since x509 1.1.5
  * @description
- * This method will get some information of a X.509 V extension 
- * which is referred by an index of hexadecimal string of X.509 
- * certificate. 
+ * This method will get some information of a X.509 V extension
+ * which is referred by an index of hexadecimal string of X.509
+ * certificate.
  * Resulting object has following properties:
  * <ul>
  * <li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.</li>
@@ -476,13 +480,13 @@ X509.getV3ExtInfoListOfCertHex = function(hCert) {
  * </ul>
  * This method is used by {@link X509.getV3ExtInfoListOfCertHex} internally.
  */
-X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
+X509.getV3ExtItemInfo_AtObj = function (hCert, pos) {
     var info = {};
 
     // posTLV - extension TLV
     info.posTLV = pos;
 
-    var a  = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos);
+    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos);
     if (a.length != 2 && a.length != 3)
         throw "malformed X.509v3 Ext (code:001)"; // oid,(critical,)val
 
@@ -490,7 +494,7 @@ X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
     if (hCert.substr(a[0], 2) != "06")
         throw "malformed X.509v3 Ext (code:002)"; // not OID "06"
     var valueHex = ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
-    info.oid = ASN1HEX.hextooidstr(valueHex); 
+    info.oid = ASN1HEX.hextooidstr(valueHex);
 
     // critical - extension critical flag
     info.critical = false; // critical false by default
@@ -502,7 +506,7 @@ X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
     if (hCert.substr(posExtV, 2) != "04")
         throw "malformed X.509v3 Ext (code:003)"; // not EncapOctet "04"
     info.posV = ASN1HEX.getStartPosOfV_AtObj(hCert, posExtV);
-    
+
     return info;
 };
 
@@ -517,12 +521,12 @@ X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
  * @since x509 1.1.6
  * @description
  * This method will get X.509v3 extension value of ASN.1 TLV
- * which is specifyed by extension name or oid. 
+ * which is specifyed by extension name or oid.
  * @example
  * hExtValue = X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage");
  * // hExtValue will be such like '030205a0'.
  */
-X509.getHexOfTLV_V3ExtValue = function(hCert, oidOrName) {
+X509.getHexOfTLV_V3ExtValue = function (hCert, oidOrName) {
     var pos = X509.getPosOfTLV_V3ExtValue(hCert, oidOrName);
     if (pos == -1) return '';
     return ASN1HEX.getHexOfTLV_AtObj(hCert, pos);
@@ -539,7 +543,7 @@ X509.getHexOfTLV_V3ExtValue = function(hCert, oidOrName) {
  * @since x509 1.1.6
  * @description
  * This method will get X.509v3 extension value of ASN.1 value
- * which is specifyed by extension name or oid. 
+ * which is specifyed by extension name or oid.
  * If there is no such extension in the certificate,
  * it returns empty string (i.e. '').
  * Available extension names and oids are defined
@@ -548,7 +552,7 @@ X509.getHexOfTLV_V3ExtValue = function(hCert, oidOrName) {
  * hExtValue = X509.getHexOfV_V3ExtValue(hCert, "keyUsage");
  * // hExtValue will be such like '05a0'.
  */
-X509.getHexOfV_V3ExtValue = function(hCert, oidOrName) {
+X509.getHexOfV_V3ExtValue = function (hCert, oidOrName) {
     var pos = X509.getPosOfTLV_V3ExtValue(hCert, oidOrName);
     if (pos == -1) return '';
     return ASN1HEX.getHexOfV_AtObj(hCert, pos);
@@ -565,7 +569,7 @@ X509.getHexOfV_V3ExtValue = function(hCert, oidOrName) {
  * @since x509 1.1.6
  * @description
  * This method will get X.509v3 extension value of ASN.1 V(value)
- * which is specifyed by extension name or oid. 
+ * which is specifyed by extension name or oid.
  * If there is no such extension in the certificate,
  * it returns empty string (i.e. '').
  * Available extension names and oids are defined
@@ -574,15 +578,15 @@ X509.getHexOfV_V3ExtValue = function(hCert, oidOrName) {
  * idx = X509.getPosOfV_V3ExtValue(hCert, "keyUsage");
  * // The 'idx' will be index in the string for keyUsage value ASN.1 TLV.
  */
-X509.getPosOfTLV_V3ExtValue = function(hCert, oidOrName) {
+X509.getPosOfTLV_V3ExtValue = function (hCert, oidOrName) {
     var oid = oidOrName;
-    if (! oidOrName.match(/^[0-9.]+$/)) oid = KJUR.asn1.x509.OID.name2oid(oidOrName);
+    if (!oidOrName.match(/^[0-9.]+$/)) oid = KJUR.asn1.x509.OID.name2oid(oidOrName);
     if (oid == '') return -1;
 
     var infoList = X509.getV3ExtInfoListOfCertHex(hCert);
     for (var i = 0; i < infoList.length; i++) {
-	var info = infoList[i];
-	if (info.oid == oid) return info.posV;
+        var info = infoList[i];
+        if (info.oid == oid) return info.posV;
     }
     return -1;
 };
@@ -616,15 +620,15 @@ X509.KEYUSAGE_NAME = [
  * @example
  * bKeyUsage = X509.getExtKeyUsageBin(hCert);
  * // bKeyUsage will be such like '101'.
- * // 1 - digitalSignature 
+ * // 1 - digitalSignature
  * // 0 - nonRepudiation
  * // 1 - keyEncipherment
  */
-X509.getExtKeyUsageBin = function(hCert) {
+X509.getExtKeyUsageBin = function (hCert) {
     var hKeyUsage = X509.getHexOfV_V3ExtValue(hCert, "keyUsage");
     if (hKeyUsage == '') return '';
     if (hKeyUsage.length % 2 != 0 || hKeyUsage.length <= 2)
-	throw "malformed key usage value";
+        throw "malformed key usage value";
     var unusedBits = parseInt(hKeyUsage.substr(0, 2));
     var bKeyUsage = parseInt(hKeyUsage.substr(2), 16).toString(2);
     return bKeyUsage.substr(0, bKeyUsage.length - unusedBits);
@@ -647,11 +651,11 @@ X509.getExtKeyUsageBin = function(hCert) {
  * sKeyUsage = X509.getExtKeyUsageString(hCert);
  * // sKeyUsage will be such like 'digitalSignature,keyEncipherment'.
  */
-X509.getExtKeyUsageString = function(hCert) {
+X509.getExtKeyUsageString = function (hCert) {
     var bKeyUsage = X509.getExtKeyUsageBin(hCert);
     var a = new Array();
     for (var i = 0; i < bKeyUsage.length; i++) {
-	if (bKeyUsage.substr(i, 1) == "1") a.push(X509.KEYUSAGE_NAME[i]);
+        if (bKeyUsage.substr(i, 1) == "1") a.push(X509.KEYUSAGE_NAME[i]);
     }
     return a.join(",");
 };
@@ -679,45 +683,45 @@ X509.getExtKeyUsageString = function(hCert) {
  * // oAIA.ocsp = ["http://ocsp.foo.com"];
  * // oAIA.caissuer = ["http://rep.foo.com/aaa.p8m"];
  */
-X509.getExtAIAInfo = function(hCert) {
+X509.getExtAIAInfo = function (hCert) {
     var result = {};
     result.ocsp = [];
     result.caissuer = [];
     var pos1 = X509.getPosOfTLV_V3ExtValue(hCert, "authorityInfoAccess");
     if (pos1 == -1) return null;
     if (hCert.substr(pos1, 2) != "30") // extnValue SEQUENCE
-	throw "malformed AIA Extn Value";
-    
+        throw "malformed AIA Extn Value";
+
     var posAccDescList = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos1);
     for (var i = 0; i < posAccDescList.length; i++) {
-	var p = posAccDescList[i];
-	var posAccDescChild = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, p);
-	if (posAccDescChild.length != 2)
-	    throw "malformed AccessDescription of AIA Extn";
-	var pOID = posAccDescChild[0];
-	var pName = posAccDescChild[1];
-	if (ASN1HEX.getHexOfV_AtObj(hCert, pOID) == "2b06010505073001") {
-	    if (hCert.substr(pName, 2) == "86") {
-		result.ocsp.push(hextoutf8(ASN1HEX.getHexOfV_AtObj(hCert, pName)));
-	    }
-	}
-	if (ASN1HEX.getHexOfV_AtObj(hCert, pOID) == "2b06010505073002") {
-	    if (hCert.substr(pName, 2) == "86") {
-		result.caissuer.push(hextoutf8(ASN1HEX.getHexOfV_AtObj(hCert, pName)));
-	    }
-	}
+        var p = posAccDescList[i];
+        var posAccDescChild = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, p);
+        if (posAccDescChild.length != 2)
+            throw "malformed AccessDescription of AIA Extn";
+        var pOID = posAccDescChild[0];
+        var pName = posAccDescChild[1];
+        if (ASN1HEX.getHexOfV_AtObj(hCert, pOID) == "2b06010505073001") {
+            if (hCert.substr(pName, 2) == "86") {
+                result.ocsp.push(hextoutf8(ASN1HEX.getHexOfV_AtObj(hCert, pName)));
+            }
+        }
+        if (ASN1HEX.getHexOfV_AtObj(hCert, pOID) == "2b06010505073002") {
+            if (hCert.substr(pName, 2) == "86") {
+                result.caissuer.push(hextoutf8(ASN1HEX.getHexOfV_AtObj(hCert, pName)));
+            }
+        }
     }
     return result;
 };
 
 /*
-  X509.prototype.readCertPEM = _x509_readCertPEM;
-  X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
-  X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
-  X509.prototype.getIssuerHex = _x509_getIssuerHex;
-  X509.prototype.getSubjectHex = _x509_getSubjectHex;
-  X509.prototype.getIssuerString = _x509_getIssuerString;
-  X509.prototype.getSubjectString = _x509_getSubjectString;
-  X509.prototype.getNotBefore = _x509_getNotBefore;
-  X509.prototype.getNotAfter = _x509_getNotAfter;
-*/
+ X509.prototype.readCertPEM = _x509_readCertPEM;
+ X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
+ X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
+ X509.prototype.getIssuerHex = _x509_getIssuerHex;
+ X509.prototype.getSubjectHex = _x509_getSubjectHex;
+ X509.prototype.getIssuerString = _x509_getIssuerString;
+ X509.prototype.getSubjectString = _x509_getSubjectString;
+ X509.prototype.getNotBefore = _x509_getNotBefore;
+ X509.prototype.getNotAfter = _x509_getNotAfter;
+ */

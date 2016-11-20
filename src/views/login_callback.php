@@ -20,30 +20,30 @@
  *  user was originally on.
  */
 ?>
-<!DOCTYPE html>	
+<!DOCTYPE html>
 <html>
-  
-  <head>
+
+<head>
     <title>Redirecting</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  
-  <body>
-    <?php require("menu.php") ?>
-    
-    <header id='head' class='secondary'>
+</head>
+
+<body>
+<?php require("menu.php") ?>
+
+<header id='head' class='secondary'>
     <div class='container'>
-      <div class='row'>
-        <h1>Redirecting ...</h1>
-      </div>
+        <div class='row'>
+            <h1>Redirecting ...</h1>
+        </div>
     </div>
-    </header>
-    
-    <?php include("footer.php"); ?>
-    
-  </body>
-  
+</header>
+
+<?php include("footer.php"); ?>
+
+</body>
+
 </html>
 
 

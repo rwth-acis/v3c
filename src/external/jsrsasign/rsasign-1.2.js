@@ -30,7 +30,9 @@ _RE_HEXDECONLY.compile("[^0-9a-f]", "gi");
 // ========================================================================
 
 function _rsasign_getHexPaddedDigestInfoForString(s, keySize, hashAlg) {
-    var hashFunc = function(s) { return KJUR.crypto.Util.hashString(s, hashAlg); };
+    var hashFunc = function (s) {
+        return KJUR.crypto.Util.hashString(s, hashAlg);
+    };
     var sHashHex = hashFunc(s);
 
     return KJUR.crypto.Util.getPaddedDigestInfoHex(sHashHex, hashAlg, keySize);
@@ -40,7 +42,7 @@ function _zeroPaddingOfSignature(hex, bitLength) {
     var s = "";
     var nZero = bitLength / 4 - hex.length;
     for (var i = 0; i < nZero; i++) {
-	s = s + "0";
+        s = s + "0";
     }
     return s + hex;
 }
@@ -55,7 +57,9 @@ function _zeroPaddingOfSignature(hex, bitLength) {
  * @return returns hexadecimal string of signature value.
  */
 function _rsasign_signString(s, hashAlg) {
-    var hashFunc = function(s) { return KJUR.crypto.Util.hashString(s, hashAlg); };
+    var hashFunc = function (s) {
+        return KJUR.crypto.Util.hashString(s, hashAlg);
+    };
     var sHashHex = hashFunc(s);
 
     return this.signWithMessageHash(sHashHex, hashAlg);
@@ -121,7 +125,9 @@ function pss_mgf1_str(seed, len, hash) {
  * @return returns hexadecimal string of signature value.
  */
 function _rsasign_signStringPSS(s, hashAlg, sLen) {
-    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); } 
+    var hashFunc = function (sHex) {
+        return KJUR.crypto.Util.hashHex(sHex, hashAlg);
+    }
     var hHash = hashFunc(rstrtohex(s));
 
     if (sLen === undefined) sLen = -1;
@@ -152,7 +158,9 @@ function _rsasign_signWithMessageHashPSS(hHash, hashAlg, sLen) {
     var emBits = this.n.bitLength() - 1;
     var emLen = Math.ceil(emBits / 8);
     var i;
-    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); } 
+    var hashFunc = function (sHex) {
+        return KJUR.crypto.Util.hashHex(sHex, hashAlg);
+    }
 
     if (sLen === -1 || sLen === undefined) {
         sLen = hLen; // same as hash length
@@ -199,7 +207,7 @@ function _rsasign_signWithMessageHashPSS(hHash, hashAlg, sLen) {
     maskedDB.push(0xbc);
 
     return _zeroPaddingOfSignature(this.doPrivate(new BigInteger(maskedDB)).toString(16),
-				   this.n.bitLength());
+        this.n.bitLength());
 }
 
 // ========================================================================
@@ -221,12 +229,12 @@ function _rsasign_getHexDigestInfoFromSig(biSig, hN, hE) {
 
 function _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo) {
     for (var algName in KJUR.crypto.Util.DIGESTINFOHEAD) {
-	var head = KJUR.crypto.Util.DIGESTINFOHEAD[algName];
-	var len = head.length;
-	if (hDigestInfo.substring(0, len) == head) {
-	    var a = [algName, hDigestInfo.substring(len)];
-	    return a;
-	}
+        var head = KJUR.crypto.Util.DIGESTINFOHEAD[algName];
+        var len = head.length;
+        if (hDigestInfo.substring(0, len) == head) {
+            var a = [algName, hDigestInfo.substring(len)];
+            return a;
+        }
     }
     return [];
 }
@@ -237,7 +245,9 @@ function _rsasign_verifySignatureWithArgs(sMsg, biSig, hN, hE) {
     if (digestInfoAry.length == 0) return false;
     var algName = digestInfoAry[0];
     var diHashValue = digestInfoAry[1];
-    var ff = function(s) { return KJUR.crypto.Util.hashString(s, algName); };
+    var ff = function (s) {
+        return KJUR.crypto.Util.hashString(s, algName);
+    };
     var msgHashValue = ff(sMsg);
     return (diHashValue == msgHashValue);
 }
@@ -245,8 +255,8 @@ function _rsasign_verifySignatureWithArgs(sMsg, biSig, hN, hE) {
 function _rsasign_verifyHexSignatureForMessage(hSig, sMsg) {
     var biSig = parseBigInt(hSig, 16);
     var result = _rsasign_verifySignatureWithArgs(sMsg, biSig,
-						  this.n.toString(16),
-						  this.e.toString(16));
+        this.n.toString(16),
+        this.e.toString(16));
     return result;
 }
 
@@ -268,11 +278,13 @@ function _rsasign_verifyString(sMsg, hSig) {
     var biDecryptedSig = this.doPublic(biSig);
     var hDigestInfo = biDecryptedSig.toString(16).replace(/^1f+00/, '');
     var digestInfoAry = _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
-  
+
     if (digestInfoAry.length == 0) return false;
     var algName = digestInfoAry[0];
     var diHashValue = digestInfoAry[1];
-    var ff = function(s) { return KJUR.crypto.Util.hashString(s, algName); };
+    var ff = function (s) {
+        return KJUR.crypto.Util.hashString(s, algName);
+    };
     var msgHashValue = ff(sMsg);
     return (diHashValue == msgHashValue);
 }
@@ -296,7 +308,7 @@ function _rsasign_verifyWithMessageHash(sHashHex, hSig) {
     var biDecryptedSig = this.doPublic(biSig);
     var hDigestInfo = biDecryptedSig.toString(16).replace(/^1f+00/, '');
     var digestInfoAry = _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
-  
+
     if (digestInfoAry.length == 0) return false;
     var algName = digestInfoAry[0];
     var diHashValue = digestInfoAry[1];
@@ -322,7 +334,9 @@ function _rsasign_verifyWithMessageHash(sHashHex, hSig) {
  * @return returns true if valid, otherwise false
  */
 function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
-    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); };
+    var hashFunc = function (sHex) {
+        return KJUR.crypto.Util.hashHex(sHex, hashAlg);
+    };
     var hHash = hashFunc(rstrtohex(sMsg));
 
     if (sLen === undefined) sLen = -1;
@@ -355,7 +369,9 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
         return false;
     }
 
-    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); };
+    var hashFunc = function (sHex) {
+        return KJUR.crypto.Util.hashHex(sHex, hashAlg);
+    };
     var mHash = hextorstr(hHash);
     var hLen = mHash.length;
     var emBits = this.n.bitLength() - 1;
@@ -384,7 +400,7 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
         em.unshift(0);
     }
 
-    if (em[emLen -1] !== 0xbc) {
+    if (em[emLen - 1] !== 0xbc) {
         throw "encoded message does not end in 0xbc";
     }
 
@@ -421,7 +437,7 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
     }
 
     return H === hextorstr(hashFunc(rstrtohex('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash +
-				     String.fromCharCode.apply(String, DB.slice(-sLen)))));
+            String.fromCharCode.apply(String, DB.slice(-sLen)))));
 }
 
 RSAKey.prototype.signWithMessageHash = _rsasign_signWithMessageHash;

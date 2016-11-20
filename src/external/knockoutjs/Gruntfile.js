@@ -1,5 +1,5 @@
 /*global module:false*/
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     var _ = grunt.util._;
 
     // Project configuration
@@ -8,10 +8,10 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         fragments: './build/fragments/',
         banner: '/*!\n' +
-                ' * Knockout JavaScript library v<%= pkg.version %>\n' +
-                ' * (c) Steven Sanderson - <%= pkg.homepage %>\n' +
-                ' * License: <%= pkg.licenses[0].type %> (<%= pkg.licenses[0].url %>)\n' +
-                ' */\n\n',
+        ' * Knockout JavaScript library v<%= pkg.version %>\n' +
+        ' * (c) Steven Sanderson - <%= pkg.homepage %>\n' +
+        ' * License: <%= pkg.licenses[0].type %> (<%= pkg.licenses[0].url %>)\n' +
+        ' */\n\n',
 
         checktrailingspaces: {
             main: {
@@ -39,8 +39,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('clean', 'Clean up output files.', function (target) {
         var output = grunt.config('build');
-        var files = [ output.debug, output.min ];
-        var options = { force: (target == 'force') };
+        var files = [output.debug, output.min];
+        var options = {force: (target == 'force')};
         _.forEach(files, function (file) {
             if (grunt.file.exists(file))
                 grunt.file.delete(file, options);
@@ -49,14 +49,14 @@ module.exports = function(grunt) {
     });
 
     var trailingSpaceRegex = /[ ]$/;
-    grunt.registerMultiTask('checktrailingspaces', 'checktrailingspaces', function() {
+    grunt.registerMultiTask('checktrailingspaces', 'checktrailingspaces', function () {
         var matches = [];
-        this.files[0].src.forEach(function(filepath) {
+        this.files[0].src.forEach(function (filepath) {
             var content = grunt.file.read(filepath),
                 lines = content.split(/\r*\n/);
-            lines.forEach(function(line, index) {
+            lines.forEach(function (line, index) {
                 if (trailingSpaceRegex.test(line)) {
-                    matches.push([filepath, (index+1), line].join(':'));
+                    matches.push([filepath, (index + 1), line].join(':'));
                 }
             });
         });
@@ -70,7 +70,9 @@ module.exports = function(grunt) {
     function getReferencedSources(sourceReferencesFilename) {
         // Returns the array of filenames referenced by a file like source-references.js
         var result;
-        global.knockoutDebugCallback = function(sources) { result = sources; };
+        global.knockoutDebugCallback = function (sources) {
+            result = sources;
+        };
         eval(grunt.file.read(sourceReferencesFilename));
         return result;
     }
@@ -85,7 +87,7 @@ module.exports = function(grunt) {
                 fragments + 'extern-post.js'
             ],
             flattenedSourceFilenames = Array.prototype.concat.apply([], sourceFilenames),
-            combinedSources = flattenedSourceFilenames.map(function(filename) {
+            combinedSources = flattenedSourceFilenames.map(function (filename) {
                 return grunt.file.read('./' + filename);
             }).join('');
 
@@ -121,7 +123,7 @@ module.exports = function(grunt) {
         });
     }
 
-    grunt.registerMultiTask('build', 'Build', function() {
+    grunt.registerMultiTask('build', 'Build', function () {
         if (!this.errorCount) {
             var output = this.data;
             if (this.target === 'debug') {
@@ -135,7 +137,7 @@ module.exports = function(grunt) {
 
     grunt.registerMultiTask('test', 'Run tests', function () {
         var done = this.async();
-        grunt.util.spawn({ cmd: this.target, args: [this.data] },
+        grunt.util.spawn({cmd: this.target, args: [this.data]},
             function (error, result, code) {
                 if (code === 127 /*not found*/) {
                     grunt.verbose.error(result.stderr);
@@ -151,7 +153,7 @@ module.exports = function(grunt) {
         );
     });
 
-    grunt.registerTask('dist', function() {
+    grunt.registerTask('dist', function () {
         var version = grunt.config('pkg.version'),
             buildConfig = grunt.config('build'),
             distConfig = grunt.config('dist');

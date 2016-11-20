@@ -21,21 +21,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collaborative Viewing of 3D Models </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Viewing of 3D Models </title>
 
 </head>
 <body>
-  <?php include("menu.php"); ?>
+<?php include("menu.php"); ?>
 
-  <?php
-    //Decide if this site is inside a separate widget
-    if(filter_input(INPUT_GET, "widget") == "true") {
+<?php
+//Decide if this site is inside a separate widget
+if (filter_input(INPUT_GET, "widget") == "true") {
 
-    }
-    else {
-      echo '
+} else {
+    echo '
           <header id="head" class="secondary">
               <div class="container">
                   <div class="row">
@@ -46,26 +45,26 @@
               </div>
           </header>
       ';
-    }
-  ?>
+}
+?>
 
-  <!-- Build course table -->
-    <div id="table-container">
+<!-- Build course table -->
+<div id="table-container">
     <?php
-      include '../php/db_connect.php';
-      include '../php/tools.php';
+    include '../php/db_connect.php';
+    include '../php/tools.php';
 
-      $query  = $db->query("SELECT * FROM subjects");
-      $result = $query->fetchAll();
+    $query = $db->query("SELECT * FROM subjects");
+    $result = $query->fetchAll();
 
-      $html = createTable($result,"subjects");
-      echo $html;
+    $html = createTable($result, "subjects");
+    echo $html;
     ?>
-    </div>
-  <!-- /container -->
+</div>
+<!-- /container -->
 
-  <?php include("footer.php");?>
- ?>
+<?php include("footer.php"); ?>
+?>
 
 </body>
 </html>

@@ -19,62 +19,68 @@
  *  Class for CRUD operations for users
  */
 
-class UserManagement {
-  
-  private $db;
-  
-  /**
-   * Constructor for UserManagement
-   */
-  function __construct() {
-    $this->db = require 'db_connect.php';
-  }
-  
-  /**
-   * Reading a user from our database
-   * @param String $sub The Open ID Connect SUB
-   * @return Object object with property names that correspond to the column 
-   * names of our users table
-   */
-  public function readUser($sub) {
-    $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-    $sqlSelect = "SELECT * FROM `users` WHERE openIdConnectSub='" . $sub . "'";
-    // This will escape symbols in the SQL statement (also supposed to prevent 
-    // SQL injection attacks). Returns a PDOStatement
-    $sth = $this->db->prepare($sqlSelect);
-    $sth->execute();
-    return $sth->fetch(PDO::FETCH_OBJ);
-  }
-  
-  /**
-   * Create a user entry in our database
-   * @param type $userProfile Object with properties email, sub, given_name,
-   * family_name
-   */
-  public function createUser($userProfile) {
-    // CREATE A NEW USER DATABASE ENTRY
-    $sqlInsert = "INSERT INTO users (email, openIdConnectSub, given_name, family_name) VALUES ('".$userProfile->email."','".$userProfile->sub."','".$userProfile->given_name."','".$userProfile->family_name."')";
-    $sth = $this->db->prepare($sqlInsert);
-    $ret = $sth->execute();
-    if($ret === false) {
-      error_log('Error: user insertion in database failed!');
-      die('Could not create new user.');
+class UserManagement
+{
+
+    private $db;
+
+    /**
+     * Constructor for UserManagement
+     */
+    function __construct()
+    {
+        $this->db = require 'db_connect.php';
     }
-  }
-  
-  /**
-   * Update a user entry in our database
-   * @param type $userProfile
-   */
-  public function updateUser($userProfile) {
-    // TODO
-  }
-  
-  /**
-   * Delete a user entry in our database
-   * @param type $sub
-   */
-  public function deleteUser($sub) {
-    // TODO
-  }
+
+    /**
+     * Reading a user from our database
+     * @param String $sub The Open ID Connect SUB
+     * @return Object object with property names that correspond to the column
+     * names of our users table
+     */
+    public function readUser($sub)
+    {
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        $sqlSelect = "SELECT * FROM `users` WHERE openIdConnectSub='" . $sub . "'";
+        // This will escape symbols in the SQL statement (also supposed to prevent 
+        // SQL injection attacks). Returns a PDOStatement
+        $sth = $this->db->prepare($sqlSelect);
+        $sth->execute();
+        return $sth->fetch(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * Create a user entry in our database
+     * @param type $userProfile Object with properties email, sub, given_name,
+     * family_name
+     */
+    public function createUser($userProfile)
+    {
+        // CREATE A NEW USER DATABASE ENTRY
+        $sqlInsert = "INSERT INTO users (email, openIdConnectSub, given_name, family_name) VALUES ('" . $userProfile->email . "','" . $userProfile->sub . "','" . $userProfile->given_name . "','" . $userProfile->family_name . "')";
+        $sth = $this->db->prepare($sqlInsert);
+        $ret = $sth->execute();
+        if ($ret === false) {
+            error_log('Error: user insertion in database failed!');
+            die('Could not create new user.');
+        }
+    }
+
+    /**
+     * Update a user entry in our database
+     * @param type $userProfile
+     */
+    public function updateUser($userProfile)
+    {
+        // TODO
+    }
+
+    /**
+     * Delete a user entry in our database
+     * @param type $sub
+     */
+    public function deleteUser($sub)
+    {
+        // TODO
+    }
 }

@@ -17,23 +17,23 @@
  *  
  */
 
-$(document).ready(function() {
-  
-  $("#btn-delete").on("click", function() {
-    
-    var id = URI().query(true).id;  
-    
-    window.location = "course_delete.php?id="+id;
-    
-  });
-  
-  
-  $("#enter-course-a").on("click", function() {
-    
-    var rolespace = $("#enter-course-a")[0].dataset.rolespace;
-    
-    if (rolespace !== undefined && rolespace !== "") {
-      window.open(tools.urlForSpace(rolespace));
-    }
-  });
+$(document).ready(function () {
+
+    $("#btn-delete").on("click", function () {
+
+        var id = URI().query(true).id;
+
+        window.location = "course_delete.php?id=" + id;
+
+    });
+
+
+    $("#enter-course-a").on("click", function () {
+
+        var rolespace = $("#enter-course-a")[0].dataset.rolespace;
+
+        if (rolespace !== undefined && rolespace !== "") {
+            window.open(tools.urlForSpace(rolespace));
+        }
+    });
 });

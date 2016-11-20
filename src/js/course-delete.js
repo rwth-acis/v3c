@@ -17,21 +17,21 @@
  *  Functionality for views/course_delete.php
  */
 
-$(document).ready(function() {
-  
-  // When clicking yes, remove course from database
-  $("#btn-yes").on("click", function() {
-    var courseId = URI().query(true).id;
-    $.post("../php/delete_course.php", {"course_id": courseId}, function(data){
-      if (data !== "FALSE") {
-        window.location = "course_list.php?id="+data;
-      }
+$(document).ready(function () {
+
+    // When clicking yes, remove course from database
+    $("#btn-yes").on("click", function () {
+        var courseId = URI().query(true).id;
+        $.post("../php/delete_course.php", {"course_id": courseId}, function (data) {
+            if (data !== "FALSE") {
+                window.location = "course_list.php?id=" + data;
+            }
+        });
     });
-  });
-  
-  // When clicking no, go back to page where user came from
-  $("#btn-no").on("click", function() {
-    window.location = document.referrer;
-  });
-  
+
+    // When clicking no, go back to page where user came from
+    $("#btn-no").on("click", function () {
+        window.location = document.referrer;
+    });
+
 });

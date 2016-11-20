@@ -18,40 +18,40 @@
  * Webpage for creating a new course.
  */
 ?>
-<!DOCTYPE html>	
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Create a new course</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  
-  <body>
-    <?php include("menu.php"); ?>
-    
-    <header id='head' class='secondary'>
+</head>
+
+<body>
+<?php include("menu.php"); ?>
+
+<header id='head' class='secondary'>
     <div class='container'>
-      <div class='row'>
-        <h1>Create a new course</h1>
-      </div>
+        <div class='row'>
+            <h1>Create a new course</h1>
+        </div>
     </div>
-    </header>
-    
-    <?php
-      // Check whether the currently logged in user is allowed to create courses
-      require '../php/access_control.php';
-      $accessControl = new AccessControl();
-      $canCreateCourse = $accessControl->canCreateCourse();
+</header>
 
-      if($canCreateCourse) {		
-        include 'addcourse_content.php';
-      } else {
-        include 'not_authorized.php';
-      }
+<?php
+// Check whether the currently logged in user is allowed to create courses
+require '../php/access_control.php';
+$accessControl = new AccessControl();
+$canCreateCourse = $accessControl->canCreateCourse();
 
-      include("footer.php");
-    ?>
-    
-  </body>
+if ($canCreateCourse) {
+    include 'addcourse_content.php';
+} else {
+    include 'not_authorized.php';
+}
+
+include("footer.php");
+?>
+
+</body>
 
 </html>

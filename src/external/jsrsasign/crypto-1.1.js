@@ -21,7 +21,7 @@
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-/** 
+/**
  * kjur's class library name space
  * @name KJUR
  * @namespace kjur's class library name space
@@ -51,77 +51,77 @@ if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
  * @property {Array} DEFAULTPROVIDER associative array of default provider name for each hash and signature algorithms
  * @description
  */
-KJUR.crypto.Util = new function() {
+KJUR.crypto.Util = new function () {
     this.DIGESTINFOHEAD = {
-	'sha1':      "3021300906052b0e03021a05000414",
-        'sha224':    "302d300d06096086480165030402040500041c",
-	'sha256':    "3031300d060960864801650304020105000420",
-	'sha384':    "3041300d060960864801650304020205000430",
-	'sha512':    "3051300d060960864801650304020305000440",
-	'md2':       "3020300c06082a864886f70d020205000410",
-	'md5':       "3020300c06082a864886f70d020505000410",
-	'ripemd160': "3021300906052b2403020105000414",
+        'sha1': "3021300906052b0e03021a05000414",
+        'sha224': "302d300d06096086480165030402040500041c",
+        'sha256': "3031300d060960864801650304020105000420",
+        'sha384': "3041300d060960864801650304020205000430",
+        'sha512': "3051300d060960864801650304020305000440",
+        'md2': "3020300c06082a864886f70d020205000410",
+        'md5': "3020300c06082a864886f70d020505000410",
+        'ripemd160': "3021300906052b2403020105000414",
     };
 
     /*
      * @since crypto 1.1.1
      */
     this.DEFAULTPROVIDER = {
-	'md5':			'cryptojs',
-	'sha1':			'cryptojs',
-	'sha224':		'cryptojs',
-	'sha256':		'cryptojs',
-	'sha384':		'cryptojs',
-	'sha512':		'cryptojs',
-	'ripemd160':		'cryptojs',
-	'hmacmd5':		'cryptojs',
-	'hmacsha1':		'cryptojs',
-	'hmacsha224':		'cryptojs',
-	'hmacsha256':		'cryptojs',
-	'hmacsha384':		'cryptojs',
-	'hmacsha512':		'cryptojs',
-	'hmacripemd160':	'cryptojs',
+        'md5': 'cryptojs',
+        'sha1': 'cryptojs',
+        'sha224': 'cryptojs',
+        'sha256': 'cryptojs',
+        'sha384': 'cryptojs',
+        'sha512': 'cryptojs',
+        'ripemd160': 'cryptojs',
+        'hmacmd5': 'cryptojs',
+        'hmacsha1': 'cryptojs',
+        'hmacsha224': 'cryptojs',
+        'hmacsha256': 'cryptojs',
+        'hmacsha384': 'cryptojs',
+        'hmacsha512': 'cryptojs',
+        'hmacripemd160': 'cryptojs',
 
-	'MD5withRSA':		'cryptojs/jsrsa',
-	'SHA1withRSA':		'cryptojs/jsrsa',
-	'SHA224withRSA':	'cryptojs/jsrsa',
-	'SHA256withRSA':	'cryptojs/jsrsa',
-	'SHA384withRSA':	'cryptojs/jsrsa',
-	'SHA512withRSA':	'cryptojs/jsrsa',
-	'RIPEMD160withRSA':	'cryptojs/jsrsa',
+        'MD5withRSA': 'cryptojs/jsrsa',
+        'SHA1withRSA': 'cryptojs/jsrsa',
+        'SHA224withRSA': 'cryptojs/jsrsa',
+        'SHA256withRSA': 'cryptojs/jsrsa',
+        'SHA384withRSA': 'cryptojs/jsrsa',
+        'SHA512withRSA': 'cryptojs/jsrsa',
+        'RIPEMD160withRSA': 'cryptojs/jsrsa',
 
-	'MD5withECDSA':		'cryptojs/jsrsa',
-	'SHA1withECDSA':	'cryptojs/jsrsa',
-	'SHA224withECDSA':	'cryptojs/jsrsa',
-	'SHA256withECDSA':	'cryptojs/jsrsa',
-	'SHA384withECDSA':	'cryptojs/jsrsa',
-	'SHA512withECDSA':	'cryptojs/jsrsa',
-	'RIPEMD160withECDSA':	'cryptojs/jsrsa',
+        'MD5withECDSA': 'cryptojs/jsrsa',
+        'SHA1withECDSA': 'cryptojs/jsrsa',
+        'SHA224withECDSA': 'cryptojs/jsrsa',
+        'SHA256withECDSA': 'cryptojs/jsrsa',
+        'SHA384withECDSA': 'cryptojs/jsrsa',
+        'SHA512withECDSA': 'cryptojs/jsrsa',
+        'RIPEMD160withECDSA': 'cryptojs/jsrsa',
 
-	'SHA1withDSA':		'cryptojs/jsrsa',
-	'SHA224withDSA':	'cryptojs/jsrsa',
-	'SHA256withDSA':	'cryptojs/jsrsa',
+        'SHA1withDSA': 'cryptojs/jsrsa',
+        'SHA224withDSA': 'cryptojs/jsrsa',
+        'SHA256withDSA': 'cryptojs/jsrsa',
 
-	'MD5withRSAandMGF1':		'cryptojs/jsrsa',
-	'SHA1withRSAandMGF1':		'cryptojs/jsrsa',
-	'SHA224withRSAandMGF1':		'cryptojs/jsrsa',
-	'SHA256withRSAandMGF1':		'cryptojs/jsrsa',
-	'SHA384withRSAandMGF1':		'cryptojs/jsrsa',
-	'SHA512withRSAandMGF1':		'cryptojs/jsrsa',
-	'RIPEMD160withRSAandMGF1':	'cryptojs/jsrsa',
+        'MD5withRSAandMGF1': 'cryptojs/jsrsa',
+        'SHA1withRSAandMGF1': 'cryptojs/jsrsa',
+        'SHA224withRSAandMGF1': 'cryptojs/jsrsa',
+        'SHA256withRSAandMGF1': 'cryptojs/jsrsa',
+        'SHA384withRSAandMGF1': 'cryptojs/jsrsa',
+        'SHA512withRSAandMGF1': 'cryptojs/jsrsa',
+        'RIPEMD160withRSAandMGF1': 'cryptojs/jsrsa',
     };
 
     /*
      * @since crypto 1.1.2
      */
     this.CRYPTOJSMESSAGEDIGESTNAME = {
-	'md5':		'CryptoJS.algo.MD5',
-	'sha1':		'CryptoJS.algo.SHA1',
-	'sha224':	'CryptoJS.algo.SHA224',
-	'sha256':	'CryptoJS.algo.SHA256',
-	'sha384':	'CryptoJS.algo.SHA384',
-	'sha512':	'CryptoJS.algo.SHA512',
-	'ripemd160':	'CryptoJS.algo.RIPEMD160'
+        'md5': 'CryptoJS.algo.MD5',
+        'sha1': 'CryptoJS.algo.SHA1',
+        'sha224': 'CryptoJS.algo.SHA224',
+        'sha256': 'CryptoJS.algo.SHA256',
+        'sha384': 'CryptoJS.algo.SHA384',
+        'sha512': 'CryptoJS.algo.SHA512',
+        'ripemd160': 'CryptoJS.algo.RIPEMD160'
     };
 
     /**
@@ -133,10 +133,10 @@ KJUR.crypto.Util = new function() {
      * @param {String} alg hash algorithm name (ex. 'sha1')
      * @return {String} hexadecimal string DigestInfo ASN.1 structure
      */
-    this.getDigestInfoHex = function(hHash, alg) {
-	if (typeof this.DIGESTINFOHEAD[alg] == "undefined")
-	    throw "alg not supported in Util.DIGESTINFOHEAD: " + alg;
-	return this.DIGESTINFOHEAD[alg] + hHash;
+    this.getDigestInfoHex = function (hHash, alg) {
+        if (typeof this.DIGESTINFOHEAD[alg] == "undefined")
+            throw "alg not supported in Util.DIGESTINFOHEAD: " + alg;
+        return this.DIGESTINFOHEAD[alg] + hHash;
     };
 
     /**
@@ -149,22 +149,22 @@ KJUR.crypto.Util = new function() {
      * @param {Integer} keySize key bit length (ex. 1024)
      * @return {String} hexadecimal string of PKCS#1 padded DigestInfo
      */
-    this.getPaddedDigestInfoHex = function(hHash, alg, keySize) {
-	var hDigestInfo = this.getDigestInfoHex(hHash, alg);
-	var pmStrLen = keySize / 4; // minimum PM length
+    this.getPaddedDigestInfoHex = function (hHash, alg, keySize) {
+        var hDigestInfo = this.getDigestInfoHex(hHash, alg);
+        var pmStrLen = keySize / 4; // minimum PM length
 
-	if (hDigestInfo.length + 22 > pmStrLen) // len(0001+ff(*8)+00+hDigestInfo)=22
-	    throw "key is too short for SigAlg: keylen=" + keySize + "," + alg;
+        if (hDigestInfo.length + 22 > pmStrLen) // len(0001+ff(*8)+00+hDigestInfo)=22
+            throw "key is too short for SigAlg: keylen=" + keySize + "," + alg;
 
-	var hHead = "0001";
-	var hTail = "00" + hDigestInfo;
-	var hMid = "";
-	var fLen = pmStrLen - hHead.length - hTail.length;
-	for (var i = 0; i < fLen; i += 2) {
-	    hMid += "ff";
-	}
-	var hPaddedMessage = hHead + hMid + hTail;
-	return hPaddedMessage;
+        var hHead = "0001";
+        var hTail = "00" + hDigestInfo;
+        var hMid = "";
+        var fLen = pmStrLen - hHead.length - hTail.length;
+        for (var i = 0; i < fLen; i += 2) {
+            hMid += "ff";
+        }
+        var hPaddedMessage = hHead + hMid + hTail;
+        return hPaddedMessage;
     };
 
     /**
@@ -177,7 +177,7 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string of hash value
      * @since 1.1.1
      */
-    this.hashString = function(s, alg) {
+    this.hashString = function (s, alg) {
         var md = new KJUR.crypto.MessageDigest({'alg': alg});
         return md.digestString(s);
     };
@@ -192,7 +192,7 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string of hash value
      * @since 1.1.1
      */
-    this.hashHex = function(sHex, alg) {
+    this.hashHex = function (sHex, alg) {
         var md = new KJUR.crypto.MessageDigest({'alg': alg});
         return md.digestHex(sHex);
     };
@@ -206,8 +206,8 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
-    this.sha1 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha1', 'prov':'cryptojs'});
+    this.sha1 = function (s) {
+        var md = new KJUR.crypto.MessageDigest({'alg': 'sha1', 'prov': 'cryptojs'});
         return md.digestString(s);
     };
 
@@ -220,13 +220,13 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
-    this.sha256 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
+    this.sha256 = function (s) {
+        var md = new KJUR.crypto.MessageDigest({'alg': 'sha256', 'prov': 'cryptojs'});
         return md.digestString(s);
     };
 
-    this.sha256Hex = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
+    this.sha256Hex = function (s) {
+        var md = new KJUR.crypto.MessageDigest({'alg': 'sha256', 'prov': 'cryptojs'});
         return md.digestHex(s);
     };
 
@@ -239,13 +239,13 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
-    this.sha512 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
+    this.sha512 = function (s) {
+        var md = new KJUR.crypto.MessageDigest({'alg': 'sha512', 'prov': 'cryptojs'});
         return md.digestString(s);
     };
 
-    this.sha512Hex = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
+    this.sha512Hex = function (s) {
+        var md = new KJUR.crypto.MessageDigest({'alg': 'sha512', 'prov': 'cryptojs'});
         return md.digestHex(s);
     };
 
@@ -258,8 +258,8 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
-    this.md5 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'md5', 'prov':'cryptojs'});
+    this.md5 = function (s) {
+        var md = new KJUR.crypto.MessageDigest({'alg': 'md5', 'prov': 'cryptojs'});
         return md.digestString(s);
     };
 
@@ -272,16 +272,16 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
-    this.ripemd160 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'ripemd160', 'prov':'cryptojs'});
+    this.ripemd160 = function (s) {
+        var md = new KJUR.crypto.MessageDigest({'alg': 'ripemd160', 'prov': 'cryptojs'});
         return md.digestString(s);
     };
 
     /*
      * @since 1.1.2
      */
-    this.getCryptoJSMDByName = function(s) {
-	
+    this.getCryptoJSMDByName = function (s) {
+
     };
 };
 
@@ -314,7 +314,7 @@ KJUR.crypto.Util = new function() {
  * md.updateString('aaa')
  * var mdHex = md.digest()
  */
-KJUR.crypto.MessageDigest = function(params) {
+KJUR.crypto.MessageDigest = function (params) {
     var md = null;
     var algName = null;
     var provName = null;
@@ -333,64 +333,64 @@ KJUR.crypto.MessageDigest = function(params) {
      * // for RIPEMD160
      * md.setAlgAndProvider('ripemd160', 'cryptojs');
      */
-    this.setAlgAndProvider = function(alg, prov) {
-	if (alg != null && prov === undefined) prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];
+    this.setAlgAndProvider = function (alg, prov) {
+        if (alg != null && prov === undefined) prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];
 
-	// for cryptojs
-	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &&
-	    prov == 'cryptojs') {
-	    try {
-		this.md = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[alg]).create();
-	    } catch (ex) {
-		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
-	    }
-	    this.updateString = function(str) {
-		this.md.update(str);
-	    };
-	    this.updateHex = function(hex) {
-		var wHex = CryptoJS.enc.Hex.parse(hex);
-		this.md.update(wHex);
-	    };
-	    this.digest = function() {
-		var hash = this.md.finalize();
-		return hash.toString(CryptoJS.enc.Hex);
-	    };
-	    this.digestString = function(str) {
-		this.updateString(str);
-		return this.digest();
-	    };
-	    this.digestHex = function(hex) {
-		this.updateHex(hex);
-		return this.digest();
-	    };
-	}
-	if (':sha256:'.indexOf(alg) != -1 &&
-	    prov == 'sjcl') {
-	    try {
-		this.md = new sjcl.hash.sha256();
-	    } catch (ex) {
-		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
-	    }
-	    this.updateString = function(str) {
-		this.md.update(str);
-	    };
-	    this.updateHex = function(hex) {
-		var baHex = sjcl.codec.hex.toBits(hex);
-		this.md.update(baHex);
-	    };
-	    this.digest = function() {
-		var hash = this.md.finalize();
-		return sjcl.codec.hex.fromBits(hash);
-	    };
-	    this.digestString = function(str) {
-		this.updateString(str);
-		return this.digest();
-	    };
-	    this.digestHex = function(hex) {
-		this.updateHex(hex);
-		return this.digest();
-	    };
-	}
+        // for cryptojs
+        if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &&
+            prov == 'cryptojs') {
+            try {
+                this.md = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[alg]).create();
+            } catch (ex) {
+                throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
+            }
+            this.updateString = function (str) {
+                this.md.update(str);
+            };
+            this.updateHex = function (hex) {
+                var wHex = CryptoJS.enc.Hex.parse(hex);
+                this.md.update(wHex);
+            };
+            this.digest = function () {
+                var hash = this.md.finalize();
+                return hash.toString(CryptoJS.enc.Hex);
+            };
+            this.digestString = function (str) {
+                this.updateString(str);
+                return this.digest();
+            };
+            this.digestHex = function (hex) {
+                this.updateHex(hex);
+                return this.digest();
+            };
+        }
+        if (':sha256:'.indexOf(alg) != -1 &&
+            prov == 'sjcl') {
+            try {
+                this.md = new sjcl.hash.sha256();
+            } catch (ex) {
+                throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
+            }
+            this.updateString = function (str) {
+                this.md.update(str);
+            };
+            this.updateHex = function (hex) {
+                var baHex = sjcl.codec.hex.toBits(hex);
+                this.md.update(baHex);
+            };
+            this.digest = function () {
+                var hash = this.md.finalize();
+                return sjcl.codec.hex.fromBits(hash);
+            };
+            this.digestString = function (str) {
+                this.updateString(str);
+                return this.digest();
+            };
+            this.digestHex = function (hex) {
+                this.updateHex(hex);
+                return this.digest();
+            };
+        }
     };
 
     /**
@@ -403,8 +403,8 @@ KJUR.crypto.MessageDigest = function(params) {
      * @example
      * md.updateString('New York');
      */
-    this.updateString = function(str) {
-	throw "updateString(str) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    this.updateString = function (str) {
+        throw "updateString(str) not supported for this alg/prov: " + this.algName + "/" + this.provName;
     };
 
     /**
@@ -417,8 +417,8 @@ KJUR.crypto.MessageDigest = function(params) {
      * @example
      * md.updateHex('0afe36');
      */
-    this.updateHex = function(hex) {
-	throw "updateHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    this.updateHex = function (hex) {
+        throw "updateHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;
     };
 
     /**
@@ -430,8 +430,8 @@ KJUR.crypto.MessageDigest = function(params) {
      * @example
      * md.digest()
      */
-    this.digest = function() {
-	throw "digest() not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    this.digest = function () {
+        throw "digest() not supported for this alg/prov: " + this.algName + "/" + this.provName;
     };
 
     /**
@@ -444,8 +444,8 @@ KJUR.crypto.MessageDigest = function(params) {
      * @example
      * md.digestString('aaa')
      */
-    this.digestString = function(str) {
-	throw "digestString(str) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    this.digestString = function (str) {
+        throw "digestString(str) not supported for this alg/prov: " + this.algName + "/" + this.provName;
     };
 
     /**
@@ -458,22 +458,22 @@ KJUR.crypto.MessageDigest = function(params) {
      * @example
      * md.digestHex('0f2abd')
      */
-    this.digestHex = function(hex) {
-	throw "digestHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    this.digestHex = function (hex) {
+        throw "digestHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;
     };
 
     if (params !== undefined) {
-	if (params['alg'] !== undefined) {
-	    this.algName = params['alg'];
-	    if (params['prov'] === undefined)
-		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
-	    this.setAlgAndProvider(this.algName, this.provName);
-	}
+        if (params['alg'] !== undefined) {
+            this.algName = params['alg'];
+            if (params['prov'] === undefined)
+                this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
+            this.setAlgAndProvider(this.algName, this.provName);
+        }
     }
 };
 
 /**
- * Mac(Message Authentication Code) class which is very similar to java.security.Mac class 
+ * Mac(Message Authentication Code) class which is very similar to java.security.Mac class
  * @name KJUR.crypto.Mac
  * @class Mac class which is very similar to java.security.Mac class
  * @param {Array} params parameters for constructor
@@ -502,64 +502,64 @@ KJUR.crypto.MessageDigest = function(params) {
  * mac.updateString('aaa')
  * var macHex = md.doFinal()
  *
- * // other password representation 
+ * // other password representation
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"utf8": "aa"}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"rstr": "\x61\x61"}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64":  "Mi02/+...a=="}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64u": "Mi02_-...a"}});
  */
-KJUR.crypto.Mac = function(params) {
+KJUR.crypto.Mac = function (params) {
     var mac = null;
     var pass = null;
     var algName = null;
     var provName = null;
     var algProv = null;
 
-    this.setAlgAndProvider = function(alg, prov) {
-	alg = alg.toLowerCase();
+    this.setAlgAndProvider = function (alg, prov) {
+        alg = alg.toLowerCase();
 
-	if (alg == null) alg = "hmacsha1";
+        if (alg == null) alg = "hmacsha1";
 
-	alg = alg.toLowerCase();
+        alg = alg.toLowerCase();
         if (alg.substr(0, 4) != "hmac") {
-	    throw "setAlgAndProvider unsupported HMAC alg: " + alg;
-	}
+            throw "setAlgAndProvider unsupported HMAC alg: " + alg;
+        }
 
-	if (prov === undefined) prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];
-	this.algProv = alg + "/" + prov;
+        if (prov === undefined) prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];
+        this.algProv = alg + "/" + prov;
 
-	var hashAlg = alg.substr(4);
+        var hashAlg = alg.substr(4);
 
-	// for cryptojs
-	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(hashAlg) != -1 &&
-	    prov == 'cryptojs') {
-	    try {
-		var mdObj = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[hashAlg]);
-		this.mac = CryptoJS.algo.HMAC.create(mdObj, this.pass);
-	    } catch (ex) {
-		throw "setAlgAndProvider hash alg set fail hashAlg=" + hashAlg + "/" + ex;
-	    }
-	    this.updateString = function(str) {
-		this.mac.update(str);
-	    };
-	    this.updateHex = function(hex) {
-		var wHex = CryptoJS.enc.Hex.parse(hex);
-		this.mac.update(wHex);
-	    };
-	    this.doFinal = function() {
-		var hash = this.mac.finalize();
-		return hash.toString(CryptoJS.enc.Hex);
-	    };
-	    this.doFinalString = function(str) {
-		this.updateString(str);
-		return this.doFinal();
-	    };
-	    this.doFinalHex = function(hex) {
-		this.updateHex(hex);
-		return this.doFinal();
-	    };
-	}
+        // for cryptojs
+        if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(hashAlg) != -1 &&
+            prov == 'cryptojs') {
+            try {
+                var mdObj = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[hashAlg]);
+                this.mac = CryptoJS.algo.HMAC.create(mdObj, this.pass);
+            } catch (ex) {
+                throw "setAlgAndProvider hash alg set fail hashAlg=" + hashAlg + "/" + ex;
+            }
+            this.updateString = function (str) {
+                this.mac.update(str);
+            };
+            this.updateHex = function (hex) {
+                var wHex = CryptoJS.enc.Hex.parse(hex);
+                this.mac.update(wHex);
+            };
+            this.doFinal = function () {
+                var hash = this.mac.finalize();
+                return hash.toString(CryptoJS.enc.Hex);
+            };
+            this.doFinalString = function (str) {
+                this.updateString(str);
+                return this.doFinal();
+            };
+            this.doFinalHex = function (hex) {
+                this.updateHex(hex);
+                return this.doFinal();
+            };
+        }
     };
 
     /**
@@ -572,8 +572,8 @@ KJUR.crypto.Mac = function(params) {
      * @example
      * md.updateString('New York');
      */
-    this.updateString = function(str) {
-	throw "updateString(str) not supported for this alg/prov: " + this.algProv;
+    this.updateString = function (str) {
+        throw "updateString(str) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
@@ -586,8 +586,8 @@ KJUR.crypto.Mac = function(params) {
      * @example
      * md.updateHex('0afe36');
      */
-    this.updateHex = function(hex) {
-	throw "updateHex(hex) not supported for this alg/prov: " + this.algProv;
+    this.updateHex = function (hex) {
+        throw "updateHex(hex) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
@@ -599,8 +599,8 @@ KJUR.crypto.Mac = function(params) {
      * @example
      * md.digest()
      */
-    this.doFinal = function() {
-	throw "digest() not supported for this alg/prov: " + this.algProv;
+    this.doFinal = function () {
+        throw "digest() not supported for this alg/prov: " + this.algProv;
     };
 
     /**
@@ -613,12 +613,12 @@ KJUR.crypto.Mac = function(params) {
      * @example
      * md.digestString('aaa')
      */
-    this.doFinalString = function(str) {
-	throw "digestString(str) not supported for this alg/prov: " + this.algProv;
+    this.doFinalString = function (str) {
+        throw "digestString(str) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
-     * performs final update on the digest using hexadecimal string, 
+     * performs final update on the digest using hexadecimal string,
      * then completes the digest computation
      * @name doFinalHex
      * @memberOf KJUR.crypto.Mac
@@ -628,8 +628,8 @@ KJUR.crypto.Mac = function(params) {
      * @example
      * md.digestHex('0f2abd')
      */
-    this.doFinalHex = function(hex) {
-	throw "digestHex(hex) not supported for this alg/prov: " + this.algProv;
+    this.doFinalHex = function (hex) {
+        throw "digestHex(hex) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
@@ -652,7 +652,7 @@ KJUR.crypto.Mac = function(params) {
      * <li>{b64u: "Mi7-_"}: explicitly specified as Base64URL string</li>
      * </ul>
      * It is *STRONGLY RECOMMENDED* that explicit representation of password argument
-     * to avoid ambiguity. For example string  "6161" can mean a string "6161" or 
+     * to avoid ambiguity. For example string  "6161" can mean a string "6161" or
      * a hexadecimal string of "aa" (i.e. \x61\x61).
      * @example
      * mac = KJUR.crypto.Mac({'alg': 'hmacsha256'});
@@ -673,53 +673,53 @@ KJUR.crypto.Mac = function(params) {
      * // set password by explicit Base64URL string
      * mac.setPassword({"b64u": "Mb-c3f_"});
      */
-    this.setPassword = function(pass) {
-	// internal this.pass shall be CryptoJS DWord Object for CryptoJS bug
-	// work around. CrytoJS HMac password can be passed by
-	// raw string as described in the manual however it doesn't
-	// work properly in some case. If password was passed
-	// by CryptoJS DWord which is not described in the manual
-	// it seems to work. (fixed since crypto 1.1.7)
+    this.setPassword = function (pass) {
+        // internal this.pass shall be CryptoJS DWord Object for CryptoJS bug
+        // work around. CrytoJS HMac password can be passed by
+        // raw string as described in the manual however it doesn't
+        // work properly in some case. If password was passed
+        // by CryptoJS DWord which is not described in the manual
+        // it seems to work. (fixed since crypto 1.1.7)
 
-	if (typeof pass == 'string') {
-	    var hPass = pass;
-	    if (pass.length % 2 == 1 || ! pass.match(/^[0-9A-Fa-f]+$/)) { // raw str
-		hPass = rstrtohex(pass);
-	    }
-	    this.pass = CryptoJS.enc.Hex.parse(hPass);
-	    return;
-	}
+        if (typeof pass == 'string') {
+            var hPass = pass;
+            if (pass.length % 2 == 1 || !pass.match(/^[0-9A-Fa-f]+$/)) { // raw str
+                hPass = rstrtohex(pass);
+            }
+            this.pass = CryptoJS.enc.Hex.parse(hPass);
+            return;
+        }
 
-	if (typeof pass != 'object')
-	    throw "KJUR.crypto.Mac unsupported password type: " + pass;
-	
-	var hPass = null;
-	if (pass.hex  !== undefined) {
-	    if (pass.hex.length % 2 != 0 || ! pass.hex.match(/^[0-9A-Fa-f]+$/))
-		throw "Mac: wrong hex password: " + pass.hex;
-	    hPass = pass.hex;
-	}
-	if (pass.utf8 !== undefined) hPass = utf8tohex(pass.utf8);
-	if (pass.rstr !== undefined) hPass = rstrtohex(pass.rstr);
-	if (pass.b64  !== undefined) hPass = b64tohex(pass.b64);
-	if (pass.b64u !== undefined) hPass = b64utohex(pass.b64u);
+        if (typeof pass != 'object')
+            throw "KJUR.crypto.Mac unsupported password type: " + pass;
 
-	if (hPass == null)
-	    throw "KJUR.crypto.Mac unsupported password type: " + pass;
+        var hPass = null;
+        if (pass.hex !== undefined) {
+            if (pass.hex.length % 2 != 0 || !pass.hex.match(/^[0-9A-Fa-f]+$/))
+                throw "Mac: wrong hex password: " + pass.hex;
+            hPass = pass.hex;
+        }
+        if (pass.utf8 !== undefined) hPass = utf8tohex(pass.utf8);
+        if (pass.rstr !== undefined) hPass = rstrtohex(pass.rstr);
+        if (pass.b64 !== undefined) hPass = b64tohex(pass.b64);
+        if (pass.b64u !== undefined) hPass = b64utohex(pass.b64u);
 
-	this.pass = CryptoJS.enc.Hex.parse(hPass);
+        if (hPass == null)
+            throw "KJUR.crypto.Mac unsupported password type: " + pass;
+
+        this.pass = CryptoJS.enc.Hex.parse(hPass);
     };
 
     if (params !== undefined) {
-	if (params.pass !== undefined) {
-	    this.setPassword(params.pass);
-	}
-	if (params.alg !== undefined) {
-	    this.algName = params.alg;
-	    if (params['prov'] === undefined)
-		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
-	    this.setAlgAndProvider(this.algName, this.provName);
-	}
+        if (params.pass !== undefined) {
+            this.setPassword(params.pass);
+        }
+        if (params.alg !== undefined) {
+            this.algName = params.alg;
+            if (params['prov'] === undefined)
+                this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
+            this.setAlgAndProvider(this.algName, this.provName);
+        }
     }
 };
 
@@ -784,7 +784,7 @@ KJUR.crypto.Mac = function(params) {
  * sig2.init(certPEM);
  * sig.updateString('aaa');
  * var isValid = sig2.verify(hSigVal);
- * 
+ *
  * // ECDSA signing
  * var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
  * sig.init(prvKeyPEM);
@@ -797,7 +797,7 @@ KJUR.crypto.Mac = function(params) {
  * sig.updateString('aaa');
  * var isValid = sig.verify(sigValueHex);
  */
-KJUR.crypto.Signature = function(params) {
+KJUR.crypto.Signature = function (params) {
     var prvKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for signing
     var pubKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for verifying
 
@@ -817,20 +817,20 @@ KJUR.crypto.Signature = function(params) {
     var hPaddedDigestInfo = null;
     var hSign = null;
 
-    this._setAlgNames = function() {
-	if (this.algName.match(/^(.+)with(.+)$/)) {
-	    this.mdAlgName = RegExp.$1.toLowerCase();
-	    this.pubkeyAlgName = RegExp.$2.toLowerCase();
-	}
+    this._setAlgNames = function () {
+        if (this.algName.match(/^(.+)with(.+)$/)) {
+            this.mdAlgName = RegExp.$1.toLowerCase();
+            this.pubkeyAlgName = RegExp.$2.toLowerCase();
+        }
     };
 
-    this._zeroPaddingOfSignature = function(hex, bitLength) {
-	var s = "";
-	var nZero = bitLength / 4 - hex.length;
-	for (var i = 0; i < nZero; i++) {
-	    s = s + "0";
-	}
-	return s + hex;
+    this._zeroPaddingOfSignature = function (hex, bitLength) {
+        var s = "";
+        var nZero = bitLength / 4 - hex.length;
+        for (var i = 0; i < nZero; i++) {
+            s = s + "0";
+        }
+        return s + hex;
     };
 
     /**
@@ -844,136 +844,136 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * md.setAlgAndProvider('SHA1withRSA', 'cryptojs/jsrsa');
      */
-    this.setAlgAndProvider = function(alg, prov) {
-	this._setAlgNames();
-	if (prov != 'cryptojs/jsrsa')
-	    throw "provider not supported: " + prov;
+    this.setAlgAndProvider = function (alg, prov) {
+        this._setAlgNames();
+        if (prov != 'cryptojs/jsrsa')
+            throw "provider not supported: " + prov;
 
-	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(this.mdAlgName) != -1) {
-	    try {
-		this.md = new KJUR.crypto.MessageDigest({'alg':this.mdAlgName});
-	    } catch (ex) {
-		throw "setAlgAndProvider hash alg set fail alg=" +
-                      this.mdAlgName + "/" + ex;
-	    }
+        if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(this.mdAlgName) != -1) {
+            try {
+                this.md = new KJUR.crypto.MessageDigest({'alg': this.mdAlgName});
+            } catch (ex) {
+                throw "setAlgAndProvider hash alg set fail alg=" +
+                this.mdAlgName + "/" + ex;
+            }
 
-	    this.init = function(keyparam, pass) {
-		var keyObj = null;
-		try {
-		    if (pass === undefined) {
-			keyObj = KEYUTIL.getKey(keyparam);
-		    } else {
-			keyObj = KEYUTIL.getKey(keyparam, pass);
-		    }
-		} catch (ex) {
-		    throw "init failed:" + ex;
-		}
+            this.init = function (keyparam, pass) {
+                var keyObj = null;
+                try {
+                    if (pass === undefined) {
+                        keyObj = KEYUTIL.getKey(keyparam);
+                    } else {
+                        keyObj = KEYUTIL.getKey(keyparam, pass);
+                    }
+                } catch (ex) {
+                    throw "init failed:" + ex;
+                }
 
-		if (keyObj.isPrivate === true) {
-		    this.prvKey = keyObj;
-		    this.state = "SIGN";
-		} else if (keyObj.isPublic === true) {
-		    this.pubKey = keyObj;
-		    this.state = "VERIFY";
-		} else {
-		    throw "init failed.:" + keyObj;
-		}
-	    };
+                if (keyObj.isPrivate === true) {
+                    this.prvKey = keyObj;
+                    this.state = "SIGN";
+                } else if (keyObj.isPublic === true) {
+                    this.pubKey = keyObj;
+                    this.state = "VERIFY";
+                } else {
+                    throw "init failed.:" + keyObj;
+                }
+            };
 
-	    this.initSign = function(params) {
-		if (typeof params['ecprvhex'] == 'string' &&
+            this.initSign = function (params) {
+                if (typeof params['ecprvhex'] == 'string' &&
                     typeof params['eccurvename'] == 'string') {
-		    this.ecprvhex = params['ecprvhex'];
-		    this.eccurvename = params['eccurvename'];
-		} else {
-		    this.prvKey = params;
-		}
-		this.state = "SIGN";
-	    };
+                    this.ecprvhex = params['ecprvhex'];
+                    this.eccurvename = params['eccurvename'];
+                } else {
+                    this.prvKey = params;
+                }
+                this.state = "SIGN";
+            };
 
-	    this.initVerifyByPublicKey = function(params) {
-		if (typeof params['ecpubhex'] == 'string' &&
-		    typeof params['eccurvename'] == 'string') {
-		    this.ecpubhex = params['ecpubhex'];
-		    this.eccurvename = params['eccurvename'];
-		} else if (params instanceof KJUR.crypto.ECDSA) {
-		    this.pubKey = params;
-		} else if (params instanceof RSAKey) {
-		    this.pubKey = params;
-		}
-		this.state = "VERIFY";
-	    };
+            this.initVerifyByPublicKey = function (params) {
+                if (typeof params['ecpubhex'] == 'string' &&
+                    typeof params['eccurvename'] == 'string') {
+                    this.ecpubhex = params['ecpubhex'];
+                    this.eccurvename = params['eccurvename'];
+                } else if (params instanceof KJUR.crypto.ECDSA) {
+                    this.pubKey = params;
+                } else if (params instanceof RSAKey) {
+                    this.pubKey = params;
+                }
+                this.state = "VERIFY";
+            };
 
-	    this.initVerifyByCertificatePEM = function(certPEM) {
-		var x509 = new X509();
-		x509.readCertPEM(certPEM);
-		this.pubKey = x509.subjectPublicKeyRSA;
-		this.state = "VERIFY";
-	    };
+            this.initVerifyByCertificatePEM = function (certPEM) {
+                var x509 = new X509();
+                x509.readCertPEM(certPEM);
+                this.pubKey = x509.subjectPublicKeyRSA;
+                this.state = "VERIFY";
+            };
 
-	    this.updateString = function(str) {
-		this.md.updateString(str);
-	    };
+            this.updateString = function (str) {
+                this.md.updateString(str);
+            };
 
-	    this.updateHex = function(hex) {
-		this.md.updateHex(hex);
-	    };
+            this.updateHex = function (hex) {
+                this.md.updateHex(hex);
+            };
 
-	    this.sign = function() {
-		this.sHashHex = this.md.digest();
-		if (typeof this.ecprvhex != "undefined" &&
-		    typeof this.eccurvename != "undefined") {
-		    var ec = new KJUR.crypto.ECDSA({'curve': this.eccurvename});
-		    this.hSign = ec.signHex(this.sHashHex, this.ecprvhex);
-		} else if (this.prvKey instanceof RSAKey &&
-		           this.pubkeyAlgName == "rsaandmgf1") {
-		    this.hSign = this.prvKey.signWithMessageHashPSS(this.sHashHex,
-								    this.mdAlgName,
-								    this.pssSaltLen);
-		} else if (this.prvKey instanceof RSAKey &&
-			   this.pubkeyAlgName == "rsa") {
-		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex,
-								 this.mdAlgName);
-		} else if (this.prvKey instanceof KJUR.crypto.ECDSA) {
-		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
-		} else if (this.prvKey instanceof KJUR.crypto.DSA) {
-		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
-		} else {
-		    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
-		}
-		return this.hSign;
-	    };
-	    this.signString = function(str) {
-		this.updateString(str);
-		return this.sign();
-	    };
-	    this.signHex = function(hex) {
-		this.updateHex(hex);
-		return this.sign();
-	    };
-	    this.verify = function(hSigVal) {
-	        this.sHashHex = this.md.digest();
-		if (typeof this.ecpubhex != "undefined" &&
-		    typeof this.eccurvename != "undefined") {
-		    var ec = new KJUR.crypto.ECDSA({curve: this.eccurvename});
-		    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
-		} else if (this.pubKey instanceof RSAKey &&
-			   this.pubkeyAlgName == "rsaandmgf1") {
-		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal, 
-								this.mdAlgName,
-								this.pssSaltLen);
-		} else if (this.pubKey instanceof RSAKey &&
-			   this.pubkeyAlgName == "rsa") {
-		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
-		} else if (this.pubKey instanceof KJUR.crypto.ECDSA) {
-		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
-		} else if (this.pubKey instanceof KJUR.crypto.DSA) {
-		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
-		} else {
-		    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
-		}
-	    };
-	}
+            this.sign = function () {
+                this.sHashHex = this.md.digest();
+                if (typeof this.ecprvhex != "undefined" &&
+                    typeof this.eccurvename != "undefined") {
+                    var ec = new KJUR.crypto.ECDSA({'curve': this.eccurvename});
+                    this.hSign = ec.signHex(this.sHashHex, this.ecprvhex);
+                } else if (this.prvKey instanceof RSAKey &&
+                    this.pubkeyAlgName == "rsaandmgf1") {
+                    this.hSign = this.prvKey.signWithMessageHashPSS(this.sHashHex,
+                        this.mdAlgName,
+                        this.pssSaltLen);
+                } else if (this.prvKey instanceof RSAKey &&
+                    this.pubkeyAlgName == "rsa") {
+                    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex,
+                        this.mdAlgName);
+                } else if (this.prvKey instanceof KJUR.crypto.ECDSA) {
+                    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
+                } else if (this.prvKey instanceof KJUR.crypto.DSA) {
+                    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
+                } else {
+                    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
+                }
+                return this.hSign;
+            };
+            this.signString = function (str) {
+                this.updateString(str);
+                return this.sign();
+            };
+            this.signHex = function (hex) {
+                this.updateHex(hex);
+                return this.sign();
+            };
+            this.verify = function (hSigVal) {
+                this.sHashHex = this.md.digest();
+                if (typeof this.ecpubhex != "undefined" &&
+                    typeof this.eccurvename != "undefined") {
+                    var ec = new KJUR.crypto.ECDSA({curve: this.eccurvename});
+                    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
+                } else if (this.pubKey instanceof RSAKey &&
+                    this.pubkeyAlgName == "rsaandmgf1") {
+                    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal,
+                        this.mdAlgName,
+                        this.pssSaltLen);
+                } else if (this.pubKey instanceof RSAKey &&
+                    this.pubkeyAlgName == "rsa") {
+                    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+                } else if (this.pubKey instanceof KJUR.crypto.ECDSA) {
+                    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+                } else if (this.pubKey instanceof KJUR.crypto.DSA) {
+                    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+                } else {
+                    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
+                }
+            };
+        }
     };
 
     /**
@@ -1011,9 +1011,9 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * sig.init(sCertPEM)
      */
-    this.init = function(key, pass) {
-	throw "init(key, pass) not supported for this alg:prov=" +
-	      this.algProvName;
+    this.init = function (key, pass) {
+        throw "init(key, pass) not supported for this alg:prov=" +
+        this.algProvName;
     };
 
     /**
@@ -1036,9 +1036,9 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * sig.initVerifyByPublicKey(rsaPrvKey)
      */
-    this.initVerifyByPublicKey = function(rsaPubKey) {
-	throw "initVerifyByPublicKey(rsaPubKeyy) not supported for this alg:prov=" +
-	      this.algProvName;
+    this.initVerifyByPublicKey = function (rsaPubKey) {
+        throw "initVerifyByPublicKey(rsaPubKeyy) not supported for this alg:prov=" +
+        this.algProvName;
     };
 
     /**
@@ -1053,9 +1053,9 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * sig.initVerifyByCertificatePEM(certPEM)
      */
-    this.initVerifyByCertificatePEM = function(certPEM) {
-	throw "initVerifyByCertificatePEM(certPEM) not supported for this alg:prov=" +
-	    this.algProvName;
+    this.initVerifyByCertificatePEM = function (certPEM) {
+        throw "initVerifyByCertificatePEM(certPEM) not supported for this alg:prov=" +
+        this.algProvName;
     };
 
     /**
@@ -1076,8 +1076,8 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * sig.initSign(prvKey)
      */
-    this.initSign = function(prvKey) {
-	throw "initSign(prvKey) not supported for this alg:prov=" + this.algProvName;
+    this.initSign = function (prvKey) {
+        throw "initSign(prvKey) not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -1090,8 +1090,8 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * sig.updateString('aaa')
      */
-    this.updateString = function(str) {
-	throw "updateString(str) not supported for this alg:prov=" + this.algProvName;
+    this.updateString = function (str) {
+        throw "updateString(str) not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -1104,8 +1104,8 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * sig.updateHex('1f2f3f')
      */
-    this.updateHex = function(hex) {
-	throw "updateHex(hex) not supported for this alg:prov=" + this.algProvName;
+    this.updateHex = function (hex) {
+        throw "updateHex(hex) not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -1118,8 +1118,8 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * var hSigValue = sig.sign()
      */
-    this.sign = function() {
-	throw "sign() not supported for this alg:prov=" + this.algProvName;
+    this.sign = function () {
+        throw "sign() not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -1133,8 +1133,8 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * var hSigValue = sig.signString('aaa')
      */
-    this.signString = function(str) {
-	throw "digestString(str) not supported for this alg:prov=" + this.algProvName;
+    this.signString = function (str) {
+        throw "digestString(str) not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -1148,8 +1148,8 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * var hSigValue = sig.signHex('1fdc33')
      */
-    this.signHex = function(hex) {
-	throw "digestHex(hex) not supported for this alg:prov=" + this.algProvName;
+    this.signHex = function (hex) {
+        throw "digestHex(hex) not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -1163,40 +1163,40 @@ KJUR.crypto.Signature = function(params) {
      * @example
      * var isValid = sig.verify('1fbcefdca4823a7(snip)')
      */
-    this.verify = function(hSigVal) {
-	throw "verify(hSigVal) not supported for this alg:prov=" + this.algProvName;
+    this.verify = function (hSigVal) {
+        throw "verify(hSigVal) not supported for this alg:prov=" + this.algProvName;
     };
 
     this.initParams = params;
 
     if (params !== undefined) {
-	if (params['alg'] !== undefined) {
-	    this.algName = params['alg'];
-	    if (params['prov'] === undefined) {
-		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
-	    } else {
-		this.provName = params['prov'];
-	    }
-	    this.algProvName = this.algName + ":" + this.provName;
-	    this.setAlgAndProvider(this.algName, this.provName);
-	    this._setAlgNames();
-	}
+        if (params['alg'] !== undefined) {
+            this.algName = params['alg'];
+            if (params['prov'] === undefined) {
+                this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
+            } else {
+                this.provName = params['prov'];
+            }
+            this.algProvName = this.algName + ":" + this.provName;
+            this.setAlgAndProvider(this.algName, this.provName);
+            this._setAlgNames();
+        }
 
-	if (params['psssaltlen'] !== undefined) this.pssSaltLen = params['psssaltlen'];
+        if (params['psssaltlen'] !== undefined) this.pssSaltLen = params['psssaltlen'];
 
-	if (params['prvkeypem'] !== undefined) {
-	    if (params['prvkeypas'] !== undefined) {
-		throw "both prvkeypem and prvkeypas parameters not supported";
-	    } else {
-		try {
-		    var prvKey = new RSAKey();
-		    prvKey.readPrivateKeyFromPEMString(params['prvkeypem']);
-		    this.initSign(prvKey);
-		} catch (ex) {
-		    throw "fatal error to load pem private key: " + ex;
-		}
-	    }
-	}
+        if (params['prvkeypem'] !== undefined) {
+            if (params['prvkeypas'] !== undefined) {
+                throw "both prvkeypem and prvkeypas parameters not supported";
+            } else {
+                try {
+                    var prvKey = new RSAKey();
+                    prvKey.readPrivateKeyFromPEMString(params['prvkeypem']);
+                    this.initSign(prvKey);
+                } catch (ex) {
+                    throw "fatal error to load pem private key: " + ex;
+                }
+            }
+        }
     }
 };
 
@@ -1211,19 +1211,19 @@ KJUR.crypto.Signature = function(params) {
  */
 
 
-KJUR.crypto.OID = new function() {
+KJUR.crypto.OID = new function () {
     this.oidhex2name = {
-	'2a864886f70d010101': 'rsaEncryption',
-	'2a8648ce3d0201': 'ecPublicKey',
-	'2a8648ce380401': 'dsa',
-	'2a8648ce3d030107': 'secp256r1',
-	'2b8104001f': 'secp192k1',
-	'2b81040021': 'secp224r1',
-	'2b8104000a': 'secp256k1',
-	'2b81040023': 'secp521r1',
-	'2b81040022': 'secp384r1',
-	'2a8648ce380403': 'SHA1withDSA', // 1.2.840.10040.4.3
-	'608648016503040301': 'SHA224withDSA', // 2.16.840.1.101.3.4.3.1
-	'608648016503040302': 'SHA256withDSA', // 2.16.840.1.101.3.4.3.2
+        '2a864886f70d010101': 'rsaEncryption',
+        '2a8648ce3d0201': 'ecPublicKey',
+        '2a8648ce380401': 'dsa',
+        '2a8648ce3d030107': 'secp256r1',
+        '2b8104001f': 'secp192k1',
+        '2b81040021': 'secp224r1',
+        '2b8104000a': 'secp256k1',
+        '2b81040023': 'secp521r1',
+        '2b81040022': 'secp384r1',
+        '2a8648ce380403': 'SHA1withDSA', // 1.2.840.10040.4.3
+        '608648016503040301': 'SHA224withDSA', // 2.16.840.1.101.3.4.3.1
+        '608648016503040302': 'SHA256withDSA', // 2.16.840.1.101.3.4.3.2
     };
 };

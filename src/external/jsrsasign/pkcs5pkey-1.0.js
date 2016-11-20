@@ -22,9 +22,9 @@
 
 /**
  * @name PKCS5PKEY
- * @class class for PKCS#5 and PKCS#8 private key 
+ * @class class for PKCS#5 and PKCS#8 private key
  * @deprecated Since jsrsasign 4.1.3. Please use KEYUTIL class.
- * @description 
+ * @description
  * <br/>
  * {@link PKCS5PKEY} class has following features:
  * <ul>
@@ -41,7 +41,7 @@
  * <li>AES-192-CBC</li>
  * <li>AES-128-CBC</li>
  * </ul>
- * 
+ *
  * <h5>METHOD SUMMARY</h5>
  * <dl>
  * <dt><b>PKCS8 PRIVATE KEY METHODS</b><dd>
@@ -70,7 +70,7 @@
  * <li>{@link PKCS5PKEY.getDecryptedKeyHexByKeyIV} - decrypt key by sharedKey and IV</li>
  * </ul>
  * </dl>
- * 
+ *
  * @example
  * Here is an example of PEM formatted encrypted PKCS#5 private key.
  * -----BEGIN RSA PRIVATE KEY-----
@@ -82,46 +82,46 @@
  * qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=
  *-----END RSA PRIVATE KEY-----
  */
-var PKCS5PKEY = function() {
+var PKCS5PKEY = function () {
     // *****************************************************************
     // *** PRIVATE PROPERTIES AND METHODS *******************************
     // *****************************************************************
     // shared key decryption ------------------------------------------
-    var decryptAES = function(dataHex, keyHex, ivHex) {
+    var decryptAES = function (dataHex, keyHex, ivHex) {
         return decryptGeneral(CryptoJS.AES, dataHex, keyHex, ivHex);
     };
 
-    var decrypt3DES = function(dataHex, keyHex, ivHex) {
+    var decrypt3DES = function (dataHex, keyHex, ivHex) {
         return decryptGeneral(CryptoJS.TripleDES, dataHex, keyHex, ivHex);
     };
 
-    var decryptGeneral = function(f, dataHex, keyHex, ivHex) {
-    var data = CryptoJS.enc.Hex.parse(dataHex);
-    var key = CryptoJS.enc.Hex.parse(keyHex);
-    var iv = CryptoJS.enc.Hex.parse(ivHex);
-    var encrypted = {};
-    encrypted.key = key;
-    encrypted.iv = iv;
-    encrypted.ciphertext = data;
-    var decrypted = f.decrypt(encrypted, key, { iv: iv });
-    return CryptoJS.enc.Hex.stringify(decrypted);
+    var decryptGeneral = function (f, dataHex, keyHex, ivHex) {
+        var data = CryptoJS.enc.Hex.parse(dataHex);
+        var key = CryptoJS.enc.Hex.parse(keyHex);
+        var iv = CryptoJS.enc.Hex.parse(ivHex);
+        var encrypted = {};
+        encrypted.key = key;
+        encrypted.iv = iv;
+        encrypted.ciphertext = data;
+        var decrypted = f.decrypt(encrypted, key, {iv: iv});
+        return CryptoJS.enc.Hex.stringify(decrypted);
     };
 
     // shared key decryption ------------------------------------------
-    var encryptAES = function(dataHex, keyHex, ivHex) {
+    var encryptAES = function (dataHex, keyHex, ivHex) {
         return encryptGeneral(CryptoJS.AES, dataHex, keyHex, ivHex);
     };
 
-    var encrypt3DES = function(dataHex, keyHex, ivHex) {
+    var encrypt3DES = function (dataHex, keyHex, ivHex) {
         return encryptGeneral(CryptoJS.TripleDES, dataHex, keyHex, ivHex);
     };
 
-    var encryptGeneral = function(f, dataHex, keyHex, ivHex) {
-    var data = CryptoJS.enc.Hex.parse(dataHex);
-    var key = CryptoJS.enc.Hex.parse(keyHex);
-    var iv = CryptoJS.enc.Hex.parse(ivHex);
-    var msg = {};
-    var encryptedHex = f.encrypt(data, key, { iv: iv });
+    var encryptGeneral = function (f, dataHex, keyHex, ivHex) {
+        var data = CryptoJS.enc.Hex.parse(dataHex);
+        var key = CryptoJS.enc.Hex.parse(keyHex);
+        var iv = CryptoJS.enc.Hex.parse(ivHex);
+        var msg = {};
+        var encryptedHex = f.encrypt(data, key, {iv: iv});
         var encryptedWA = CryptoJS.enc.Hex.parse(encryptedHex.toString());
         var encryptedB64 = CryptoJS.enc.Base64.stringify(encryptedWA);
         return encryptedB64;
@@ -129,23 +129,23 @@ var PKCS5PKEY = function() {
 
     // other methods and properties ----------------------------------------
     var ALGLIST = {
-    'AES-256-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 32, ivlen: 16 },
-    'AES-192-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 24, ivlen: 16 },
-    'AES-128-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 16, ivlen: 16 },
-    'DES-EDE3-CBC': { 'proc': decrypt3DES, 'eproc': encrypt3DES, keylen: 24, ivlen: 8 }
+        'AES-256-CBC': {'proc': decryptAES, 'eproc': encryptAES, keylen: 32, ivlen: 16},
+        'AES-192-CBC': {'proc': decryptAES, 'eproc': encryptAES, keylen: 24, ivlen: 16},
+        'AES-128-CBC': {'proc': decryptAES, 'eproc': encryptAES, keylen: 16, ivlen: 16},
+        'DES-EDE3-CBC': {'proc': decrypt3DES, 'eproc': encrypt3DES, keylen: 24, ivlen: 8}
     };
 
-    var getFuncByName = function(algName) {
+    var getFuncByName = function (algName) {
         return ALGLIST[algName]['proc'];
     };
 
-    var _generateIvSaltHex = function(numBytes) {
+    var _generateIvSaltHex = function (numBytes) {
         var wa = CryptoJS.lib.WordArray.random(numBytes);
         var hex = CryptoJS.enc.Hex.stringify(wa);
         return hex;
     };
 
-    var _parsePKCS5PEM = function(sPKCS5PEM) {
+    var _parsePKCS5PEM = function (sPKCS5PEM) {
         var info = {};
         if (sPKCS5PEM.match(new RegExp("DEK-Info: ([^,]+),([0-9A-Fa-f]+)", "m"))) {
             info.cipher = RegExp.$1;
@@ -173,11 +173,11 @@ var PKCS5PKEY = function() {
         return info;
     };
 
-    var _getKeyAndUnusedIvByPasscodeAndIvsalt = function(algName, passcode, ivsaltHex) {
+    var _getKeyAndUnusedIvByPasscodeAndIvsalt = function (algName, passcode, ivsaltHex) {
         //alert("ivsaltHex(2) = " + ivsaltHex);
         var saltHex = ivsaltHex.substring(0, 16);
         //alert("salt = " + saltHex);
-        
+
         var salt = CryptoJS.enc.Hex.parse(saltHex);
         var data = CryptoJS.enc.Utf8.parse(passcode);
         //alert("salt = " + salt);
@@ -187,7 +187,7 @@ var PKCS5PKEY = function() {
         var hHexValueJoined = '';
         var hLastValue = null;
         //alert("nRequiredBytes = " + nRequiredBytes);
-        for (;;) {
+        for (; ;) {
             var h = CryptoJS.algo.MD5.create();
             if (hLastValue != null) {
                 h.update(hLastValue);
@@ -214,14 +214,14 @@ var PKCS5PKEY = function() {
      * @param {String} ivsaltHex hexadecimal string of IV and salt
      * @param {String} hexadecimal string of decrypted private key
      */
-    var _decryptKeyB64 = function(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
+    var _decryptKeyB64 = function (privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
         var privateKeyWA = CryptoJS.enc.Base64.parse(privateKeyB64);
         var privateKeyHex = CryptoJS.enc.Hex.stringify(privateKeyWA);
         var f = ALGLIST[sharedKeyAlgName]['proc'];
         var decryptedKeyHex = f(privateKeyHex, sharedKeyHex, ivsaltHex);
         return decryptedKeyHex;
     };
-    
+
     /*
      * @param {String} privateKeyHex hexadecimal string of private key
      * @param {String} sharedKeyAlgName algorithm name of shared key encryption
@@ -229,7 +229,7 @@ var PKCS5PKEY = function() {
      * @param {String} ivsaltHex hexadecimal string of IV and salt
      * @param {String} base64 string of encrypted private key
      */
-    var _encryptKeyHex = function(privateKeyHex, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
+    var _encryptKeyHex = function (privateKeyHex, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
         var f = ALGLIST[sharedKeyAlgName]['eproc'];
         var encryptedKeyB64 = f(privateKeyHex, sharedKeyHex, ivsaltHex);
         return encryptedKeyB64;
@@ -259,7 +259,7 @@ var PKCS5PKEY = function() {
          * @return {String} hexadecimal string data of PEM contents
          * @since pkcs5pkey 1.0.5
          */
-        getHexFromPEM: function(sPEM, sHead) {
+        getHexFromPEM: function (sPEM, sHead) {
             var s = sPEM;
             if (s.indexOf("BEGIN " + sHead) == -1) {
                 throw "can't find PEM header: " + sHead;
@@ -282,7 +282,7 @@ var PKCS5PKEY = function() {
          * @param {String} ivHex hexadecimal string of initial vector(IV).
          * @return {String} hexadecimal string of decrypted privated key
          */
-        getDecryptedKeyHexByKeyIV: function(encryptedKeyHex, algName, sharedKeyHex, ivHex) {
+        getDecryptedKeyHexByKeyIV: function (encryptedKeyHex, algName, sharedKeyHex, ivHex) {
             var f1 = getFuncByName(algName);
             return f1(encryptedKeyHex, sharedKeyHex, ivHex);
         },
@@ -304,7 +304,7 @@ var PKCS5PKEY = function() {
          * </ul>
          *
          */
-        parsePKCS5PEM: function(sPKCS5PEM) {
+        parsePKCS5PEM: function (sPKCS5PEM) {
             return _parsePKCS5PEM(sPKCS5PEM);
         },
 
@@ -318,11 +318,11 @@ var PKCS5PKEY = function() {
          * @param {String} hexadecimal string of IV. heading 8 bytes will be used for passcode salt
          * @return {Hash} hash of key and unused IV (ex. {keyhex:2fe3..., ivhex:3fad..})
          */
-        getKeyAndUnusedIvByPasscodeAndIvsalt: function(algName, passcode, ivsaltHex) {
+        getKeyAndUnusedIvByPasscodeAndIvsalt: function (algName, passcode, ivsaltHex) {
             return _getKeyAndUnusedIvByPasscodeAndIvsalt(algName, passcode, ivsaltHex);
         },
 
-        decryptKeyB64: function(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
+        decryptKeyB64: function (privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
             return _decryptKeyB64(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex);
         },
 
@@ -335,7 +335,7 @@ var PKCS5PKEY = function() {
          * @param {String} passcode passcode to decrypt private key (ex. 'password')
          * @return {String} hexadecimal string of decrypted RSA priavte key
          */
-        getDecryptedKeyHex: function(sEncryptedPEM, passcode) {
+        getDecryptedKeyHex: function (sEncryptedPEM, passcode) {
             // 1. parse pem
             var info = _parsePKCS5PEM(sEncryptedPEM);
             var publicKeyAlgName = info.type;
@@ -364,7 +364,7 @@ var PKCS5PKEY = function() {
          * @return {RSAKey} loaded RSAKey object of RSA private key
          * @since pkcs5pkey 1.0.2
          */
-        getRSAKeyFromEncryptedPKCS5PEM: function(sEncryptedP5PEM, passcode) {
+        getRSAKeyFromEncryptedPKCS5PEM: function (sEncryptedP5PEM, passcode) {
             var hPKey = this.getDecryptedKeyHex(sEncryptedP5PEM, passcode);
             var rsaKey = new RSAKey();
             rsaKey.readPrivateKeyFromASN1HexString(hPKey);
@@ -392,14 +392,14 @@ var PKCS5PKEY = function() {
          * <li>ivsaltHex - automatically generate IV and salt which length depends on algorithm</li>
          * </ul>
          * @example
-         * var pem = 
+         * var pem =
          *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
-         * var pem2 = 
+         * var pem2 =
          *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
-         * var pem3 = 
+         * var pem3 =
          *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");
          */
-        getEryptedPKCS5PEMFromPrvKeyHex: function(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex) {
+        getEryptedPKCS5PEMFromPrvKeyHex: function (hPrvKey, passcode, sharedKeyAlgName, ivsaltHex) {
             var sPEM = "";
 
             // 1. set sharedKeyAlgName if undefined (default AES-256-CBC)
@@ -432,7 +432,7 @@ var PKCS5PKEY = function() {
             sPEM += "\r\n";
             sPEM += pemBody;
             sPEM += "\r\n-----END RSA PRIVATE KEY-----\r\n";
-            
+
             return sPEM;
         },
 
@@ -461,7 +461,7 @@ var PKCS5PKEY = function() {
          * pkey.generate(1024, '10001'); // generate 1024bit RSA private key with public exponent 'x010001'
          * var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");
          */
-        getEryptedPKCS5PEMFromRSAKey: function(pKey, passcode, alg, ivsaltHex) {
+        getEryptedPKCS5PEMFromRSAKey: function (pKey, passcode, alg, ivsaltHex) {
             var version = new KJUR.asn1.DERInteger({'int': 0});
             var n = new KJUR.asn1.DERInteger({'bigint': pKey.n});
             var e = new KJUR.asn1.DERInteger({'int': pKey.e});
@@ -492,7 +492,7 @@ var PKCS5PKEY = function() {
          * var pem2 = PKCS5PKEY.newEncryptedPKCS5PEM("password", 512);      // RSA 512bit/10001/AES-256-CBC
          * var pem3 = PKCS5PKEY.newEncryptedPKCS5PEM("password", 512, '3'); // RSA 512bit/    3/AES-256-CBC
          */
-        newEncryptedPKCS5PEM: function(passcode, keyLen, hPublicExponent, alg) {
+        newEncryptedPKCS5PEM: function (passcode, keyLen, hPublicExponent, alg) {
             if (typeof keyLen == "undefined" || keyLen == null) {
                 keyLen = 1024;
             }
@@ -521,7 +521,7 @@ var PKCS5PKEY = function() {
          * @return {RSAKey} loaded RSAKey object of RSA private key
          * @since pkcs5pkey 1.0.1
          */
-        getRSAKeyFromPlainPKCS8PEM: function(pkcs8PEM) {
+        getRSAKeyFromPlainPKCS8PEM: function (pkcs8PEM) {
             if (pkcs8PEM.match(/ENCRYPTED/))
                 throw "pem shall be not ENCRYPTED";
             var prvKeyHex = this.getHexFromPEM(pkcs8PEM, "PRIVATE KEY");
@@ -538,11 +538,11 @@ var PKCS5PKEY = function() {
          * @return {RSAKey} loaded RSAKey object of RSA private key
          * @since pkcs5pkey 1.0.3
          */
-        getRSAKeyFromPlainPKCS8Hex: function(prvKeyHex) {
+        getRSAKeyFromPlainPKCS8Hex: function (prvKeyHex) {
             var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(prvKeyHex, 0);
             if (a1.length != 3)
                 throw "outer DERSequence shall have 3 elements: " + a1.length;
-            var algIdTLV =ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
+            var algIdTLV = ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
             if (algIdTLV != "300d06092a864886f70d0101010500") // AlgId rsaEncryption
                 throw "PKCS8 AlgorithmIdentifier is not rsaEnc: " + algIdTLV;
             var algIdTLV = ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
@@ -581,9 +581,9 @@ var PKCS5PKEY = function() {
          * // key with PBKDF2 with TripleDES
          * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
          */
-        parseHexOfEncryptedPKCS8: function(sHEX) {
+        parseHexOfEncryptedPKCS8: function (sHEX) {
             var info = {};
-        
+
             var a0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, 0);
             if (a0.length != 2)
                 throw "malformed format: SEQUENCE(0).items != 2: " + a0.length;
@@ -592,7 +592,7 @@ var PKCS5PKEY = function() {
             info.ciphertext = ASN1HEX.getHexOfV_AtObj(sHEX, a0[1]);
 
             // 2. pkcs5PBES2
-            var a0_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0[0]); 
+            var a0_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0[0]);
             if (a0_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0).items != 2: " + a0_0.length;
 
@@ -601,12 +601,12 @@ var PKCS5PKEY = function() {
                 throw "this only supports pkcs5PBES2";
 
             // 2.2 pkcs5PBES2 param
-            var a0_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0[1]); 
+            var a0_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0[1]);
             if (a0_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1).items != 2: " + a0_0_1.length;
 
             // 2.2.1 encryptionScheme
-            var a0_0_1_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[1]); 
+            var a0_0_1_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[1]);
             if (a0_0_1_1.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1.1).items != 2: " + a0_0_1_1.length;
             if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
@@ -617,14 +617,14 @@ var PKCS5PKEY = function() {
             info.encryptionSchemeIV = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[1]);
 
             // 2.2.2 keyDerivationFunc
-            var a0_0_1_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[0]); 
+            var a0_0_1_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[0]);
             if (a0_0_1_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1.0).items != 2: " + a0_0_1_0.length;
             if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0[0]) != "2a864886f70d01050c")
                 throw "this only supports pkcs5PBKDF2";
-            
+
             // 2.2.2.1 pkcs5PBKDF2 param
-            var a0_0_1_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1_0[1]); 
+            var a0_0_1_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1_0[1]);
             if (a0_0_1_0_1.length < 2)
                 throw "malformed format: SEQUENCE(0.0.1.0.1).items < 2: " + a0_0_1_0_1.length;
 
@@ -635,7 +635,7 @@ var PKCS5PKEY = function() {
             var iterNumHex = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0_1[1]);
             try {
                 info.pbkdf2Iter = parseInt(iterNumHex, 16);
-            } catch(ex) {
+            } catch (ex) {
                 throw "malformed format pbkdf2Iter: " + iterNumHex;
             }
 
@@ -667,12 +667,12 @@ var PKCS5PKEY = function() {
          * // key with PBKDF2 with TripleDES
          * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
          */
-        getPBKDF2KeyHexFromParam: function(info, passcode) {
+        getPBKDF2KeyHexFromParam: function (info, passcode) {
             var pbkdf2SaltWS = CryptoJS.enc.Hex.parse(info.pbkdf2Salt);
             var pbkdf2Iter = info.pbkdf2Iter;
-            var pbkdf2KeyWS = CryptoJS.PBKDF2(passcode, 
-                                              pbkdf2SaltWS, 
-                                              { keySize: 192/32, iterations: pbkdf2Iter });
+            var pbkdf2KeyWS = CryptoJS.PBKDF2(passcode,
+                pbkdf2SaltWS,
+                {keySize: 192 / 32, iterations: pbkdf2Iter});
             var pbkdf2KeyHex = CryptoJS.enc.Hex.stringify(pbkdf2KeyWS);
             return pbkdf2KeyHex;
         },
@@ -697,7 +697,7 @@ var PKCS5PKEY = function() {
          * // key with PBKDF2 with TripleDES
          * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
          */
-        getPlainPKCS8HexFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+        getPlainPKCS8HexFromEncryptedPKCS8PEM: function (pkcs8PEM, passcode) {
             // 1. derHex - PKCS#8 private key encrypted by PBKDF2
             var derHex = this.getHexFromPEM(pkcs8PEM, "ENCRYPTED PRIVATE KEY");
             // 2. info - PKCS#5 PBES info
@@ -709,7 +709,7 @@ var PKCS5PKEY = function() {
             encrypted.ciphertext = CryptoJS.enc.Hex.parse(info.ciphertext);
             var pbkdf2KeyWS = CryptoJS.enc.Hex.parse(pbkdf2KeyHex);
             var des3IVWS = CryptoJS.enc.Hex.parse(info.encryptionSchemeIV);
-            var decWS = CryptoJS.TripleDES.decrypt(encrypted, pbkdf2KeyWS, { iv: des3IVWS });
+            var decWS = CryptoJS.TripleDES.decrypt(encrypted, pbkdf2KeyWS, {iv: des3IVWS});
             var decHex = CryptoJS.enc.Hex.stringify(decWS);
             return decHex;
         },
@@ -734,7 +734,7 @@ var PKCS5PKEY = function() {
          * // key with PBKDF2 with TripleDES
          * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
          */
-        getRSAKeyFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+        getRSAKeyFromEncryptedPKCS8PEM: function (pkcs8PEM, passcode) {
             var prvKeyHex = this.getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
             var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
             return rsaKey;
@@ -750,7 +750,7 @@ var PKCS5PKEY = function() {
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
-        getKeyFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+        getKeyFromEncryptedPKCS8PEM: function (pkcs8PEM, passcode) {
             var prvKeyHex = this.getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
             var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
             return key;
@@ -772,7 +772,7 @@ var PKCS5PKEY = function() {
          * <li>keyidx - string starting index of key in pkcs8PrvHex</li>
          * </ul>
          */
-        parsePlainPrivatePKCS8Hex: function(pkcs8PrvHex) {
+        parsePlainPrivatePKCS8Hex: function (pkcs8PrvHex) {
             var result = {};
             result.algparam = null;
 
@@ -821,7 +821,7 @@ var PKCS5PKEY = function() {
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
-        getKeyFromPlainPrivatePKCS8PEM: function(prvKeyPEM) {
+        getKeyFromPlainPrivatePKCS8PEM: function (prvKeyPEM) {
             var prvKeyHex = this.getHexFromPEM(prvKeyPEM, "PRIVATE KEY");
             var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
             return key;
@@ -836,9 +836,9 @@ var PKCS5PKEY = function() {
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
-        getKeyFromPlainPrivatePKCS8Hex: function(prvKeyHex) {
+        getKeyFromPlainPrivatePKCS8Hex: function (prvKeyHex) {
             var p8 = this.parsePlainPrivatePKCS8Hex(prvKeyHex);
-            
+
             if (p8.algoid == "2a864886f70d010101") { // RSA
                 this.parsePrivateRawRSAKeyHexAtObj(prvKeyHex, p8);
                 var k = p8.key;
@@ -867,7 +867,7 @@ var PKCS5PKEY = function() {
          * @return {RSAKey} loaded RSAKey object of RSA public key
          * @since pkcs5pkey 1.0.4
          */
-        getRSAKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
+        getRSAKeyFromPublicPKCS8PEM: function (pkcs8PubPEM) {
             var pubKeyHex = this.getHexFromPEM(pkcs8PubPEM, "PUBLIC KEY");
             var rsaKey = this.getRSAKeyFromPublicPKCS8Hex(pubKeyHex);
             return rsaKey;
@@ -882,7 +882,7 @@ var PKCS5PKEY = function() {
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
-        getKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
+        getKeyFromPublicPKCS8PEM: function (pkcs8PubPEM) {
             var pubKeyHex = this.getHexFromPEM(pkcs8PubPEM, "PUBLIC KEY");
             var key = this.getKeyFromPublicPKCS8Hex(pubKeyHex);
             return key;
@@ -897,9 +897,9 @@ var PKCS5PKEY = function() {
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
-        getKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
+        getKeyFromPublicPKCS8Hex: function (pkcs8PubHex) {
             var p8 = this.parsePublicPKCS8Hex(pkcs8PubHex);
-            
+
             if (p8.algoid == "2a864886f70d010101") { // RSA
                 var aRSA = this.parsePublicRawRSAKeyHex(p8.key);
                 var key = new RSAKey();
@@ -931,13 +931,13 @@ var PKCS5PKEY = function() {
          * <li>e - hexadecimal string of public exponent
          * </ul>
          */
-        parsePublicRawRSAKeyHex: function(pubRawRSAHex) {
+        parsePublicRawRSAKeyHex: function (pubRawRSAHex) {
             var result = {};
-            
+
             // 1. Sequence
             if (pubRawRSAHex.substr(0, 2) != "30")
                 throw "malformed RSA key(code:001)"; // not sequence
-            
+
             var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pubRawRSAHex, 0);
             if (a1.length != 2)
                 throw "malformed RSA key(code:002)"; // not 2 items in seq
@@ -978,9 +978,9 @@ var PKCS5PKEY = function() {
          * <li>co - hexadecimal string
          * </ul>
          */
-        parsePrivateRawRSAKeyHexAtObj: function(pkcs8PrvHex, info) {
+        parsePrivateRawRSAKeyHexAtObj: function (pkcs8PrvHex, info) {
             var keyIdx = info.keyidx;
-            
+
             // 1. sequence
             if (pkcs8PrvHex.substr(keyIdx, 2) != "30")
                 throw "malformed RSA private key(code:001)"; // not sequence
@@ -1015,9 +1015,9 @@ var PKCS5PKEY = function() {
          * <li>key - hexadecimal string of ECC private key
          * </ul>
          */
-        parsePrivateRawECKeyHexAtObj: function(pkcs8PrvHex, info) {
+        parsePrivateRawECKeyHexAtObj: function (pkcs8PrvHex, info) {
             var keyIdx = info.keyidx;
-            
+
             // 1. sequence
             if (pkcs8PrvHex.substr(keyIdx, 2) != "30")
                 throw "malformed ECC private key(code:001)"; // not sequence
@@ -1048,7 +1048,7 @@ var PKCS5PKEY = function() {
          * <li>key - hexadecimal string of public key</li>
          * </ul>
          */
-        parsePublicPKCS8Hex: function(pkcs8PubHex) {
+        parsePublicPKCS8Hex: function (pkcs8PubHex) {
             var result = {};
             result.algparam = null;
 
@@ -1082,7 +1082,7 @@ var PKCS5PKEY = function() {
                 throw "malformed PKCS8 public key(code:004)"; // Key is not bit string
 
             result.key = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a1[1]).substr(2);
-            
+
             // 4. return result assoc array
             return result;
         },
@@ -1096,20 +1096,20 @@ var PKCS5PKEY = function() {
          * @return {RSAKey} loaded RSAKey object of RSA public key
          * @since pkcs5pkey 1.0.4
          */
-        getRSAKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
+        getRSAKeyFromPublicPKCS8Hex: function (pkcs8PubHex) {
             var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, 0);
             if (a1.length != 2)
                 throw "outer DERSequence shall have 2 elements: " + a1.length;
 
-            var algIdTLV =ASN1HEX.getHexOfTLV_AtObj(pkcs8PubHex, a1[0]);
+            var algIdTLV = ASN1HEX.getHexOfTLV_AtObj(pkcs8PubHex, a1[0]);
             if (algIdTLV != "300d06092a864886f70d0101010500") // AlgId rsaEncryption
                 throw "PKCS8 AlgorithmId is not rsaEncryption";
-            
+
             if (pkcs8PubHex.substr(a1[1], 2) != "03")
                 throw "PKCS8 Public Key is not BITSTRING encapslated.";
 
             var idxPub = ASN1HEX.getStartPosOfV_AtObj(pkcs8PubHex, a1[1]) + 2; // 2 for unused bit
-            
+
             if (pkcs8PubHex.substr(idxPub, 2) != "30")
                 throw "PKCS8 Public Key is not SEQUENCE.";
 
@@ -1117,17 +1117,17 @@ var PKCS5PKEY = function() {
             if (a2.length != 2)
                 throw "inner DERSequence shall have 2 elements: " + a2.length;
 
-            if (pkcs8PubHex.substr(a2[0], 2) != "02") 
+            if (pkcs8PubHex.substr(a2[0], 2) != "02")
                 throw "N is not ASN.1 INTEGER";
-            if (pkcs8PubHex.substr(a2[1], 2) != "02") 
+            if (pkcs8PubHex.substr(a2[1], 2) != "02")
                 throw "E is not ASN.1 INTEGER";
-            
+
             var hN = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[0]);
             var hE = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[1]);
 
             var pubKey = new RSAKey();
             pubKey.setPublic(hN, hE);
-            
+
             return pubKey;
         },
     };

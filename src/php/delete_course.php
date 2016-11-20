@@ -40,29 +40,30 @@ $course = $query->fetch();
 
 // Check whether user is creator of this course
 // Only the creator can delete the course
-if ($course !== FALSE) {
-  $subject_id = $course["subject_id"];
+if ($course !== false) {
+    $subject_id = $course["subject_id"];
 
-  // Remove the connection between models and this course
-  $sql_remove_models = "DELETE FROM course_models WHERE course_id=$course_id";
-  $conn->query($sql_remove_models);
+    // Remove the connection between models and this course
+    $sql_remove_models = "DELETE FROM course_models WHERE course_id=$course_id";
+    $conn->query($sql_remove_models);
 
-  // Delete the course itself
-  $sql_delete_course = "DELETE FROM courses WHERE id=$course_id";
-  $conn->query($sql_delete_course);
+    // Delete the course itself
+    $sql_delete_course = "DELETE FROM courses WHERE id=$course_id";
+    $conn->query($sql_delete_course);
 
-  $html = "";
-  if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
-  
-  // DELETE THE WIDGET WHICH WAS CREATED FOR THE COURSE
-  $xml_file_name_path = __DIR__ . "/../widgets/gallery$course_id.xml";
-  unlink($xml_file_name_path);
+    $html = "";
+    if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
+        $html = "&widget=true";
+    }
 
-  $return = $subject_id;
-}
-else {
-  // If not deleted, return FALSE
-  $return = "FALSE";
+    // DELETE THE WIDGET WHICH WAS CREATED FOR THE COURSE
+    $xml_file_name_path = __DIR__ . "/../widgets/gallery$course_id.xml";
+    unlink($xml_file_name_path);
+
+    $return = $subject_id;
+} else {
+    // If not deleted, return FALSE
+    $return = "FALSE";
 }
 
 ob_end_clean();

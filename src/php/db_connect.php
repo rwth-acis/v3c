@@ -24,12 +24,12 @@ if ((include '../config/config.php') === false) {
 }
 
 // mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
-$connection = mysqli_connect($host, $user, $password);
+$connection = mysql_connect($host, $user, $password);
 if (!$connection) {
     //throw new Exception("Unable to connect! Please check username and password");
 }
 
-if (!mysqli_select_db($connection, $database)) {
+if (!mysql_select_db($database)) {
     throw new Exception("Requested database does not exist!");
 }
 

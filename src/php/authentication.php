@@ -29,11 +29,9 @@ class Authentication
     {
 
         // FIXME: debug
-//      return true
+//      return true;
 
-        if ($_SESSION == null) {
-            session_start();
-        }
+        session_start();
 
         // Implementation depends on the service used to authenticate a user 
         // (e.g. Learning Layers)
@@ -57,9 +55,7 @@ class Authentication
     public function getUserProfile()
     {
 
-        if ($_SESSION == null) {
-            session_start();
-        }
+        session_start();
 
         // Where the data can be retrieved from depends on which service has been 
         // used to authenticate the user

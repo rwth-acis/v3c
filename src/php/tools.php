@@ -263,7 +263,7 @@ function sortCourseUnits($courseid)
 
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
-    $sqlSelect = "SELECT * FROM course_units WHERE course_id = " . $courseid . "ORDER BY date ASCENDING ";
+    $sqlSelect = "SELECT * FROM course_units WHERE course_id = '" . $courseid . "' ORDER BY date ASCENDING ";
     $sth = db ->prepare($sqlSelect);
     $sth->execute();
     $array = $sth->fetch();

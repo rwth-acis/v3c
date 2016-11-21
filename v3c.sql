@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `v3c_database`
+-- Datenbank: `v3c`
 --
 
 -- --------------------------------------------------------
@@ -151,6 +151,7 @@ CREATE TABLE `users` (
   `given_name`       VARCHAR(256)          DEFAULT NULL,
   `family_name`      VARCHAR(256)          DEFAULT NULL,
   `confirmed`        TINYINT(1)   NOT NULL,
+  DEFAULT '0'
   `role`             TINYINT(2)   NOT NULL DEFAULT '4',
   `created_at`       TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP,
   `openIdConnectSub` VARCHAR(255)          DEFAULT NULL,

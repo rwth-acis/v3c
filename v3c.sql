@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 21. Nov 2016 um 02:42
+-- Erstellungszeit: 21. Nov 2016 um 05:10
 -- Server-Version: 10.1.19-MariaDB
 -- PHP-Version: 5.6.24
 
@@ -30,8 +30,8 @@ CREATE TABLE `courses` (
   `id`          INT(11)     NOT NULL
   COMMENT 'find corresponding models with this id',
   `name`        VARCHAR(64) NOT NULL,
-  `domain`      varchar(64) NOT NULL,
-  `profession`  varchar(64) NOT NULL,
+  `domain`      VARCHAR(64) NOT NULL,
+  `profession`  VARCHAR(64) NOT NULL,
   `description` TEXT,
   `creator`     INT(11)     NOT NULL
   COMMENT 'correlates with user table',
@@ -150,6 +150,7 @@ CREATE TABLE `users` (
   `email`            VARCHAR(128) NOT NULL,
   `given_name`       VARCHAR(256)          DEFAULT NULL,
   `family_name`      VARCHAR(256)          DEFAULT NULL,
+  `confirmed`        TINYINT(1)   NOT NULL,
   `role`             TINYINT(2)   NOT NULL DEFAULT '4',
   `created_at`       TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP,
   `openIdConnectSub` VARCHAR(255)          DEFAULT NULL,
@@ -165,11 +166,11 @@ CREATE TABLE `users` (
 -- Daten für Tabelle `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `given_name`, `family_name`, `role`, `created_at`, `openIdConnectSub`, `affiliation`, `city`, `street`, `phone`)
+INSERT INTO `users` (`id`, `email`, `given_name`, `family_name`, `confirmed`, `role`, `created_at`, `openIdConnectSub`, `affiliation`, `city`, `street`, `phone`)
 VALUES
-  (132, 'petersommerhoff@gmail.com', 'Peter', 'Sommerhoff', 1, '2016-11-17 14:33:49',
+  (132, 'petersommerhoff@gmail.com', 'Peter', 'Sommerhoff', 1, 4, '2016-11-17 14:33:49',
         'bfc09ba5-b56d-4647-a83e-c1ce153d1230', 'RWTH', 'Aachen', 'Halifax', '1234'),
-  (133, 'tilman.berres@rwth-aachen.de', 'Tilman', 'Berres', 1, '2016-11-19 12:42:35',
+  (133, 'tilman.berres@rwth-aachen.de', 'Tilman', 'Berres', 1, 4, '2016-11-19 12:42:35',
         '1cec8880-664d-4307-bf4f-7569161041ed', 'RWTH', 'Aachen', 'Halifax', '23456');
 
 --

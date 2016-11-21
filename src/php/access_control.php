@@ -68,7 +68,7 @@ class AccessControl
             // User has no databaseentry
             $status = USER_STATUS::USER_NOT_CONFIRMED;
         } else {
-            if ($user->role != 1) {
+            if ($user->confirmed != 1) {
                 $status = USER_STATUS::USER_NOT_CONFIRMED;
             } else {
                 $status = USER_STATUS::USER_IS_TUTOR;

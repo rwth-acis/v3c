@@ -101,7 +101,7 @@ src/widgets/*
 !src/widgets/*_placeholder.xml
 
 # ignore bower-managed files
-src/external/*
+# src/external/*
 
 .brackets.json
 

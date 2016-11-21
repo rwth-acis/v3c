@@ -1,6 +1,11 @@
--- Erstellungszeit: 18. Nov 2016 um 12:36
--- Server Version: 5.6.21
--- PHP-Version: 5.5.19
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Erstellungszeit: 21. Nov 2016 um 05:10
+-- Server-Version: 10.1.19-MariaDB
+-- PHP-Version: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -9,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Datenbank: `v3c`
@@ -21,49 +26,95 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `courses`
 --
 
-CREATE TABLE IF NOT EXISTS `courses` (
+CREATE TABLE `courses` (
   `id`          INT(11)     NOT NULL
   COMMENT 'find corresponding models with this id',
   `name`        VARCHAR(64) NOT NULL,
-  `domain` varchar(64) NOT NULL,
-  `profession` varchar(64) NOT NULL,
+  `domain`      VARCHAR(64) NOT NULL,
+  `profession`  VARCHAR(64) NOT NULL,
   `description` TEXT,
   `creator`     INT(11)     NOT NULL
   COMMENT 'correlates with user table',
-  `role_url`    TEXT        NOT NULL,
   `contact`     VARCHAR(1000)        DEFAULT NULL,
-  `dates`       VARCHAR(1000)        DEFAULT NULL,
+  `language`    INT(11)     NOT NULL,
   `links`       VARCHAR(1000)        DEFAULT NULL,
   `edit_date`   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `subject_id`  INT(11)     NOT NULL
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 2
   DEFAULT CHARSET = latin1;
 
 --
 -- Daten für Tabelle `courses`
 --
 
-INSERT INTO `courses` (`id`, `name`,`domain` ,`profession` , `description`, `creator`, `role_url`, `contact`, `dates`, `links`, `edit_date`, `subject_id`) VALUES
-  (1, 'Social Entrepreneurship 101', 'Tourism & Holiday Services', 'Travel Agent', 'This course introduces the basic principles of Social Entrepreneurship', 132, 'se101', 'Peter Sommerhoff', 'Nov 23, 2016\r\nNov 30, 2016\r\nDez 13, 2016', 'http://petersommerhoff.com', '2016-11-18 10:04:51', 1);
-
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `course_models`
---
--- in Benutzung(#1146 - Table 'v3c.course_models' doesn't exist)
--- Fehler beim Lesen der Daten: (#1146 - Table 'v3c.course_models' doesn't exist)
+INSERT INTO `courses` (`id`, `name`, `domain`, `profession`, `description`, `creator`, `contact`, `language`, `links`, `edit_date`, `subject_id`)
+VALUES
+  (1, 'Social Entrepreneurship 101', '', '', 'This course introduces the basic principles of Social Entrepreneurship',
+      132, 'Peter Sommerhoff', 1, 'http://petersommerhoff.com', '2016-11-20 18:04:43', 1),
+  (2, 'Flight Booking Course', '', '', 'In this course you will learn to book flights for a customer.', 133,
+      'Tilman Berres', 1, '', '2016-11-20 18:04:34', 66);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `models`
+-- Tabellenstruktur für Tabelle `course_units`
 --
--- in Benutzung(#1146 - Table 'v3c.models' doesn't exist)
--- Fehler beim Lesen der Daten: (#1146 - Table 'v3c.models' doesn't exist)
+
+CREATE TABLE `course_units` (
+  `id`        INT(11) NOT NULL,
+  `course_id` INT(11) NOT NULL,
+  `role_url`  TEXT    NOT NULL,
+  `date`      DATE    NOT NULL
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `languages`
+--
+
+CREATE TABLE `languages` (
+  `id`       INT(11)     NOT NULL,
+  `language` VARCHAR(63) NOT NULL
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = latin1;
+
+--
+-- Daten für Tabelle `languages`
+--
+
+INSERT INTO `languages` (`id`, `language`) VALUES
+  (1, 'English'),
+  (2, 'Greek'),
+  (3, 'Italian'),
+  (4, 'Spanish');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `roles`
+--
+
+CREATE TABLE `roles` (
+  `id`   TINYINT(2)  NOT NULL,
+  `role` VARCHAR(64) NOT NULL
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = latin1;
+
+--
+-- Daten für Tabelle `roles`
+--
+
+INSERT INTO `roles` (`id`, `role`) VALUES
+  (1, 'Creator'),
+  (2, 'Trainer'),
+  (3, 'Developer'),
+  (4, 'Learner');
 
 -- --------------------------------------------------------
 
@@ -71,14 +122,13 @@ INSERT INTO `courses` (`id`, `name`,`domain` ,`profession` , `description`, `cre
 -- Tabellenstruktur für Tabelle `subjects`
 --
 
-CREATE TABLE IF NOT EXISTS `subjects` (
+CREATE TABLE `subjects` (
   `id`      INT(11)     NOT NULL
   COMMENT 'find corresponding models with this id',
   `name`    VARCHAR(64) NOT NULL,
   `img_url` TEXT        NOT NULL
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 67
   DEFAULT CHARSET = latin1;
 
 --
@@ -95,12 +145,14 @@ INSERT INTO `subjects` (`id`, `name`, `img_url`) VALUES
 -- Tabellenstruktur für Tabelle `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `id`               INT(11)      NOT NULL,
   `email`            VARCHAR(128) NOT NULL,
   `given_name`       VARCHAR(256)          DEFAULT NULL,
   `family_name`      VARCHAR(256)          DEFAULT NULL,
   `confirmed`        TINYINT(1)   NOT NULL DEFAULT '0',
+
+  `role`             TINYINT(2)   NOT NULL DEFAULT '4',
   `created_at`       TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP,
   `openIdConnectSub` VARCHAR(255)          DEFAULT NULL,
   `affiliation`      VARCHAR(100)          DEFAULT NULL,
@@ -109,17 +161,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `phone`            VARCHAR(100)          DEFAULT NULL
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 133
   DEFAULT CHARSET = latin1;
 
 --
 -- Daten für Tabelle `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `given_name`, `family_name`, `confirmed`, `created_at`, `openIdConnectSub`, `affiliation`, `city`, `street`, `phone`)
+INSERT INTO `users` (`id`, `email`, `given_name`, `family_name`, `confirmed`, `role`, `created_at`, `openIdConnectSub`, `affiliation`, `city`, `street`, `phone`)
 VALUES
-  (132, 'petersommerhoff@gmail.com', 'Peter', 'Sommerhoff', 1, '2016-11-17 14:33:49',
-        'bfc09ba5-b56d-4647-a83e-c1ce153d1230', 'RWTH', 'Aachen', 'Halifax', '1234');
+  (132, 'petersommerhoff@gmail.com', 'Peter', 'Sommerhoff', 1, 4, '2016-11-17 14:33:49',
+        'bfc09ba5-b56d-4647-a83e-c1ce153d1230', 'RWTH', 'Aachen', 'Halifax', '1234'),
+  (133, 'tilman.berres@rwth-aachen.de', 'Tilman', 'Berres', 1, 4, '2016-11-19 12:42:35',
+        '1cec8880-664d-4307-bf4f-7569161041ed', 'RWTH', 'Aachen', 'Halifax', '23456');
 
 --
 -- Indizes der exportierten Tabellen
@@ -131,7 +184,28 @@ VALUES
 ALTER TABLE `courses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `index_creator` (`creator`),
-  ADD KEY `FK_Subjects_Course` (`subject_id`);
+  ADD KEY `FK_Subjects_Course` (`subject_id`),
+  ADD KEY `language` (`language`);
+
+--
+-- Indizes für die Tabelle `course_units`
+--
+ALTER TABLE `course_units`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `course_id` (`course_id`);
+
+--
+-- Indizes für die Tabelle `languages`
+--
+ALTER TABLE `languages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `language` (`language`);
+
+--
+-- Indizes für die Tabelle `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `subjects`
@@ -144,7 +218,8 @@ ALTER TABLE `subjects`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_email_pass` (`email`);
+  ADD UNIQUE KEY `uq_email_pass` (`email`),
+  ADD KEY `role` (`role`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -156,7 +231,19 @@ ALTER TABLE `users`
 ALTER TABLE `courses`
   MODIFY `id` INT(11) NOT NULL AUTO_INCREMENT
   COMMENT 'find corresponding models with this id',
-  AUTO_INCREMENT = 2;
+  AUTO_INCREMENT = 3;
+--
+-- AUTO_INCREMENT für Tabelle `languages`
+--
+ALTER TABLE `languages`
+  MODIFY `id` INT(11) NOT NULL AUTO_INCREMENT,
+  AUTO_INCREMENT = 5;
+--
+-- AUTO_INCREMENT für Tabelle `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` TINYINT(2) NOT NULL AUTO_INCREMENT,
+  AUTO_INCREMENT = 5;
 --
 -- AUTO_INCREMENT für Tabelle `subjects`
 --
@@ -169,7 +256,7 @@ ALTER TABLE `subjects`
 --
 ALTER TABLE `users`
   MODIFY `id` INT(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 133;
+  AUTO_INCREMENT = 134;
 --
 -- Constraints der exportierten Tabellen
 --
@@ -179,8 +266,21 @@ ALTER TABLE `users`
 --
 ALTER TABLE `courses`
   ADD CONSTRAINT `FK_Subjects_Course` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`),
+  ADD CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`language`) REFERENCES `languages` (`id`),
   ADD CONSTRAINT `fk_courses_users` FOREIGN KEY (`creator`) REFERENCES `users` (`id`)
   ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `course_units`
+--
+ALTER TABLE `course_units`
+  ADD CONSTRAINT `course_units_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`);
+
+--
+-- Constraints der Tabelle `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role`) REFERENCES `roles` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;

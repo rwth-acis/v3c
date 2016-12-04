@@ -19,13 +19,13 @@
 
 /**
  * Event handler for "Upgrade to lecturer account" button in not_authorized.php
- * Sends ajax request to server to set confirmed flag. Also reads optional user 
+ * Sends ajax request to server to set confirmed flag. Also reads optional user
  * data and writes sends it to our server.
  */
 
-$(document).ready( function () {
+$(document).ready(function () {
     var btn = $('#btn_request_lecturer');
-    if(btn.length > 0) {
+    if (btn.length > 0) {
         btn.on('click', function () {
             // This is the old info message. Here the user was informed, that an admin 
             // first had to accept the account upgrade. This is no longer required.
@@ -37,35 +37,35 @@ $(document).ready( function () {
             //	        "only lecturers have an account\n" +
             //          "</p>";
 
-              // Using Bootstrap (button.js) to add a loading state behavior. This disables the
-              // button after being clicked and shows the text "Updating.."
-              var btn = $('#btn_request_lecturer');
-              btn.button('loading');
+            // Using Bootstrap (button.js) to add a loading state behavior. This disables the
+            // button after being clicked and shows the text "Updating.."
+            var btn = $('#btn_request_lecturer');
+            btn.button('loading');
 
-              // Read optional user input
-              var affiliationValue = $('#affiliation-input').val();
-              var cityValue = $('#city-input').val();
-              var streetValue = $('#street-input').val();
-              var phoneValue = $('#phone-input').val();
+            // Read optional user input
+            var affiliationValue = $('#affiliation-input').val();
+            var cityValue = $('#city-input').val();
+            var streetValue = $('#street-input').val();
+            var phoneValue = $('#phone-input').val();
 
-              // Request server to upgrade our account to a lecturer (=tutor) account
-              $.post("../php/register_as_tutor.php", 
-                  {affiliation:affiliationValue, city:cityValue, street:streetValue, phone:phoneValue}, 
-                  function(msg) {
+            // Request server to upgrade our account to a lecturer (=tutor) account
+            $.post("../php/register_as_tutor.php",
+                {affiliation: affiliationValue, city: cityValue, street: streetValue, phone: phoneValue},
+                function (msg) {
 
-                msg = JSON.parse(msg);      
-                if (msg.result === true) {
+                    msg = JSON.parse(msg);
+                    if (msg.result === true) {
 
-                  // Refresh the current page to show its content instead of not_authorized.php
-                  window.location.reload(true);
-                }
-                else {
-                  // If upgrade was not successfull, unlock the "Upgrade to lecturer" button,
-                  // such that the user can click it again.
-                  btn.button('reset');
-                }
+                        // Refresh the current page to show its content instead of not_authorized.php
+                        window.location.reload(true);
+                    }
+                    else {
+                        // If upgrade was not successfull, unlock the "Upgrade to lecturer" button,
+                        // such that the user can click it again.
+                        btn.button('reset');
+                    }
 
-              });
+                });
         });
     }
-} );
+});

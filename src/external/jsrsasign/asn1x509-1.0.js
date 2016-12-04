@@ -21,7 +21,7 @@
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-/** 
+/**
  * kjur's class library name space
  * // already documented in asn1-1.0.js
  * @name KJUR
@@ -108,9 +108,9 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * // Certificate  ::=  SEQUENCE  {
  * //     tbsCertificate       TBSCertificate,
  * //     signatureAlgorithm   AlgorithmIdentifier,
- * //     signature            BIT STRING  }        
+ * //     signature            BIT STRING  }
  */
-KJUR.asn1.x509.Certificate = function(params) {
+KJUR.asn1.x509.Certificate = function (params) {
     KJUR.asn1.x509.Certificate.superclass.constructor.call(this);
     var asn1TBSCert = null;
     var asn1SignatureAlg = null;
@@ -119,7 +119,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     var prvKey = null;
     var rsaPrvKey = null; // DEPRECATED
 
-    
+
     /**
      * set PKCS#5 encrypted RSA PEM private key as CA key
      * @name setRsaPrvKeyByPEMandPass
@@ -135,10 +135,10 @@ KJUR.asn1.x509.Certificate = function(params) {
      * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs});
      * cert.setRsaPrvKeyByPEMandPass("-----BEGIN RSA PRIVATE..(snip)", "password");
      */
-    this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
+    this.setRsaPrvKeyByPEMandPass = function (rsaPEM, passPEM) {
         var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
         var caKey = new RSAKey();
-        caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
+        caKey.readPrivateKeyFromASN1HexString(caKeyHex);
         this.prvKey = caKey;
     };
 
@@ -152,7 +152,7 @@ KJUR.asn1.x509.Certificate = function(params) {
      * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
      * cert.sign();
      */
-    this.sign = function() {
+    this.sign = function () {
         this.asn1SignatureAlg = this.asn1TBSCert.asn1SignatureAlg;
 
         sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA'});
@@ -161,10 +161,12 @@ KJUR.asn1.x509.Certificate = function(params) {
         this.hexSig = sig.sign();
 
         this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
-        
-        var seq = new KJUR.asn1.DERSequence({'array': [this.asn1TBSCert,
-                                                       this.asn1SignatureAlg,
-                                                       this.asn1Sig]});
+
+        var seq = new KJUR.asn1.DERSequence({
+            'array': [this.asn1TBSCert,
+                this.asn1SignatureAlg,
+                this.asn1Sig]
+        });
         this.hTLV = seq.getEncodedHex();
         this.isModified = false;
     };
@@ -180,19 +182,21 @@ KJUR.asn1.x509.Certificate = function(params) {
      * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs});
      * cert.setSignatureHex('01020304');
      */
-    this.setSignatureHex = function(sigHex) {
+    this.setSignatureHex = function (sigHex) {
         this.asn1SignatureAlg = this.asn1TBSCert.asn1SignatureAlg;
         this.hexSig = sigHex;
         this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
 
-        var seq = new KJUR.asn1.DERSequence({'array': [this.asn1TBSCert,
-                                                       this.asn1SignatureAlg,
-                                                       this.asn1Sig]});
+        var seq = new KJUR.asn1.DERSequence({
+            'array': [this.asn1TBSCert,
+                this.asn1SignatureAlg,
+                this.asn1Sig]
+        });
         this.hTLV = seq.getEncodedHex();
         this.isModified = false;
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.isModified == false && this.hTLV != null) return this.hTLV;
         throw "not signed yet";
     };
@@ -209,7 +213,7 @@ KJUR.asn1.x509.Certificate = function(params) {
      * cert.sign();
      * var sPEM =  cert.getPEMString();
      */
-    this.getPEMString = function() {
+    this.getPEMString = function () {
         var hCert = this.getEncodedHex();
         var wCert = CryptoJS.enc.Hex.parse(hCert);
         var b64Cert = CryptoJS.enc.Base64.stringify(wCert);
@@ -226,7 +230,7 @@ KJUR.asn1.x509.Certificate = function(params) {
         } else if (typeof params['rsaprvkey'] != "undefined") {
             this.prvKey = params['rsaprvkey'];
         } else if ((typeof params['rsaprvpem'] != "undefined") &&
-                   (typeof params['rsaprvpas'] != "undefined")) {
+            (typeof params['rsaprvpas'] != "undefined")) {
             this.setRsaPrvKeyByPEMandPass(params['rsaprvpem'], params['rsaprvpas']);
         }
     }
@@ -254,13 +258,13 @@ YAHOO.lang.extend(KJUR.asn1.x509.Certificate, KJUR.asn1.ASN1Object);
  *  o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
  *  o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
  */
-KJUR.asn1.x509.TBSCertificate = function(params) {
+KJUR.asn1.x509.TBSCertificate = function (params) {
     KJUR.asn1.x509.TBSCertificate.superclass.constructor.call(this);
 
-    this._initialize = function() {
+    this._initialize = function () {
         this.asn1Array = new Array();
 
-        this.asn1Version = 
+        this.asn1Version =
             new KJUR.asn1.DERTaggedObject({'obj': new KJUR.asn1.DERInteger({'int': 2})});
         this.asn1SerialNumber = null;
         this.asn1SignatureAlg = null;
@@ -282,7 +286,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * @example
      * tbsc.setSerialNumberByParam({'int': 3});
      */
-    this.setSerialNumberByParam = function(intParam) {
+    this.setSerialNumberByParam = function (intParam) {
         this.asn1SerialNumber = new KJUR.asn1.DERInteger(intParam);
     };
 
@@ -296,7 +300,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * @example
      * tbsc.setSignatureAlgByParam({'name': 'SHA1withRSA'});
      */
-    this.setSignatureAlgByParam = function(algIdParam) {
+    this.setSignatureAlgByParam = function (algIdParam) {
         this.asn1SignatureAlg = new KJUR.asn1.x509.AlgorithmIdentifier(algIdParam);
     };
 
@@ -311,7 +315,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.setIssuerParam({'str': '/C=US/CN=b'});
      * @see KJUR.asn1.x509.X500Name
      */
-    this.setIssuerByParam = function(x500NameParam) {
+    this.setIssuerByParam = function (x500NameParam) {
         this.asn1Issuer = new KJUR.asn1.x509.X500Name(x500NameParam);
     };
 
@@ -326,10 +330,10 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.setNotBeforeByParam({'str': '130508235959Z'});
      * @see KJUR.asn1.x509.Time
      */
-    this.setNotBeforeByParam = function(timeParam) {
+    this.setNotBeforeByParam = function (timeParam) {
         this.asn1NotBefore = new KJUR.asn1.x509.Time(timeParam);
     };
-    
+
     /**
      * set notAfter field by parameter
      * @name setNotAfterByParam
@@ -341,7 +345,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.setNotAfterByParam({'str': '130508235959Z'});
      * @see KJUR.asn1.x509.Time
      */
-    this.setNotAfterByParam = function(timeParam) {
+    this.setNotAfterByParam = function (timeParam) {
         this.asn1NotAfter = new KJUR.asn1.x509.Time(timeParam);
     };
 
@@ -356,7 +360,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.setSubjectParam({'str': '/C=US/CN=b'});
      * @see KJUR.asn1.x509.X500Name
      */
-    this.setSubjectByParam = function(x500NameParam) {
+    this.setSubjectByParam = function (x500NameParam) {
         this.asn1Subject = new KJUR.asn1.x509.X500Name(x500NameParam);
     };
 
@@ -372,7 +376,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.setSubjectPublicKeyByParam({'rsakey': pubKey});
      * @see KJUR.asn1.x509.SubjectPublicKeyInfo
      */
-    this.setSubjectPublicKeyByParam = function(subjPKeyParam) {
+    this.setSubjectPublicKeyByParam = function (subjPKeyParam) {
         this.asn1SubjPKey = new KJUR.asn1.x509.SubjectPublicKeyInfo(subjPKeyParam);
     };
 
@@ -384,14 +388,14 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
      * @description
      * @example
-     * tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
-     * tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+     * tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or
+     * tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or
      * tbsc.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.
      * @see KJUR.asn1.x509.SubjectPublicKeyInfo
      * @see KEYUTIL.getKey
      * @since asn1x509 1.0.6
      */
-    this.setSubjectPublicKeyByGetKey = function(keyParam) {
+    this.setSubjectPublicKeyByGetKey = function (keyParam) {
         var keyObj = KEYUTIL.getKey(keyParam);
         this.asn1SubjPKey = new KJUR.asn1.x509.SubjectPublicKeyInfo(keyObj);
     };
@@ -408,7 +412,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
      * @see KJUR.asn1.x509.Extension
      */
-    this.appendExtension = function(extObj) {
+    this.appendExtension = function (extObj) {
         this.extensionsArray.push(extObj);
     };
 
@@ -428,7 +432,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
      * @see KJUR.asn1.x509.Extension
      */
-    this.appendExtensionByName = function(name, extParams) {
+    this.appendExtensionByName = function (name, extParams) {
         if (name.toLowerCase() == "basicconstraints") {
             var extObj = new KJUR.asn1.x509.BasicConstraints(extParams);
             this.appendExtension(extObj);
@@ -449,11 +453,11 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
         }
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.asn1NotBefore == null || this.asn1NotAfter == null)
             throw "notBefore and/or notAfter not set";
-        var asn1Validity = 
-            new KJUR.asn1.DERSequence({'array':[this.asn1NotBefore, this.asn1NotAfter]});
+        var asn1Validity =
+            new KJUR.asn1.DERSequence({'array': [this.asn1NotBefore, this.asn1NotAfter]});
 
         this.asn1Array = new Array();
 
@@ -467,9 +471,11 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
 
         if (this.extensionsArray.length > 0) {
             var extSeq = new KJUR.asn1.DERSequence({"array": this.extensionsArray});
-            var extTagObj = new KJUR.asn1.DERTaggedObject({'explicit': true,
-                                                           'tag': 'a3',
-                                                           'obj': extSeq});
+            var extTagObj = new KJUR.asn1.DERTaggedObject({
+                'explicit': true,
+                'tag': 'a3',
+                'obj': extSeq
+            });
             this.asn1Array.push(extTagObj);
         }
 
@@ -500,13 +506,13 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  * //     critical    BOOLEAN DEFAULT FALSE,
  * //     extnValue   OCTET STRING  }
  */
-KJUR.asn1.x509.Extension = function(params) {
+KJUR.asn1.x509.Extension = function (params) {
     KJUR.asn1.x509.Extension.superclass.constructor.call(this);
     var asn1ExtnValue = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var asn1Oid = new KJUR.asn1.DERObjectIdentifier({'oid': this.oid});
-        var asn1EncapExtnValue = 
+        var asn1EncapExtnValue =
             new KJUR.asn1.DEROctetString({'hex': this.getExtnValueHex()});
 
         var asn1Array = new Array();
@@ -536,10 +542,10 @@ YAHOO.lang.extend(KJUR.asn1.x509.Extension, KJUR.asn1.ASN1Object);
  * @description
  * @example
  */
-KJUR.asn1.x509.KeyUsage = function(params) {
+KJUR.asn1.x509.KeyUsage = function (params) {
     KJUR.asn1.x509.KeyUsage.superclass.constructor.call(this, params);
 
-    this.getExtnValueHex = function() {
+    this.getExtnValueHex = function () {
         return this.asn1ExtnValue.getEncodedHex();
     };
 
@@ -561,15 +567,15 @@ YAHOO.lang.extend(KJUR.asn1.x509.KeyUsage, KJUR.asn1.x509.Extension);
  * @description
  * @example
  */
-KJUR.asn1.x509.BasicConstraints = function(params) {
+KJUR.asn1.x509.BasicConstraints = function (params) {
     KJUR.asn1.x509.BasicConstraints.superclass.constructor.call(this, params);
     var cA = false;
     var pathLen = -1;
 
-    this.getExtnValueHex = function() {
+    this.getExtnValueHex = function () {
         var asn1Array = new Array();
         if (this.cA) asn1Array.push(new KJUR.asn1.DERBoolean());
-        if (this.pathLen > -1) 
+        if (this.pathLen > -1)
             asn1Array.push(new KJUR.asn1.DERInteger({'int': this.pathLen}));
         var asn1Seq = new KJUR.asn1.DERSequence({'array': asn1Array});
         this.asn1ExtnValue = asn1Seq;
@@ -599,18 +605,18 @@ YAHOO.lang.extend(KJUR.asn1.x509.BasicConstraints, KJUR.asn1.x509.Extension);
  * @description
  * @example
  */
-KJUR.asn1.x509.CRLDistributionPoints = function(params) {
+KJUR.asn1.x509.CRLDistributionPoints = function (params) {
     KJUR.asn1.x509.CRLDistributionPoints.superclass.constructor.call(this, params);
 
-    this.getExtnValueHex = function() {
+    this.getExtnValueHex = function () {
         return this.asn1ExtnValue.getEncodedHex();
     };
 
-    this.setByDPArray = function(dpArray) {
+    this.setByDPArray = function (dpArray) {
         this.asn1ExtnValue = new KJUR.asn1.DERSequence({'array': dpArray});
     };
 
-    this.setByOneURI = function(uri) {
+    this.setByOneURI = function (uri) {
         var gn1 = new KJUR.asn1.x509.GeneralNames([{'uri': uri}]);
         var dpn1 = new KJUR.asn1.x509.DistributionPointName(gn1);
         var dp1 = new KJUR.asn1.x509.DistributionPoint({'dpobj': dpn1});
@@ -636,7 +642,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension
  * @extends KJUR.asn1.x509.Extension
  * @description
  * @example
- * var e1 = 
+ * var e1 =
  *     new KJUR.asn1.x509.ExtKeyUsage({'critical': true,
  *                                     'array':
  *                                     [{'oid': '2.5.29.37.0',  // anyExtendedKeyUsage
@@ -646,10 +652,10 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension
  * // ExtKeyUsageSyntax ::= SEQUENCE SIZE (1..MAX) OF KeyPurposeId
  * // KeyPurposeId ::= OBJECT IDENTIFIER
  */
-KJUR.asn1.x509.ExtKeyUsage = function(params) {
+KJUR.asn1.x509.ExtKeyUsage = function (params) {
     KJUR.asn1.x509.ExtKeyUsage.superclass.constructor.call(this, params);
 
-    this.setPurposeArray = function(purposeArray) {
+    this.setPurposeArray = function (purposeArray) {
         this.asn1ExtnValue = new KJUR.asn1.DERSequence();
         for (var i = 0; i < purposeArray.length; i++) {
             var o = new KJUR.asn1.DERObjectIdentifier(purposeArray[i]);
@@ -657,7 +663,7 @@ KJUR.asn1.x509.ExtKeyUsage = function(params) {
         }
     };
 
-    this.getExtnValueHex = function() {
+    this.getExtnValueHex = function () {
         return this.asn1ExtnValue.getEncodedHex();
     };
 
@@ -693,26 +699,32 @@ YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
  *              'critical': true});
  * var e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier(param);
  */
-KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
+KJUR.asn1.x509.AuthorityKeyIdentifier = function (params) {
     KJUR.asn1.x509.AuthorityKeyIdentifier.superclass.constructor.call(this, params);
     this.asn1KID = null;
     this.asn1CertIssuer = null;
     this.asn1CertSN = null;
 
-    this.getExtnValueHex = function() {
+    this.getExtnValueHex = function () {
         var a = new Array();
         if (this.asn1KID)
-            a.push(new KJUR.asn1.DERTaggedObject({'explicit': false,
-                                                  'tag': '80',
-                                                  'obj': this.asn1KID}));
+            a.push(new KJUR.asn1.DERTaggedObject({
+                'explicit': false,
+                'tag': '80',
+                'obj': this.asn1KID
+            }));
         if (this.asn1CertIssuer)
-            a.push(new KJUR.asn1.DERTaggedObject({'explicit': false,
-                                                  'tag': 'a1',
-                                                  'obj': this.asn1CertIssuer}));
+            a.push(new KJUR.asn1.DERTaggedObject({
+                'explicit': false,
+                'tag': 'a1',
+                'obj': this.asn1CertIssuer
+            }));
         if (this.asn1CertSN)
-            a.push(new KJUR.asn1.DERTaggedObject({'explicit': false,
-                                                  'tag': '82',
-                                                  'obj': this.asn1CertSN}));
+            a.push(new KJUR.asn1.DERTaggedObject({
+                'explicit': false,
+                'tag': '82',
+                'obj': this.asn1CertSN
+            }));
 
         var asn1Seq = new KJUR.asn1.DERSequence({'array': a});
         this.asn1ExtnValue = asn1Seq;
@@ -727,10 +739,10 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
      * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic keyIdentifier value calculation by an issuer 
+     * NOTE: Automatic keyIdentifier value calculation by an issuer
      * public key will be supported in future version.
      */
-    this.setKIDByParam = function(param) {
+    this.setKIDByParam = function (param) {
         this.asn1KID = new KJUR.asn1.DEROctetString(param);
     };
 
@@ -742,10 +754,10 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
      * @param {Array} param array of {@link KJUR.asn1.x509.X500Name} parameter
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic authorityCertIssuer name setting by an issuer 
+     * NOTE: Automatic authorityCertIssuer name setting by an issuer
      * certificate will be supported in future version.
      */
-    this.setCertIssuerByParam = function(param) {
+    this.setCertIssuerByParam = function (param) {
         this.asn1CertIssuer = new KJUR.asn1.x509.X500Name(param);
     };
 
@@ -757,10 +769,10 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
      * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic authorityCertSerialNumber setting by an issuer 
+     * NOTE: Automatic authorityCertSerialNumber setting by an issuer
      * certificate will be supported in future version.
      */
-    this.setCertSNByParam = function(param) {
+    this.setCertSNByParam = function (param) {
         this.asn1CertSN = new KJUR.asn1.DERInteger(param);
     };
 
@@ -811,7 +823,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extensio
  * //     signatureAlgorithm   AlgorithmIdentifier,
  * //     signatureValue       BIT STRING  }
  */
-KJUR.asn1.x509.CRL = function(params) {
+KJUR.asn1.x509.CRL = function (params) {
     KJUR.asn1.x509.CRL.superclass.constructor.call(this);
 
     var asn1TBSCertList = null;
@@ -819,7 +831,7 @@ KJUR.asn1.x509.CRL = function(params) {
     var asn1Sig = null;
     var hexSig = null;
     var rsaPrvKey = null;
-    
+
     /**
      * set PKCS#5 encrypted RSA PEM private key as CA key
      * @name setRsaPrvKeyByPEMandPass
@@ -832,10 +844,10 @@ KJUR.asn1.x509.CRL = function(params) {
      * <h4>EXAMPLES</h4>
      * @example
      */
-    this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
+    this.setRsaPrvKeyByPEMandPass = function (rsaPEM, passPEM) {
         var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
         var caKey = new RSAKey();
-        caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
+        caKey.readPrivateKeyFromASN1HexString(caKeyHex);
         this.rsaPrvKey = caKey;
     };
 
@@ -849,7 +861,7 @@ KJUR.asn1.x509.CRL = function(params) {
      * var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
      * cert.sign();
      */
-    this.sign = function() {
+    this.sign = function () {
         this.asn1SignatureAlg = this.asn1TBSCertList.asn1SignatureAlg;
 
         sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA', 'prov': 'cryptojs/jsrsa'});
@@ -858,15 +870,17 @@ KJUR.asn1.x509.CRL = function(params) {
         this.hexSig = sig.sign();
 
         this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
-        
-        var seq = new KJUR.asn1.DERSequence({'array': [this.asn1TBSCertList,
-                                                       this.asn1SignatureAlg,
-                                                       this.asn1Sig]});
+
+        var seq = new KJUR.asn1.DERSequence({
+            'array': [this.asn1TBSCertList,
+                this.asn1SignatureAlg,
+                this.asn1Sig]
+        });
         this.hTLV = seq.getEncodedHex();
         this.isModified = false;
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.isModified == false && this.hTLV != null) return this.hTLV;
         throw "not signed yet";
     };
@@ -883,7 +897,7 @@ KJUR.asn1.x509.CRL = function(params) {
      * cert.sign();
      * var sPEM =  cert.getPEMString();
      */
-    this.getPEMString = function() {
+    this.getPEMString = function () {
         var hCert = this.getEncodedHex();
         var wCert = CryptoJS.enc.Hex.parse(hCert);
         var b64Cert = CryptoJS.enc.Base64.stringify(wCert);
@@ -924,7 +938,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRL, KJUR.asn1.ASN1Object);
  *  o.setNotNextUpdateByParam({'str': '140504235959Z'});
  *  o.addRevokedCert({'int': 4}, {'str':'130514235959Z'}));
  *  o.addRevokedCert({'hex': '0f34dd'}, {'str':'130514235959Z'}));
- * 
+ *
  * // TBSCertList  ::=  SEQUENCE  {
  * //        version                 Version OPTIONAL,
  * //                                     -- if present, MUST be v2
@@ -940,7 +954,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRL, KJUR.asn1.ASN1Object);
  * //                                  }  OPTIONAL,
  * //        crlExtensions           [0]  EXPLICIT Extensions OPTIONAL
  */
-KJUR.asn1.x509.TBSCertList = function(params) {
+KJUR.asn1.x509.TBSCertList = function (params) {
     KJUR.asn1.x509.TBSCertList.superclass.constructor.call(this);
     var aRevokedCert = null;
 
@@ -954,7 +968,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
      * @example
      * tbsc.setSignatureAlgByParam({'name': 'SHA1withRSA'});
      */
-    this.setSignatureAlgByParam = function(algIdParam) {
+    this.setSignatureAlgByParam = function (algIdParam) {
         this.asn1SignatureAlg = new KJUR.asn1.x509.AlgorithmIdentifier(algIdParam);
     };
 
@@ -969,7 +983,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
      * tbsc.setIssuerParam({'str': '/C=US/CN=b'});
      * @see KJUR.asn1.x509.X500Name
      */
-    this.setIssuerByParam = function(x500NameParam) {
+    this.setIssuerByParam = function (x500NameParam) {
         this.asn1Issuer = new KJUR.asn1.x509.X500Name(x500NameParam);
     };
 
@@ -984,7 +998,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
      * tbsc.setThisUpdateByParam({'str': '130508235959Z'});
      * @see KJUR.asn1.x509.Time
      */
-    this.setThisUpdateByParam = function(timeParam) {
+    this.setThisUpdateByParam = function (timeParam) {
         this.asn1ThisUpdate = new KJUR.asn1.x509.Time(timeParam);
     };
 
@@ -999,7 +1013,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
      * tbsc.setNextUpdateByParam({'str': '130508235959Z'});
      * @see KJUR.asn1.x509.Time
      */
-    this.setNextUpdateByParam = function(timeParam) {
+    this.setNextUpdateByParam = function (timeParam) {
         this.asn1NextUpdate = new KJUR.asn1.x509.Time(timeParam);
     };
 
@@ -1015,7 +1029,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
      * tbsc.addRevokedCert({'int': 3}, {'str': '130508235959Z'});
      * @see KJUR.asn1.x509.Time
      */
-    this.addRevokedCert = function(snParam, timeParam) {
+    this.addRevokedCert = function (snParam, timeParam) {
         var param = {};
         if (snParam != undefined && snParam != null) param['sn'] = snParam;
         if (timeParam != undefined && timeParam != null) param['time'] = timeParam;
@@ -1023,7 +1037,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
         this.aRevokedCert.push(o);
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         this.asn1Array = new Array();
 
         if (this.asn1Version != null) this.asn1Array.push(this.asn1Version);
@@ -1043,7 +1057,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
         return this.hTLV;
     };
 
-    this._initialize = function() {
+    this._initialize = function () {
         this.asn1Version = null;
         this.asn1SignatureAlg = null;
         this.asn1Issuer = null;
@@ -1066,20 +1080,20 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertList, KJUR.asn1.ASN1Object);
  * @description
  * @example
  * var e = new KJUR.asn1.x509.CRLEntry({'time': {'str': '130514235959Z'}, 'sn': {'int': 234}});
- * 
+ *
  * // revokedCertificates     SEQUENCE OF SEQUENCE  {
  * //     userCertificate         CertificateSerialNumber,
  * //     revocationDate          Time,
  * //     crlEntryExtensions      Extensions OPTIONAL
  * //                             -- if present, version MUST be v2 }
  */
-KJUR.asn1.x509.CRLEntry = function(params) {
+KJUR.asn1.x509.CRLEntry = function (params) {
     KJUR.asn1.x509.CRLEntry.superclass.constructor.call(this);
     var sn = null;
     var time = null;
 
     /**
-     * set DERInteger parameter for serial number of revoked certificate 
+     * set DERInteger parameter for serial number of revoked certificate
      * @name setCertSerial
      * @memberOf KJUR.asn1.x509.CRLEntry
      * @function
@@ -1088,7 +1102,7 @@ KJUR.asn1.x509.CRLEntry = function(params) {
      * @example
      * entry.setCertSerial({'int': 3});
      */
-    this.setCertSerial = function(intParam) {
+    this.setCertSerial = function (intParam) {
         this.sn = new KJUR.asn1.DERInteger(intParam);
     };
 
@@ -1102,16 +1116,16 @@ KJUR.asn1.x509.CRLEntry = function(params) {
      * @example
      * entry.setRevocationDate({'str': '130508235959Z'});
      */
-    this.setRevocationDate = function(timeParam) {
+    this.setRevocationDate = function (timeParam) {
         this.time = new KJUR.asn1.x509.Time(timeParam);
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var o = new KJUR.asn1.DERSequence({"array": [this.sn, this.time]});
         this.TLV = o.getEncodedHex();
         return this.TLV;
     };
-    
+
     if (typeof params != "undefined") {
         if (typeof params['time'] != "undefined") {
             this.setRevocationDate(params['time']);
@@ -1139,7 +1153,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
  * // 2. construct by object
  * o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
  */
-KJUR.asn1.x509.X500Name = function(params) {
+KJUR.asn1.x509.X500Name = function (params) {
     KJUR.asn1.x509.X500Name.superclass.constructor.call(this);
     this.asn1Array = new Array();
 
@@ -1154,14 +1168,14 @@ KJUR.asn1.x509.X500Name = function(params) {
      * name = new KJUR.asn1.x509.X500Name();
      * name.setByString("/C=US/O=aaa/OU=bbb/CN=foo@example.com");
      */
-    this.setByString = function(dnStr) {
+    this.setByString = function (dnStr) {
         var a = dnStr.split('/');
         a.shift();
         for (var i = 0; i < a.length; i++) {
-            this.asn1Array.push(new KJUR.asn1.x509.RDN({'str':a[i]}));
+            this.asn1Array.push(new KJUR.asn1.x509.RDN({'str': a[i]}));
         }
     };
-    
+
     /**
      * set DN by associative array
      * @name setByObject
@@ -1174,7 +1188,7 @@ KJUR.asn1.x509.X500Name = function(params) {
      * name = new KJUR.asn1.x509.X500Name();
      * name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});
      */
-    this.setByObject = function(dnObj) {
+    this.setByObject = function (dnObj) {
         // Get all the dnObject attributes and stuff them in the ASN.1 array.
         for (var x in dnObj) {
             if (dnObj.hasOwnProperty(x)) {
@@ -1187,7 +1201,7 @@ KJUR.asn1.x509.X500Name = function(params) {
         }
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (typeof this.hTLV == "string") return this.hTLV;
         var o = new KJUR.asn1.DERSequence({"array": this.asn1Array});
         this.hTLV = o.getEncodedHex();
@@ -1197,13 +1211,13 @@ KJUR.asn1.x509.X500Name = function(params) {
     if (typeof params != "undefined") {
         if (typeof params['str'] != "undefined") {
             this.setByString(params['str']);
-        // If params is an object, then set the ASN1 array just using the object
-        // attributes. This is nice for fields that have lots of special
-        // characters (i.e. CN: 'http://www.github.com/kjur//').
+            // If params is an object, then set the ASN1 array just using the object
+            // attributes. This is nice for fields that have lots of special
+            // characters (i.e. CN: 'http://www.github.com/kjur//').
         } else if (typeof params === "object") {
             this.setByObject(params);
         }
-        
+
         if (typeof params.certissuer != "undefined") {
             var x = new X509();
             x.hex = X509.pemToHex(params.certissuer);
@@ -1227,15 +1241,15 @@ YAHOO.lang.extend(KJUR.asn1.x509.X500Name, KJUR.asn1.ASN1Object);
  * @description
  * @example
  */
-KJUR.asn1.x509.RDN = function(params) {
+KJUR.asn1.x509.RDN = function (params) {
     KJUR.asn1.x509.RDN.superclass.constructor.call(this);
     this.asn1Array = new Array();
 
-    this.addByString = function(rdnStr) {
-        this.asn1Array.push(new KJUR.asn1.x509.AttributeTypeAndValue({'str':rdnStr}));
+    this.addByString = function (rdnStr) {
+        this.asn1Array.push(new KJUR.asn1.x509.AttributeTypeAndValue({'str': rdnStr}));
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var o = new KJUR.asn1.DERSet({"array": this.asn1Array});
         this.TLV = o.getEncodedHex();
         return this.TLV;
@@ -1258,13 +1272,13 @@ YAHOO.lang.extend(KJUR.asn1.x509.RDN, KJUR.asn1.ASN1Object);
  * @description
  * @example
  */
-KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
+KJUR.asn1.x509.AttributeTypeAndValue = function (params) {
     KJUR.asn1.x509.AttributeTypeAndValue.superclass.constructor.call(this);
     var typeObj = null;
     var valueObj = null;
     var defaultDSType = "utf8";
 
-    this.setByString = function(attrTypeAndValueStr) {
+    this.setByString = function (attrTypeAndValueStr) {
         if (attrTypeAndValueStr.match(/^([^=]+)=(.+)$/)) {
             this.setByAttrTypeAndValueStr(RegExp.$1, RegExp.$2);
         } else {
@@ -1272,14 +1286,14 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
         }
     };
 
-    this.setByAttrTypeAndValueStr = function(shortAttrType, valueStr) {
+    this.setByAttrTypeAndValueStr = function (shortAttrType, valueStr) {
         this.typeObj = KJUR.asn1.x509.OID.atype2obj(shortAttrType);
         var dsType = defaultDSType;
         if (shortAttrType == "C") dsType = "prn";
         this.valueObj = this.getValueObj(dsType, valueStr);
     };
 
-    this.getValueObj = function(dsType, valueStr) {
+    this.getValueObj = function (dsType, valueStr) {
         if (dsType == "utf8")   return new KJUR.asn1.DERUTF8String({"str": valueStr});
         if (dsType == "prn")    return new KJUR.asn1.DERPrintableString({"str": valueStr});
         if (dsType == "tel")    return new KJUR.asn1.DERTeletexString({"str": valueStr});
@@ -1287,7 +1301,7 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
         throw "unsupported directory string type: type=" + dsType + " value=" + valueStr;
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var o = new KJUR.asn1.DERSequence({"array": [this.typeObj, this.valueObj]});
         this.TLV = o.getEncodedHex();
         return this.TLV;
@@ -1330,7 +1344,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.AttributeTypeAndValue, KJUR.asn1.ASN1Object);
  * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoECDSA_object);
  * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);
  */
-KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
+KJUR.asn1.x509.SubjectPublicKeyInfo = function (params) {
     KJUR.asn1.x509.SubjectPublicKeyInfo.superclass.constructor.call(this);
     var asn1AlgId = null;
     var asn1SubjPKey = null;
@@ -1347,16 +1361,16 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
      * @example
      * spki.setRSAKey(rsaKey);
      */
-    this.setRSAKey = function(rsaKey) {
-        if (! RSAKey.prototype.isPrototypeOf(rsaKey))
+    this.setRSAKey = function (rsaKey) {
+        if (!RSAKey.prototype.isPrototypeOf(rsaKey))
             throw "argument is not RSAKey instance";
         this.rsaKey = rsaKey;
         var asn1RsaN = new KJUR.asn1.DERInteger({'bigint': rsaKey.n});
         var asn1RsaE = new KJUR.asn1.DERInteger({'int': rsaKey.e});
         var asn1RsaPub = new KJUR.asn1.DERSequence({'array': [asn1RsaN, asn1RsaE]});
         var rsaKeyHex = asn1RsaPub.getEncodedHex();
-        this.asn1AlgId = new KJUR.asn1.x509.AlgorithmIdentifier({'name':'rsaEncryption'});
-        this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex':'00'+rsaKeyHex});
+        this.asn1AlgId = new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'rsaEncryption'});
+        this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + rsaKeyHex});
     };
 
     /**
@@ -1370,7 +1384,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
      * @example
      * spki.setRSAPEM(rsaPubPEM);
      */
-    this.setRSAPEM = function(rsaPubPEM) {
+    this.setRSAPEM = function (rsaPubPEM) {
         if (rsaPubPEM.match(/-----BEGIN PUBLIC KEY-----/)) {
             var s = rsaPubPEM;
             s = s.replace(/^-----[^-]+-----/, '');
@@ -1393,46 +1407,51 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
     /*
      * @since asn1x509 1.0.7
      */
-    this.getASN1Object = function() {
+    this.getASN1Object = function () {
         if (this.asn1AlgId == null || this.asn1SubjPKey == null)
             throw "algId and/or subjPubKey not set";
-        var o = new KJUR.asn1.DERSequence({'array':
-                                           [this.asn1AlgId, this.asn1SubjPKey]});
+        var o = new KJUR.asn1.DERSequence({
+            'array': [this.asn1AlgId, this.asn1SubjPKey]
+        });
         return o;
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var o = this.getASN1Object();
         this.hTLV = o.getEncodedHex();
         return this.hTLV;
     };
 
-    this._setRSAKey = function(key) {
+    this._setRSAKey = function (key) {
         var asn1RsaPub = KJUR.asn1.ASN1Util.newObject({
             'seq': [{'int': {'bigint': key.n}}, {'int': {'int': key.e}}]
         });
         var rsaKeyHex = asn1RsaPub.getEncodedHex();
-        this.asn1AlgId = new KJUR.asn1.x509.AlgorithmIdentifier({'name':'rsaEncryption'});
-        this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex':'00'+rsaKeyHex});
+        this.asn1AlgId = new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'rsaEncryption'});
+        this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + rsaKeyHex});
     };
 
-    this._setEC = function(key) {
+    this._setEC = function (key) {
         var asn1Params = new KJUR.asn1.DERObjectIdentifier({'name': key.curveName});
-        this.asn1AlgId = 
-            new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'ecPublicKey',
-                                                    'asn1params': asn1Params});
+        this.asn1AlgId =
+            new KJUR.asn1.x509.AlgorithmIdentifier({
+                'name': 'ecPublicKey',
+                'asn1params': asn1Params
+            });
         this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + key.pubKeyHex});
     };
 
-    this._setDSA = function(key) {
+    this._setDSA = function (key) {
         var asn1Params = new KJUR.asn1.ASN1Util.newObject({
             'seq': [{'int': {'bigint': key.p}},
-                    {'int': {'bigint': key.q}},
-                    {'int': {'bigint': key.g}}]
+                {'int': {'bigint': key.q}},
+                {'int': {'bigint': key.g}}]
         });
-        this.asn1AlgId = 
-            new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'dsa',
-                                                    'asn1params': asn1Params});
+        this.asn1AlgId =
+            new KJUR.asn1.x509.AlgorithmIdentifier({
+                'name': 'dsa',
+                'asn1params': asn1Params
+            });
         var pubInt = new KJUR.asn1.DERInteger({'bigint': key.y});
         this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + pubInt.getEncodedHex()});
     };
@@ -1441,10 +1460,10 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
         if (typeof RSAKey != 'undefined' && params instanceof RSAKey) {
             this._setRSAKey(params);
         } else if (typeof KJUR.crypto.ECDSA != 'undefined' &&
-                   params instanceof KJUR.crypto.ECDSA) {
+            params instanceof KJUR.crypto.ECDSA) {
             this._setEC(params);
         } else if (typeof KJUR.crypto.DSA != 'undefined' &&
-                   params instanceof KJUR.crypto.DSA) {
+            params instanceof KJUR.crypto.DSA) {
             this._setDSA(params);
         } else if (typeof params['rsakey'] != "undefined") {
             this.setRSAKey(params['rsakey']);
@@ -1468,16 +1487,16 @@ YAHOO.lang.extend(KJUR.asn1.x509.SubjectPublicKeyInfo, KJUR.asn1.ASN1Object);
  * var t1 = new KJUR.asn1.x509.Time{'str': '130508235959Z'} // UTCTime by default
  * var t2 = new KJUR.asn1.x509.Time{'type': 'gen',  'str': '20130508235959Z'} // GeneralizedTime
  */
-KJUR.asn1.x509.Time = function(params) {
+KJUR.asn1.x509.Time = function (params) {
     KJUR.asn1.x509.Time.superclass.constructor.call(this);
     var type = null;
     var timeParams = null;
 
-    this.setTimeParams = function(timeParams) {
+    this.setTimeParams = function (timeParams) {
         this.timeParams = timeParams;
     }
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var o = null;
 
         if (this.timeParams != null) {
@@ -1496,7 +1515,7 @@ KJUR.asn1.x509.Time = function(params) {
         this.TLV = o.getEncodedHex();
         return this.TLV;
     };
-    
+
     this.type = "utc";
     if (typeof params != "undefined") {
         if (typeof params.type != "undefined") {
@@ -1521,14 +1540,14 @@ YAHOO.lang.extend(KJUR.asn1.x509.Time, KJUR.asn1.ASN1Object);
  * @description
  * @example
  */
-KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
+KJUR.asn1.x509.AlgorithmIdentifier = function (params) {
     KJUR.asn1.x509.AlgorithmIdentifier.superclass.constructor.call(this);
     var nameAlg = null;
     var asn1Alg = null;
     var asn1Params = null;
     var paramEmpty = false;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.nameAlg == null && this.asn1Alg == null) {
             throw "algorithm not specified";
         }
@@ -1536,7 +1555,7 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
             this.asn1Alg = KJUR.asn1.x509.OID.name2obj(this.nameAlg);
         }
         var a = [this.asn1Alg];
-        if (! this.paramEmpty) a.push(this.asn1Params);
+        if (!this.paramEmpty) a.push(this.asn1Params);
         var o = new KJUR.asn1.DERSequence({'array': a});
         this.hTLV = o.getEncodedHex();
         return this.hTLV;
@@ -1588,10 +1607,10 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  *         ediPartyName                    [5]     EDIPartyName,
  *         uniformResourceIdentifier       [6]     IA5String,
  *         iPAddress                       [7]     OCTET STRING,
- *         registeredID                    [8]     OBJECT IDENTIFIER } 
+ *         registeredID                    [8]     OBJECT IDENTIFIER }
  * </pre>
  *
- * 
+ *
  *
  * @example
  * gn = new KJUR.asn1.x509.GeneralName({rfc822:      'test@aaa.com'});
@@ -1600,19 +1619,19 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  * gn = new KJUR.asn1.x509.GeneralName({certissuer:  certPEM});
  * gn = new KJUR.asn1.x509.GeneralName({certsubj:    certPEM});
  */
-KJUR.asn1.x509.GeneralName = function(params) {
+KJUR.asn1.x509.GeneralName = function (params) {
     KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
     var asn1Obj = null;
     var type = null;
-    var pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86'};
+    var pTag = {rfc822: '81', dns: '82', dn: 'a4', uri: '86'};
     this.explicit = false;
 
-    this.setByParam = function(params) {
+    this.setByParam = function (params) {
         var str = null;
         var v = null;
 
-		if (typeof params == "undefined") return;
-		
+        if (typeof params == "undefined") return;
+
         if (typeof params.rfc822 != "undefined") {
             this.type = 'rfc822';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
@@ -1625,51 +1644,53 @@ KJUR.asn1.x509.GeneralName = function(params) {
             this.type = 'uri';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
         }
-		if (typeof params.certissuer != "undefined") {
-			this.type = 'dn';
-			this.explicit = true;
-			var certStr = params.certissuer;
-			var certHex = null;
-			if (certStr.match(/^[0-9A-Fa-f]+$/)) {
-				certHex == certStr;
+        if (typeof params.certissuer != "undefined") {
+            this.type = 'dn';
+            this.explicit = true;
+            var certStr = params.certissuer;
+            var certHex = null;
+            if (certStr.match(/^[0-9A-Fa-f]+$/)) {
+                certHex == certStr;
             }
-		    if (certStr.indexOf("-----BEGIN ") != -1) {
-				certHex = X509.pemToHex(certStr);
-			}
-		    if (certHex == null) throw "certissuer param not cert";
-			var x = new X509();
-			x.hex = certHex;
-			var dnHex = x.getIssuerHex();
-			v = new KJUR.asn1.ASN1Object();
-			v.hTLV = dnHex;
-		}
-		if (typeof params.certsubj != "undefined") {
-			this.type = 'dn';
-			this.explicit = true;
-			var certStr = params.certsubj;
-			var certHex = null;
-			if (certStr.match(/^[0-9A-Fa-f]+$/)) {
-				certHex == certStr;
+            if (certStr.indexOf("-----BEGIN ") != -1) {
+                certHex = X509.pemToHex(certStr);
             }
-		    if (certStr.indexOf("-----BEGIN ") != -1) {
-				certHex = X509.pemToHex(certStr);
-			}
-		    if (certHex == null) throw "certsubj param not cert";
-			var x = new X509();
-			x.hex = certHex;
-			var dnHex = x.getSubjectHex();
-			v = new KJUR.asn1.ASN1Object();
-			v.hTLV = dnHex;
-		}
+            if (certHex == null) throw "certissuer param not cert";
+            var x = new X509();
+            x.hex = certHex;
+            var dnHex = x.getIssuerHex();
+            v = new KJUR.asn1.ASN1Object();
+            v.hTLV = dnHex;
+        }
+        if (typeof params.certsubj != "undefined") {
+            this.type = 'dn';
+            this.explicit = true;
+            var certStr = params.certsubj;
+            var certHex = null;
+            if (certStr.match(/^[0-9A-Fa-f]+$/)) {
+                certHex == certStr;
+            }
+            if (certStr.indexOf("-----BEGIN ") != -1) {
+                certHex = X509.pemToHex(certStr);
+            }
+            if (certHex == null) throw "certsubj param not cert";
+            var x = new X509();
+            x.hex = certHex;
+            var dnHex = x.getSubjectHex();
+            v = new KJUR.asn1.ASN1Object();
+            v.hTLV = dnHex;
+        }
 
         if (this.type == null)
             throw "unsupported type in params=" + params;
-        this.asn1Obj = new KJUR.asn1.DERTaggedObject({'explicit': this.explicit,
-                                                      'tag': pTag[this.type],
-                                                      'obj': v});
+        this.asn1Obj = new KJUR.asn1.DERTaggedObject({
+            'explicit': this.explicit,
+            'tag': pTag[this.type],
+            'obj': v
+        });
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         return this.asn1Obj.getEncodedHex();
     }
 
@@ -1688,11 +1709,11 @@ YAHOO.lang.extend(KJUR.asn1.x509.GeneralName, KJUR.asn1.ASN1Object);
  * <br/>
  * <h4>EXAMPLE AND ASN.1 SYNTAX</h4>
  * @example
- * var gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]); 
+ * var gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
  *
  * GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName
  */
-KJUR.asn1.x509.GeneralNames = function(paramsArray) {
+KJUR.asn1.x509.GeneralNames = function (paramsArray) {
     KJUR.asn1.x509.GeneralNames.superclass.constructor.call(this);
     var asn1Array = null;
 
@@ -1709,14 +1730,14 @@ KJUR.asn1.x509.GeneralNames = function(paramsArray) {
      * var gns = new KJUR.asn1.x509.GeneralNames();
      * gns.setByParamArray([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
      */
-    this.setByParamArray = function(paramsArray) {
+    this.setByParamArray = function (paramsArray) {
         for (var i = 0; i < paramsArray.length; i++) {
             var o = new KJUR.asn1.x509.GeneralName(paramsArray[i]);
             this.asn1Array.push(o);
         }
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var o = new KJUR.asn1.DERSequence({'array': this.asn1Array});
         return o.getEncodedHex();
     };
@@ -1735,19 +1756,21 @@ YAHOO.lang.extend(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
  * @description
  * @example
  */
-KJUR.asn1.x509.DistributionPointName = function(gnOrRdn) {
+KJUR.asn1.x509.DistributionPointName = function (gnOrRdn) {
     KJUR.asn1.x509.DistributionPointName.superclass.constructor.call(this);
     var asn1Obj = null;
     var type = null;
     var tag = null;
     var asn1V = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.type != "full")
             throw "currently type shall be 'full': " + this.type;
-        this.asn1Obj = new KJUR.asn1.DERTaggedObject({'explicit': false,
-                                                      'tag': this.tag,
-                                                      'obj': this.asn1V});
+        this.asn1Obj = new KJUR.asn1.DERTaggedObject({
+            'explicit': false,
+            'tag': this.tag,
+            'obj': this.asn1V
+        });
         this.hTLV = this.asn1Obj.getEncodedHex();
         return this.hTLV;
     };
@@ -1771,16 +1794,18 @@ YAHOO.lang.extend(KJUR.asn1.x509.DistributionPointName, KJUR.asn1.ASN1Object);
  * @description
  * @example
  */
-KJUR.asn1.x509.DistributionPoint = function(params) {
+KJUR.asn1.x509.DistributionPoint = function (params) {
     KJUR.asn1.x509.DistributionPoint.superclass.constructor.call(this);
     var asn1DP = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var seq = new KJUR.asn1.DERSequence();
         if (this.asn1DP != null) {
-            var o1 = new KJUR.asn1.DERTaggedObject({'explicit': true,
-                                                    'tag': 'a0',
-                                                    'obj': this.asn1DP});
+            var o1 = new KJUR.asn1.DERTaggedObject({
+                'explicit': true,
+                'tag': 'a0',
+                'obj': this.asn1DP
+            });
             seq.appendASN1Object(o1);
         }
         this.hTLV = seq.getEncodedHex();
@@ -1801,7 +1826,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
  * @class static object for OID
  * @property {Assoc Array} atype2oidList for short attribyte type name and oid (i.e. 'C' and '2.5.4.6')
  * @property {Assoc Array} name2oidList for oid name and oid (i.e. 'keyUsage' and '2.5.29.15')
- * @property {Assoc Array} objCache for caching name and DERObjectIdentifier object 
+ * @property {Assoc Array} objCache for caching name and DERObjectIdentifier object
  * @description
  * <dl>
  * <dt><b>atype2oidList</b>
@@ -1811,93 +1836,93 @@ YAHOO.lang.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
  * </dl>
  * @example
  */
-KJUR.asn1.x509.OID = new function(params) {
+KJUR.asn1.x509.OID = new function (params) {
     this.atype2oidList = {
-        'C':    '2.5.4.6',
-        'O':    '2.5.4.10',
-        'OU':   '2.5.4.11',
-        'ST':   '2.5.4.8',
-        'L':    '2.5.4.7',
-        'CN':   '2.5.4.3',
-        'DN':   '2.5.4.49',
-        'DC':   '0.9.2342.19200300.100.1.25',
+        'C': '2.5.4.6',
+        'O': '2.5.4.10',
+        'OU': '2.5.4.11',
+        'ST': '2.5.4.8',
+        'L': '2.5.4.7',
+        'CN': '2.5.4.3',
+        'DN': '2.5.4.49',
+        'DC': '0.9.2342.19200300.100.1.25',
     };
     this.name2oidList = {
-        'sha1':                 '1.3.14.3.2.26',
-        'sha256':               '2.16.840.1.101.3.4.2.1',
-        'sha384':               '2.16.840.1.101.3.4.2.2',
-        'sha512':               '2.16.840.1.101.3.4.2.3',
-        'sha224':               '2.16.840.1.101.3.4.2.4',
-        'md5':                  '1.2.840.113549.2.5',
-        'md2':                  '1.3.14.7.2.2.1',
-        'ripemd160':            '1.3.36.3.2.1',
+        'sha1': '1.3.14.3.2.26',
+        'sha256': '2.16.840.1.101.3.4.2.1',
+        'sha384': '2.16.840.1.101.3.4.2.2',
+        'sha512': '2.16.840.1.101.3.4.2.3',
+        'sha224': '2.16.840.1.101.3.4.2.4',
+        'md5': '1.2.840.113549.2.5',
+        'md2': '1.3.14.7.2.2.1',
+        'ripemd160': '1.3.36.3.2.1',
 
-        'MD2withRSA':           '1.2.840.113549.1.1.2',
-        'MD4withRSA':           '1.2.840.113549.1.1.3',
-        'MD5withRSA':           '1.2.840.113549.1.1.4',
-        'SHA1withRSA':          '1.2.840.113549.1.1.5',
-        'SHA224withRSA':        '1.2.840.113549.1.1.14',
-        'SHA256withRSA':        '1.2.840.113549.1.1.11',
-        'SHA384withRSA':        '1.2.840.113549.1.1.12',
-        'SHA512withRSA':        '1.2.840.113549.1.1.13',
+        'MD2withRSA': '1.2.840.113549.1.1.2',
+        'MD4withRSA': '1.2.840.113549.1.1.3',
+        'MD5withRSA': '1.2.840.113549.1.1.4',
+        'SHA1withRSA': '1.2.840.113549.1.1.5',
+        'SHA224withRSA': '1.2.840.113549.1.1.14',
+        'SHA256withRSA': '1.2.840.113549.1.1.11',
+        'SHA384withRSA': '1.2.840.113549.1.1.12',
+        'SHA512withRSA': '1.2.840.113549.1.1.13',
 
-        'SHA1withECDSA':        '1.2.840.10045.4.1',
-        'SHA224withECDSA':      '1.2.840.10045.4.3.1',
-        'SHA256withECDSA':      '1.2.840.10045.4.3.2',
-        'SHA384withECDSA':      '1.2.840.10045.4.3.3',
-        'SHA512withECDSA':      '1.2.840.10045.4.3.4',
+        'SHA1withECDSA': '1.2.840.10045.4.1',
+        'SHA224withECDSA': '1.2.840.10045.4.3.1',
+        'SHA256withECDSA': '1.2.840.10045.4.3.2',
+        'SHA384withECDSA': '1.2.840.10045.4.3.3',
+        'SHA512withECDSA': '1.2.840.10045.4.3.4',
 
-        'dsa':                  '1.2.840.10040.4.1',
-        'SHA1withDSA':          '1.2.840.10040.4.3',
-        'SHA224withDSA':        '2.16.840.1.101.3.4.3.1',
-        'SHA256withDSA':        '2.16.840.1.101.3.4.3.2',
+        'dsa': '1.2.840.10040.4.1',
+        'SHA1withDSA': '1.2.840.10040.4.3',
+        'SHA224withDSA': '2.16.840.1.101.3.4.3.1',
+        'SHA256withDSA': '2.16.840.1.101.3.4.3.2',
 
-        'rsaEncryption':        '1.2.840.113549.1.1.1',
+        'rsaEncryption': '1.2.840.113549.1.1.1',
 
-        'countryName':          '2.5.4.6',
-        'organization':         '2.5.4.10',
-        'organizationalUnit':   '2.5.4.11',
-        'stateOrProvinceName':  '2.5.4.8',
-        'locality':             '2.5.4.7',
-        'commonName':           '2.5.4.3',
+        'countryName': '2.5.4.6',
+        'organization': '2.5.4.10',
+        'organizationalUnit': '2.5.4.11',
+        'stateOrProvinceName': '2.5.4.8',
+        'locality': '2.5.4.7',
+        'commonName': '2.5.4.3',
 
         'subjectKeyIdentifier': '2.5.29.14',
-        'keyUsage':             '2.5.29.15',
-        'subjectAltName':       '2.5.29.17',
-        'basicConstraints':     '2.5.29.19',
-        'nameConstraints':      '2.5.29.30',
-        'cRLDistributionPoints':'2.5.29.31',
-        'certificatePolicies':  '2.5.29.32',
-        'authorityKeyIdentifier':'2.5.29.35',
-        'policyConstraints':    '2.5.29.36',
-        'extKeyUsage':          '2.5.29.37',
-	'authorityInfoAccess':  '1.3.6.1.5.5.7.1.1',
+        'keyUsage': '2.5.29.15',
+        'subjectAltName': '2.5.29.17',
+        'basicConstraints': '2.5.29.19',
+        'nameConstraints': '2.5.29.30',
+        'cRLDistributionPoints': '2.5.29.31',
+        'certificatePolicies': '2.5.29.32',
+        'authorityKeyIdentifier': '2.5.29.35',
+        'policyConstraints': '2.5.29.36',
+        'extKeyUsage': '2.5.29.37',
+        'authorityInfoAccess': '1.3.6.1.5.5.7.1.1',
 
-        'anyExtendedKeyUsage':  '2.5.29.37.0',
-        'serverAuth':           '1.3.6.1.5.5.7.3.1',
-        'clientAuth':           '1.3.6.1.5.5.7.3.2',
-        'codeSigning':          '1.3.6.1.5.5.7.3.3',
-        'emailProtection':      '1.3.6.1.5.5.7.3.4',
-        'timeStamping':         '1.3.6.1.5.5.7.3.8',
-        'ocspSigning':          '1.3.6.1.5.5.7.3.9',
+        'anyExtendedKeyUsage': '2.5.29.37.0',
+        'serverAuth': '1.3.6.1.5.5.7.3.1',
+        'clientAuth': '1.3.6.1.5.5.7.3.2',
+        'codeSigning': '1.3.6.1.5.5.7.3.3',
+        'emailProtection': '1.3.6.1.5.5.7.3.4',
+        'timeStamping': '1.3.6.1.5.5.7.3.8',
+        'ocspSigning': '1.3.6.1.5.5.7.3.9',
 
-        'ecPublicKey':          '1.2.840.10045.2.1',
-        'secp256r1':            '1.2.840.10045.3.1.7',
-        'secp256k1':            '1.3.132.0.10',
-        'secp384r1':            '1.3.132.0.34',
+        'ecPublicKey': '1.2.840.10045.2.1',
+        'secp256r1': '1.2.840.10045.3.1.7',
+        'secp256k1': '1.3.132.0.10',
+        'secp384r1': '1.3.132.0.34',
 
-        'pkcs5PBES2':           '1.2.840.113549.1.5.13',
-        'pkcs5PBKDF2':          '1.2.840.113549.1.5.12',
+        'pkcs5PBES2': '1.2.840.113549.1.5.13',
+        'pkcs5PBKDF2': '1.2.840.113549.1.5.12',
 
-        'des-EDE3-CBC':         '1.2.840.113549.3.7',
+        'des-EDE3-CBC': '1.2.840.113549.3.7',
 
-        'data':                 '1.2.840.113549.1.7.1', // CMS data
-        'signed-data':          '1.2.840.113549.1.7.2', // CMS signed-data
-        'enveloped-data':       '1.2.840.113549.1.7.3', // CMS enveloped-data
-        'digested-data':        '1.2.840.113549.1.7.5', // CMS digested-data
-        'encrypted-data':       '1.2.840.113549.1.7.6', // CMS encrypted-data
-        'authenticated-data':   '1.2.840.113549.1.9.16.1.2', // CMS authenticated-data
-        'tstinfo':              '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo
+        'data': '1.2.840.113549.1.7.1', // CMS data
+        'signed-data': '1.2.840.113549.1.7.2', // CMS signed-data
+        'enveloped-data': '1.2.840.113549.1.7.3', // CMS enveloped-data
+        'digested-data': '1.2.840.113549.1.7.5', // CMS digested-data
+        'encrypted-data': '1.2.840.113549.1.7.6', // CMS encrypted-data
+        'authenticated-data': '1.2.840.113549.1.9.16.1.2', // CMS authenticated-data
+        'tstinfo': '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo
     };
 
     this.objCache = {};
@@ -1912,7 +1937,7 @@ KJUR.asn1.x509.OID = new function(params) {
      * @example
      * var asn1ObjOID = OID.name2obj('SHA1withRSA');
      */
-    this.name2obj = function(name) {
+    this.name2obj = function (name) {
         if (typeof this.objCache[name] != "undefined")
             return this.objCache[name];
         if (typeof this.name2oidList[name] == "undefined")
@@ -1933,7 +1958,7 @@ KJUR.asn1.x509.OID = new function(params) {
      * @example
      * var asn1ObjOID = OID.atype2obj('CN');
      */
-    this.atype2obj = function(atype) {
+    this.atype2obj = function (atype) {
         if (typeof this.objCache[atype] != "undefined")
             return this.objCache[atype];
         if (typeof this.atype2oidList[atype] == "undefined")
@@ -1960,7 +1985,7 @@ KJUR.asn1.x509.OID = new function(params) {
  * // name will be 'authorityInfoAccess'.
  * @since asn1x509 1.0.9
  */
-KJUR.asn1.x509.OID.oid2name = function(oid) {
+KJUR.asn1.x509.OID.oid2name = function (oid) {
     var list = KJUR.asn1.x509.OID.name2oidList;
     for (var name in list) {
         if (list[name] == oid) return name;
@@ -1983,7 +2008,7 @@ KJUR.asn1.x509.OID.oid2name = function(oid) {
  * // name will be '1.3.6.1.5.5.7.1.1'.
  * @since asn1x509 1.0.11
  */
-KJUR.asn1.x509.OID.name2oid = function(name) {
+KJUR.asn1.x509.OID.name2oid = function (name) {
     var list = KJUR.asn1.x509.OID.name2oidList;
     if (list[name] === undefined) return '';
     return list[name];
@@ -1994,7 +2019,7 @@ KJUR.asn1.x509.OID.name2oid = function(name) {
  * @name KJUR.asn1.x509.X509Util
  * @class X.509 certificate and CRL utilities class
  */
-KJUR.asn1.x509.X509Util = new function() {
+KJUR.asn1.x509.X509Util = new function () {
     /**
      * get PKCS#8 PEM public key string from RSAKey object
      * @name getPKCS8PubKeyPEMfromRSAKey
@@ -2005,7 +2030,7 @@ KJUR.asn1.x509.X509Util = new function() {
      * @example
      * var pem = KJUR.asn1.x509.X509Util.getPKCS8PubKeyPEMfromRSAKey(pubKey);
      */
-    this.getPKCS8PubKeyPEMfromRSAKey = function(rsaKey) {
+    this.getPKCS8PubKeyPEMfromRSAKey = function (rsaKey) {
         var pem = null;
         var hN = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(rsaKey.n);
         var hE = KJUR.asn1.ASN1Util.integerToByteHex(rsaKey.e);
@@ -2031,8 +2056,8 @@ KJUR.asn1.x509.X509Util = new function() {
  * @description
  * This method can issue a certificate by a simple
  * JSON object.
- * Signature value will be provided by signing with 
- * private key using 'cakey' parameter or 
+ * Signature value will be provided by signing with
+ * private key using 'cakey' parameter or
  * hexa decimal signature value by 'sighex' parameter.
  *
  * NOTE: When using DSA or ECDSA CA signing key,
@@ -2079,7 +2104,7 @@ KJUR.asn1.x509.X509Util = new function() {
  *   sighex: '0102030405..'}
  * );
  */
-KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
+KJUR.asn1.x509.X509Util.newCertPEM = function (param) {
     var ns1 = KJUR.asn1.x509;
     var o = new ns1.TBSCertificate();
 
@@ -2090,14 +2115,14 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
 
     if (typeof param.sigalg.name == 'string')
         o.setSignatureAlgByParam(param.sigalg);
-    else 
+    else
         throw "unproper signature algorithm name";
 
     if (param.issuer !== undefined)
         o.setIssuerByParam(param.issuer);
     else
         throw "issuer name undefined.";
-    
+
     if (param.notbefore !== undefined)
         o.setNotBeforeByParam(param.notbefore);
     else
@@ -2148,13 +2173,13 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
 };
 
 /*
-  org.bouncycastle.asn1.x500
-  AttributeTypeAndValue
-  DirectoryString
-  RDN
-  X500Name
-  X500NameBuilder
+ org.bouncycastle.asn1.x500
+ AttributeTypeAndValue
+ DirectoryString
+ RDN
+ X500Name
+ X500NameBuilder
 
-  org.bouncycastleasn1.x509
-  TBSCertificate
-*/
+ org.bouncycastleasn1.x509
+ TBSCertificate
+ */

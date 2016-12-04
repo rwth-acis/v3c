@@ -16,7 +16,7 @@
  * @file search.js
  * Requests models from database which match an input search string.
  */
- 
+
 var modelSearch = {}
 
 // Save the selected model's id if one exists, -1 otherwise (ids start with image-over)
@@ -29,30 +29,38 @@ modelSearch.selectedModel = -1;
  * @param  {string} str Search string entered by the user
  */
 modelSearch.showModels = function (str) {
-  // Find out which page we are visiting to display the models correctly
-  var type = (window.location.pathname.indexOf("editcourse.php") != -1) ? "modelselection" : "model";
+    // Find out which page we are visiting to display the models correctly
+    var type = (window.location.pathname.indexOf("editcourse.php") != -1) ? "modelselection" : "model";
 
-  // Update selected model id
-  var element = $(".highlight-model")[0];
-  modelSearch.selectedModel = element ? element.id : modelSearch.selectedModel;
+    // Update selected model id
+    var element = $(".highlight-model")[0];
+    modelSearch.selectedModel = element ? element.id : modelSearch.selectedModel;
 
-  $.post("../php/getmodels.php", {q: str, type: type}, function(response) {
-    $("#result-container").html( response )
-    if(type === "modelselection") { editCourse.addSelectListener(); }
-
-    // If we are inside ROLE, change the list items to open in separate widget
-    if(window.location.search.substring(1) === "widget=true") {
-        initOverviewWidget();
-        // Apply highlighting
-        element = $('#'+modelSearch.selectedModel);
-        if(element.length) { element.addClass('highlight-model') };
-    } else {
-        // Highlight previously selected models
-        for(var item in editCourse.selectedModels) {
-            element = $("#result-container #image-over"+item)
-            if(element.length) {element.addClass('highlight-model')};
+    $.post("../php/getmodels.php", {q: str, type: type}, function (response) {
+        $("#result-container").html(response)
+        if (type === "modelselection") {
+            editCourse.addSelectListener();
         }
-    }
-  });
+
+        // If we are inside ROLE, change the list items to open in separate widget
+        if (window.location.search.substring(1) === "widget=true") {
+            initOverviewWidget();
+            // Apply highlighting
+            element = $('#' + modelSearch.selectedModel);
+            if (element.length) {
+                element.addClass('highlight-model')
+            }
+            ;
+        } else {
+            // Highlight previously selected models
+            for (var item in editCourse.selectedModels) {
+                element = $("#result-container #image-over" + item)
+                if (element.length) {
+                    element.addClass('highlight-model')
+                }
+                ;
+            }
+        }
+    });
 
 }

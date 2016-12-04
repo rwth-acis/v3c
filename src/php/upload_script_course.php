@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  * @file upload_script_course.php
- * 
+ *
  * Adss new course to the course database on the server
  * adds metadata about it database.
  */
@@ -27,7 +27,7 @@ $conn = require '../php/db_connect.php';
 require_once '../php/tools.php';
 
 if ((include '../config/config.php') === false) {
-  throw new Exception("The config.php is missing! Cannot create widget automatically.");
+    throw new Exception("The config.php is missing! Cannot create widget automatically.");
 }
 
 //Get input data from form
@@ -37,6 +37,8 @@ $role_link = filter_input(INPUT_POST, 'roleLink');
 $contact = filter_input(INPUT_POST, 'contact');
 $dates = filter_input(INPUT_POST, 'dates');
 $links = filter_input(INPUT_POST, 'links');
+$profession = filter_input(INPUT_POST, 'profession');
+$domain = filter_input(INPUT_POST, 'domain');
 $subject_id = filter_input(INPUT_POST, 'subject_id');
 
 // Get the ID (of our DB) of the currently logged in user. Required, because this 
@@ -47,7 +49,7 @@ ob_end_clean();
 $creator = $user_database_entry['id'];
 
 // Create database-entry
-$sql = "INSERT INTO courses (name, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name','$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
+$sql = "INSERT INTO courses (name, domain, profession, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name', '$domain', '$profession', '$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
 
 $conn->query($sql);
 
@@ -55,7 +57,7 @@ $last_id = $conn->lastInsertId();
 
 $html = "";
 if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
-  $html = "&widget=true";
+    $html = "&widget=true";
 }
 
 // After creating a course, the user is redirected to the edit page. The reason

@@ -21,83 +21,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collaborative Viewing of 3D Models </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Viewing of 3D Models </title>
 
-  <?php
+    <?php
     //Decide if this site is inside a separate widget
-    if(filter_input(INPUT_GET, "widget") == "true")
-    {
-      print("<script src='../js/overview-widget.js'> </script>");
+    if (filter_input(INPUT_GET, "widget") == "true") {
+        print("<script src='../js/overview-widget.js'> </script>");
     }
-  ?>
+    ?>
 
 </head>
 <body>
-  <?php
-    include("menu.php");
-    include("../php/tools.php");
-  ?>
-  <?php
-    //Decide if this site is inside a separate widget
-    if(filter_input(INPUT_GET, "widget") == "true") {
+<?php
+include("menu.php");
+include("../php/tools.php");
+?>
+<?php
+//Decide if this site is inside a separate widget
+if (filter_input(INPUT_GET, "widget") == "true") {
 
-    }
-    else {
-        // Disable uploading in ROLE
-  ?>
-      <header id="head" class="secondary">
+} else {
+    // Disable uploading in ROLE
+    ?>
+    <header id="head" class="secondary">
         <div class='container'>
-          <div class='row'>
-            <div  class="col-sm-8">
-              <h1>Gallery</h1>
+            <div class='row'>
+                <div class="col-sm-8">
+                    <h1>Gallery</h1>
+                </div>
+                <div class="col-sm-4">
+                    <?php
+                    $btn_edit_class = "btn btn-success btn-block btn-lg";
+                    printLinkBtn("upload.php", $btn_edit_class . " headline-btn", "Upload");
+                    ?>
+                </div>
             </div>
-            <div class="col-sm-4">
-              <?php
-                $btn_edit_class = "btn btn-success btn-block btn-lg";
-                printLinkBtn("upload.php", $btn_edit_class." headline-btn", "Upload");
-              ?>
-            </div>
-          </div>
         </div>
-      </header>
-  <?php
-    }
-  ?>
-  <div class='container'>
+    </header>
+    <?php
+}
+?>
+<div class='container'>
     <div class='row'>
-      <div class='col-md-6'>
-        <div class="col-sm-12">
-          <?php
-            printLinkBtn("upload.php", $btn_edit_class." headline-btn-smartphone", "Upload");
-          ?>
+        <div class='col-md-6'>
+            <div class="col-sm-12">
+                <?php
+                printLinkBtn("upload.php", $btn_edit_class . " headline-btn-smartphone", "Upload");
+                ?>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <?php include("search.php"); ?>
-  <!-- container -->
-  <section class="container">
+</div>
+<?php include("search.php"); ?>
+<!-- container -->
+<section class="container">
     <br><br><br>
     <div class="container" id="result-container">
-      <?php
-      include '../php/db_connect.php';
+        <?php
+        include '../php/db_connect.php';
 
-      $query  = $db->query("SELECT * FROM models");
-      $result = $query->fetchAll();
+        $query = $db->query("SELECT * FROM models");
+        $result = $query->fetchAll();
 
-      $html = createTable($result, 'model');
-      echo $html;
-      ?>
+        $html = createTable($result, 'model');
+        echo $html;
+        ?>
     </div>
-  </section>
-  <!-- /container -->
+</section>
+<!-- /container -->
 
-  <?php include("footer.php"); ?>
+<?php include("footer.php"); ?>
 
-  <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-  <script src='../js/search.js'></script>
+<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+<script src='../js/search.js'></script>
 
 </body>
 </html>

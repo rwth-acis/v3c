@@ -18,19 +18,19 @@
  */
 
 /// Initialize course_list.php
-$(document).ready(function(){
-  var editBtns = document.getElementsByClassName("btn-edit");
-  var deleteBtns = document.getElementsByClassName("btn-delete");
-  
-  for (var i = 0; i < editBtns.length; i++) {
-    editBtns[i].onclick = function(event) {
-      window.location = "editcourse.php?id=" + event.target.dataset.id;
-    };
-  }
-  
-  for (var i = 0; i < deleteBtns.length; i++) {
-    deleteBtns[i].onclick = function(event) {
-      window.location = "course_delete.php?id=" + event.target.dataset.id;
-    };
-  }
+$(document).ready(function () {
+    var editBtns = document.getElementsByClassName("btn-edit");
+    var deleteBtns = document.getElementsByClassName("btn-delete");
+
+    for (var i = 0; i < editBtns.length; i++) {
+        editBtns[i].onclick = function (event) {
+            window.location = "editcourse.php?id=" + event.target.dataset.id;
+        };
+    }
+
+    for (var i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].onclick = function (event) {
+            window.location = "course_delete.php?id=" + event.target.dataset.id;
+        };
+    }
 });

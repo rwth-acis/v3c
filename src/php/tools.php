@@ -24,16 +24,19 @@
  * @param  resource $result Identifier for the result set from the database
  * @return string/html         HTML table containing the models which should be displayed
  */
-function createTable($result, $type) {
+function createTable($result, $type)
+{
     $html = '<ul class="img-list">';
-    
+
     foreach ($result as $entry) {
-        if(substr($type,0,1) == "m") {
-            $html .= getModelStructure($entry,$type);
-        } else if(substr($type,0,1) == "s") {
-          $html .= getSubjectStructure($entry);
+        if (substr($type, 0, 1) == "m") {
+            $html .= getModelStructure($entry, $type);
         } else {
-            $html .= getCourseStructure($entry);
+            if (substr($type, 0, 1) == "s") {
+                $html .= getSubjectStructure($entry);
+            } else {
+                $html .= getCourseStructure($entry);
+            }
         }
     }
 
@@ -46,13 +49,16 @@ function createTable($result, $type) {
  * @param  object $entry Course data from database
  * @return string/html        HTML containing the course information
  */
-function getCourseStructure($entry) {
+function getCourseStructure($entry)
+{
     $html = "";
     // Decide if we are in ROLE space
-    if(filter_input(INPUT_GET, "widget") == 'true') {$html = "&widget=true";}
+    if (filter_input(INPUT_GET, "widget") == 'true') {
+        $html = "&widget=true";
+    }
 
     // id used to derive course id (from database) connected to clicked link
-    return "<li><a href='course.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
+    return "<li><a href='course.php?id=$entry[id]" . $html . "' id='a_img$entry[id]'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
             <p style='font-weight: bold;'>$entry[name]</p>
             </a></li>";
@@ -63,13 +69,16 @@ function getCourseStructure($entry) {
  * @param  object $entry Subject data from database
  * @return string/html        HTML containing the subject information
  */
-function getSubjectStructure($entry) {
+function getSubjectStructure($entry)
+{
     $html = "";
     // Decide if we are in ROLE space
-    if(filter_input(INPUT_GET, "widget") == 'true') {$html = "&widget=true";}
+    if (filter_input(INPUT_GET, "widget") == 'true') {
+        $html = "&widget=true";
+    }
 
     // id used to derive course id (from database) connected to clicked link
-    return "<li><a href='course_list.php?id=$entry[id]".$html."' id='a_img$entry[id]'>
+    return "<li><a href='course_list.php?id=$entry[id]" . $html . "' id='a_img$entry[id]'>
             <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
             <p style='font-weight: bold;'>$entry[name]</p>
             </a></li>";
@@ -82,14 +91,15 @@ function getSubjectStructure($entry) {
  * @param $text
  * @internal param type $arg id of the course
  */
-function printLinkBtn($url, $class, $text) {
-  $widgetExtension = "";
-  if(filter_input(INPUT_GET, "widget") == "true") { 
-    $widgetExtension = "&widget=true"; 
-  }
-  echo "<a href=$url $widgetExtension>"; 
-  echo "<button class='$class' type='button'>$text</button>";
-  echo "</a>";
+function printLinkBtn($url, $class, $text)
+{
+    $widgetExtension = "";
+    if (filter_input(INPUT_GET, "widget") == "true") {
+        $widgetExtension = "&widget=true";
+    }
+    echo "<a href=$url $widgetExtension>";
+    echo "<button class='$class' type='button'>$text</button>";
+    echo "</a>";
 }
 
 // Method: POST, PUT, GET etc
@@ -100,20 +110,21 @@ function httpRequest($method, $url, $data = false)
 {
     $curl = curl_init();
 
-    switch ($method)
-    {
+    switch ($method) {
         case "POST":
             curl_setopt($curl, CURLOPT_POST, 1);
 
-            if ($data)
+            if ($data) {
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            }
             break;
         case "PUT":
             curl_setopt($curl, CURLOPT_PUT, 1);
             break;
         default:
-            if ($data)
+            if ($data) {
                 $url = sprintf("%s?%s", $url, http_build_query($data));
+            }
     }
 
     // Optional Authentication:
@@ -125,16 +136,17 @@ function httpRequest($method, $url, $data = false)
 
     $res_exec = curl_exec($curl);
     // To avoid warnings:
-    if (!isset($result)) 
-       $result = new stdClass();
-       
-    if($res_exec == FALSE) {
-    	$result->bOk = FALSE;
-    	$result->sMsg = curl_error($curl);
+    if (!isset($result)) {
+        $result = new stdClass();
+    }
+
+    if ($res_exec == false) {
+        $result->bOk = false;
+        $result->sMsg = curl_error($curl);
     } else {
-    	$result->bOk = TRUE;
-    	$result->sMsg = $res_exec;
-    	$result->iStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $result->bOk = true;
+        $result->sMsg = $res_exec;
+        $result->iStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     }
 
     curl_close($curl);
@@ -148,23 +160,24 @@ function httpRequest($method, $url, $data = false)
  * @param  string The token that is send to the OIDC-provider
  * @return struct {'bOk':boolean, 'sMsg':string}, sMsg is userprofile in JSON on success and errormessage on fail
  */
-function getUserProfile($access_token) {
-	$result = new stdClass();
-	$result->success = false;
-	$result->message = '';
-	
-	$oidc_request = httpRequest("GET", $las2peerUrl.'/'.'user'.'?access_token='.$access_token);
-	
-	if($oidc_request->bOk == FALSE or $oidc_request->iStatus !== 200) {
-		$result->bOk = false;
-		$result->sMsg = $oidc_request->sMsg;
-	} else {
-		error_log('3dnrt/user call unsuccessfull: '.$oidc_request->sMsg);
-		$result->bOk = true;
-		$result->message = $oidc_request->sMsg;
-	}
-		
-	return $result;
+function getUserProfile($access_token)
+{
+    $result = new stdClass();
+    $result->success = false;
+    $result->message = '';
+
+    $oidc_request = httpRequest("GET", $las2peerUrl . '/' . 'user' . '?access_token=' . $access_token);
+
+    if ($oidc_request->bOk == false or $oidc_request->iStatus !== 200) {
+        $result->bOk = false;
+        $result->sMsg = $oidc_request->sMsg;
+    } else {
+        error_log('3dnrt/user call unsuccessfull: ' . $oidc_request->sMsg);
+        $result->bOk = true;
+        $result->message = $oidc_request->sMsg;
+    }
+
+    return $result;
 }
 
 /**
@@ -174,48 +187,50 @@ function getUserProfile($access_token) {
  * @param string $value
  * @return array {key1=>value1, key2=>value2, ...} or NULL if $key-$value is not found in $table
  */
-function getSingleDatabaseEntryByValue($table, $key, $value) {
-   require '../php/db_connect.php';
+function getSingleDatabaseEntryByValue($table, $key, $value)
+{
+    require '../php/db_connect.php';
 
-   $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-   
-   $sqlSelect = "SELECT * FROM ".$table." WHERE ".$key."='".$value."'";
-   $sth = $db->prepare($sqlSelect);
-   $sth->execute();
-   $entry = $sth->fetch();
-   
-   return $entry;
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+    $sqlSelect = "SELECT * FROM " . $table . " WHERE " . $key . "='" . $value . "'";
+    $sth = $db->prepare($sqlSelect);
+    $sth->execute();
+    $entry = $sth->fetch();
+
+    return $entry;
 }
 
 /**
  * @return [bErr:bool, bIsConfirmed:bool, sMsg:string]
  */
-function checkUserConfirmed($sub) {
+function checkUserConfirmed($sub)
+{
 
-	$result = new stdClass();
+    $result = new stdClass();
 
-	try {
-	   $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
-	} catch (Exception $e) {
-		$result->bErr = true;
-		$result->bIsConfirmed = false;
-		$result->sMsg = $e->getMessage();
-		
-		return $result;
-	}
-   
-   // If $user is empty, the user is not known
-   if(!$user) {
-   	$result->bErr = false;
-   	$result->bIsConfirmed = false;
-   	$result->sMsg = "User has no databaseentry.";
-   } else {
-   	$result->bErr = false;
-   	$result->bIsConfirmed = ($user['confirmed'] == 1);
-   	$result->sMsg = "Value queried from database.";
-   }
-   
-   return $result;
+    try {
+        $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
+    } catch (Exception $e) {
+        $result->bErr = true;
+        $result->bIsConfirmed = false;
+        $result->sMsg = $e->getMessage();
+
+        return $result;
+    }
+
+    // If $user is empty, the user is not known
+    if (!$user) {
+        $result->bErr = false;
+        $result->bIsConfirmed = false;
+        $result->sMsg = "User has no databaseentry.";
+    } else {
+        $result->bErr = false;
+        $result->bIsConfirmed = ($user['confirmed'] == 1);
+        $result->sMsg = "Value queried from database.";
+    }
+
+    return $result;
 }
 
 /**
@@ -223,16 +238,17 @@ function checkUserConfirmed($sub) {
  *
  * @return id or NULL, if user is not found
  */
-function getUserId($sub) {
+function getUserId($sub)
+{
 
-	$result = new stdClass();
+    $result = new stdClass();
 
-   $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
-   
-   // If $user is empty, the user is not known
-   if(!$user) {
-   	return NULL;
-   } else {
-   	return $user->id;
-   }
+    $user = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $sub);
+
+    // If $user is empty, the user is not known
+    if (!$user) {
+        return null;
+    } else {
+        return $user->id;
+    }
 }

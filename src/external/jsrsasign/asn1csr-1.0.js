@@ -62,14 +62,14 @@ if (typeof KJUR.asn1.csr == "undefined" || !KJUR.asn1.csr) KJUR.asn1.csr = {};
  * csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
  * csr.sign("SHA256withRSA", prvKeyObj);
  * pem = csr.getPEMString();
- * 
+ *
  * // -- DEFINITION OF ASN.1 SYNTAX --
  * // CertificationRequest ::= SEQUENCE {
  * //   certificationRequestInfo CertificationRequestInfo,
  * //   signatureAlgorithm       AlgorithmIdentifier{{ SignatureAlgorithms }},
  * //   signature                BIT STRING }
  */
-KJUR.asn1.csr.CertificationRequest = function(params) {
+KJUR.asn1.csr.CertificationRequest = function (params) {
     KJUR.asn1.csr.CertificationRequest.superclass.constructor.call(this);
     var asn1CSRInfo = null;
     var asn1SignatureAlg = null;
@@ -90,11 +90,11 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
      * csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
      * csr.sign("SHA256withRSA", prvKeyObj);
      */
-    this.sign = function(sigAlgName, prvKeyObj) {
-	if (this.prvKey == null) this.prvKey = prvKeyObj;
+    this.sign = function (sigAlgName, prvKeyObj) {
+        if (this.prvKey == null) this.prvKey = prvKeyObj;
 
-	this.asn1SignatureAlg = 
-	    new KJUR.asn1.x509.AlgorithmIdentifier({'name': sigAlgName});
+        this.asn1SignatureAlg =
+            new KJUR.asn1.x509.AlgorithmIdentifier({'name': sigAlgName});
 
         sig = new KJUR.crypto.Signature({'alg': sigAlgName});
         sig.initSign(this.prvKey);
@@ -102,9 +102,11 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
         this.hexSig = sig.sign();
 
         this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
-        var seq = new KJUR.asn1.DERSequence({'array': [this.asn1CSRInfo,
-                                                       this.asn1SignatureAlg,
-                                                       this.asn1Sig]});
+        var seq = new KJUR.asn1.DERSequence({
+            'array': [this.asn1CSRInfo,
+                this.asn1SignatureAlg,
+                this.asn1Sig]
+        });
         this.hTLV = seq.getEncodedHex();
         this.isModified = false;
     };
@@ -127,13 +129,13 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
      * // MII ...snip...
      * // -----END CERTIFICATE REQUEST-----
      */
-    this.getPEMString = function() {
-	var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(this.getEncodedHex(),
-							 "CERTIFICATE REQUEST");
-	return pem;
+    this.getPEMString = function () {
+        var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(this.getEncodedHex(),
+            "CERTIFICATE REQUEST");
+        return pem;
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.isModified == false && this.hTLV != null) return this.hTLV;
         throw "not signed yet";
     };
@@ -168,16 +170,16 @@ YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  * //   attributes    [0] Attributes{{ CRIAttributes }} }
  *
  */
-KJUR.asn1.csr.CertificationRequestInfo = function(params) {
+KJUR.asn1.csr.CertificationRequestInfo = function (params) {
     KJUR.asn1.csr.CertificationRequestInfo.superclass.constructor.call(this);
 
-    this._initialize = function() {
+    this._initialize = function () {
         this.asn1Array = new Array();
 
-	this.asn1Version = new KJUR.asn1.DERInteger({'int': 0});
-	this.asn1Subject = null;
-	this.asn1SubjPKey = null;
-	this.extensionsArray = new Array();
+        this.asn1Version = new KJUR.asn1.DERInteger({'int': 0});
+        this.asn1Subject = null;
+        this.asn1SubjPKey = null;
+        this.extensionsArray = new Array();
     };
 
     /**
@@ -191,7 +193,7 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
      * csri.setSubjectByParam({'str': '/C=US/CN=b'});
      * @see KJUR.asn1.x509.X500Name
      */
-    this.setSubjectByParam = function(x500NameParam) {
+    this.setSubjectByParam = function (x500NameParam) {
         this.asn1Subject = new KJUR.asn1.x509.X500Name(x500NameParam);
     };
 
@@ -203,18 +205,18 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
      * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
      * @description
      * @example
-     * csri.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
-     * csri.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+     * csri.setSubjectPublicKeyByGetKeyParam(certPEMString); // or
+     * csri.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or
      * csir.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.
      * @see KJUR.asn1.x509.SubjectPublicKeyInfo
      * @see KEYUTIL.getKey
      */
-    this.setSubjectPublicKeyByGetKey = function(keyParam) {
+    this.setSubjectPublicKeyByGetKey = function (keyParam) {
         var keyObj = KEYUTIL.getKey(keyParam);
         this.asn1SubjPKey = new KJUR.asn1.x509.SubjectPublicKeyInfo(keyObj);
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         this.asn1Array = new Array();
 
         this.asn1Array.push(this.asn1Version);
@@ -222,9 +224,11 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
         this.asn1Array.push(this.asn1SubjPKey);
 
         var extSeq = new KJUR.asn1.DERSequence({"array": this.extensionsArray});
-        var extTagObj = new KJUR.asn1.DERTaggedObject({'explicit': false,
-                                                       'tag': 'a0',
-                                                       'obj': extSeq});
+        var extTagObj = new KJUR.asn1.DERTaggedObject({
+            'explicit': false,
+            'tag': 'a0',
+            'obj': extSeq
+        });
         this.asn1Array.push(extTagObj);
 
         var o = new KJUR.asn1.DERSequence({"array": this.asn1Array});
@@ -242,7 +246,7 @@ YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequestInfo, KJUR.asn1.ASN1Object);
  * @name KJUR.asn1.csr.CSRUtil
  * @class Certification Request (CSR/PKCS#10) utilities class
  */
-KJUR.asn1.csr.CSRUtil = new function() {
+KJUR.asn1.csr.CSRUtil = new function () {
 };
 
 /**
@@ -271,7 +275,7 @@ KJUR.asn1.csr.CSRUtil = new function() {
  *   sbjprvkey: prvKeyObj
  * });
  *
- * // 2) by private/public key PEM 
+ * // 2) by private/public key PEM
  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
  *   subject: {str: '/C=US/O=Test/CN=example.com'},
  *   sbjpubkey: pubKeyPEM,
@@ -288,7 +292,7 @@ KJUR.asn1.csr.CSRUtil = new function() {
  *   sbjprvkey: kp.prvKeyObj
  * });
  */
-KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
+KJUR.asn1.csr.CSRUtil.newCSRPEM = function (param) {
     var ns1 = KJUR.asn1.csr;
 
     if (param.subject === undefined) throw "parameter subject undefined";

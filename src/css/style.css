@@ -830,3 +830,7 @@ footer ul li {
 .authorization-error-container {
     max-width: 1200px;
 }
+
+#course-list-description {
+    margin-top: 10px;
+}

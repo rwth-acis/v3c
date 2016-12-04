@@ -42,7 +42,7 @@
  * </ul>
  * All functions in 'base64x.js' are defined in {@link _global_} and not
  * in this class.
- * 
+ *
  * @class Base64URL and supplementary functions for Tom Wu's base64.js library
  * @author Kenji Urushima
  * @version 1.1 (07 May 2012)
@@ -57,12 +57,12 @@ function Base64x() {
 /**
  * convert a string to an array of character codes
  * @param {String} s
- * @return {Array of Numbers} 
+ * @return {Array of Numbers}
  */
 function stoBA(s) {
     var a = new Array();
     for (var i = 0; i < s.length; i++) {
-	a[i] = s.charCodeAt(i);
+        a[i] = s.charCodeAt(i);
     }
     return a;
 }
@@ -75,7 +75,7 @@ function stoBA(s) {
 function BAtos(a) {
     var s = "";
     for (var i = 0; i < a.length; i++) {
-	s = s + String.fromCharCode(a[i]);
+        s = s + String.fromCharCode(a[i]);
     }
     return s;
 }
@@ -89,9 +89,9 @@ function BAtos(a) {
 function BAtohex(a) {
     var s = "";
     for (var i = 0; i < a.length; i++) {
-	var hex1 = a[i].toString(16);
-	if (hex1.length == 1) hex1 = "0" + hex1;
-	s = s + hex1;
+        var hex1 = a[i].toString(16);
+        if (hex1.length == 1) hex1 = "0" + hex1;
+        s = s + hex1;
     }
     return s;
 }
@@ -193,42 +193,36 @@ function b64utohex(s) {
 
 var utf8tob64u, b64utoutf8;
 
-if (typeof Buffer === 'function')
-{
-  utf8tob64u = function (s)
-  {
-    return b64tob64u(new Buffer(s, 'utf8').toString('base64'));
-  };
+if (typeof Buffer === 'function') {
+    utf8tob64u = function (s) {
+        return b64tob64u(new Buffer(s, 'utf8').toString('base64'));
+    };
 
-  b64utoutf8 = function (s)
-  {
-    return new Buffer(b64utob64(s), 'base64').toString('utf8');
-  };
+    b64utoutf8 = function (s) {
+        return new Buffer(b64utob64(s), 'base64').toString('utf8');
+    };
 }
-else
-{
+else {
 // ==== utf8 / base64url ================================
-/**
- * convert a UTF-8 encoded string including CJK or Latin to a Base64URL encoded string.<br/>
- * @param {String} s UTF-8 encoded string
- * @return {String} Base64URL encoded string
- * @since 1.1
- */
-  utf8tob64u = function (s)
-  {
-    return hextob64u(uricmptohex(encodeURIComponentAll(s)));
-  };
+    /**
+     * convert a UTF-8 encoded string including CJK or Latin to a Base64URL encoded string.<br/>
+     * @param {String} s UTF-8 encoded string
+     * @return {String} Base64URL encoded string
+     * @since 1.1
+     */
+    utf8tob64u = function (s) {
+        return hextob64u(uricmptohex(encodeURIComponentAll(s)));
+    };
 
-/**
- * convert a Base64URL encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
- * @param {String} s Base64URL encoded string
- * @return {String} UTF-8 encoded string
- * @since 1.1
- */
-  b64utoutf8 = function (s)
-  {
-    return decodeURIComponent(hextouricmp(b64utohex(s)));
-  };
+    /**
+     * convert a Base64URL encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
+     * @param {String} s Base64URL encoded string
+     * @return {String} UTF-8 encoded string
+     * @since 1.1
+     */
+    b64utoutf8 = function (s) {
+        return decodeURIComponent(hextouricmp(b64utohex(s)));
+    };
 }
 
 // ==== utf8 / base64url ================================
@@ -239,7 +233,7 @@ else
  * @since 1.1.1
  */
 function utf8tob64(s) {
-  return hex2b64(uricmptohex(encodeURIComponentAll(s)));
+    return hex2b64(uricmptohex(encodeURIComponentAll(s)));
 }
 
 /**
@@ -249,7 +243,7 @@ function utf8tob64(s) {
  * @since 1.1.1
  */
 function b64toutf8(s) {
-  return decodeURIComponent(hextouricmp(b64tohex(s)));
+    return decodeURIComponent(hextouricmp(b64tohex(s)));
 }
 
 // ==== utf8 / hex ================================
@@ -260,7 +254,7 @@ function b64toutf8(s) {
  * @since 1.1.1
  */
 function utf8tohex(s) {
-  return uricmptohex(encodeURIComponentAll(s));
+    return uricmptohex(encodeURIComponentAll(s));
 }
 
 /**
@@ -272,7 +266,7 @@ function utf8tohex(s) {
  * @since 1.1.1
  */
 function hextoutf8(s) {
-  return decodeURIComponent(hextouricmp(s));
+    return decodeURIComponent(hextouricmp(s));
 }
 
 /**
@@ -333,7 +327,7 @@ function b64nltohex(s) {
     var b64 = s.replace(/[^0-9A-Za-z\/+=]*/g, '');
     var hex = b64tohex(b64);
     return hex;
-} 
+}
 
 // ==== URIComponent / hex ================================
 /**
@@ -343,7 +337,7 @@ function b64nltohex(s) {
  * @since 1.1
  */
 function uricmptohex(s) {
-  return s.replace(/%/g, "");
+    return s.replace(/%/g, "");
 }
 
 /**
@@ -353,7 +347,7 @@ function uricmptohex(s) {
  * @since 1.1
  */
 function hextouricmp(s) {
-  return s.replace(/(..)/g, "%$1");
+    return s.replace(/(..)/g, "%$1");
 }
 
 // ==== URIComponent ================================
@@ -361,31 +355,31 @@ function hextouricmp(s) {
  * convert UTFa hexadecimal string to a URLComponent string such like "%67%68".<br/>
  * Note that these "<code>0-9A-Za-z!'()*-._~</code>" characters will not
  * converted to "%xx" format by builtin 'encodeURIComponent()' function.
- * However this 'encodeURIComponentAll()' function will convert 
+ * However this 'encodeURIComponentAll()' function will convert
  * all of characters into "%xx" format.
  * @param {String} s hexadecimal string
  * @return {String} URIComponent string such like "%67%68"
  * @since 1.1
  */
 function encodeURIComponentAll(u8) {
-  var s = encodeURIComponent(u8);
-  var s2 = "";
-  for (var i = 0; i < s.length; i++) {
-    if (s[i] == "%") {
-      s2 = s2 + s.substr(i, 3);
-      i = i + 2;
-    } else {
-      s2 = s2 + "%" + stohex(s[i]);
+    var s = encodeURIComponent(u8);
+    var s2 = "";
+    for (var i = 0; i < s.length; i++) {
+        if (s[i] == "%") {
+            s2 = s2 + s.substr(i, 3);
+            i = i + 2;
+        } else {
+            s2 = s2 + "%" + stohex(s[i]);
+        }
     }
-  }
-  return s2;
+    return s2;
 }
 
 // ==== new lines ================================
 /**
- * convert all DOS new line("\r\n") to UNIX new line("\n") in 
+ * convert all DOS new line("\r\n") to UNIX new line("\n") in
  * a String "s".
- * @param {String} s string 
+ * @param {String} s string
  * @return {String} converted string
  */
 function newline_toUnix(s) {
@@ -394,9 +388,9 @@ function newline_toUnix(s) {
 }
 
 /**
- * convert all UNIX new line("\r\n") to DOS new line("\n") in 
+ * convert all UNIX new line("\r\n") to DOS new line("\n") in
  * a String "s".
- * @param {String} s string 
+ * @param {String} s string
  * @return {String} converted string
  */
 function newline_toDos(s) {
@@ -415,29 +409,29 @@ function newline_toDos(s) {
  * @throws "malformed integer array string: *" for wrong input
  * @description
  * This function converts a string of JavaScript integer array to
- * a hexadecimal string. Each integer value shall be in a range 
+ * a hexadecimal string. Each integer value shall be in a range
  * from 0 to 255 otherwise it raise exception. Input string can
  * have extra space or newline string so that they will be ignored.
- * 
+ *
  * @example
  * intarystrtohex(" [123, 34, 101, 34, 58] ")
  * -> 7b2265223a (i.e. `{"e":` as string)
  */
 function intarystrtohex(s) {
-  s = s.replace(/^\s*\[\s*/, '');
-  s = s.replace(/\s*\]\s*$/, '');
-  s = s.replace(/\s*/g, '');
-  try {
-    var hex = s.split(/,/).map(function(element, index, array) {
-      var i = parseInt(element);
-      if (i < 0 || 255 < i) throw "integer not in range 0-255";
-      var hI = ("00" + i.toString(16)).slice(-2);
-      return hI;
-    }).join('');
-    return hex;
-  } catch(ex) {
-    throw "malformed integer array string: " + ex;
-  }
+    s = s.replace(/^\s*\[\s*/, '');
+    s = s.replace(/\s*\]\s*$/, '');
+    s = s.replace(/\s*/g, '');
+    try {
+        var hex = s.split(/,/).map(function (element, index, array) {
+            var i = parseInt(element);
+            if (i < 0 || 255 < i) throw "integer not in range 0-255";
+            var hI = ("00" + i.toString(16)).slice(-2);
+            return hI;
+        }).join('');
+        return hex;
+    } catch (ex) {
+        throw "malformed integer array string: " + ex;
+    }
 }
 
 /**
@@ -452,11 +446,11 @@ function intarystrtohex(s) {
  * strdiffidx("abcdefg", "abcdef") -> 6
  * strdiffidx("abcdefgh", "abcdef") -> 6
  */
-var strdiffidx = function(s1, s2) {
+var strdiffidx = function (s1, s2) {
     var n = s1.length;
     if (s1.length > s2.length) n = s2.length;
     for (var i = 0; i < n; i++) {
-	if (s1.charCodeAt(i) != s2.charCodeAt(i)) return i;
+        if (s1.charCodeAt(i) != s2.charCodeAt(i)) return i;
     }
     if (s1.length != s2.length) return n;
     return -1; // same

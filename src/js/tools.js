@@ -26,35 +26,35 @@ tools.urlForSpace = function (spaceName) {
 }
 
 // Adds a click listener to create-room-btn
-tools.addCreateCourseRoomListener = function() {
-  
-  $("#create-room-btn").on("click", function() {
-  
-    var courseRoom = $("#targetRole").val();
-    
-    // Open the URL given in the "targetRole" input field in a new tab
-    window.open(tools.ROLE_SANDBOX_SPACES + courseRoom, '_blank');
-    
-  });
+tools.addCreateCourseRoomListener = function () {
+
+    $("#create-room-btn").on("click", function () {
+
+        var courseRoom = $("#targetRole").val();
+
+        // Open the URL given in the "targetRole" input field in a new tab
+        window.open(tools.ROLE_SANDBOX_SPACES + courseRoom, '_blank');
+
+    });
 };
 
 
-tools.addCourseNameInputListener = function() {
-  
-  // When user leaves course name input field, automatically create a suggestion
-  // for the course room name / course room URL
-  $("#targetName").on("blur", function(event) {
-    var courseRoom = $("#targetRole").val();
-    
-    // Update ROLE Space URL in course room input only if it is empty
-    if (courseRoom === undefined || courseRoom === "") {
-   
-      var courseRoom = $("#targetName").val().toLowerCase().replace(/[^a-z0-9]+/g, "")
-      
-      // Update the course room input field
-      $("#targetRole").val( courseRoom )
-    }
-  });
+tools.addCourseNameInputListener = function () {
+
+    // When user leaves course name input field, automatically create a suggestion
+    // for the course room name / course room URL
+    $("#targetName").on("blur", function (event) {
+        var courseRoom = $("#targetRole").val();
+
+        // Update ROLE Space URL in course room input only if it is empty
+        if (courseRoom === undefined || courseRoom === "") {
+
+            var courseRoom = $("#targetName").val().toLowerCase().replace(/[^a-z0-9]+/g, "")
+
+            // Update the course room input field
+            $("#targetRole").val(courseRoom)
+        }
+    });
 };
 
 /**
@@ -62,5 +62,5 @@ tools.addCourseNameInputListener = function() {
  * @return true, if the page is a widget in ROLE. false, otherwise
  */
 tools.isInRole = function () {
-  return URI().query(true).widget === "true";
+    return URI().query(true).widget === "true";
 }

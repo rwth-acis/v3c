@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
  *
@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  * @file upload_script_course.php
- * 
+ *
  * Adds new course to the course database on the server
  * adds metadata about it database.
  */
@@ -27,22 +27,26 @@ $conn = require '../php/db_connect.php';
 $id = filter_input(INPUT_POST, 'targetId');
 $name = mysql_escape_string(filter_input(INPUT_POST, 'name'));
 $text = mysql_escape_string(filter_input(INPUT_POST, 'text'));
+$domain = filter_input(INPUT_POST, 'domain');
+$profession = filter_input(INPUT_POST, 'profession');
 $role_link = filter_input(INPUT_POST, 'roleLink');
 $contact = filter_input(INPUT_POST, 'contact');
 $dates = filter_input(INPUT_POST, 'dates');
 $links = filter_input(INPUT_POST, 'links');
 
 //Creator stays the same
-	
+
 // modify database-entry
-$sql = "UPDATE courses SET name='$name', description='$text', role_url='$role_link', contact='$contact', dates='$dates', links='$links' WHERE id=$id";
+$sql = "UPDATE courses SET name='$name', domain='$domain', profession='$profession', description='$text', role_url='$role_link', contact='$contact', dates='$dates', links='$links' WHERE id=$id";
 
 //echo "sqlquery: $sql";
 
 $conn->query($sql);
 
 $html = "";
-if(isset($_GET['widget']) && $_GET['widget'] == 'true') {$html = "&widget=true";}
+if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
+    $html = "&widget=true";
+}
 
 header("Location:../views/course.php?id=$id$html");
 

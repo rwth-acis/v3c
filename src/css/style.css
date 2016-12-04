@@ -480,6 +480,18 @@ ul.list-spaces li {
     margin-top: 10px;
 }
 
+.margin-left {
+    margin-left: 10px;
+}
+
+.margin-right {
+    margin-right: 10px;
+}
+
+.margin-all {
+    margin: 10px 10px 10px 10px;
+}
+
 .output-element {
     white-space: pre-wrap;
 }
@@ -833,4 +845,8 @@ footer ul li {
 
 #course-list-description {
     margin-top: 10px;
+}
+
+.hover-click:hover {
+    cursor: pointer;
 }

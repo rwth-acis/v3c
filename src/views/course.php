@@ -60,6 +60,33 @@ function replaceLinks($text)
     return $text;
 }
 
+//TODO: get course units from DB.
+$course_units = array();
+$course_units[0]["id"] = "1";
+$course_units[0]["title"] = "unit1";
+$course_units[0]["start_date"] = "01.11.2016";
+$course_units[0]["description"] = "01.11.2016";
+
+$course_units[1]["id"] = "2";
+$course_units[1]["title"] = "unit2";
+$course_units[1]["start_date"] = "07.11.2016";
+$course_units[1]["description"] = "01.11.2016";
+
+$course_units[2]["id"] = "3";
+$course_units[2]["title"] = "unit3";
+$course_units[2]["start_date"] = "14.11.2016";
+$course_units[2]["description"] = "01.11.2016";
+
+$course_units[3]["id"] = "4";
+$course_units[3]["title"] = "unit4";
+$course_units[3]["start_date"] = "21.11.2016";
+$course_units[3]["description"] = "01.11.2016";
+
+$course_units[4]["id"] = "5";
+$course_units[4]["title"] = "unit5";
+$course_units[4]["start_date"] = "28.11.2016";
+$course_units[4]["description"] = "01.11.2016";
+
 ?>
 <header id='head' class='secondary'>
     <div class='container'>
@@ -82,6 +109,30 @@ function replaceLinks($text)
                                 </button>
                             </a>
                         <?php } ?>
+                    </div>
+                    <div class="col-xs-12 margin-top">
+                        <?php foreach($course_units as $course_unit): ?>
+                        <ul class="list-group">
+                            <li data-toggle="collapse" data-target="#<?php echo $course_unit["id"] ?>" href="#" class="hover-click list-group-item clearfix">
+                                <span class="glyphicon glyphicon-book margin-right"></span>
+                                <?php echo $course_unit["title"] ?>
+                                <span class="pull-right">
+                                    <span class="glyphicon glyphicon-calendar margin-right"></span>
+                                    <?php echo $course_unit["start_date"] ?>
+                                    <!-- TODO: href to course room-->
+                                    <a href="#" class="margin-left btn btn-xs btn-warning">
+                                        Enter Course Room
+                                    </a>
+                                </span>
+                            </li>
+                            <div id="<?php echo $course_unit["id"] ?>" class="collapse">
+                                <div class="margin-top margin-left">
+                                    <?php echo $course_unit["description"] ?>
+                                </div>
+
+                            </div>
+                        </ul>
+                        <?php endforeach; ?>
                     </div>
 
                     <div class="col-xs-12 margin-top">

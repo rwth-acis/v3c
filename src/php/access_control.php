@@ -68,7 +68,7 @@ class AccessControl
             // User has no databaseentry
             $status = USER_STATUS::USER_NOT_CONFIRMED;
         } else {
-            if ($user->confirmed != 1) {
+            if ($user->role != 1) {
                 $status = USER_STATUS::USER_NOT_CONFIRMED;
             } else {
                 $status = USER_STATUS::USER_IS_TUTOR;
@@ -108,9 +108,8 @@ class AccessControl
         } else {
             $user = $this->getSessionUser();
             if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
-
                 $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-                if ($user->id === $course['creator']) {
+                if ($user->role === $course['id']) {
                     $ret = true;
                 } else {
                     $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;

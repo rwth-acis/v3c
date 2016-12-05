@@ -27,7 +27,9 @@ VALUES
   ('petersommerhoff@gmail.com', 'Peter', 'Sommerhoff', 1, 'bfc09ba5-b56d-4647-a83e-c1ce153d1230', '2016-11-17 14:33:49',
    '2016-11-17 14:33:49'),
   ('tilman.berres@rwth-aachen.de', 'Tilman', 'Berres', 1, '1cec8880-664d-4307-bf4f-7569161041ed', '2016-11-19 12:42:35',
-   '2016-11-19 12:42:35');
+   '2016-11-19 12:42:35'),
+  ('lauri.euren@rwth-aachen.de', 'Lauri', 'Euren', 1, 'b7221a72-2c14-4525-a840-2d0703cc494d', '2016-11-20 14:33:49',
+   '2016-11-20 14:33:49');
 
 
 --

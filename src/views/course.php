@@ -36,7 +36,7 @@ include '../php/db_connect.php';
 include '../php/tools.php';
 
 $arg = $_GET["id"];
-$query = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email FROM courses JOIN users ON courses.creator = users.id WHERE courses.id = $arg");
+$query = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email FROM courses JOIN users ON courses.creator = users.email WHERE courses.id = $arg");
 
 $entry = $query->fetchObject();
 

@@ -40,8 +40,9 @@ include '../php/tools.php';
 $subject_id = filter_input(INPUT_GET, "id");
 $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObject();
 $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, users.family_name AS creator_lastname 
-                           FROM courses JOIN users ON courses.creator=users.id 
-                           WHERE subject_id='$subject_id'")->fetchAll();
+                           FROM courses JOIN users ON courses.creator=users.email 
+                           WHERE courses.id='$subject_id'")->fetchAll();
+
 ?>
 <header id='head' class='secondary'>
     <div class='container'>
@@ -86,7 +87,7 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                         <?php
                         foreach ($courses as $course) {
                             // Add line brake after each date for more readability in the table
-                            $course_dates_array = explode("\n", $course["dates"]);
+                            $course_dates_array = explode("\n", $course["date_created"]);
                             ?>
                             <tr>
                                 <td>

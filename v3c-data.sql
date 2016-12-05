@@ -48,13 +48,13 @@ VALUES
 INSERT INTO `course_units` (`id`, `lang`, `title`, `description`, `start_date`, `points`, `date_created`, `date_updated`)
 VALUES
   (NULL, 'en', 'Introduction to Social Entrepreneurship', 'The basics of Social Entrepreneurship explained. What is social value and why we must have an impact on it?',
-   '2016-01-12 09:00:00', 12, '2016-11-20 18:05:43', '2016-11-20 18:05:43'),
+   '2016-12-01 09:00:00', 12, '2016-11-20 18:05:43', '2016-11-20 18:05:43'),
   (NULL, 'en', 'Assessing Your Inner Potential', 'What factors make people successful? How to further develop these factors in yourself?',
-  '2016-07-12 09:00:00', 12, '2016-11-20 18:06:43', '2016-11-20 18:06:43'),
+  '2016-12-07 09:00:00', 12, '2016-11-20 18:06:43', '2016-11-20 18:06:43'),
   (NULL, 'en', 'From Ideas To Action', 'Once being able to assess capabilities, we look, how do these capabilities turn into beneficial action.',
    '2016-14-12 09:00:00', 12, '2016-11-20 18:07:43', '2016-11-20 18:07:43'),
   (NULL, 'en', 'Role Of Technology', 'What is the role of technology in social entrepreneurship nowadays?',
-   '2016-21-12 09:00:00', 12, '2016-11-20 18:08:43', '2016-11-20 18:08:43'),
+   '2016-12-21 09:00:00', 12, '2016-11-20 18:08:43', '2016-11-20 18:08:43'),
   (NULL, 'en', 'History of Social Entrepreneurship and Summary', 'We take a look at some of the biggest social entrepreneurs and see what they have in common. We also wrap up the course with a brief summary.',
    '2016-04-01 09:00:00', 12, '2016-11-20 18:09:43', '2016-11-20 18:10:43');
    

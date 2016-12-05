@@ -30,16 +30,24 @@
 <?php include("menu.php"); ?>
 
 <?php
-// Get course data and name + email of its creator from our database based
-// on the id given in the website URL
 include '../php/db_connect.php';
 include '../php/tools.php';
 
-$arg = $_GET["id"];
-$query = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email FROM courses JOIN users ON courses.creator = users.email WHERE courses.id = $arg");
+// The course unit id from URL parameter
+$course_id = $_GET["id"];
 
-$entry = $query->fetchObject();
+// Gets course details with it's creator information
+$course_query = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email 
+                            FROM courses JOIN users ON courses.creator = users.email 
+                            WHERE courses.id = $course_id");
+$course_details = $course_query->fetchObject();
 
+// Get course subject
+$course_subject_details = $db->query("SELECT subjects.* FROM subjects WHERE id= $course_id")->fetch(PDO::FETCH_ASSOC);
+
+// Gets the course units that correspond the particular course
+$course_units = $db->query("SELECT DISTINCT course_units.* 
+                            FROM course_units JOIN course_to_unit AS ctu ON ctu.course_id = $course_id")->fetchAll();
 /**
  * Replaces all URLs in the given text by <a> tags
  * Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
@@ -60,38 +68,11 @@ function replaceLinks($text)
     return $text;
 }
 
-//TODO: get course units from DB.
-$course_units = array();
-$course_units[0]["id"] = "1";
-$course_units[0]["title"] = "unit1";
-$course_units[0]["start_date"] = "01.11.2016";
-$course_units[0]["description"] = "01.11.2016";
-
-$course_units[1]["id"] = "2";
-$course_units[1]["title"] = "unit2";
-$course_units[1]["start_date"] = "07.11.2016";
-$course_units[1]["description"] = "01.11.2016";
-
-$course_units[2]["id"] = "3";
-$course_units[2]["title"] = "unit3";
-$course_units[2]["start_date"] = "14.11.2016";
-$course_units[2]["description"] = "01.11.2016";
-
-$course_units[3]["id"] = "4";
-$course_units[3]["title"] = "unit4";
-$course_units[3]["start_date"] = "21.11.2016";
-$course_units[3]["description"] = "01.11.2016";
-
-$course_units[4]["id"] = "5";
-$course_units[4]["title"] = "unit5";
-$course_units[4]["start_date"] = "28.11.2016";
-$course_units[4]["description"] = "01.11.2016";
-
 ?>
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo "$entry->name"; ?></h1>
+            <h1><?php echo "$course_details->name"; ?></h1>
         </div>
     </div>
 </header>
@@ -102,81 +83,111 @@ $course_units[4]["description"] = "01.11.2016";
         <div class='container'>
             <div class='row'>
                 <div class='col-md-12 non-overflow-div'>
-                    <div class="col-sm-12">
-                        <?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
-                            <a id="enter-course-a" href="#" data-rolespace="<?php echo $entry->role_url; ?>">
-                                <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room
-                                </button>
-                            </a>
-                        <?php } ?>
+                    <div class="row">
+                        <div class='col-md-12 text-center'>
+                            <h2>Course Units</h2>
+                            <!--<?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
+                                <a id="enter-course-a" href="#" data-rolespace="<?php echo $course_details->role_url; ?>">
+                                    <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room
+                                    </button>
+                                </a>
+                            <?php } ?>-->
+                        </div>
                     </div>
-                    <div class="col-xs-12 margin-top">
-                        <?php foreach($course_units as $course_unit): ?>
-                        <ul class="list-group">
-                            <li data-toggle="collapse" data-target="#<?php echo $course_unit["id"] ?>" href="#" class="hover-click list-group-item clearfix">
-                                <span class="glyphicon glyphicon-book margin-right"></span>
-                                <?php echo $course_unit["title"] ?>
-                                <span class="pull-right">
+                    <div class="row">
+                        <div class="col-xs-12 margin-top">
+                            <ul class="list-group">
+                                <?php foreach($course_units as $course_unit):?>
+                                    <li data-toggle="collapse" data-target="#<?php echo $course_unit["id"] ?>" href="#" class="hover-click list-group-item clearfix">
+                                        <span class="glyphicon glyphicon-book margin-right"></span>
+                                        <?php echo $course_unit["title"] ?>
+                                        <span class="pull-right">
                                     <span class="glyphicon glyphicon-calendar margin-right"></span>
-                                    <?php echo $course_unit["start_date"] ?>
-                                    <!-- TODO: href to course room-->
+                                            <?php echo $course_unit["start_date"] ?>
+                                            <!-- TODO: href to course room-->
                                     <a href="#" class="margin-left btn btn-xs btn-warning">
                                         Enter Course Room
                                     </a>
                                 </span>
-                            </li>
-                            <div id="<?php echo $course_unit["id"] ?>" class="collapse">
-                                <div class="margin-top margin-left">
-                                    <?php echo $course_unit["description"] ?>
-                                </div>
+                                    </li>
+                                    <div id="<?php echo $course_unit["id"] ?>" class="collapse">
+                                        <div class="margin-top margin-left">
+                                            <?php echo $course_unit["description"] ?>
+                                        </div>
+                                        <div id="collapse1" class="panel-collapse collapse">
+                                            <div class="panel-body">Panel Body</div>
+                                        </div>
 
-                            </div>
-                        </ul>
-                        <?php endforeach; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="col-xs-12 margin-top">
-                        <label class="col-sm-3">Created by:</label>
-                        <p class="col-sm-3 output-element"><?php echo $entry->given_name . " " . $entry->family_name; ?></p>
-                        <a href="mailto:<?php echo $entry->email; ?>"><?php echo $entry->email; ?></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 non-overflow-div" style="margin: 0 auto;">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <label class="col-sm-3 output-element">Created by:</label>
+                        <div class="col-sm-7"><?php echo $course_details->given_name . " " . $course_details->family_name; ?>
+                            (<a href="mailto:<?php echo $course_details->email; ?>"><?php echo $course_details->email; ?></a>)</div>
+                        <div class="col-sm-1"></div>
                     </div>
-                    <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
                         <label class="col-sm-3">Domain:</label>
-                        <p class="col-sm-9 output-element"><?php echo $entry->domain; ?></p>
+                        <p class="col-sm-7 output-element"><?php echo $course_subject_details["name"]; ?></p>
+                        <div class="col-sm-1"></div>
                     </div>
 
-                    <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
                         <label class="col-sm-3">Profession:</label>
-                        <p class="col-sm-9 output-element"><?php echo $entry->profession; ?></p>
+                        <p class="col-sm-7 output-element"><?php echo $course_details->profession; ?></p>
+                        <div class="col-sm-1"></div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <label class="col-sm-3">Description:</label>
+                        <p class="col-sm-7 output-element"><?php echo $course_details->description; ?></p>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class=" col-sm-5">
+                            <?php printLinkBtn("editcourse.php?id=$course_id",
+                                "btn btn-success btn-block btn-lg", "Edit"); ?>
+                        </div>
+                        <div class="col-sm-5">
+                            <button class="btn btn-warning col-sm-5 btn-block btn-lg " type='button'
+                                    id="btn-delete">Delete
+                            </button>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
+
                     <!--<div class="col-xs-12">
                         <label class="col-sm-3">Contact:</label>
-                        <p class="col-sm-9 output-element"><?php echo $entry->contact; ?></p>
+                        <p class="col-sm-9 output-element"><?php echo $course_details->contact; ?></p>
                     </div>-->
-                    <div class="col-xs-12">
-                        <label class="col-sm-3">Description:</label>
-                        <p class="col-sm-9 output-element"><?php echo $entry->description; ?></p>
-                    </div>
+
                     <!--<div class="col-xs-12">
                         <label class="col-sm-3">Dates:</label>
-                        <p class="col-sm-9 output-element"><?php echo $entry->dates; ?></p>
+                        <p class="col-sm-9 output-element"><?php echo $course_details->dates; ?></p>
                     </div>-->
                     <!--<div class="col-xs-12">
                         <label class="col-sm-3">Links:</label>
-                        <p class="col-sm-9 output-element"><?php echo replaceLinks($entry->links); ?></p>
+                        <p class="col-sm-9 output-element"><?php echo replaceLinks($course_details->links); ?></p>
                     </div>-->
-                </div>
-                <div class="col-sm-12 middle-btn-div">
-                    <div class=" col-sm-5">
-                        <?php printLinkBtn("editcourse.php?id=$arg",
-                            "btn btn-success btn-block btn-lg middle-btn-margin", "Edit"); ?>
-                    </div>
-                    <div class="col-sm-5">
-                        <button class="btn btn-warning col-sm-5 btn-block btn-lg middle-btn-margin" type='button'
-                                id="btn-delete">Delete
-                        </button>
-                    </div>
-                </div>
+
+
             </div>
         </div>
     </section>

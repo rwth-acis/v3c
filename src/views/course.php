@@ -80,7 +80,9 @@ function replaceLinks($text)
 <div id='courses'>
     <section class='container'>
         <br><br>
+        <!-- This container is divided in three rows: The Title, The Course Units and Course meta data -->
         <div class='container'>
+            <!-- Course Title -->
             <div class='row'>
                 <div class='col-md-12 non-overflow-div'>
                     <div class="row">
@@ -94,9 +96,11 @@ function replaceLinks($text)
                             <?php } ?>-->
                         </div>
                     </div>
+                    <!-- Course Units -->
                     <div class="row">
                         <div class="col-xs-12 margin-top">
                             <ul class="list-group">
+                                <!-- List element for each course unit is created -->
                                 <?php foreach($course_units as $course_unit):?>
                                     <li data-toggle="collapse" data-target="#<?php echo $course_unit["id"] ?>" href="#" class="hover-click list-group-item clearfix">
                                         <span class="glyphicon glyphicon-book margin-right"></span>
@@ -126,6 +130,7 @@ function replaceLinks($text)
 
                 </div>
             </div>
+            <!-- Course metadata -->
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8 non-overflow-div" style="margin: 0 auto;">
@@ -171,31 +176,15 @@ function replaceLinks($text)
                 </div>
                 <div class="col-md-2"></div>
             </div>
-
-
-                    <!--<div class="col-xs-12">
-                        <label class="col-sm-3">Contact:</label>
-                        <p class="col-sm-9 output-element"><?php echo $course_details->contact; ?></p>
-                    </div>-->
-
-                    <!--<div class="col-xs-12">
-                        <label class="col-sm-3">Dates:</label>
-                        <p class="col-sm-9 output-element"><?php echo $course_details->dates; ?></p>
-                    </div>-->
-                    <!--<div class="col-xs-12">
-                        <label class="col-sm-3">Links:</label>
-                        <p class="col-sm-9 output-element"><?php echo replaceLinks($course_details->links); ?></p>
-                    </div>-->
-
-
-            </div>
+            <!-- row -->
         </div>
+        <!-- container -->
     </section>
+    <!-- container -->
 </div>
-<!-- container -->
+<!-- #courses -->
 
 <?php include("footer.php"); ?>
-
 
 <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 

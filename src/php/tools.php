@@ -252,3 +252,21 @@ function getUserId($sub)
         return $user->id;
     }
 }
+
+/**
+ * This function fetches a course's course units and returns a databasae object with ordered by their respective dates.
+ * @param $courseid
+ */
+function sortCourseUnits($courseid)
+{
+    require '../php/db_connect.php';
+
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+    $sqlSelect = "SELECT * FROM course_units WHERE course_id = '" . $courseid . "' ORDER BY date ASCENDING ";
+    $sth = db ->prepare($sqlSelect);
+    $sth->execute();
+    $array = $sth->fetch();
+
+    return $array;
+}

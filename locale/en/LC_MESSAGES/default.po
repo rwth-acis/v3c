@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2016-12-05 11:06+0100\n"
+"PO-Revision-Date: 2016-12-07 18:22+0100\n"
+"Last-Translator: Sabine Luettgen\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+# Test1
+msgid "This is a text string!"
+msgstr "This is a translated string."
+
+# test 2
+msgid "test2_de"
+msgstr "englisch test"
+
+# general
+msgid "general:button:home"
+msgstr "Home"
+
+msgid "general:button:courses"
+msgstr "Courses"
+
+msgid "general:button:signin"
+msgstr "Sign in"
+
+# welcome page
+msgid "main:welcome:headline"
+msgstr "Welcome to the V3C project!"
+
+msgid "main:welcome:v3cgoal"
+msgstr ""
+
+msgid "main:welcome:v3ccourses"
+msgstr ""
+
+msgid "main:welcome:tourism"
+msgstr ""
+
+msgid "main:welcome:social"
+msgstr ""

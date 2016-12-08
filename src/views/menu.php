@@ -52,6 +52,10 @@ require_once '../config/config.php';
 <link rel='stylesheet' type='text/css' href='../css/style.css'>
 
 <?php
+include("../php/localization.php");
+setLanguage("de");
+
+
 //Decide if this site is inside a separate widget
 if (filter_input(INPUT_GET, "widget") == "true") {
     // Hide Menu in ROLE
@@ -77,8 +81,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             </div>
             <div id='henm-nav-bar' class='collapse navbar-collapse'>
                 <ul class='nav navbar-nav pull-right mainNav'>
-                    <li><a href='welcome.php'>Home</a></li>
-                    <li><a href='subjects.php'>Courses</a></li>
+                    <li><a href='welcome.php'><?php echo getTranslation("general:button:home", "Home");?></a></li>
+                    <li><a href='subjects.php'><?php echo getTranslation("general:button:courses", "Courses");?></a></li>
                     <li>
             <span id="signinButton">
                 <span class="oidc-signin"

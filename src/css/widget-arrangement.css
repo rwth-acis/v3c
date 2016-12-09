@@ -59,16 +59,23 @@
     background-color: lightgrey;
 }
 .virtus-pw-content-container {
-    background-color: white;
     height:100%;
 }
-.virtus-pw-placeholder-small{
-    width:70px;
-    height: 70px;
-    margin: 10px;
-    background-color: lightgreen;
+.virtus-pw-content{
+    height: 20%;
+    background-color: #333;
+}
+.virtus-pw-sliderviewer-img{
+    height: 100%;
+    width:100%;
+}
+.virtus-pw-slide-img-wrapper{
+    height: 80%;
 }
 
 .virtus-pw-hide{
     display:none;
+}
+.virtus-pw-content-wrapper{
+    height: 100%;
 }

@@ -45,12 +45,12 @@
 <!--Prototype Templates -->
 <div class="virtus-pw-prototype virtus-pw-hide">
     <div class="virtus-pw-name">
-        prototype
+        Slideviewer
     </div>
     <div class="virtus-pw-content-container">
-        <div class="row">
-            <div class="virtus-pw-placeholder-small col-sm-2"></div>
-            <div class="virtus-pw-content">somecontent</div>
+        <div class="row virtus-pw-content-wrapper">
+            <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img" src='https://s-media-cache-ak0.pinimg.com/564x/0d/e6/b3/0de6b34699563781365b286c45359692.jpg'></div>
+            <div class="col-sm-12 virtus-pw-content">somecontent</div>
         </div>
     </div>
 </div>

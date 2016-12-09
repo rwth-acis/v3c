@@ -148,7 +148,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             console.log("CHANGE EVENT FIRED");
             $.each(items, function (index, item) {
                 var $item = (item.el).find('.grid-stack-sidebar-item');
-                console.log($item);
+                //console.log($item);
                 if ($item.hasClass('grid-stack-sidebar-item')) {
                     console.log('found an item with class grid-stack-sidebar-item');
                     //This one needs to be added
@@ -163,13 +163,28 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         });
     });
 function createSidebarElement(name, index){
-    $('.gridstack-sidebar').append($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
-        .draggable({
-            revert: 'invalid',
-            handle: '.grid-stack-item-content',
-            scroll: false,
-            appendTo: 'body',
-        }));
+    $parentEl =$('.gridstack-sidebar');
+    if(index ==0){
+        $parentEl.prepend($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
+            .draggable({
+                revert: 'invalid',
+                handle: '.grid-stack-item-content',
+                scroll: false,
+                appendTo: 'body',
+            }));
+    }else{
+        //$('[data-index="'+(parseInt(index)-1)+'"]').parent().after($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
+        $('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
+            .insertAfter($parentEl.find($('[data-index="'+(parseInt(index)-1)+'"]')).parent())
+            .draggable({
+                revert: 'invalid',
+                handle: '.grid-stack-item-content',
+                scroll: false,
+                appendTo: 'body',
+            });
+    }
+
+
 }
 </script>
 </body>

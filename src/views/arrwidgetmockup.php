@@ -51,20 +51,21 @@
                 <div class='col-sm-2'>
                     <div class='featured-box sidebar-container'>
                         <div class="gridstack-sidebar">
-                            <div class="grid-stack-item" >
-                                <div class="grid-stack-item-content grid-stack-sidebar-item" data-gs-width="3" data-gs-height="5" >slideviewer</div>
+                            <div class="grid-stack-item">
+                                <div class="grid-stack-item-content grid-stack-sidebar-item" data-gs-width="3"
+                                     data-gs-height="5">slideviewer
+                                </div>
                             </div>
                             <div class="grid-stack-item">
-                                <div class="grid-stack-item-content" >videoviewer</div>
+                                <div class="grid-stack-item-content">videoviewer</div>
                             </div>
                             <div class="grid-stack-item">
                                 <div class="grid-stack-item-content">quiz</div>
                             </div>
 
                         </div>
-
-                    </div>
-                    <div class="trash">
+                        <div class="trash">
+                        </div>
                     </div>
                 </div>
 
@@ -108,17 +109,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     $(function () {
-        var $sidebar = $('.gridstack-sidebar');
-        var sidebarGridOptions = {
-            float: false,
-            width: 1,
-            cellHeight: 50,
-            verticalMargin: 0,
-            placeholder_class: 'grid-stack-placeholder',
-            acceptWidgets: '.grid-stack-item',
-            staticGrid: 'true'
-        };
-        $sidebar.gridstack(_.defaults(sidebarGridOptions));
         var $canvas = $('#grid1');
         var $canvasContainer = $('.gridstack-canvas-container');
 
@@ -151,30 +141,31 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             }, this);
         });
         $prevItems.draggable({
-            placeholderClass: 'gridstack-item',
             revert: 'invalid',
             handle: '.grid-stack-item-content',
             scroll: false,
             appendTo: 'body',
         });
-        $('.grid-stack').on('change', function(event, items) {
-            var sidebarInitItems = {
-                width: 1,
-                height: 1
-            }
+        $('.grid-stack').on('change', function (event, items) {
+
             console.log("CHANGE EVENT FIRED");
-            var sidebarGridData = $sidebar.data('gridstack');
-            $.each(items, function(index, item) {
+            $.each(items, function (index, item) {
                 var $item = (item.el).find('.grid-stack-sidebar-item');
                 console.log($item);
-                if($item.hasClass('grid-stack-sidebar-item')){
+                if ($item.hasClass('grid-stack-sidebar-item')) {
                     console.log('found an item with class grid-stack-sidebar-item');
                     //This one needs to be added
                     var newItemIndex = $item.data('item-id');
-                    console.log(newItemIndex);
-                    sidebarGridData.addWidget($('<div data-item-id="'+newItemIndex+'" class="sidebar-grid-stack-item"><div class="grid-stack-item-content grid-stack-sidebar-item">I\'m new</div></div>'), 0, newItemIndex, sidebarInitItems.width, sidebarInitItems.height)
-
+                    //console.log(newItemIndex);
+                    $('.gridstack-sidebar').append($('<div class="grid-stack-item "><div class="grid-stack-item-content" >new Item</div></div>')
+                        .draggable({
+                            revert: 'invalid',
+                            handle: '.grid-stack-item-content',
+                            scroll: false,
+                            appendTo: 'body',
+                        }));
                 }
+
             });
         });
     });

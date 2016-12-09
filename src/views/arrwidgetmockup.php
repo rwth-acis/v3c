@@ -50,7 +50,19 @@
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img" src='https://s-media-cache-ak0.pinimg.com/564x/0d/e6/b3/0de6b34699563781365b286c45359692.jpg'></div>
-            <div class="col-sm-12 virtus-pw-content">somecontent</div>
+            <div class="col-sm-12 virtus-pw-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="slideviewer-nav-icon">1/20</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon" aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

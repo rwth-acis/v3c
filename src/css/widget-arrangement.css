@@ -3,7 +3,9 @@
     min-height:20vh;
 }
 .gridstack-canvas-container{
-    height: 60vh;
+    margin-top: 15px;
+    padding: 10px 0px;
+    background-color: lightgoldenrodyellow;
 }
 .grid-stack-item-content {
     color: #2c3e50;
@@ -79,3 +81,9 @@
 .virtus-pw-content-wrapper{
     height: 100%;
 }
+.slideviewer-nav-icon{
+    padding-top: 15px;
+    line-height: 45px;
+    color: white;
+}
+

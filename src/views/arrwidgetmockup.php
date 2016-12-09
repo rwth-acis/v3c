@@ -50,7 +50,7 @@
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img"
-                                                                    src='https://s-media-cache-ak0.pinimg.com/564x/0d/e6/b3/0de6b34699563781365b286c45359692.jpg'>
+                                                                    src='../images/widgetsPrototypes/slides-mockup.jpg'>
             </div>
             <div class="col-sm-12 virtus-pw-content">
                 <div class="row">
@@ -76,7 +76,7 @@
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img"
-                                                                    src='http://i.imgur.com/g0I8gTi.jpg'></div>
+                                                                    src='../images/widgetsPrototypes/video-mockup.jpg'></div>
             <div class="col-sm-12 virtus-pw-content">
                 <div class="row">
                     <div class="col-sm-3">
@@ -106,7 +106,7 @@
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-quizzes-img-wrapper"><img class="virtus-pw-sliderviewer-img"
-                                                                      src='http://i.imgur.com/wkxNHN2.jpg'></div>
+                                                                      src='../images/widgetsPrototypes/quizzes-mockup.jpg'></div>
             <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor ?
             </div>

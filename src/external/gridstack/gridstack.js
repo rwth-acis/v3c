@@ -876,15 +876,13 @@ var nodeMaxHeight= 5;
                     var el = $(ui.draggable).clone(false);
                     el.data('_gridstack_node', node);
                     /*TODO: REMOVE ITEM FIX*/
-                    console.log($(ui.draggable));
+
                     $(ui.draggable).remove();
                     el.draggable
                     node.el = el;
                     self.placeholder.hide();
                     //console.log(el);
                     //TODO: Modify Element max width height etc
-                    console.log(el.attr('data-so-wow'));
-                    console.log(node);
                     el
                         .attr('data-gs-x', node.x)
                         .attr('data-gs-y', node.y)

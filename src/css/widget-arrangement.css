@@ -8,7 +8,11 @@
 .grid-stack-item-content {
     color: #2c3e50;
     text-align: center;
-    background-color: #18bc9c;
+    background-color: white;
+    border: 1px solid lightgrey;
+}
+.grid-stack-item-content.grid-stack-sidebar-item{
+    border: none;
 }
 
 .grid-stack-item-removing {
@@ -42,4 +46,29 @@
 
 .gridstack-sidebar .grid-stack-item .grid-stack-item-content {
     background: none;
+}
+
+.virtus-pw-prototype{
+    font-weight: bold;
+    background-color: white;
+    height:93%;
+}
+.virtus-pw-name{
+    height: 7%;
+    text-align: center;
+    background-color: lightgrey;
+}
+.virtus-pw-content-container {
+    background-color: white;
+    height:100%;
+}
+.virtus-pw-placeholder-small{
+    width:70px;
+    height: 70px;
+    margin: 10px;
+    background-color: lightgreen;
+}
+
+.virtus-pw-hide{
+    display:none;
 }

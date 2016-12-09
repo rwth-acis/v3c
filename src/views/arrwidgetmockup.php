@@ -51,17 +51,6 @@
                 <div class='col-sm-2'>
                     <div class='featured-box sidebar-container'>
                         <div class="gridstack-sidebar">
-                            <div class="grid-stack-item">
-                                <div class="grid-stack-item-content grid-stack-sidebar-item" data-gs-width="3"
-                                     data-gs-height="5">slideviewer
-                                </div>
-                            </div>
-                            <div class="grid-stack-item">
-                                <div class="grid-stack-item-content">videoviewer</div>
-                            </div>
-                            <div class="grid-stack-item">
-                                <div class="grid-stack-item-content">quiz</div>
-                            </div>
 
                         </div>
                         <div class="trash">
@@ -98,8 +87,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../external/jqueryUI/jquery-ui.min.js"></script>
 <script src="../external/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 <script src="../external/lodash/lodash.js"></script>
-<!--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.2.5/gridstack.min.js"></script>-->
-<!--<script src="../external/gridstack/gridstack.js"></script>-->
 <script src="../external/gridstack/gridstack.js"></script>
 <script src="../external/gridstack/gridstack.jQueryUI.min.js"></script>
 
@@ -108,6 +95,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../js/course-list.js"></script>
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
+    initWidgets = [
+        {name: 'slideviewer'},{name: 'videoviewer'}, {name: 'quiz'}
+    ];
+
+
     $(function () {
         var $canvas = $('#grid1');
         var $canvasContainer = $('.gridstack-canvas-container');
@@ -124,8 +116,12 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         };
         $canvas.gridstack(options);
 
+        initWidgets.forEach(function (value, i) {
+            createSidebarElement(value.name, i);
+        });
+
         //$canvas.cellHeight($canvas.height);
-        var items = [
+        /*var items = [
             {x: 4, y: 1, width: 1, height: 2},
             {x: 4, y: 1, width: 1, height: 1},
             {x: 2, y: 3, width: 3, height: 1},
@@ -139,13 +135,14 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 grid.addWidget($('<div><div class="grid-stack-item-content" /><div/>'),
                     node.x, node.y, node.width, node.height)
             }, this);
-        });
+        });*/
         $prevItems.draggable({
             revert: 'invalid',
             handle: '.grid-stack-item-content',
             scroll: false,
             appendTo: 'body',
         });
+        //fix for static sidebar items
         $('.grid-stack').on('change', function (event, items) {
 
             console.log("CHANGE EVENT FIRED");
@@ -155,21 +152,25 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 if ($item.hasClass('grid-stack-sidebar-item')) {
                     console.log('found an item with class grid-stack-sidebar-item');
                     //This one needs to be added
-                    var newItemIndex = $item.data('item-id');
-                    //console.log(newItemIndex);
-                    $('.gridstack-sidebar').append($('<div class="grid-stack-item "><div class="grid-stack-item-content" >new Item</div></div>')
-                        .draggable({
-                            revert: 'invalid',
-                            handle: '.grid-stack-item-content',
-                            scroll: false,
-                            appendTo: 'body',
-                        }));
+                    var itemIndex = $item.data('index');
+                    //console.log(ItemIndex);
+                    initWidgets[itemIndex].name
+                    createSidebarElement(initWidgets[itemIndex].name, itemIndex)
+                    $item.removeClass('grid-stack-sidebar-item');
                 }
 
             });
         });
     });
-
+function createSidebarElement(name, index){
+    $('.gridstack-sidebar').append($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
+        .draggable({
+            revert: 'invalid',
+            handle: '.grid-stack-item-content',
+            scroll: false,
+            appendTo: 'body',
+        }));
+}
 </script>
 </body>
 </html>

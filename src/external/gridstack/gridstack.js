@@ -334,7 +334,7 @@
 
     GridStackEngine.prototype.addNode = function(node, triggerAddEvent) {
         node = this._prepareNode(node);
-
+        //console.log('ADDING NODE')
         if (typeof node.maxWidth != 'undefined') { node.width = Math.min(node.width, node.maxWidth); }
         if (typeof node.maxHeight != 'undefined') { node.height = Math.min(node.height, node.maxHeight); }
         if (typeof node.minWidth != 'undefined') { node.width = Math.max(node.width, node.minWidth); }
@@ -777,6 +777,7 @@
         }
 
         if (!self.opts.staticGrid && self.opts.acceptWidgets) {
+
             var draggingElement = null;
 
             var onDrag = function(event, ui) {
@@ -828,6 +829,7 @@
                     }
                 })
                 .on(self.container, 'dropover', function(event, ui) {
+                    console.log('Widgets entered Canvas');
                     var offset = self.container.offset();
                     var el = $(ui.draggable);
                     var cellWidth = self.cellWidth();
@@ -839,6 +841,9 @@
 
                     draggingElement = el;
 
+                    /*FIX: FIXED GRIDSTACK BEHAVIOUR FOR ADDING CELLS*/
+                    //var node = self.grid._prepareNode({width: 4, height: 4, _added: false, _temporary: true});
+
                     var node = self.grid._prepareNode({width: width, height: height, _added: false, _temporary: true});
                     el.data('_gridstack_node', node);
                     el.data('_gridstack_node_orig', origNode);
@@ -846,6 +851,7 @@
                     el.on('drag', onDrag);
                 })
                 .on(self.container, 'dropout', function(event, ui) {
+                    console.log('Widgets left Canvas');
                     var el = $(ui.draggable);
                     el.unbind('drag', onDrag);
                     var node = el.data('_gridstack_node');
@@ -856,13 +862,17 @@
                     el.data('_gridstack_node', el.data('_gridstack_node_orig'));
                 })
                 .on(self.container, 'drop', function(event, ui) {
+                    console.log('Widgets dropped on Canvas');
                     self.placeholder.detach();
 
                     var node = $(ui.draggable).data('_gridstack_node');
                     node._grid = self;
                     var el = $(ui.draggable).clone(false);
                     el.data('_gridstack_node', node);
+                    /*TODO: REMOVE ITEM FIX*/
+                    //console.log($(ui.draggable));
                     $(ui.draggable).remove();
+                    el.draggable
                     node.el = el;
                     self.placeholder.hide();
                     el
@@ -1253,6 +1263,7 @@
 
     GridStack.prototype.addWidget = function(el, x, y, width, height, autoPosition, minWidth, maxWidth,
         minHeight, maxHeight, id) {
+        console.log('Widget Added')
         el = $(el);
         if (typeof x != 'undefined') { el.attr('data-gs-x', x); }
         if (typeof y != 'undefined') { el.attr('data-gs-y', y); }

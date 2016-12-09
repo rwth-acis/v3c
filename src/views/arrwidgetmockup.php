@@ -51,25 +51,29 @@
                 <div class='col-sm-2'>
                     <div class='featured-box sidebar-container'>
                         <div class="gridstack-sidebar">
-                            <div class="grid-stack-item preview-item-margin">
-                                <div class="grid-stack-item-content">slideviewer</div>
+                            <div class="grid-stack-item" >
+                                <div class="grid-stack-item-content grid-stack-sidebar-item" data-gs-width="3" data-gs-height="5" >slideviewer</div>
                             </div>
-                            <div class="grid-stack-item preview-item-margin">
-                                <div class="grid-stack-item-content">videoviewer</div>
+                            <div class="grid-stack-item">
+                                <div class="grid-stack-item-content" >videoviewer</div>
                             </div>
-                            <div class="grid-stack-item preview-item-margin">
+                            <div class="grid-stack-item">
                                 <div class="grid-stack-item-content">quiz</div>
                             </div>
 
                         </div>
-                        <div class="trash">
-                        </div>
+
+                    </div>
+                    <div class="trash">
                     </div>
                 </div>
 
                 <!-- List of all courses -->
-                <div class='col-sm-10'>
-                    <div class="grid-stack grid-stack-10 grid-stack-main">
+                <div class='col-sm-10 '>
+                    <div class="gridstack-canvas-container">
+                        <div class="grid-stack grid-stack-10 grid-stack-main" id="grid1">
+                            <!--<div class="grid-stack-item test" data-gs-x="10" data-gs-y="0" data-gs-width="2" data-gs-height="8" data-gs-no-resize="" data-gs-no-move="" data-gs-locked=""></div>-->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +99,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../external/lodash/lodash.js"></script>
 <!--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.2.5/gridstack.min.js"></script>-->
 <!--<script src="../external/gridstack/gridstack.js"></script>-->
-<script src="../external/gridstack/gridstack.all.js"></script>
+<script src="../external/gridstack/gridstack.js"></script>
 <script src="../external/gridstack/gridstack.jQueryUI.min.js"></script>
 
 <!-- Plugin JavaScript -->
@@ -104,23 +108,74 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     $(function () {
+        var $sidebar = $('.gridstack-sidebar');
+        var sidebarGridOptions = {
+            float: false,
+            width: 1,
+            cellHeight: 50,
+            verticalMargin: 0,
+            placeholder_class: 'grid-stack-placeholder',
+            acceptWidgets: '.grid-stack-item',
+            staticGrid: 'true'
+        };
+        $sidebar.gridstack(_.defaults(sidebarGridOptions));
+        var $canvas = $('#grid1');
+        var $canvasContainer = $('.gridstack-canvas-container');
 
-        $canvas = $('.grid-stack-main');
+        var $prevItems = $('.gridstack-sidebar .grid-stack-item');
         var options = {
             width: 10,
             float: false,
             removable: '.trash',
             removeTimeout: 100,
-            placeholderClass: 'grid-stack-placeholder',
-            acceptWidgets: '.grid-stack-item'
+            acceptWidgets: '.grid-stack-item',
+            /*height: 8,*/
+
         };
         $canvas.gridstack(options);
 
-        $('.gridstack-sidebar .grid-stack-item').draggable({
+        //$canvas.cellHeight($canvas.height);
+        var items = [
+            {x: 4, y: 1, width: 1, height: 2},
+            {x: 4, y: 1, width: 1, height: 1},
+            {x: 2, y: 3, width: 3, height: 1},
+            {x: 2, y: 5, width: 1, height: 1}
+        ];
+
+        $('.grid-stack').each(function () {
+            var grid = $(this).data('gridstack');
+
+            _.each(items, function (node) {
+                grid.addWidget($('<div><div class="grid-stack-item-content" /><div/>'),
+                    node.x, node.y, node.width, node.height)
+            }, this);
+        });
+        $prevItems.draggable({
+            placeholderClass: 'gridstack-item',
             revert: 'invalid',
             handle: '.grid-stack-item-content',
             scroll: false,
-            appendTo: 'body'
+            appendTo: 'body',
+        });
+        $('.grid-stack').on('change', function(event, items) {
+            var sidebarInitItems = {
+                width: 1,
+                height: 1
+            }
+            console.log("CHANGE EVENT FIRED");
+            var sidebarGridData = $sidebar.data('gridstack');
+            $.each(items, function(index, item) {
+                var $item = (item.el).find('.grid-stack-sidebar-item');
+                console.log($item);
+                if($item.hasClass('grid-stack-sidebar-item')){
+                    console.log('found an item with class grid-stack-sidebar-item');
+                    //This one needs to be added
+                    var newItemIndex = $item.data('item-id');
+                    console.log(newItemIndex);
+                    sidebarGridData.addWidget($('<div data-item-id="'+newItemIndex+'" class="sidebar-grid-stack-item"><div class="grid-stack-item-content grid-stack-sidebar-item">I\'m new</div></div>'), 0, newItemIndex, sidebarInitItems.width, sidebarInitItems.height)
+
+                }
+            });
         });
     });
 

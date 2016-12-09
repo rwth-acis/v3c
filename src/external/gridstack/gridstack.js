@@ -10,7 +10,7 @@ var nodeHeight = 4;
 var nodeMinWidth = 4;
 var nodeMinHeight = 4;
 var nodeMaxWidth = 6;
-var nodeMaxHeight= 5;
+var nodeMaxHeight= 6;
 (function(factory) {
     if (typeof define === 'function' && define.amd) {
         define(['jquery', 'lodash'], factory);

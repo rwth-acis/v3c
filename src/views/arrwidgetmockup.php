@@ -24,7 +24,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Widget arrangement mockup </title>
-
+    <link rel="stylesheet" href="../external/redacted/fonts/stylesheet.css"/>
     <link rel="stylesheet" href="../external/jasny-bootstrap/dist/css/jasny-bootstrap.min.css"/>
     <link rel="stylesheet" href="../external/gridstack/gridstack.css"/>
     <link rel="stylesheet" href="../external/gridstack/gridstack-extra.css"/>
@@ -91,6 +91,29 @@
         </div>
     </div>
 </div>
+<div class="virtus-pw-prototype virtus-pw-hide " id="prototypeQuizzesViewer">
+    <div class="virtus-pw-name">
+        Quizzes Widget
+    </div>
+    <div class="virtus-pw-content-container">
+        <div class="row virtus-pw-content-wrapper">
+            <div class="col-sm-12 virtus-pw-quizzes-img-wrapper"><img class="virtus-pw-sliderviewer-img" src='http://i.imgur.com/wkxNHN2.jpg'></div>
+            <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor ?</div>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12 quizzes-answers-container">
+                        <div class="row">
+                            <div class="col-sm-6 quizzes-answer-box-container"><div class="quizzes-answer-box">some answer</div></div>
+                            <div class="col-sm-6 quizzes-answer-box-container"><div class="quizzes-answer-box">The answer is b</div></div>
+                            <div class="col-sm-6 quizzes-answer-box-container"><div class="quizzes-answer-box">No that is the </div></div>
+                            <div class="col-sm-6 quizzes-answer-box-container"><div class="quizzes-answer-box">ture that</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id='courses'>
     <section class='container'>
         <div class='container'>
@@ -146,7 +169,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     initWidgets = [
-        {name: 'slideviewer',prototypeName: 'prototypeSlideViewer'},{name: 'videoviewer',prototypeName: 'prototypeVideoViewer'}, {name: 'quiz',prototypeName: 'prototypeSlideViewer'}
+        {name: 'slideviewer',prototypeName: 'prototypeSlideViewer'},{name: 'videoviewer',prototypeName: 'prototypeVideoViewer'}, {name: 'quiz',prototypeName: 'prototypeQuizzesViewer'}
     ];
 
 

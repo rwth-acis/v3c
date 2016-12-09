@@ -106,3 +106,27 @@
 .videoviewer-icons-side-padding{
     padding: 15px 10px 0px 15px;
 }
+
+
+.virtus-pw-quizzes-img-wrapper{
+    height: 50%;
+}
+.quizzes-question-text{
+    height: 20%;
+    font-family: "redacted_scriptregular";
+    color: #333;
+    font-size: 1em;
+}
+.quizzes-answers-container{
+    height: 30%;
+}
+.quizzes-answer-box{
+    font-family: "redacted_scriptregular";
+    border-radius: 5px;
+    margin: 4% 0.5rem 0.5rem 4%;
+    line-height: 3rem;
+    width: 90%;
+    height: 40%;
+    background-color: lightgrey;
+    color: #666
+}

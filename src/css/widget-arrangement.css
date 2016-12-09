@@ -2,8 +2,18 @@
     background-color: lightgoldenrodyellow;
     min-height:20vh;
 }
-.gridstack-canvas-container{
+.sidebar-title{
+    font-weight: bold;
+    text-align: center;
+}
+.canvas-title{
+    font-weight: bold;
+    text-align: center;
+}
+.virtus-margin-top-15{
     margin-top: 15px;
+}
+.gridstack-canvas-container{
     padding: 10px 0px;
     background-color: lightgoldenrodyellow;
 }
@@ -83,7 +93,16 @@
 }
 .slideviewer-nav-icon{
     padding-top: 15px;
-    line-height: 45px;
     color: white;
 }
-
+.slide-viewer-slideindex-style{
+    color:white;
+    line-height: 45px;
+}
+.videoviewer-time-style{
+    color:white;
+    line-height: 15px;
+ }
+.videoviewer-icons-side-padding{
+    padding: 15px 10px 0px 15px;
+}

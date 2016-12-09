@@ -43,9 +43,9 @@
     </div>
 </header>
 <!--Prototype Templates -->
-<div class="virtus-pw-prototype virtus-pw-hide">
+<div class="virtus-pw-prototype virtus-pw-hide " id="prototypeSlideViewer">
     <div class="virtus-pw-name">
-        Slideviewer
+        Slides Widget
     </div>
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
@@ -56,10 +56,35 @@
                         <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon" aria-hidden="true"></span>
                     </div>
                     <div class="col-sm-4">
-                        <span class="slideviewer-nav-icon">1/20</span>
+                        <span class="slide-viewer-slideindex-style">1/20</span>
                     </div>
                     <div class="col-sm-4">
                         <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon" aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="virtus-pw-prototype virtus-pw-hide " id="prototypeVideoViewer">
+    <div class="virtus-pw-name">
+        Video Widget
+    </div>
+    <div class="virtus-pw-content-container">
+        <div class="row virtus-pw-content-wrapper">
+            <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img" src='http://i.imgur.com/g0I8gTi.jpg'></div>
+            <div class="col-sm-12 virtus-pw-content">
+                <div class="row">
+                    <div class="col-sm-3">
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-backward slideviewer-nav-icon videoviewer-icons-side-padding" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon glyphicon glyphicon-play slideviewer-nav-icon videoviewer-icons-side-padding" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-forward slideviewer-nav-icon videoviewer-icons-side-padding" aria-hidden="true"></span><br>
+                        <span class="videoviewer-time-style">00:30:43/01:15:00</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <span class="glyphicon glyphicon glyphicon-fullscreen slideviewer-nav-icon" aria-hidden="true"></span>
                     </div>
                 </div>
             </div>
@@ -71,8 +96,9 @@
         <div class='container'>
             <div class='row'>
                 <!-- Info box with data about subject -->
-                <div class='col-sm-2'>
+                <div class='col-sm-2 virtus-margin-top-15'>
                     <div class='featured-box sidebar-container'>
+                        <div class="sidebar-title">Toolbox:</div>
                         <div class="gridstack-sidebar">
 
                         </div>
@@ -82,8 +108,9 @@
                 </div>
 
                 <!-- List of all courses -->
-                <div class='col-sm-10 '>
+                <div class='col-sm-10 virtus-margin-top-15'>
                     <div class="gridstack-canvas-container">
+                        <div class="canvas-title">Rolespace</div>
                         <div class="grid-stack grid-stack-10 grid-stack-main" id="grid1">
                             <!--<div class="grid-stack-item test" data-gs-x="10" data-gs-y="0" data-gs-width="2" data-gs-height="8" data-gs-no-resize="" data-gs-no-move="" data-gs-locked=""></div>-->
                         </div>
@@ -119,12 +146,12 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     initWidgets = [
-        {name: 'slideviewer'},{name: 'videoviewer'}, {name: 'quiz'}
+        {name: 'slideviewer',prototypeName: 'prototypeSlideViewer'},{name: 'videoviewer',prototypeName: 'prototypeVideoViewer'}, {name: 'quiz',prototypeName: 'prototypeSlideViewer'}
     ];
 
 
     $(function () {
-        var $prototypeWidget = $('.virtus-pw-prototype')
+
         var $canvas = $('#grid1');
         var $canvasContainer = $('.gridstack-canvas-container');
 
@@ -178,10 +205,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     //This one needs to be added
                     var itemIndex = $item.data('index');
                     //console.log(ItemIndex);
-                    initWidgets[itemIndex].name
                     createSidebarElement(initWidgets[itemIndex].name, itemIndex)
                     $item.removeClass('grid-stack-sidebar-item');
 
+
+                    var $prototypeWidget = $('#'+initWidgets[itemIndex].prototypeName);
                     $prototypeClone = $prototypeWidget.clone();
                     $prototypeClone.removeClass('virtus-pw-hide');
                     $item.html("");

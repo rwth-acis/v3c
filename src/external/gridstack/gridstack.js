@@ -5,6 +5,12 @@
  * gridstack.js may be freely distributed under the MIT license.
  * @preserve
 */
+var nodeWidth = 4;
+var nodeHeight = 4;
+var nodeMinWidth = 4;
+var nodeMinHeight = 4;
+var nodeMaxWidth = 6;
+var nodeMaxHeight= 5;
 (function(factory) {
     if (typeof define === 'function' && define.amd) {
         define(['jquery', 'lodash'], factory);
@@ -829,7 +835,7 @@
                     }
                 })
                 .on(self.container, 'dropover', function(event, ui) {
-                    console.log('Widgets entered Canvas');
+                    console.log('Widget entered Canvas');
                     var offset = self.container.offset();
                     var el = $(ui.draggable);
                     var cellWidth = self.cellWidth();
@@ -844,14 +850,14 @@
                     /*FIX: FIXED GRIDSTACK BEHAVIOUR FOR ADDING CELLS*/
                     //var node = self.grid._prepareNode({width: 4, height: 4, _added: false, _temporary: true});
 
-                    var node = self.grid._prepareNode({width: width, height: height, _added: false, _temporary: true});
+                    var node = self.grid._prepareNode({width: nodeWidth, height: nodeWidth, maxHeight: nodeMaxHeight, maxWidth: nodeMaxWidth, minHeight: nodeMinHeight, minWidth: nodeMinWidth, _added: false, _temporary: true});
                     el.data('_gridstack_node', node);
                     el.data('_gridstack_node_orig', origNode);
 
                     el.on('drag', onDrag);
                 })
                 .on(self.container, 'dropout', function(event, ui) {
-                    console.log('Widgets left Canvas');
+                    console.log('Widget left Canvas');
                     var el = $(ui.draggable);
                     el.unbind('drag', onDrag);
                     var node = el.data('_gridstack_node');
@@ -862,7 +868,7 @@
                     el.data('_gridstack_node', el.data('_gridstack_node_orig'));
                 })
                 .on(self.container, 'drop', function(event, ui) {
-                    console.log('Widgets dropped on Canvas');
+                    console.log('Widget dropped on Canvas');
                     self.placeholder.detach();
 
                     var node = $(ui.draggable).data('_gridstack_node');
@@ -870,16 +876,24 @@
                     var el = $(ui.draggable).clone(false);
                     el.data('_gridstack_node', node);
                     /*TODO: REMOVE ITEM FIX*/
-                    //console.log($(ui.draggable));
+                    console.log($(ui.draggable));
                     $(ui.draggable).remove();
                     el.draggable
                     node.el = el;
                     self.placeholder.hide();
+                    //console.log(el);
+                    //TODO: Modify Element max width height etc
+                    console.log(el.attr('data-so-wow'));
+                    console.log(node);
                     el
                         .attr('data-gs-x', node.x)
                         .attr('data-gs-y', node.y)
                         .attr('data-gs-width', node.width)
                         .attr('data-gs-height', node.height)
+                        .attr('data-gs-min-width', node.minWidth)
+                        .attr('data-gs-min-height', node.minHeight)
+                        .attr('data-gs-max-width', node.maxWidth)
+                        .attr('data-gs-max-height', node.maxHeight)
                         .addClass(self.opts.itemClass)
                         .removeAttr('style')
                         .enableSelection()

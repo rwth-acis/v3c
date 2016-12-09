@@ -165,7 +165,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 function createSidebarElement(name, index){
     $parentEl =$('.gridstack-sidebar');
     if(index ==0){
-        $parentEl.prepend($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
+        $parentEl.prepend($('<div class="grid-stack-item " data-gs-width="20"  data-so-wow="This is 10"><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
             .draggable({
                 revert: 'invalid',
                 handle: '.grid-stack-item-content',

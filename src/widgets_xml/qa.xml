@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2013 Dominik Renzel, Chair of Computer Science 5, RWTH Aachen University, Germany
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<Module>
+  <ModulePrefs title="Question and Answer" description="A simple question and answer widget for use in ROLE spaces." author="Dominik Renzel" author_email="renzel@dbis.rwth-aachen.de" height="600">
+  	
+    <Require feature="openapp"/>
+	<Require feature="opensocial-0.9"/>
+    <OAuth>
+		<Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/" openapp:service="http://purl.org/role/terms/spaceService" openapp:permitReadAppend="http://purl.org/role/terms/data">
+			<Request url="http://purl.org/role/terms/spaceService" param_location="uri-query"/>
+            <Authorization url="http://purl.org/role/terms/spaceService"/>
+            <Access url="http://purl.org/role/terms/spaceService" param_location="uri-query"/>
+		</Service>
+    </OAuth>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+		
+		<link href="http://dbis.rwth-aachen.de/gadgets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<!-- <link href="http://dbis.rwth-aachen.de/gadgets/lib/pagination/pagination.css" rel="stylesheet"  /> -->
+		
+		<style type="text/css">
+			/* ----- Sticky footer styles ----- */
+			
+			/* Wrapper for page content to push down footer */
+			#wrap {
+				min-height: 100%;
+				height: auto !important;
+				height: 100%;
+				/* Negative indent footer by it's height */
+				margin: 0 auto -50px;
+			}
+
+			/* Set the fixed height of the footer here */
+			#push,#footer {
+				height: 50px;
+			}
+			
+			#footer {
+				background-color: #f5f5f5;
+			}
+
+			/* Lastly, apply responsive CSS fixes as necessary */
+			@media (max-width: 767px) {
+				#footer {
+					margin-left: -20px;
+					margin-right: -20px;
+					padding-left: 20px;
+					padding-right: 20px;
+				}
+			}
+
+			/* ----- Custom page CSS ----- */
+
+			.container-fluid {
+				width: auto;
+				max-width: 680px;
+			}
+			
+			.container-fluid .credit {
+				margin: 20px 0;
+			}
+
+		</style>
+		
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="http://dbis.rwth-aachen.de/gadgets/lib/bootstrap/js/bootstrap.min.js"></script>
+		<script src="http://dbis.rwth-aachen.de/gadgets/lib/pagination/pagination.js"></script>
+		
+		<script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+		<script src="http://dbis.rwth-aachen.de/gadgets/lib/moment.min.js"></script>
+		
+		<script>
+			
+			var questions = [];
+			var qcontext = null;
+			var votes = {};
+			var answers = {};
+			
+			var question_index = 0;
+			var answer_index = 0;
+			
+			var paginationOptions;
+			
+			var space, spaceinfo, spacename;
+			var user, userinfo, username;
+			
+			var iwcClient;
+			
+			gadgets.util.registerOnLoadHandler(init);
+			
+			function sortRecent(a, b){
+				var aq = a.date;
+				var bq = b.date; 
+				return ((aq < bq) ? 1 : ((aq > bq) ? -1 : 0));
+			}
+			
+			function sortVotings(a,b){
+				var av = computeVotings(a.uri);
+				var bv = computeVotings(b.uri); 
+				
+				if(av == bv){
+					var ad = a.date;
+					var bd = b.date; 
+					return ((ad < bd) ? 1 : ((ad > bd) ? -1 : 0));
+				} else {
+					return ((av < bv) ? 1 : -1);
+				}
+			}
+			
+			var question_sort = sortVotings;
+			var answer_sort = sortRecent;
+			
+			function findUrls(text)
+			{
+				var source = (text || '').toString();
+				var urlArray = [];
+				var url;
+				var matchArray;
+
+				// Regular expression to find FTP, HTTP(S) and email URLs.
+				var regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
+
+				// Iterate through any URLs in the text.
+				while( (matchArray = regexToken.exec( source )) !== null )
+				{
+					var token = matchArray[0];
+					urlArray.push( token );
+				}
+
+				return urlArray;
+			}
+			
+			function init(){
+				
+				space = new openapp.oo.Resource(openapp.param.space());
+				user = new openapp.oo.Resource(openapp.param.user());
+				
+				space.getInfo(function(info) {
+					spaceinfo = info;
+					spacename = spaceinfo[openapp.ns.dcterms + "title"];
+					// developers, uncomment next line to clear all questions and attached answers, including all votes for both questions and answers.
+					//clearQuestions();
+					loadQuestions();
+					updateUI();
+				});
+				
+				user.getInfo(function(info) {
+					userinfo = info;
+					username = userinfo[openapp.ns.dcterms + "title"];
+				});
+				
+				iwcClient = new iwc.Client()
+				iwcClient.connect(iwcCallback);
+				
+				generateQuestionListUI();
+			}
+			
+			function addQuestion(){
+				var qtext = $("#question").val();
+				$("#question").value="";
+				
+				
+				var q = {
+					question: escape(qtext)
+				};
+				try{
+					storeQuestion(q,function(res){
+						
+						var intent = {
+							"component":"",
+							"data":res.uri,
+							"dataType":"text/json",
+							"action":"ACTION_ADD",
+							"flags":["PUBLISH_GLOBAL"],
+							"extras": {"ns":"rwth:acis:qna:question"}
+						};
+						
+						publish(intent);
+					});
+				} catch (e){
+					console.log("Question not stored! " + e);
+				}
+			}
+			
+			function storeQuestion(rep,cb){
+				
+				if(!space){
+					throw("Space is not ready!");
+				}
+				
+				if(!rep){
+					throw("No question representation was provided!");
+				}
+				
+				if(!rep.question){
+					throw("Question representation does not was provide 'question' field!");
+				}
+				
+				rep.date = new Date().getTime();
+				rep.uid = user.uri;
+				rep.user = username;
+				
+				space.create({
+					relation: openapp.ns.role+"data",
+					type: "rwth:acis:qna:question",
+					representation: rep,
+					callback: cb
+				});
+			}
+			
+			function voteSubmitCallback(qurl,voting,t){
+				return function(){
+					
+					try{
+						var v = {
+							type: t,
+							vote: voting
+						};
+						
+						storeVote(qurl,v,function(res){
+							var intent = {
+								"component":"",
+								"data":res.uri,
+								"dataType":"text/json",
+								"action":"ACTION_ADD",
+								"flags":["PUBLISH_GLOBAL"],
+								"extras": {"context":qurl, "ns":"rwth:acis:qna:vote"}
+							};
+							
+							publish(intent);
+						});
+					} catch (e){
+						console.log("Vote not stored! " + e);
+					}
+				}
+			}
+			
+			function storeVote(ruri, rep, cb){
+				if(!space){
+					throw("Space is not ready!");
+				}
+				
+				if(!rep){
+					throw("No vote representation was provided!");
+				}
+				
+				if(!ruri){
+					throw("No URI was provided for the voted resource!");
+				}
+				
+				if(!rep.vote) {
+					throw("Vote representation does not provide 'vote' field!");
+				}
+				
+				if(!rep.type) {
+					throw("Vote representation does not provide 'type' field!");
+				}
+				
+				if(!(rep.vote == 1 || rep.vote == -1)) {
+					throw("Vote representation value for 'vote' field must be either 1 (upvote) or -1 (downvote), but was " + rep.vote + "!");
+				}
+				
+				rep.context = ruri;
+				rep.date = new Date().getTime();
+				rep.uid = user.uri;
+				rep.user = username;
+				
+				res = new openapp.oo.Resource(ruri);
+				res.create({
+					relation: openapp.ns.role+"data",
+					type: "rwth:acis:qna:vote",
+					representation: rep,
+					callback: cb
+				});
+			}
+			
+			function addAnswer(qurl){
+				var atext = $("#answer").val();
+				$("#answer").value="";
+				
+				var a = {
+					answer: escape(atext)
+				};
+				
+				try{
+					storeAnswer(qurl,a,function(res){
+						var intent = {
+							"component":"",
+							"data":res.uri,
+							"dataType":"text/json",
+							"action":"ACTION_ADD",
+							"flags":["PUBLISH_GLOBAL"],
+							"extras": {"context":qurl, "ns":"rwth:acis:qna:answer"}
+						};
+						
+						publish(intent);
+					});
+				} catch (e){
+					console.log("Answer not stored! " + e);
+				}
+			}
+			
+			function storeAnswer(qurl, rep, cb){
+				if(!space){
+					throw("Space is not ready!");
+				}
+				
+				if(!rep){
+					throw("No answer representation was provided!");
+				}
+				
+				if(!qurl){
+					throw("No URI was provided for the question resource the answer was given for!");
+				}
+				
+				if(!rep.answer) {
+					throw("Answer representation does not provide 'answer' field!");
+				}
+				
+				qres = new openapp.oo.Resource(qurl);
+				
+				rep.context = qurl;
+				rep.date = new Date().getTime();
+				rep.uid = user.uri;
+				rep.user = username;
+				
+				qres.create({
+					relation: openapp.ns.role+"data",
+					type: "rwth:acis:qna:answer",
+					representation: rep,
+					callback: cb
+				});
+			}
+			
+			function updateItem(item,a){
+				var index = findItemIndex(item,a);
+				if(index != -1){
+					a.splice(index,1);
+				}
+				a.push(item);
+			}
+			
+			function findItemIndex(item,a){
+				for(i=0;i<a.length;i++){
+					var aitem = a[i];
+					if(item.uri == aitem.uri){
+						return i;
+					}
+				}
+				return -1;
+			}
+			
+			function loadQuestions(){
+				//Check space existence
+				if(!space) {
+					return;
+				}
+				
+				space.getSubResources({
+					relation: openapp.ns.role+"data",
+					type: "rwth:acis:qna:question",
+					onAll: function(qs){
+						for(i=0;i<qs.length;i++){
+							loadQuestion(qs[i]);
+						}
+					}
+				});
+			}
+			
+			function loadQuestion(qres){
+				qres.getRepresentation("rdfjson",function(d){
+					d.uri = qres.uri;
+					updateItem(d,questions);
+					
+					updateUI();
+					
+					qres.getSubResources({
+						relation: openapp.ns.role+"data",
+						type: "rwth:acis:qna:vote",
+						onAll: function(vs){
+							for(i=0;i<vs.length;i++){
+								loadVote(vs[i]);
+							}
+						}
+					});
+					
+					qres.getSubResources({
+						relation: openapp.ns.role+"data",
+						type: "rwth:acis:qna:answer",
+						onAll: function(as){
+							for(i=0;i<as.length;i++){
+								loadAnswer(as[i]);
+							}
+						}
+					});
+				}); 
+			}
+			
+			function loadVote(vres){
+				vres.getRepresentation("rdfjson",function(d){
+					d.uri = vres.uri;
+					
+					if(!votes[d.context]) votes[d.context] = [];
+					updateItem(d,votes[d.context]);
+					updateUI();
+				});
+			}
+			
+			function loadAnswer(ares){
+				ares.getRepresentation("rdfjson",function(d){
+					d.uri = ares.uri;
+				
+					if(!answers[d.context]) answers[d.context] = [];
+					updateItem(d,answers[d.context]);
+					updateUI();
+					
+					ares.getSubResources({
+						relation: openapp.ns.role+"data",
+						type: "rwth:acis:qna:vote",
+						onAll: function(vs){
+							for(i=0;i<vs.length;i++){
+								loadVote(vs[i]);
+							}
+						}
+					});
+				});
+			}
+			
+			function clearQuestions(){
+				//Check space existence
+				if(!space) {
+					return;
+				}
+				
+				//Get questions from space
+				space.getSubResources({
+					relation: openapp.ns.role+"data",
+					type: "rwth:acis:qna:question",
+					onEach: function(q){
+						q.del(function(e){
+							console.log("Question deleted.");
+						});
+					}
+				});
+			}
+			
+			function loadAnswers(qurl){
+				//Check space existence
+				if(!space) {
+					return;
+				}
+				
+				var qres = new openapp.oo.Resource(qurl);
+				
+				//Get questions from space
+				qres.getSubResources({
+					relation: openapp.ns.role+"data",
+					type: "rwth:acis:qna:answer",
+					onAll: function(as){
+						for(i=0;i<as.length;i++){
+							loadAnswer(as[i]);
+						}
+					}
+				});
+			}
+			
+			function clearVotes(){
+				//Check space existence
+				if(!space) {
+					return;
+				}
+				
+				//Get votes from space
+				space.getSubResources({
+					relation: openapp.ns.role+"data",
+					type: "rwth:acis:qna:vote",
+					onEach: function(q){
+						q.del(function(d){
+							console.log("Vote deleted");
+						});
+					}
+				});
+			}
+			
+			function hasVotedFor(rurl){
+				if(!votes[rurl]) return 0;
+				for(i=0;i<votes[rurl].length;i++){
+					if(votes[rurl][i].uid == user.uri) return votes[rurl][i].vote;
+				}
+				return 0;
+			}
+			
+			
+			
+			function questionSelectCallback(q){
+				return function(){
+					qcontext = q.uri;
+					generateQuestionUI(q);
+					loadAnswers(q.uri);
+				}
+			}
+			
+			function computeVotings(ruri){
+				
+				if(!votes[ruri]) return 0;
+				
+				var vval = 0;
+				
+				for(i=0;i<votes[ruri].length;i++){
+					vval +=  votes[ruri][i].vote;
+				}
+		
+				return vval;
+			}
+			
+			function computeAnswers(quri){
+				if(!answers[quri]) return 0;
+				return answers[quri].length;
+			}
+			
+			function linkify(s){
+				var links = findUrls(s);
+				var la = s;
+					
+				for(j=0;j<links.length;j++){
+					la = la.replace(links[j],"<a href='"+ links[j] + "' target='_blank'>" + links[j] + "</a>");
+				}
+				return la;
+			}
+			
+			function questionPageSelectCallback(page_index, jq){
+                
+				question_index = page_index;
+                var items_per_page = paginationOptions["items_per_page"];
+                var max_elem = Math.min((page_index+1) * items_per_page, questions.length);
+                
+				var table = $('<table class="table table-bordered table-hover"/>');
+				var tbody = $('<tbody/>');
+                
+                // Iterate through a selection of the content and build an HTML string
+                for(var i=page_index*items_per_page;i<max_elem;i++)
+                {
+					var question = questions[i];
+					
+					question.votes = computeVotings(question.uri);
+					question.answers = computeAnswers(question.uri);
+					
+					var tr = $('<tr/>');
+					
+					var td_votes = $('<td width="40" style="text-align: center"/>');
+					
+					var tooltip_options = {html:true,placement:'right'};
+					
+					var votespan = $('<span class="badge" title="<h5>Votes</h5>" style="margin: 5px 0px">' + question.votes + '</span>');
+					
+					if(question.votes < 0){
+						votespan.addClass('badge-important');
+					} else if (question.votes >= 2 && question.votes <6){
+						votespan.addClass('badge-info');					
+					} else if (question.votes >=6 && question.votes < 10){
+						votespan.addClass('badge-success');
+					} else if (question.votes >=10){
+						votespan.addClass('badge-success');
+						votespan.html("10+");
+					}
+					
+					votespan.tooltip(tooltip_options);
+					
+					td_votes.append(votespan);
+					
+					var answerspan = $('<span class="badge" title="<h5>Answers</h5>">' + question.answers + '</span>');
+					
+					
+					
+					if(question.answers == 0){
+						answerspan.addClass('badge-important');
+					} else if (question.answers == 1){
+						answerspan.addClass('badge-info');					
+					} else if (question.answers >1 && question.answers < 10){
+						answerspan.addClass('badge-success');
+					} else if (question.answers >= 10){
+						answerspan = $('<span class="badge badge-success">10+</span>');
+					}
+					
+					answerspan.tooltip(tooltip_options);
+					
+					td_votes.append(answerspan);
+					
+					var div_votebtngrp = $('<span class="btn-group push-left" style="margin: 5px 0px">');
+				
+					var vtd = hasVotedFor(question.uri);
+					if(vtd != 0){
+						btn_upvote = $('<button class="btn btn-small disabled"><i class="icon-thumbs-up"></i></button>');
+						btn_downvote = $('<button class="btn btn-small disabled"><i class="icon-thumbs-down"></i></button>');
+					} else {
+						btn_upvote = $('<button class="btn btn-small"><i class="icon-thumbs-up"></i></button>');
+						btn_upvote.click(voteSubmitCallback(question.uri,1,"rwth:acis:qna:question"));
+						
+						btn_downvote = $('<button class="btn btn-small"><i class="icon-thumbs-down"></i></button>');
+						btn_downvote.click(voteSubmitCallback(question.uri,-1,"rwth:acis:qna:question"));
+					}
+					
+					var d = moment(question.date).fromNow();
+					
+					td_itable = $('<td >');
+					qspan = $('<span title="Click to answer!">' + linkify(unescape(question.question)) + '</span>');
+					qspan.click(questionSelectCallback(question));
+					qspan.tooltip();
+					uspan = $('<span style="font-size: 8pt" class="pull-right"><a href="' + question.uid + '">' + question.user + '</a>, ' + d + '</span>');
+					td_itable.append(qspan);
+					td_itable.append('<br/>');
+					td_itable.append(uspan);
+					
+					td_itable.append(div_votebtngrp);
+
+					
+					div_votebtngrp.append(btn_upvote);
+					div_votebtngrp.append(btn_downvote);
+					
+					//td_votes.append(div_votebtngrp);
+					
+					tr.append(td_votes);
+					
+					tr.append(td_itable);
+					
+					tbody.append(tr);
+					
+                }
+				
+				table.append(tbody);
+                
+                // Replace old content with new content
+				$('#question-table').empty();
+                $('#question-table').append(table);
+                
+                // Prevent click eventpropagation
+                return false;
+            }
+			
+			function updateUI(){
+				if(qcontext != null){
+					updateQuestionUI();
+				} else {
+					updateQuestionListUI();
+				}
+			}
+			
+			function answerPageSelectCallback(page_index, jq){
+                
+				answer_index = page_index;
+                var items_per_page = paginationOptions["items_per_page"];
+                var max_elem = Math.min((page_index+1) * items_per_page, answers[qcontext].length);
+                
+				var table = $('<table class="table table-bordered table-hover"/>');
+				var tbody = $('<tbody/>');
+                
+                // Iterate through a selection of the content and build an HTML string
+                for(var i=page_index*items_per_page;i<max_elem;i++)
+                {
+					var answer = answers[qcontext][i];
+					
+					answer.votes = computeVotings(answer.uri);
+					
+					var tr = $('<tr/>');
+					
+					var td_votes = $('<td width="40"/>');
+					
+					var tooltip_options = {html:true,placement:'right'};
+					
+					var votespan = $('<span class="badge" title="Votes">' + answer.votes + '</span>');
+					
+					if(answer.votes < 0){
+						votespan.addClass('badge-important');
+					} else if (answer.votes >= 2 && answer.votes <6){
+						votespan.addClass('badge-info');
+					} else if (answer.votes >=6 && answer.votes < 100){
+						votespan.addClass('badge-success');
+					} else if (answer.votes >= 100){
+						votespan.addClass('badge-success');
+						votespan.html("+99");
+					}
+					
+					votespan.tooltip(tooltip_options);
+					
+					td_votes.append(votespan);
+					
+					var div_votebtngrp = $('<div class="btn-group" style="margin: 5px 0px">');
+				
+					var vtd = hasVotedFor(answer.uri);
+					if(vtd != 0){
+						btn_upvote = $('<button class="btn btn-small disabled"><i class="icon-thumbs-up"></i></button>');
+						btn_downvote = $('<button class="btn btn-small disabled"><i class="icon-thumbs-down"></i></button>');
+					} else {
+						btn_upvote = $('<button class="btn btn-small"><i class="icon-thumbs-up"></i></button>');
+						btn_upvote.click(voteSubmitCallback(answer.uri,1,"rwth:acis:qna:answer"));
+						
+						btn_downvote = $('<button class="btn btn-small"><i class="icon-thumbs-down"></i></button>');
+						btn_downvote.click(voteSubmitCallback(answer.uri,-1,"rwth:acis:qna:answer"));
+					}
+					
+					var d = moment(answer.date).fromNow();
+					
+					td_itable = $('<td >');
+					qspan = $('<span>' + linkify(unescape(answer.answer)) + '</span>');
+					
+					uspan = $('<span style="font-size: 8pt" class="pull-right"><a href="' + answer.uid + '">' + answer.user + '</a>, ' + d + '</span>');
+					td_itable.append(qspan);
+					td_itable.append('<br/>');
+					td_itable.append(uspan);
+					
+					td_itable.append(div_votebtngrp);
+					
+					div_votebtngrp.append(btn_upvote);
+					div_votebtngrp.append(btn_downvote);
+					
+					//td_votes.append(div_votebtngrp);
+					
+					tr.append(td_votes);
+					tr.append(td_itable);
+					
+					tbody.append(tr);
+					
+                }
+				
+				table.append(tbody);
+                
+                // Replace old content with new content
+				$('#answer-table').empty();
+                $('#answer-table').append(table);
+                
+                // Prevent click eventpropagation
+                return false;
+            }
+			
+			function generateQuestionListUI(){
+				
+				$("#content").empty();
+				$("#qoainput").empty();
+				
+				// generate sorting bar 
+				var sortbar = $('<div class="btn-group" data-toggle="buttons-radio" style="margin: 5px 0px;"><button id="question_sort_vote" type="button" class="btn btn-primary btn-small">Popular</button><button id="question_sort_date" type="button" class="btn btn-primary btn-small">Recent</button></div>');
+				
+				// generate question table placeholder
+				var qtable = $('<div id="question-table" style="height: 430px; overflow: auto;"></div>');
+				
+				// generate pagination bar placeholder
+				var pagination = $('<div id="question-pagination" class="pagination"></div>');
+				
+				$("#content").append(sortbar);
+				$("#content").append(qtable);
+				$("#content").append(pagination);
+				
+				var question_field = $('<input type="text" class="span10" placeholder="Your Question" name="question" id="question"/>');
+				var ask_button = $('<button id="askbtn" class="btn">Ask!</button>');
+				
+				$("#qoainput").append(question_field);
+				$("#qoainput").append(ask_button);
+				
+				$("#askbtn").click(function(e){
+					addQuestion();
+				});
+			
+				$("#question").keypress(function(e){
+					if ( e.which == 13 ) {
+						addQuestion();
+					}
+				});
+				
+				$("#question_sort_vote").click(function(){
+					if(!$("#question_sort_vote").hasClass("active")){
+						question_sort = sortVotings;
+						updateUI();
+					}
+				});
+				
+				$("#question_sort_date").click(function(){
+					if(!$("#question_sort_date").hasClass("active")){
+						question_sort = sortRecent;
+						updateUI();
+					}
+				});
+	
+			}
+			
+			function generateQuestionUI(q){
+				
+				$("#content").empty();
+				$("#qoainput").empty();
+				
+				var back_button = $('<button class="btn btn-small">Back</button>');
+				back_button.click(function(){
+					qcontext = null;
+					generateQuestionListUI();
+					loadQuestions();
+				});
+				
+				$("#content").append(back_button);
+				var question_header = $('<div style="font-size: 16pt; font-weight: bold; overflow:auto; height:60px; margin: 5px 0px;">' + linkify(unescape(q.question)) + '</div>');
+				$("#content").append(question_header);
+				
+				// generate sorting bar 
+				var sortbar = $('<div class="btn-group" data-toggle="buttons-radio" style="margin: 5px 0px;"><button id="answer_sort_vote" type="button" class="btn btn-primary btn-small">Popular</button><button id="answer_sort_date" type="button" class="btn btn-primary btn-small">Recent</button></div>');
+				
+				// generate question table placeholder
+				var qtable = $('<div id="answer-table" style="height: 350px; overflow: auto;"></div>');
+				
+				// generate pagination bar placeholder
+				var pagination = $('<div id="answer-pagination" class="pagination"></div>');
+				
+				$("#content").append(sortbar);
+				$("#content").append(qtable);
+				$("#content").append(pagination);
+				
+				$("#answer_sort_vote").click(function(){
+					if(!$("#answer_sort_vote").hasClass("active")){
+						answer_sort = sortVotings;
+						updateUI();
+					}
+				});
+				
+				$("#answer_sort_date").click(function(){
+					if(!$("#answer_sort_date").hasClass("active")){
+						answer_sort = sortRecent;
+						updateUI();
+					}
+				});
+				
+				// generate footer with input field (for answering);
+				var answer_field = $('<input type="text" class="span8" placeholder="Your Answer" name="answer" id="answer"/>');
+				var answer_button = $('<button id="answerbtn" class="btn">Answer!</button>');
+				
+				$("#qoainput").append(answer_field);
+				$("#qoainput").append(answer_button);
+				
+				$("#answerbtn").click(function(e){
+					addAnswer(q.uri);
+				});
+			
+				$("#answer").keypress(function(e){
+					if ( e.which == 13 ) {
+						addAnswer(q.uri);
+					}
+				});
+			}
+			
+			function updateQuestionListUI(){
+				
+				questions.sort(question_sort);
+				
+				paginationOptions = {
+					items_per_page:4,
+					num_display_entries:5,
+					current_page:question_index,
+					callback: questionPageSelectCallback
+				};
+				
+				$("#question-pagination").pagination(questions.length, paginationOptions);
+				if(questions.length > paginationOptions.items_per_page){
+					$("#question-pagination").show();
+				}
+				else{
+					$("#question-pagination").hide();
+				}
+			}
+			
+			function updateQuestionUI(){
+	
+				answers[qcontext].sort(answer_sort);			
+				
+				paginationOptions = {
+					items_per_page:4,
+					num_display_entries:5,
+					current_page:answer_index,
+					callback: answerPageSelectCallback
+				};
+				
+				$("#answer-pagination").pagination(answers[qcontext].length, paginationOptions);
+				if(answers[qcontext].length > paginationOptions.items_per_page){
+					$("#answer-pagination").show();
+				}
+				else{
+					$("#answer-pagination").hide();
+				}
+			}
+			
+			function publish(intent){
+				if(!iwcClient) return;
+				iwcClient.publish(intent);
+			}
+			
+			function iwcCallback(intent){
+				
+				if(intent.action == "ACTION_ADD" && intent.data && intent.extras && intent.extras.ns){
+					if (intent.extras.ns == "rwth:acis:qna:question"){
+						//console.log("Add question: " + intent.data);
+						loadQuestion(new openapp.oo.Resource(intent.data));
+					} else if (intent.extras.ns == "rwth:acis:qna:vote"){
+						//console.log("Add voting: " + intent.data);
+						loadVote(new openapp.oo.Resource(intent.data));
+					} else if (intent.extras.ns == "rwth:acis:qna:answer"){
+						//console.log("Add answer: " + intent.data);
+						loadAnswer(new openapp.oo.Resource(intent.data));
+					} else {
+						//console.log("Unclassified ACTION_ADD intent");
+						//console.log(intent);
+					}
+					
+				} else {
+					//console.log("Unclassified intent");
+					//console.log(intent);
+				}
+				
+			}
+			
+		</script>
+		
+		<!-- HTML Block -->
+		<div id="wrap">
+			<div id="content" class="container-fluid"></div>
+			<div id="push"></div>
+		</div>
+
+		<div id="footer">
+			<div class="container-fluid">
+				<p>
+					<div id="qoainput" class="row-fluid input-append"></div>
+				</p>
+			</div>
+		</div>
+		
+		
+		
+	]]>
+  </Content>
+</Module>

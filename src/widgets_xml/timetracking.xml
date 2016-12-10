@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2012 Dominik Renzel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<Module>
+<ModulePrefs title="Timetracking" description="A simple personal timetracking widget." author="Dominik Renzel" author_email="renzel@dbis.rwth-aachen.de" height="600">
+  	<Require feature="opensocial-0.8"/>
+	<Require feature="dynamic-height"/>
+    <Require feature="openapp"/>
+    <OAuth>
+		<Service name="openapp" xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/" openapp:service="http://purl.org/role/terms/spaceService" openapp:permitReadAppend="http://purl.org/role/terms/data">
+			<Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+</ModulePrefs>
+
+<Content type="html">
+<![CDATA[
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://dbis.rwth-aachen.de/gadgets/timetracking/lib/tablesorter/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="http://dbis.rwth-aachen.de/gadgets/timetracking/lib/datetimepicker/datetimepicker_css.js"></script>
+	<script type="text/javascript" src="http://dbis.rwth-aachen.de/gadgets/timetracking/lib/autocomplete/jquery.autocomplete.js"></script>
+	<script type="text/javascript" src="http://dbis.rwth-aachen.de/gadgets/timetracking/lib/autocomplete/jquery.bgiframe.min.js"></script>
+	<script type="text/javascript" src="http://dbis.rwth-aachen.de/gadgets/timetracking/lib/jexpand/jExpand.js"></script>
+	
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" type="text/css"/>
+	<link rel="stylesheet" href="http://dbis.rwth-aachen.de/gadgets/timetracking/css/tablesorter/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://dbis.rwth-aachen.de/gadgets/timetracking/css/autocomplete/main.css" type="text/css" />
+	<link rel="stylesheet" href="http://dbis.rwth-aachen.de/gadgets/timetracking/css/autocomplete/jquery.autocomplete.css" type="text/css" />
+	
+	<style type="text/css">
+		#tabletasks th { background:#fff; font:bold 10pt Verdana;}
+		#tabletasks td.date { background:#fff url(http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/row_bkg.png) repeat-x scroll center left; cursor:pointer; font:bold 9pt Verdana;}
+		#tabletasks span.arrow { background:transparent url(http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
+	</style>
+	
+    <script type="text/javascript">
+    
+	var lasttime;
+	var lasttask;
+	var user;
+	var tc;
+	var usedtasks = new Array();
+    var dates;
+	var mintime;
+  	var maxtime;
+	
+	var wave;
+	
+	var from = new Date();
+	var to = new Date();
+	
+	var tmo_ns = "http://www.semanticdesktop.org/ontologies/2008/05/20/tmo/#";
+
+	// --------------- Imitate Wave API ---------------
+	
+	api = function(){};
+	api.Wave = function(){
+		this.id = openapp.param.user();
+		this.stateCallback = function(){
+			console.log("Standard function: state updated");
+		};
+	};
+	
+	api.Wave.prototype.getId = function(){
+		return this.id;
+	};
+	
+	api.Wave.prototype.getState = function(){
+		return this.state;
+	};
+	
+	api.Wave.prototype.setStateCallback = function (cb){
+		this.stateCallback = cb;
+		this.state = new api.Wave.State(this);
+	};
+	
+	api.Wave.prototype.getStateCallback = function(){
+		return this.stateCallback;
+	};
+	
+	api.Wave.State = function(wave){
+		this.wave = wave;
+		this.state = null;
+		this.update();
+	};
+	
+	api.Wave.State.prototype.update = function(){
+		var that = this;
+		getTaskContainer(function(tc){
+			tc.getRepresentation("rdfjson",function(r){
+				that.state = r;
+				that.wave.stateCallback();
+			});
+		});
+	};
+	
+	api.Wave.State.prototype.submitDelta = function(delta){
+		var that = this;
+		
+		for (key in delta){
+			//console.log(key + ":" + delta[key]);
+			if(delta[key] == null){
+				delete that.state[key];
+			}else {
+				that.state[key] = delta[key];
+			}
+		}
+		
+		tc.setRepresentation(that.state,"application/json",function(){
+			that.update();
+		});
+	};
+	
+	api.Wave.State.prototype.submitValue = function(key, val){
+		var delta = {};
+		delta[key] = val;
+		this.submitDelta(delta);
+	};
+	
+	api.Wave.State.prototype.getKeys = function(){
+		var res = new Array();
+		for (key in this.state){
+			if(key.indexOf("date-") == -1){
+				res.push(key);
+			}
+		}
+		//console.log(res);
+		return res;
+	};
+	
+	api.Wave.State.prototype.get = function(id){
+		return this.state[id];
+	};
+	
+	// ----------------------------------------
+	
+	function debug_resetTaskContainer(){
+		console.log("debug_resetTaskContainer: deleting task containers fur current user");
+		resetTaskContainers(function(){
+			console.log("debug_resetTaskContainer: current user's task containers deleted successfully");
+		});
+	}
+	
+	function init() {
+		
+		$(function() {
+            lasttime = new Date();
+			
+			if(typeof openapp.param.user() == 'undefined'){
+				$("#main").html("You need to be signed in!");
+				return;
+			}
+			
+			user = new openapp.oo.Resource(openapp.param.user());
+			
+			//debug_resetTaskContainer(); return;
+			
+			wave = new api.Wave();
+			wave.setStateCallback(stateUpdated);
+			
+            $("#text_taskdesc").keypress(function(event){
+				if(event.which == '13') {
+					submitTask();
+				}
+			});
+			
+			$("#dialog_changetaskdescr").dialog({ 
+				autoOpen: false,
+				closeOnEscape: true,
+				modal: true, 
+				buttons: [
+					{
+						text: "Ok",
+						click: function() { 
+							$(this).dialog("close");
+							var taskid = $("#currenttaskid").val();
+							var currenttaskdescr = $("#currenttaskdescr").val();
+							var newtaskdescr = $("#newtaskdescr").val();
+							
+							//console.log("Changing description for task " + taskid + " from " + currenttaskdescr + " to " + newtaskdescr);
+							
+							if($('#changesamedescr').attr('checked') == true){
+								changeTaskDescriptions(currenttaskdescr,newtaskdescr);
+							}
+							else{
+								var task = getTask(taskid);
+								task['description'] = newtaskdescr;
+								updateTask(task);
+							}
+						}
+					}
+				]
+			});
+        	//wave.setParticipantCallback(participantsChanged);         
+        });
+    }
+	
+    function submitTask() {
+	
+	  var ftime = new Date();
+	  var ttime = new Date();
+	  var description = $("#text_taskdesc").val();
+		
+	  //console.log(ftime + " - " + ttime + ":" + description);
+	  if(document.getElementById("wdate").checked){
+		//console.log(" **** date checked");
+		ftime = from;
+		ttime = to;
+		var task = createTask(openapp.param.user(),ftime,ttime,description);
+		addTask(task);
+	  }
+	  else {
+		//console.log(" **** date NOT checked");
+		ftime = lasttime;
+		ttime = new Date();
+		
+		if(!lasttask){
+			var task = createTask(openapp.param.user(),ftime,ttime,description);
+			addTask(task);
+			lasttask = task;
+		}
+		else{
+			if(description == lasttask.description){
+				lasttask.to = ttime;
+				addTask(lasttask);
+			}
+			else{
+				var task = createTask(openapp.param.user(),ftime,ttime,description);
+				addTask(task);
+				lasttask = task;
+			}
+		}
+		lasttime = ttime;
+	  }
+    }
+	
+	function createTask(p, f, t, d){
+    	var tsk = new Object();
+    	tsk['id'] = f.getTime()+"_"+t.getTime();
+    	tsk['participant'] = p;
+    	tsk['from'] = f;
+    	tsk['to'] = t;
+    	tsk['description'] = d;
+    	return tsk; 
+    }
+	
+	function updateTask(t){
+		var state = wave.getState();
+		var keys = state.getKeys();
+		
+		delta = {};
+    	delta[t.id] = toString(t);
+		
+		for(var i = 0;i<keys.length;i++){
+			if(t.id != keys[i]){
+				var tid2 = keys[i];
+				var t2 = getTask(tid2);
+				var ov = isOverlapping(t,t2);
+				if(ov == 0){
+					//No overlapping: do nothing here
+				}
+				else if(ov == 1){
+					//Complete overlapping: remove other task
+					delta[tid2] = null;
+				}
+				else if(ov == 2){
+					//Initial overlapping: postpone other task's beginning 
+					t2.from = t.to;
+					nid = t2.from.getTime() + "_" + t2.to.getTime();
+					t2.id = nid;
+					
+					delta[nid]= toString(t2);
+					delta[tid2] = null;
+				}
+				else if(ov == 3){
+					//Final overlapping: prepone other task's ending
+					if(t2.description == t.description){
+					
+					}
+					else{
+						t2.to = t.from;
+						nid = t2.from.getTime() + "_" + t2.to.getTime();
+						t2.id = nid;
+					
+						delta[nid]= toString(t2);
+						delta[tid2] = null;
+					}
+				}
+				else if(ov == 4){
+					//Complete overlapping: split other task 
+					oldto = t2.to;
+					t2.to = t.from;
+					nid = t2.from.getTime() + "_" + t2.to.getTime();
+					t2.id = nid;
+					
+					delta[nid]= toString(t2);
+					delta[tid2] = null;
+		
+					var t3 = createTask(t2.participant,t.to,oldto,t2.description)
+					delta[t3.id] = toString(t3);
+				}
+			}
+		}
+		state.submitDelta(delta);
+	}
+	
+    function addTask(t){
+    	updateTask(t);
+    }
+	
+	function getPosition(tid){
+		var keys = wave.getState().getKeys().sort();
+		
+		for(var i=0; i<keys.length; i++){
+			// console.log(i + " " + keys[i]);
+			if(keys[i] == tid){
+				// console.log("Position found: " + i);
+				return i;
+			} 
+		}
+		return -1;
+	}
+	
+	function getTaskByPosition(pos){
+		var state = wave.getState();
+		var keys = state.getKeys();
+		if(pos < 0 || pos >= keys.length){
+			return null;
+		}
+		else{
+			keys.sort();
+			state.get(keys[pos]);
+		}
+	}
+	
+	function removeTask(tid){
+    	wave.getState().submitValue(tid,null);
+    }
+	
+	function getTask(tid){
+		var state = wave.getState();
+		var taskstr = state.get(tid);
+        var task = fromString(taskstr);
+		return task;
+	}
+    
+    function toString(task){
+		return JSON.stringify(task);
+	}
+    
+    function fromString(s){
+		//console.log("fromString: parsing String '" + s + "' to task...");
+		var itask = $.parseJSON(s);
+		itask['from'] = new Date(itask['from']);
+		itask['to'] = new Date(itask['to']);
+		
+    	return itask;
+    }
+    
+    function renderTaskTable(){
+		//console.log("renderTaskTable: rendering tasks");
+    	$("#tabletasksbody").html("");
+    	var state = wave.getState();
+  		var keys = state.getKeys();
+		keys.sort();
+		//console.log("renderTaskTable: sorted task keys");
+		//console.log(keys);
+		
+		var dwt = getDayWorkTimes();
+  		
+  		var prevdate = new Date();
+  		prevdate.setTime(0);
+  		mintime = new Date().getTime() + 1000000;
+  		maxtime = 0;
+  		var worktime = 0;
+  		
+		var html = ""; 
+		var dayid;
+		var showtask;
+		
+  		for (var i = 0; i < keys.length; ++i) {
+			
+			if(keys[i].indexOf("date") == -1){
+				var taskstr = state.get(keys[i]);
+				var task = fromString(taskstr);
+				
+				if(isSameDay(prevdate,task.from) == 0){
+					dayid = getDayId(task.from);
+					showtask = getDateDisplay(dayid);
+					//console.log("New Day " +dayid + " showing: " + showtask);
+					var t_dwt = new Date(dwt[dayid]);
+					var t_dwt_s = twodigit(t_dwt.getHours()-1) + ":" + twodigit(t_dwt.getMinutes()) + ":" + twodigit(t_dwt.getSeconds());
+					//var tdur = twodigit(dur.getHours()-1) + ":" + twodigit(dur.getMinutes()) + ":" + twodigit(dur.getSeconds());
+					html += "<tr><td colspan='6' class='date' id='"+dayid+"'>"+ renderDate(task.from) +" (" + t_dwt_s + ")</td></tr>";
+				}
+				
+				var now = new Date(); 
+				if(task.from.getFullYear() == now.getFullYear()){
+					if(showtask == 1){
+						//console.log("Rendering task " + task.id);
+						html += renderTask(task);
+					}
+					if(usedtasks.join().indexOf(task.description)<0){
+						usedtasks.push(task.description);
+					}
+					prevdate = task.from;
+					mintime = Math.min(mintime,task.from.getTime());
+					maxtime = Math.max(maxtime,task.to.getTime());
+					lasttask = task;
+					worktime += (task.to.getTime() - task.from.getTime());
+				}
+			}
+        }
+		//console.log("HTML to be appended:");
+		//console.log(html);
+		
+		$("#tabletasksbody").append(html);
+		$("#tabletasks td.date").click(function(){
+			toggleDateDisplay($(this).attr("id"));
+        });
+
+		usedtasks.sort();
+        mindate = new Date();
+        mindate.setTime(mintime);
+        maxdate = new Date();
+        maxdate.setTime(maxtime);
+		if(keys.length>0){
+			lasttime = maxdate;
+		}
+		else{
+			lasttime = new Date();
+		}
+        //addStatsRow(mindate,maxdate,worktime);
+		//gadgets.window.adjustHeight(400);
+    }
+	
+	function toggleDateDisplay(dateid){
+		var showing = getDateDisplay(dateid);
+		if(showing == null){
+			setDateDisplay(dateid,1);
+		}
+		else{
+			if(showing == 0){
+				console.log("Toggling to show tasks for " + dateid);
+				setDateDisplay(dateid,1);
+			}
+			else{
+				console.log("Toggling to hide tasks for " + dateid);
+				setDateDisplay(dateid,0);
+			}
+		}
+	}
+	
+	function getDateDisplay(dateid){
+		var state = wave.getState();
+		return state.get(dateid);
+	}
+	
+	function setDateDisplay(dateid,v){
+		if(v==1 || v==0){
+			wave.getState().submitValue(dateid,v);
+		}
+	}
+    
+	function isSameTask(t1, t2){
+		if(t1.description == t2.description) {
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
+	
+    function isSameDay(d1, d2){
+    	
+    	if ((d1.getFullYear() == d2.getFullYear()) && 
+    		(d1.getMonth() == d2.getMonth()) &&
+    		(d1.getDate() == d2.getDate())){
+    		//console.log("d1: " + d1 + " d2: " + d2);
+			//console.log("d1 Year: " + d1.getFullYear() + " d2 Year: " + d2.getFullYear());
+			//console.log("d1 Month: " + d1.getMonth() + " d2 Month: " + d2.getMonth());
+			//console.log("d1 Day: " + d1.getDate() + " d2 Day: " + d2.getDate());
+			return 1;
+    	}
+    	else{
+    		return 0;
+    	}
+    }
+	
+	function getDayWorkTimes(){
+		var state = wave.getState();
+		var keys = state.getKeys();
+		var result = {};
+		
+		for (i = 0;i<keys.length;i++){
+			var t = getTask(keys[i]);
+			var did = getDayId(t.from);
+			var t_wt = (t.to.getTime()) - (t.from.getTime());
+			//console.log("Working Time for task " + t.id + ": " + t_wt);
+			var t_wtd = new Date(t_wt);
+			if(result[did] == null){
+				result[did] = t_wt;
+			} else {
+				result[did] = parseInt(result[did],10) + t_wt;
+			}
+		}
+		//console.log(result);
+		return result;
+	}
+	
+	function getDayId(d){
+		return "date-"+d.getFullYear()+twodigit(d.getMonth())+twodigit(d.getDate());
+	}
+    
+    function participantsChanged(){
+    	
+    }
+    
+    function renderTask(task){ 
+    	
+		var res = "<tr>";
+		
+    	var tfrom = twodigit(task.from.getHours()) + ":" + twodigit(task.from.getMinutes()) + ":" + twodigit(task.from.getSeconds());
+    	var tto = twodigit(task.to.getHours()) + ":" + twodigit(task.to.getMinutes()) + ":" + twodigit(task.to.getSeconds());		
+    	
+		var dur = new Date(task.to.getTime() - task.from.getTime());
+		var tdur = twodigit(dur.getHours()-1) + ":" + twodigit(dur.getMinutes()) + ":" + twodigit(dur.getSeconds());
+		var tid = task.id;
+		
+		var icons = "<td>" + classifyTask(task) + "</td>";
+		
+		var sfrom = "<td onclick='javascript:showTaskFromCalendar(\""+tid+"\")' style='cursor:pointer'>"+tfrom+"</td>";
+		
+		var sto = "<td onclick='javascript:showTaskToCalendar(\""+tid+"\")' style='cursor:pointer'>" + tto + "</td>";
+		
+		var sdesc = "<td onclick='javascript:showChangeDescrDialog(\""+tid+"\")' style='cursor:pointer'>"+task.description+"</td>";
+		var sdur = "<td>" + tdur + "</td>";
+		var sremove = "<td><img src='http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/close.png' onclick = 'removeTask(\""+task.id+"\");'/></td>"
+		
+		var res = "<tr>" + icons + sfrom + sto + sdesc + sdur + sremove + "</tr>";
+		
+		//console.log("HTML for task " + task.id + ":" + res );
+		return res;
+	}
+	
+	function changeFrom (tid,ms){
+		
+		var t = getTask(tid);
+		var nfrom = new Date(t.from.getTime() + ms); 
+		setTaskFrom(tid, nfrom);
+	}
+	
+	function setTaskFrom (tid, d){
+		var t = getTask(tid);
+	
+		if(d.getTime() < t.to.getTime()){
+			t.from = d;
+			t.id = t.from.getTime() +"_"+t.to.getTime();
+			updateTask(t);
+			wave.getState().submitValue(tid,null);
+		}
+		else{
+			// console.log("Change would cause negative task duration. Use remove button instead.")
+		}
+	}
+	
+	function changeTo(tid,ms){
+		var t = getTask(tid);
+		var nto = new Date(t.to.getTime() + ms); 
+		setTaskTo(tid, nto);
+	}
+	
+	function setTaskTo(tid, d){
+		var t = getTask(tid);
+		if(t.from.getTime() < d.getTime()){
+			var now = new Date();
+			if(d < now){
+				t.to = d;
+			}
+			else{
+				t.to = now;
+			}
+			t.id = t.from.getTime() +"_"+t.to.getTime();
+			updateTask(t);
+			wave.getState().submitValue(tid,null);
+		}
+		else{
+			// console.log("Change would cause negative task duration. Use remove button instead.")
+		}
+	}
+	
+	function isOverlapping(task1,task2){
+	
+		var tid1 = task1.id;
+		var tid2 = task2.id;
+		
+		if(task1.from >= task2.to || task1.to <= task2.from){
+			// console.log("No overlapping of " + tid1 + " and " + tid2);
+			return 0;
+		}
+		
+		else if(task1.from <= task2.from && task1.to >= task2.to){
+			// console.log("Complete overlapping of " + tid1 + " over " + tid2);
+			return 1;
+		}
+		
+		else if(task1.from <= task2.from && task1.to > task2.from){
+			// console.log("Initial overlapping of " + tid1 + " over " + tid2);
+			return 2;
+		}
+		
+		else if(task1.from <= task2.to && task1.to > task2.to){
+			// console.log("Final overlapping of " + tid1 + " over " + tid2);
+			return 3;
+		}
+		
+		else if(task1.from > task2.from && task1.to < task2.to){
+			// console.log("Interruption of " + tid1 + " over " + tid2);
+			return 4;
+		}
+	}
+	
+	function classifyTask(t){
+		var d = t.description;
+		var result = "";
+		if(d.indexOf("ROLE ") >= 0 || d.indexOf("UMIC ") >=0){
+			result += "<img title='Project Work' width='16' src='http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/project.png' />";
+		}
+		if(d.toLowerCase().indexOf("paper") >= 0 || d.toLowerCase().indexOf("slides") >=0 || d.toLowerCase().indexOf("conference") >=0 || d.toLowerCase().indexOf("workshop") >=0){
+			result += "<img title='Research' width='16' src='http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/science.png' />";
+		}
+		if(d.toLowerCase().indexOf("lecture") >= 0 || d.toLowerCase().indexOf("exercise") >=0 || d.toLowerCase().indexOf("course") >=0 || d.toLowerCase().indexOf("seminar") >=0){
+			result += "<img title='Teaching' width='16' src='http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/education.png' />";
+		}
+		if(isSameDay(t.from,t.to) == 0){
+			result += "<img title='Overnight' width='16' src='http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/night.gif' />";
+		}
+		if(d.toLowerCase().indexOf("pause") >=0 || d.toLowerCase().indexOf("lunch") >= 0 || d.toLowerCase().indexOf("break") >= 0 || d.toLowerCase().indexOf("eat") >= 0){
+			result += "<img title='Break' width='16' src='http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/sleep.png' />";
+		}
+		return result;
+	}
+    
+    function renderDate(date){ 
+		var ls = date.toLocaleString();
+    	return ls.substring(0,ls.indexOf(":")-2);
+		//return date.getFullYear()+"-"+twodigit(date.getMonth()+1)+"-"+twodigit(date.getDate())+" ("+date.getDay()+")";
+    }
+    function addStatsRow(mindate, maxdate, worktime){
+    	totaltime = (maxdate.getTime()-mindate.getTime());
+    	activity = worktime / totaltime; 
+    	$("#tabletasksbody").append("<tr><td colspan='7' ><ul><li>Min Date: " + mindate + "</li><li>Max Date: " + maxdate + "</li><li>Work Time: "+(worktime/1000)+" s</li><li>Activity: "+ activity +"</li></ul></td></tr>");
+    }
+    
+    function twodigit(num){
+    	var n = parseInt(num);
+    	if(n<10){
+    		return "0"+num;
+    	}
+    	else{
+    		return num;
+    	}
+    }
+	
+	function stateUpdated() {
+		renderTaskTable();
+		if(usedtasks){
+			$("#text_taskdesc").autocomplete(usedtasks);
+			$("#input").focus();
+			$("#text_taskdesc").focus();
+		}
+    }
+	
+	function changeTaskDescriptions(oldDescr,newDescr){
+		var state = wave.getState();
+		var keys = state.getKeys();
+		
+		delta = {};
+		for(var i = 0;i<keys.length;i++){
+			var t = getTask(keys[i]);
+			if(t.description == oldDescr){
+				t.description = newDescr;
+				delta[t.id] = toString(t);
+			}
+		}
+		state.submitDelta(delta);
+		
+	}
+	
+	function showTaskFromCalendar(tid){
+		t = getTask(tid);
+		NewCssCal(tid,t.from,"ddmmyyyy","arrow",true,"24",false,setTaskFrom);
+	}
+	
+	function showTaskToCalendar(tid){
+		t = getTask(tid);
+		NewCssCal(tid,t.to,"ddmmyyyy","arrow",true,"24",false,setTaskTo);
+	}
+	
+	function showFromCalendar(){
+		NewCssCal("from",from,"ddmmyyyy","arrow",true,"24",false,setFrom);
+	}
+	
+	function showToCalendar(){
+		NewCssCal("to",to,"ddmmyyyy","arrow",true,"24",false,setTo);
+	}
+	
+	function showChangeDescrDialog(tid){
+		t = getTask(tid);
+		$("#currenttaskid").val(tid);
+		$("#currenttaskdescr").val(t.description);
+		$("#newtaskdescr").val(t.description);
+		$("#dialog_changetaskdescr").dialog("open");
+	}
+	
+	function setTo(tid,d){
+		var now = new Date();
+		if(d > from){
+			if(d < now){
+				to = d;
+			}
+			else{
+				to = now;
+			}
+		}
+		else{
+			if(d<now){
+				to = d;
+				from = new Date(to.getTime() - 300000);
+			}
+			else{
+				to = now;
+				from = new Date(to.getTime() - 300000);
+			}
+		}
+		document.getElementById("display_from").innerHTML = (from + "").substr(0,24);
+		document.getElementById("display_to").innerHTML = (to + "").substr(0,24);
+	}
+	
+	function setFrom(tid,d){
+		if(d < to){
+			from = d;
+		}
+		else{
+			from = d;
+			var now = new Date();
+			if((from.getTime() + 300000) < now.getTime()){
+				to = new Date(from.getTime() + 300000);
+			}
+			else{
+				to = now;
+			}
+		}
+		document.getElementById("display_from").innerHTML = (from + "").substr(0,24);
+		document.getElementById("display_to").innerHTML = (to + "").substr(0,24);
+	}
+	
+	function toggleMenuVisibility(){
+		if(document.getElementById("dmenu").style.visibility == 'hidden'){
+			document.getElementById("dmenu").style.visibility = 'visible';
+		}
+		else{
+			document.getElementById("dmenu").style.visibility = 'hidden';
+		}
+	}
+	
+	// ------------------- OpenApp functions ---------------------
+
+	function retrieveTaskContainers(cb){
+		user.getSubResources({
+			relation: openapp.ns.role + "data",
+			type: tmo_ns + "TaskContainer",
+			onAll: function(taskContainers) {
+				cb(taskContainers);
+			}
+		});
+	}
+	
+	function resetTaskContainers(cb){
+		user.getSubResources({
+			relation: openapp.ns.role + "data",
+			type: tmo_ns + "TaskContainer",
+			onAll: function(taskContainers) {
+				//console.log("TaskContainers found for deletion: " + taskContainers.length);
+				for(i=0;i<taskContainers.length;i++){
+					var res = new openapp.oo.Resource(taskContainers[i].uri);
+					res.del();
+				}
+				cb();
+			}
+		});
+	}
+	
+	function addTaskContainer(cb){
+		user.create({
+			relation: openapp.ns.role + "data",
+			type: tmo_ns + "TaskContainer",
+			representation: {},
+			callback: function(sub){
+				//console.log("TaskContainer created");
+				tc = sub;
+				cb(tc);
+			}
+		});	
+	}
+	
+	function getTaskContainer(cb){
+		if(typeof tc !== 'undefined'){
+			cb(tc);
+		} else {
+			retrieveTaskContainers(function(tcs){
+				//console.log("Task Containers: " + tcs.length);
+				//console.log(tcs);
+				if(tcs.length > 0){
+					//console.log("Found TaskContainers - use first one found.")
+					tc = tcs[0];
+					cb(tc);
+				} else {
+					//console.log("TaskContainer does not exist - create a new one.");
+					addTaskContainer(cb);
+				}
+			});
+		}
+	}
+	
+    gadgets.util.registerOnLoadHandler(init);
+    </script>
+    
+  <div style="width:100%;height:600px;overflow:auto" id="main">
+		<div id="input">
+	    	<table border="0" cellpadding="10" cellspacing="10">
+				<tr>
+					<td><input type="text" size="100" maxlength="200" id="text_taskdesc" /></td>
+					<td width="10"></td>
+					<td><img src='http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/add.jpg' onclick="submitTask()" /></td>
+					<td width="10"></td>
+					<td><input type="checkbox" id="wdate" onchange="toggleMenuVisibility();"> add with custom start/end</td>
+					<td width="10"></td>
+					<td id="dmenu" style="visibility:hidden;">
+						<div>
+							start: <img src="http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/cal.gif" onclick="javascript:showFromCalendar()" style="cursor:pointer"/>
+							<span id="display_from" style="font-size: 9pt"></span>
+						</div>
+						<div>
+							end: <img src="http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/cal.gif" onclick="javascript:showToCalendar()" style="cursor:pointer"/>
+							<span id="display_to" style="font-size: 9pt"></span>
+						</div>
+					</td>
+					
+				</tr>
+			</table>
+	    </div>
+	    <div id="tasklist" style="width:100%;height:400px">
+	    	<div id="divtasks" >
+	    		<table cellspacing="1" class="tablesorter" id="tabletasks">
+					<colgroup>
+						<col width="70px">
+						<col width="70px">
+						<col width="70px">
+						<col width="*">
+						<col width="70px">
+						<col width="30px">
+					</colgroup>
+					<thead> 
+						<tr> 
+							<th>Categories</th>
+							<th>Start</th>
+							<th>End</th>
+							<th>Description</th> 
+							<th>Duration</th> 
+							<th></th> 
+						</tr> 
+					</thead> 
+					<tbody id="tabletasksbody">
+					</tbody>
+				</table>
+	    	</div>
+<!--
+			<div>
+			<img src="http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/cal.gif" onclick="javascript:showFromCalendar()" style="cursor:pointer"/>
+			<img src="http://dbis.rwth-aachen.de/gadgets/timetracking/resources/icons/cal.gif" onclick="javascript:showToCalendar()" style="cursor:pointer"/>
+			</div>
+-->		 
+	    </div>
+    </div>
+	
+	<!------- Dialogs --------->
+	<div id="dialog_changetaskdescr" title="Change Task Description">
+		Change task description<br/>
+		<input id="currenttaskid" type="hidden" value="" />
+		<input id="currenttaskdescr" type="hidden" value="" />
+		<input id="newtaskdescr" type="text" value="" /><br/><br/>
+		<input type="checkbox" id="changesamedescr"> change all tasks with same description<br>
+	</div>
+  ]]>  
+</Content>
+</Module>

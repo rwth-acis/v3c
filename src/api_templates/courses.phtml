@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>Virtus API</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+</head>
+<body>
+<h1>All Courses</h1>
+
+<p><a href="/courses/new">Add new course</a></p>
+
+<?php
+if(count($courses) > 0):
+    ?>
+    <table class="pure-table">
+        <tr>
+            <th>Title</th>
+            <th>Lang</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Domain</th>
+            <th>Profession</th>
+            <th>Date Created</th>
+            <th>Date Updated</th>
+        </tr>
+
+        <?php
+        $odd = true;
+        foreach($courses as $course):?>
+            <tr <?=$odd ? "class=\"pure-table-odd\"" : ""; ?>>
+                <td><?=$course->getId() ?></td>
+                <td><?=$course->getLang() ?></td>
+                <td><?=$course->getName() ?></td>
+                <td><?=$course->getShortDescription() ?> ...</td>
+                <td><?=$course->getDomain() ?></td>
+                <td><?=$course->getProfession() ?></td>
+                <td><?=$course->getDateCreated() ?></td>
+                <td><?=$course->getDateUpdated() ?></td>
+                <td>
+                    <a href="<?=$router->pathFor('course-detail', ['id' => $course->getId()])?>">view</a>
+                </td>
+            </tr>
+
+            <?php
+
+            $odd = $odd ? false : true;
+
+        endforeach; ?>
+    </table>
+<?php else: ?>
+    <p>No current courses</p>
+<?php endif; ?>
+
+</body>
+</html>

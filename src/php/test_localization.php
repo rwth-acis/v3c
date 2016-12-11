@@ -1,47 +1,29 @@
 <?php
-if (!function_exists("gettext"))
-{
-    echo "not installed\n";
-}
-else
-{
-    echo "installed\n";
-}
-/*
-$language = "de";
-echo "Language:".$language;
-#putenv("LANG=".$language);
-putenv("LC_ALL=".$language);
-setlocale(LC_ALL, $language);
+// I18N support information here
 
-$domain = "messages";
-#bindtextdomain($domain, "Locale");
-#textdomain($domain);
-bindtextdomain('default', 'C:\Users\Sabine\Documents\Uni\Master\Kurse\03_HENM\workspace\v3c\Locale');
-textdomain('default');
+// define constants
+define('PROJECT_DIR', realpath('./'));
+define('LOCALE_DIR', '../../locale');
+define('DEFAULT_LOCALE', 'en');
 
-echo "Test:\n";
-echo gettext("This is a text string!");
-echo "\n end\n";
-echo "test2: ";
-echo gettext ("test2_de");
+require_once('../../../php-gettext-1.0.12/php-gettext-1.0.12/gettext.inc');
 
-*/
+$encoding = 'UTF-8';
 
-echo ("----------------------");
+$locale = (isset($_GET['lang']))? $_GET['lang'] : DEFAULT_LOCALE;
 
-$locale = 'en';
+//var_dump($locale);die();
 
-putenv("LANG=" . $locale); // Linux
-putenv("LC_ALL=" . $locale); // windows
-setlocale(LC_ALL, $locale);
-
+// gettext setup
+T_setlocale(LC_MESSAGES, $locale);
+// Set the text domain as 'messages'
 $domain = 'default';
-//bindtextdomain($domain, 'C:\Users\Sabine\Documents\Uni\Master\Kurse\03_HENM\workspace\v3c\locale');
-bindtextdomain($domain, '../../locale');
-bind_textdomain_codeset($domain, 'UTF-8');
+bindtextdomain($domain, LOCALE_DIR);
+// bind_textdomain_codeset is supported only in PHP 4.2.0+
+if (function_exists('bind_textdomain_codeset'))
+    bind_textdomain_codeset($domain, $encoding);
 textdomain($domain);
 
-print gettext("test2_de");
+echo gettext("HELLO_WORLD");
 
 ?>

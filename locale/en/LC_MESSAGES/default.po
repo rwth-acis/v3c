@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2016-12-05 11:06+0100\n"
-"PO-Revision-Date: 2016-12-07 18:22+0100\n"
+"PO-Revision-Date: 2016-12-11 19:50+0100\n"
 "Last-Translator: Sabine Luettgen\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,9 @@ msgstr "This is a translated string."
 # test 2
 msgid "test2_de"
 msgstr "englisch test"
+
+msgid "HELLO_WORLD"
+msgstr "Hello World!"
 
 # general
 msgid "general:button:home"
@@ -45,4 +48,10 @@ msgid "main:welcome:tourism"
 msgstr ""
 
 msgid "main:welcome:social"
+msgstr ""
+
+msgid "main:welcome:courses"
+msgstr ""
+
+msgid "main:welcome:listcourses"
 msgstr ""

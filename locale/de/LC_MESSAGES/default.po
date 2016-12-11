@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2016-12-05 11:06+0100\n"
-"PO-Revision-Date: 2016-12-07 18:08+0100\n"
+"PO-Revision-Date: 2016-12-11 19:50+0100\n"
 "Last-Translator: Sabine Luettgen\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,9 @@ msgstr "Dies ist ein uebersetzter String"
 # test 2
 msgid "test2_de"
 msgstr "deutscher test"
+
+msgid "HELLO_WORLD"
+msgstr "Hallo Welt"
 
 # general
 msgid "general:button:home"
@@ -46,3 +49,9 @@ msgstr "Tourismus und Gastgewerbe"
 
 msgid "main:welcome:social"
 msgstr "Social Entrepreneurship"
+
+msgid "main:welcome:courses"
+msgstr "Kurse"
+
+msgid "main:welcome:listcourses"
+msgstr "Für eine vollständige Liste aller Kurse klicken Sie hier."

@@ -65,8 +65,8 @@
                     ?>
                     <i class="fa fa-file fa-2x"></i>
                     <div class="text">
-                        <h3>Courses</h3>
-                        <p>Check for the the list of all the courses available here.</p>
+                        <h3><?php echo getTranslation("main:welcome:courses", "Courses");?></h3>
+                        <p><?php echo getTranslation("main:welcome:listcourses", "Check for the list of all the courses available here.");?></p>
                     </div>
                 </div>
             </div>

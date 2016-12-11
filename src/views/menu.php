@@ -53,8 +53,6 @@ require_once '../config/config.php';
 
 <?php
 include("../php/localization.php");
-setLanguage("de");
-
 
 //Decide if this site is inside a separate widget
 if (filter_input(INPUT_GET, "widget") == "true") {

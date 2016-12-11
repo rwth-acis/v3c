@@ -41,7 +41,7 @@ $subject_id = filter_input(INPUT_GET, "id");
 $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObject();
 $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, users.family_name AS creator_lastname 
                            FROM courses JOIN users ON courses.creator=users.email 
-                           WHERE courses.id='$subject_id'")->fetchAll();
+                           WHERE courses.domain='$subject_id'")->fetchAll();
 
 ?>
 <header id='head' class='secondary'>

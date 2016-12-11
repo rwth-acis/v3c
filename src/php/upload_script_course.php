@@ -30,27 +30,25 @@ if ((include '../config/config.php') === false) {
     throw new Exception("The config.php is missing! Cannot create widget automatically.");
 }
 
+//Get id of subject
+$subject_id = filter_input(INPUT_GET, "id");
+
 //Get input data from form
 $name = mysql_real_escape_string(filter_input(INPUT_POST, 'name'));
 $text = mysql_real_escape_string(filter_input(INPUT_POST, 'text'));
-$role_link = filter_input(INPUT_POST, 'roleLink');
-$contact = filter_input(INPUT_POST, 'contact');
-$dates = filter_input(INPUT_POST, 'dates');
-$links = filter_input(INPUT_POST, 'links');
 $profession = filter_input(INPUT_POST, 'profession');
-$domain = filter_input(INPUT_POST, 'domain');
-$subject_id = filter_input(INPUT_POST, 'subject_id');
+$lang = filter_input(INPUT_POST, 'lang');
+
 
 // Get the ID (of our DB) of the currently logged in user. Required, because this 
 // user will be registered as the creator of the course.
 ob_start();
 $user_database_entry = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $_SESSION['sub']);
 ob_end_clean();
-$creator = $user_database_entry['id'];
+$creator = $user_database_entry['email'];
 
 // Create database-entry
-$sql = "INSERT INTO courses (name, domain, profession, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name', '$domain', '$profession', '$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
-
+$sql = "INSERT INTO courses (name, domain, profession, description, creator, lang) VALUES ('$name', $subject_id, '$profession', '$text', '$creator', '$lang')";
 $conn->query($sql);
 
 $last_id = $conn->lastInsertId();

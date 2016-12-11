@@ -44,6 +44,7 @@
                                        placeholder="Enter your course name" required>
                             </div>
                         </div>
+                    <!--
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
                             <div class="col-sm-10">
@@ -54,9 +55,9 @@
                                 <a href="#">
                                     <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline"
                                            type="button" value="+"/>
-                                </a>
+                                </a>-->
                                 <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
-                                <a target="_blank" href="help.php">
+                               <!-- <a target="_blank" href="help.php">
                                     <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
                                 </a>
                             </div>
@@ -67,7 +68,7 @@
                                 <input type="text" class="form-control" rows="1" name="domain" id="targetDomain"
                                        placeholder="Enter your course domain" required>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetProfession">Course Profession:</label>
                             <div class="col-sm-10">
@@ -103,6 +104,18 @@
                                           placeholder="Enter external links which provide additional information, e.g. links to Campus Office, L2P"></textarea>
                             </div>
                         </div>-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="targetName">Course Language:</label>
+                            <div class="col-sm-10">
+                                <select name="lang">
+                                    <option value="en">English</option>
+                                    <option value="gr">Greek</option>
+                                    <option value="de">German</option>
+                                    <option value="it">Italian</option>
+                                    <option value="es">Spanish</option>
+                                </select>
+                            </div>
+                        </div>
                         <input hidden id="subject_input" name="subject_id">
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton"
                                 value="Upload">Save

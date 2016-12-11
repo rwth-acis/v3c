@@ -98,11 +98,13 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                                         echo $start_date . "<br>";
                                     } ?></td>
                                 <td class="rowlink-skip"><input type="button"
-                                                                data-id="<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"
+                                                                data-id="<?php echo $course["id"] ?>"
+                                                                data-lang="<?php echo $course["lang"] ?>"
                                                                 class="btn btn-edit btn-sm btn-success btn-block"
                                                                 value="Edit"/></td>
                                 <td class="rowlink-skip"><input type="button"
-                                                                data-id="<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"
+                                                                data-id="<?php echo $course["id"] ?>"
+                                                                data-lang="<?php echo $course["lang"] ?>"
                                                                 class="btn btn-delete btn-sm btn-warning btn-block"
                                                                 value="Delete"</td>
                             </tr>

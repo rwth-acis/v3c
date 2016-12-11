@@ -35,7 +35,7 @@ $profession = filter_input(INPUT_POST, 'profession');
 //Creator stays the same
 
 // modify database-entry
-$sql = "UPDATE courses SET name='$name', domain='$domain', profession='$profession', description='$text', WHERE id='$id' AND lang='$lang'";
+$sql = "UPDATE courses SET name='$name', domain='$domain', profession='$profession', description='$text' WHERE id='$id' AND lang='$lang'";
 
 //echo "sqlquery: $sql";
 
@@ -46,6 +46,6 @@ if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
     $html = "&widget=true";
 }
 
-header("Location:../views/course.php?id=$id&lang=$lang&$name&$text&$domain&$profession$html");
+header("Location:../views/course.php?id=$id&lang=$lang$html");
 
 ?>

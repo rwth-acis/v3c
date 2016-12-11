@@ -24,13 +24,13 @@ $(document).ready(function () {
 
     for (var i = 0; i < editBtns.length; i++) {
         editBtns[i].onclick = function (event) {
-            window.location = "editcourse.php?id=" + event.target.dataset.id;
+            window.location = "editcourse.php?id=" + event.target.dataset.id + "&=" + event.target.dataset.lang;
         };
     }
 
     for (var i = 0; i < deleteBtns.length; i++) {
         deleteBtns[i].onclick = function (event) {
-            window.location = "course_delete.php?id=" + event.target.dataset.id;
+            window.location = "course_delete.php?id=" + event.target.dataset.id + "&=" + event.target.dataset.lang;
         };
     }
 });

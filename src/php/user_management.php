@@ -90,11 +90,11 @@ class UserManagement
      * @param $confirmed
      * @param $role
      */
-    function setUserPermissions($id, $confirmed, $role)
+    function setUserPermissions($id, $role)
     {
         if ($_POST != null) {
 
-            $sqlUpdate = 'UPDATE users SET confirmed = ' . $confirmed . ', role = ' . $role . ' WHERE id = ' . $id;
+            $sqlUpdate = 'UPDATE users SET role = ' . $role . ' WHERE id = ' . $id;
             $sth = $db->prepare($sqlUpdate);
             $ret = $sth->execute();
             if ($ret === false) {

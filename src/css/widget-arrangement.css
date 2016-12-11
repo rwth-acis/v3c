@@ -58,6 +58,8 @@
 .gridstack-sidebar {
     padding: 1rem 0;
     text-align: center;
+    height: 20rem;
+    background-color: antiquewhite;
 }
 
 .grid-stack-sidebar-item-topbar {

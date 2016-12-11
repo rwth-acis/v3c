@@ -8,10 +8,14 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
 
 include '../php/db_connect.php';
 include '../config/config.php';
 require '../vendor/autoload.php';
+require_once '../api/helper_methods.php';
 
 spl_autoload_register(function ($classname) {
     require ("../classes/" . $classname . ".php");
@@ -34,12 +38,26 @@ $container = $app->getContainer();
 
 $container['view'] = new \Slim\Views\PhpRenderer("../api_templates/");
 
+$c['notFoundHandler'] = function ($c) {
+    return function ($request, $response) use ($c) {
+        return $c['response']
+            ->withStatus(404)
+            ->withHeader('Content-Type', 'text/html')
+            ->write('Page not found');
+    };
+};
+
 
 $container['logger'] = function($c) {
+    // Create the logger
     $logger = new \Monolog\Logger('my_logger');
-    $file_handler = new \Monolog\Handler\StreamHandler("../logs/app.log");
-    $logger->pushHandler($file_handler);
+    // Now add some handlers
+    $logger->pushHandler(new StreamHandler(__DIR__.'/my_app.log', Logger::DEBUG));
+    $logger->pushHandler(new FirePHPHandler());
+
+    // You can now use your logger
     return $logger;
+
 };
 
 $container['db'] = function ($c) {
@@ -59,24 +77,22 @@ $app->get('/', function (Request $request, Response $response) {
 /**
  * Get Courses
  */
-$app->get('/courses', function (Request $request, Response $response) use ($app) {
+$app->get('/courses', function (Request $request, Response $response) {
     $mapper = new CourseMapper($this->db);
-    $courses = $mapper->getCourses();
+    $courses = $mapper->getCourses($request->getQueryParams());
+    $this->logger->addInfo("array: ", $request->getQueryParams());
     $courses_array = array();
     foreach ($courses as $course) {
         $courses_array[] = (array)$course;
     }
-    $new_response = $response->withJson($courses_array);
-
-    //$response = $this->view->render($response, "courses.phtml", ["courses" => $courses, "router" => $this->router] );
-    return $new_response;
+    $response = $response->withJson($courses_array);
+    return $response;
 });
 
 /**
  * Get Course
  */
 $app->get('/courses/{id}', function (Request $request, Response $response, $args) {
-    $q = $request->getQueryParams();
     $course_id = (int)$args['id'];
     $mapper = new CourseMapper($this->db);
     $course = $mapper->getCourseById($course_id);
@@ -85,11 +101,41 @@ $app->get('/courses/{id}', function (Request $request, Response $response, $args
     return $response;
 });
 
+/**
+ * Get Course Units
+ */
+$app->get('/courses/{id}/course_units', function (Request $request, Response $response, $args) use ($app) {
+    $course_id = (int)$args['id'];
+    $this->logger->addInfo("course id : " . $course_id);
+    $mapper = new CourseUnitMapper($this->db);
+    $course_elements = $mapper->getCourseUnits($course_id);
+    $course_units_array = array();
+    foreach ($course_elements as $course_unit) {
+        $course_units_array[] = (array)$course_unit;
+    }
+    $new_response = $response->withJson($course_units_array);
+
+    return $new_response;
+});
+
+/**
+ * Get Course Unit
+ */
+$app->get('/courses/{course_id}/course_units/{unit_id}', function (Request $request, Response $response, $args) use ($app) {
+    $course_id = (int)$args['course_id'];
+    $course_unit_id = (int)$args['unit_id'];
+    $mapper = new CourseUnitMapper($this->db);
+    $course_unit = $mapper->getCourseUnitById($course_id, $course_unit_id);
+    $course_unit = (array)$course_unit;
+    $new_response = $response->withJson($course_unit);
+
+    return $new_response;
+});
 
 /**
  * Get Course Elements
- */
-$app->get('/course_elements', function (Request $request, Response $response) use ($app) {
+
+$app->get('/courses/{id}/course_elements', function (Request $request, Response $response) use ($app) {
     $mapper = new CourseElementMapper($this->db);
     $course_elements = $mapper->getCourseElements();
     $course_el_array = array();
@@ -101,6 +147,8 @@ $app->get('/course_elements', function (Request $request, Response $response) us
     //$response = $this->view->render($response, "courses.phtml", ["courses" => $courses, "router" => $this->router] );
     return $new_response;
 });
+ */
+
 
 
 

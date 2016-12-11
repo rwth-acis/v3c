@@ -44,9 +44,17 @@
 </header>
 <!--Prototype Templates -->
 <div class="virtus-pw-prototype virtus-pw-hide " id="prototypeSlideViewer">
-    <div class="virtus-pw-name">
-        Slides Widget
+    <div class="row virtus-pw-prototype-topbar">
+        <div class="virtus-pw-name col-sm-12">
+            Slides Widget
+        </div>
+        <div class="virtus-pw-prototype-top-toolbar">
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+        </div>
     </div>
+
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img"
@@ -70,8 +78,15 @@
     </div>
 </div>
 <div class="virtus-pw-prototype virtus-pw-hide " id="prototypeVideoViewer">
-    <div class="virtus-pw-name">
-        Video Widget
+    <div class="row virtus-pw-prototype-topbar">
+        <div class="virtus-pw-name col-sm-12">
+            Video Widget
+        </div>
+        <div class="virtus-pw-prototype-top-toolbar">
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+        </div>
     </div>
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
@@ -100,8 +115,15 @@
     </div>
 </div>
 <div class="virtus-pw-prototype virtus-pw-hide " id="prototypeQuizzesViewer">
-    <div class="virtus-pw-name">
-        Quizzes Widget
+    <div class="row virtus-pw-prototype-topbar">
+        <div class="virtus-pw-name col-sm-12">
+            Quizzes Widget
+        </div>
+        <div class="virtus-pw-prototype-top-toolbar">
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+        </div>
     </div>
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">

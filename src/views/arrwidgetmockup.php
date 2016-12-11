@@ -51,7 +51,7 @@
         <div class="virtus-pw-prototype-top-toolbar">
             <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
             <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"  aria-hidden="true"></span>
         </div>
     </div>
 
@@ -234,6 +234,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     $(function () {
         // TODO: FIX TOOLTIP HOVERING
         //$('[data-toggle="tooltip"]').tooltip()
+
+
         var $canvas = $('#grid1');
         var $canvasContainer = $('.gridstack-canvas-container');
 
@@ -314,6 +316,15 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             }
             cntr = 0;
         });
+
+
+        //Buttons on prototype toolbar remove:
+        /*$('.rm-icon').click(function(e){
+            console.log("click")
+            e.stopPropagation();
+            $canvas.removeWidget($(this).parent().parent().parent().parent().parent().remove());
+        });*/
+
     });
     function createSidebarElement(name, index) {
         $parentEl = $('.gridstack-sidebar');
@@ -337,7 +348,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     appendTo: 'body',
                 });
         }
-
 
     }
 </script>

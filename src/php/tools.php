@@ -201,6 +201,21 @@ function getSingleDatabaseEntryByValue($table, $key, $value)
     return $entry;
 }
 
+function getSingleDatabaseEntryByValuePair($table, $key1, $value1, $key2, $value2)
+{
+    require '../php/db_connect.php';
+
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+    $sqlSelect = "SELECT * FROM " . $table . " WHERE " . $key1 . "='" . $value1 . "' AND " . $key2 . "='" . $value2 . "'";
+    $sth = $db->prepare($sqlSelect);
+    $sth->execute();
+    $entry = $sth->fetch();
+
+    return $entry;
+}
+
+
 /**
  * @return [bErr:bool, bIsConfirmed:bool, sMsg:string]
  */
@@ -267,4 +282,14 @@ function sortCourseUnits($courseid)
     $course_units = $course_units_sql->fetchAll();
 
     return $course_units;
+}
+
+/**
+ * This function returns a database object containing all subjects.
+ */
+function getSubjectList()
+{
+    require '../php/db_connect.php';
+    $sql = "SELECT id, name FROM subjects";
+    return $db->subjects;
 }

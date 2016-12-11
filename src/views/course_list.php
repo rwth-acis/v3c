@@ -91,16 +91,18 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                             ?>
                             <tr>
                                 <td>
-                                    <a href="course.php?id=<?php echo $course["id"]; ?>"><?php echo $course["name"]; ?></a>
+                                    <a href="course.php?id=<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"><?php echo $course["name"]; ?></a>
                                 </td>
                                 <td><?php echo $course["creator_firstname"] . " " . $course["creator_lastname"]; ?></td>
                                 <td><?php foreach ($course_dates_array as $start_date) {
                                         echo $start_date . "<br>";
                                     } ?></td>
-                                <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
+                                <td class="rowlink-skip"><input type="button"
+                                                                data-id="<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"
                                                                 class="btn btn-edit btn-sm btn-success btn-block"
                                                                 value="Edit"/></td>
-                                <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
+                                <td class="rowlink-skip"><input type="button"
+                                                                data-id="<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"
                                                                 class="btn btn-delete btn-sm btn-warning btn-block"
                                                                 value="Delete"</td>
                             </tr>

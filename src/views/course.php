@@ -35,6 +35,7 @@ include '../php/tools.php';
 
 // The course unit id from URL parameter
 $course_id = $_GET["id"];
+$course_lang = $_GET["lang"];
 
 // Gets course details with it's creator information
 $course_query = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email 
@@ -163,7 +164,7 @@ function replaceLinks($text)
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class=" col-sm-5">
-                            <?php printLinkBtn("editcourse.php?id=$course_id",
+                            <?php printLinkBtn("editcourse.php?id=$course_id&lang=$course_lang",
                                 "btn btn-success btn-block btn-lg", "Edit"); ?>
                         </div>
                         <div class="col-sm-5">

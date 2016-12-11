@@ -25,19 +25,17 @@ $conn = require '../php/db_connect.php';
 
 //Get input data from form
 $id = filter_input(INPUT_POST, 'targetId');
-$name = mysql_escape_string(filter_input(INPUT_POST, 'name'));
-$text = mysql_escape_string(filter_input(INPUT_POST, 'text'));
+$lang = filter_input(INPUT_POST, 'targetLang');
+$name = filter_input(INPUT_POST, 'name');
+$text = filter_input(INPUT_POST, 'text');
 $domain = filter_input(INPUT_POST, 'domain');
 $profession = filter_input(INPUT_POST, 'profession');
-$role_link = filter_input(INPUT_POST, 'roleLink');
-$contact = filter_input(INPUT_POST, 'contact');
-$dates = filter_input(INPUT_POST, 'dates');
-$links = filter_input(INPUT_POST, 'links');
+
 
 //Creator stays the same
 
 // modify database-entry
-$sql = "UPDATE courses SET name='$name', domain='$domain', profession='$profession', description='$text', role_url='$role_link', contact='$contact', dates='$dates', links='$links' WHERE id=$id";
+$sql = "UPDATE courses SET name='$name', domain='$domain', profession='$profession', description='$text', WHERE id='$id' AND lang='$lang'";
 
 //echo "sqlquery: $sql";
 
@@ -48,6 +46,6 @@ if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
     $html = "&widget=true";
 }
 
-header("Location:../views/course.php?id=$id$html");
+header("Location:../views/course.php?id=$id&lang=$lang&$name&$text&$domain&$profession$html");
 
 ?>

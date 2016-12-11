@@ -22,7 +22,7 @@ $(document).ready(function () {
     // When clicking yes, remove course from database
     $("#btn-yes").on("click", function () {
         var courseId = URI().query(true).id;
-        $.post("../php/delete_course.php", {"course_id": courseId}, function (data) {
+        $.post("../php/delete_course.php", {"course_id": courseId, "course_lang:": courseLang}, function (data) {
             if (data !== "FALSE") {
                 window.location = "course_list.php?id=" + data;
             }

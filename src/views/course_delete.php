@@ -33,8 +33,9 @@
 // LOAD COURSE DATA FROM OUR DATABASE //////////////////////////////////////
 include '../php/tools.php';
 $course_id = filter_input(INPUT_GET, 'id');
+$course_lang = filter_input(INPUT_GET, 'lang');
 try {
-    $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
+    $course = getSingleDatabaseEntryByValuePair('courses', 'id', $course_id, 'lang', $course_lang);
 } catch (Exception $e) {
     error_log($e->getMessage());
 }

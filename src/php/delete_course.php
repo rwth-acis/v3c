@@ -28,12 +28,13 @@ $conn = require '../php/db_connect.php';
 
 //Get input data from form
 $course_id = mysql_real_escape_string(filter_input(INPUT_POST, 'course_id'));
+$course_lang = mysql_real_escape_string(filter_input(INPUT_POST, 'course_lang'));
 
 // Get all models associated with the course
 $sql_select = "SELECT * 
                 FROM courses
                 INNER JOIN users ON courses.creator = users.id
-                WHERE courses.id = $course_id AND users.openIdConnectSub = '" . $_SESSION["sub"] . "'";
+                WHERE courses.id = $course_id and courses.lang = $course_lang AND users.openIdConnectSub = '" . $_SESSION["sub"] . "'";
 
 $query = $db->query($sql_select);
 $course = $query->fetch();
@@ -48,7 +49,7 @@ if ($course !== false) {
     $conn->query($sql_remove_models);
 
     // Delete the course itself
-    $sql_delete_course = "DELETE FROM courses WHERE id=$course_id";
+    $sql_delete_course = "DELETE FROM courses WHERE id=$course_id AND lang=$course_lang";
     $conn->query($sql_delete_course);
 
     $html = "";

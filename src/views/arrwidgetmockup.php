@@ -155,8 +155,8 @@
 
                         </div>
                         <div class="row sidebar-widget-counter-container">
-                            <div class="col-sm-6 sidebar-widget-counter-text">total Widgets:</div>
-                            <div class="col-sm-1 sidebar-widget-counter-number">0/3</div>
+                            <div class="col-sm-12 sidebar-widget-counter-text">total Widgets used:</div>
+                            <div class="col-sm-12 sidebar-widget-counter-number">0/3</div>
                         </div>
                         <div class="trash">
                         </div>
@@ -202,8 +202,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     initWidgets = [
-        {name: 'slideviewer', prototypeName: 'prototypeSlideViewer'}, {
-            name: 'videoviewer',
+        {name: 'slide viewer', prototypeName: 'prototypeSlideViewer'}, {
+            name: 'video viewer',
             prototypeName: 'prototypeVideoViewer'
         }, {name: 'quiz', prototypeName: 'prototypeQuizzesViewer'}
     ];
@@ -296,7 +296,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     function createSidebarElement(name, index) {
         $parentEl = $('.gridstack-sidebar');
         if (index == 0) {
-            $parentEl.prepend($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '">' + name + '</div></div>')
+            $parentEl.prepend($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '"><div class="grid-stack-sidebar-item-topbar"></div>' + name + '</div></div>')
                 .draggable({
                     revert: 'invalid',
                     handle: '.grid-stack-item-content',
@@ -305,7 +305,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 }));
         } else {
             //$('[data-index="'+(parseInt(index)-1)+'"]').parent().after($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
-            $('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '">' + name + '</div></div>')
+            $('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '"><div class="grid-stack-sidebar-item-topbar"></div>' + name + '</div></div>')
             //.find('.grid-stack-sidebar-item').append($('.virtus-pw-prototype'))
                 .insertAfter($parentEl.find($('[data-index="' + (parseInt(index) - 1) + '"]')).parent())
                 .draggable({

@@ -31,14 +31,13 @@ if ((include '../config/config.php') === false) {
 }
 
 //Get id of subject
-$subject_id = filter_input(INPUT_GET, "id");
 
 //Get input data from form
 $name = mysql_real_escape_string(filter_input(INPUT_POST, 'name'));
 $text = mysql_real_escape_string(filter_input(INPUT_POST, 'text'));
 $profession = filter_input(INPUT_POST, 'profession');
 $lang = filter_input(INPUT_POST, 'lang');
-
+$subject_id = filter_input(INPUT_POST, 'subject_id');
 
 // Get the ID (of our DB) of the currently logged in user. Required, because this 
 // user will be registered as the creator of the course.
@@ -61,5 +60,6 @@ if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
 // After creating a course, the user is redirected to the edit page. The reason
 // for this is, that it is not possible to add models on addcourse.php. But the user
 // can add models on editcourse.php
+
 header("Location: ../views/editcourse.php?id=$last_id$html");
 ?>

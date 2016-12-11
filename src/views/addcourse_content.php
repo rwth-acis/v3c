@@ -116,7 +116,8 @@
                                 </select>
                             </div>
                         </div>
-                        <input hidden id="subject_input" name="subject_id">
+                        <?php $subject_id = filter_input(INPUT_GET, "id");?>
+                        <input hidden id="subject_input" name="subject_id" value=<?php echo $subject_id; ?>>
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton"
                                 value="Upload">Save
                         </button>

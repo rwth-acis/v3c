@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2016-12-05 11:06+0100\n"
-"PO-Revision-Date: 2016-12-11 19:50+0100\n"
+"PO-Revision-Date: 2016-12-12 14:21+0100\n"
 "Last-Translator: Sabine Luettgen\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,13 +26,13 @@ msgstr "Hallo Welt"
 
 # general
 msgid "general:button:home"
-msgstr "Home"
+msgstr "Startseite"
 
 msgid "general:button:courses"
 msgstr "Kurse"
 
 msgid "general:button:signin"
-msgstr "Sign in"
+msgstr "Anmelden"
 
 # welcome page
 msgid "main:welcome:headline"

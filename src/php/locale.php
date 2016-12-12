@@ -16,6 +16,7 @@ else {
 // save language preference for future page requests
 $_SESSION["Language"]  = $language;
 
+/*
 $folder = '../../locale';
 $domain = "default";
 $encoding = "UTF-8";
@@ -34,3 +35,4 @@ bindtextdomain($domain, $folder);
 bind_textdomain_codeset($domain, $encoding);
 
 textdomain($domain);
+*/

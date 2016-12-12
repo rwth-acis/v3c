@@ -39,7 +39,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
               <div class="container">
                   <div class="row">
                       <div class="col-sm-12">
-                          <h1>Subjects</h1>
+                          <h1><?php echo getTranslation("main:subjects:subject", "Subjects");?></h1>
                       </div>
                   </div>
               </div>

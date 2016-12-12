@@ -24,11 +24,12 @@ function getTranslation($key, $default)
         "main:welcome:tourism" => "Tourismus und Gastgewerbe",
         "main:welcome:social" => "Social Entrepreneurship",
         "main:welcome:courses" => "Kurse",
-        "main:welcome:listcourses" => "Für eine vollständige Liste aller Kurse klicken Sie hier."
+        "main:welcome:listcourses" => "Für eine vollständige Liste aller Kurse klicken Sie hier.",
+        "main:subjects:subject" => "Themen"
 
     );
 
-    if ($_SESSION["Language"] == "de") {
+    if ($_SESSION["lang"] == "de") {
 
         if (array_key_exists ($key, $lang )) {
             return $lang[$key];

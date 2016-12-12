@@ -109,7 +109,7 @@ function replaceLinks($text)
                                     <span class="glyphicon glyphicon-calendar margin-right"></span>
                                             <?php echo $course_unit["start_date"] ?>
                                             <!-- TODO: href to course room-->
-                                    <a href="#" class="margin-left btn btn-xs btn-warning">
+                                    <a href="http://role-sandbox.eu/spaces/v3c_demo" target="_blank" class="margin-left btn btn-xs btn-warning">
                                         Enter Course Room
                                     </a>
                                 </span>

@@ -51,6 +51,10 @@ label {
     color: #777;
 }
 
+.center {
+    text-align: center;
+}
+
 /* ==========================================================================
    HEADER
    ========================================================================== */
@@ -250,6 +254,10 @@ label {
     outline: none;
 }
 
+[type="submit"] {
+    margin-top: 30px;
+}
+
 .search_box input[type="submit"] {
     border: none;
     cursor: pointer;
@@ -361,10 +369,14 @@ ul.img-list {
 
 ul.img-list li {
     display: inline-block;
-    height: 180px;
     position: relative;
-    width: 160px;
+    width: 320px;
     overflow: hidden;
+}
+
+ul.img-list img {
+    width: 100%;
+    height: auto;
 }
 
 span.text-content {
@@ -831,6 +843,14 @@ footer ul li {
 /* Introduced for "Course room:" label in editcourse.php at high screen widths */
 .form-group label {
     display: block;
+}
+
+.form-group input, .form-group textarea {
+    margin-bottom: 10px;
+}
+
+.collapse.in {
+    padding-bottom: 20px;
 }
 
 .course-room-div {

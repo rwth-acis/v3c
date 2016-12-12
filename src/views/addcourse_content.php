@@ -26,12 +26,7 @@
         <div class='container'>
             <div class='row'>
                 <div class='col-md-10 col-md-offset-1'>
-                    <!-- User information box -->
-                    <div class='featured-box'>
-                        Add your new course room data. To create a new ROLE space click "+" and for help on ROLE click
-                        "?".<br>
-                        Don't forget to click the save button.
-                    </div>
+
                     <!--- CREATE COURSE INPUT FORM -->
                     <form role="form" class="form-horizontal"
                           action="../php/upload_script_course.php<?php if (isset($_GET['widget']) && $_GET['widget']) {
@@ -42,23 +37,6 @@
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" rows="1" name="name" id="targetName"
                                        placeholder="Enter your course name" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
-                            <div class="col-sm-10">
-                                <div class="course-room-div">
-                                    <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole"
-                                           placeholder="Enter ROLE space name">
-                                </div>
-                                <a href="#">
-                                    <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline"
-                                           type="button" value="+"/>
-                                </a>
-                                <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
-                                <a target="_blank" href="help.php">
-                                    <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
-                                </a>
                             </div>
                         </div>
                         <div class="form-group">

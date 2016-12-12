@@ -18,56 +18,56 @@
  */
 
 /*
-    Two-directional data-binding for selected model
-    It is like:
-    |                                                             
-    |  _____________    click               ____________          ____________              
-    | |             |  ------------------> |            |  ----> |            |                                               
-    | | Model-items |                      | View-Model |        | Yjs-object |                                          
-    | |             |  update → highlight  | (in mo-vi) |        |            | 
-    | |_____________|  <-----------------  |____________| <----- |____________|
-    |                                        |                               
-    |                                        |                               
-    |                                        | update 3D-View                                
-    |                                       _↓_____                                
-    |                                      |       |                      
-    |                                      | x3d   |                               
-    |                                      |_______|                                  
-    |                                                                        
-*/
-    
-$(document).ready( function () {
-    
+ Two-directional data-binding for selected model
+ It is like:
+ |
+ |  _____________    click               ____________          ____________
+ | |             |  ------------------> |            |  ----> |            |
+ | | Model-items |                      | View-Model |        | Yjs-object |
+ | |             |  update → highlight  | (in mo-vi) |        |            |
+ | |_____________|  <-----------------  |____________| <----- |____________|
+ |                                        |
+ |                                        |
+ |                                        | update 3D-View
+ |                                       _↓_____
+ |                                      |       |
+ |                                      | x3d   |
+ |                                      |_______|
+ |
+ */
+
+$(document).ready(function () {
+
     var items = $('.img-list').find('a')
 
     // remove links
     items.attr('href', 'javascript:void(0)')
 
     // add modelId property
-    items.map( function () {
-            $(this).prop( 'modelId', parseInt($(this).attr('id').substr(5)) )
-        })
+    items.map(function () {
+        $(this).prop('modelId', parseInt($(this).attr('id').substr(5)))
+    })
 
     // showcase → gallery
     window.addEventListener('message', function (msg) {
         if (msg.data.command == 'selectModel') {
             // highlight selected model
             $('.img-list').find('img').removeClass('highlight-model')
-            $('.img-list').find('a').filter(function(){
-                    return $(this).prop('modelId') == msg.data.modelId
-                })
-                .find('img').addClass('highlight-model')            
+            $('.img-list').find('a').filter(function () {
+                return $(this).prop('modelId') == msg.data.modelId
+            })
+                .find('img').addClass('highlight-model')
         }
     }, false)
 
     // gallery → showcase
     // add click-handler
     items.on('click', function () {
-            window.parent.postMessage( {
-                command: 'selectModel', 
-                modelId: $(this).prop('modelId')
-            }, '*' )
-        })  
+        window.parent.postMessage({
+            command: 'selectModel',
+            modelId: $(this).prop('modelId')
+        }, '*')
+    })
 })
         
         

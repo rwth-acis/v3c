@@ -22,87 +22,89 @@
 /*ob_start();
   Debugging with FireBug+FirePHP
   require_once '../php/fb.php';*/
-  session_start();
-  require_once '../config/config.php'; 
+session_start();
+require_once '../config/config.php';
 ?>
 
-  <!-- jQuery -->
-  <script src="../external/jquery/dist/jquery.min.js"></script>
-  <!-- Bootstrap -->
-  <script src="../external/bootstrap/dist/js/bootstrap.min.js"></script>
-  <link rel='stylesheet' type='text/css' href='../external/bootstrap/dist/css/bootstrap.min.css'>
-  <link rel="stylesheet" type='text/css' href="../external/bootstrap/dist/css/bootstrap-theme.min.css">
-  <!-- Bootstrap switch -->
-  <script src="../external/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
-  <link rel='stylesheet' type='text/css' href='../external/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'>
-  <!-- Bootstrap slider -->
-  <script src="../external/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-  <link rel='stylesheet' type='text/css' href='../external/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'>    
-  <!-- import JWS and JSRSASIGN -->
-  <script src="../external/jsrsasign/jws-3.3.min.js"></script>
-  <script src="../external/jsrsasign/jsrsasign-latest-all-min.js"></script>
-  <!-- Knockout -->
-  <script src='../external/knockoutjs/dist/knockout.js'></script>
-  <!-- URI.js -->
-  <script src='../external/uri.js/src/URI.min.js'></script>
+<!-- jQuery -->
+<script src="../external/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="../external/bootstrap/dist/js/bootstrap.min.js"></script>
+<link rel='stylesheet' type='text/css' href='../external/bootstrap/dist/css/bootstrap.min.css'>
+<link rel="stylesheet" type='text/css' href="../external/bootstrap/dist/css/bootstrap-theme.min.css">
+<!-- Bootstrap switch -->
+<script src="../external/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+<link rel='stylesheet' type='text/css' href='../external/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'>
+<!-- Bootstrap slider -->
+<!--<script src="../external/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>-->
+<!--<link rel='stylesheet' type='text/css' href='../external/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'>-->
+<!-- import JWS and JSRSASIGN -->
+<script src="../external/jsrsasign/jws-3.3.min.js"></script>
+<script src="../external/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<!-- Knockout -->
+<script src='../external/knockoutjs/dist/knockout.js'></script>
+<!-- URI.js -->
+<script src='../external/uri.js/src/URI.min.js'></script>
 
 
-	<script src="../js/tools.js"></script>
-	<script src="../js/personality.js"></script>
-    <link rel='stylesheet' type='text/css' href='../css/style.css'>
+<script src="../js/tools.js"></script>
+<script src="../js/personality.js"></script>
+<link rel='stylesheet' type='text/css' href='../css/style.css'>
 
 <?php
-  //Decide if this site is inside a separate widget
-  if(filter_input(INPUT_GET, "widget") == "true") {
-      // Hide Menu in ROLE
-  }
-  else {
-      ?>
-  <div class='navbar navbar-inverse'>
-	  <a href="https://github.com/rwth-acis/v3c"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
-    <div class='container'>
-      <div class='navbar-header'>
-        <!-- Button for smallest screens -->
+//Decide if this site is inside a separate widget
+if (filter_input(INPUT_GET, "widget") == "true") {
+    // Hide Menu in ROLE
+} else {
+    ?>
+    <div class='navbar navbar-inverse'>
+        <a href="https://github.com/rwth-acis/v3c"><img style="position: absolute; top: 0; right: 0; border: 0;"
+                                                        src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+                                                        alt="Fork me on GitHub"
+                                                        data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+        <div class='container'>
+            <div class='navbar-header'>
+                <!-- Button for smallest screens -->
 
-        <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#henm-nav-bar'>
-          <span class='icon-bar'></span>
-          <span class='icon-bar'></span>
-          <span class='icon-bar'></span>
-        </button>
-        <a href="welcome.php">
-          <img src='../images/virtus.png' class='head-logo' alt='Virtus V3C'>
-        </a>
-      </div>
-      <div id='henm-nav-bar' class='collapse navbar-collapse'>
-        <ul class='nav navbar-nav pull-right mainNav'>
-	        <li><a href='welcome.php'>Home</a></li>
-          <li><a href='subjects.php'>Courses</a></li>
-          <li>
+                <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#henm-nav-bar'>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                </button>
+                <a href="welcome.php">
+                    <img src='../images/virtus.png' class='head-logo' alt='Virtus V3C'>
+                </a>
+            </div>
+            <div id='henm-nav-bar' class='collapse navbar-collapse'>
+                <ul class='nav navbar-nav pull-right mainNav'>
+                    <li><a href='welcome.php'>Home</a></li>
+                    <li><a href='subjects.php'>Courses</a></li>
+                    <li>
             <span id="signinButton">
                 <span class="oidc-signin"
-                    data-callback="personality_signinCallback"
-                    data-name="Learning Layers"
-                    data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
-                    data-server="https://api.learning-layers.eu/o/oauth2"
-                    data-clientid="<?php echo($oidcClientId); ?>"
-                    data-scope="openid phone email address profile">
+                      data-callback="personality_signinCallback"
+                      data-name="Learning Layers"
+                      data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
+                      data-server="https://api.learning-layers.eu/o/oauth2"
+                      data-clientid="<?php echo($oidcClientId); ?>"
+                      data-scope="openid phone email address profile">
                 </span>
             </span>
-          </li>
-        </ul>
-      </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
-  <script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); 
-    po.type = 'text/javascript'; 
-    po.async = true;
-    po.src = '../js/oidc-button.js';
-    var s = document.getElementsByTagName('script')[0]; 
-    s.parentNode.insertBefore(po, s);
-  })();
-  </script>
-<?php
-  }
+    <script type="text/javascript">
+        (function () {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = '../js/oidc-button.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+    <?php
+}
 ?>

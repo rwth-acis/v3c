@@ -39,7 +39,7 @@
  * @class ASN.1 DER encoded hexadecimal string utility class
  * @since jsrsasign 1.1
  */
-var ASN1HEX = new function() {
+var ASN1HEX = new function () {
     /**
      * get byte length for ASN.1 L(length) bytes
      * @name getByteLengthOfL_AtObj
@@ -49,7 +49,7 @@ var ASN1HEX = new function() {
      * @param {Number} pos string index
      * @return byte length for ASN.1 L(length) bytes
      */
-    this.getByteLengthOfL_AtObj = function(s, pos) {
+    this.getByteLengthOfL_AtObj = function (s, pos) {
         if (s.substring(pos + 2, pos + 3) != '8') return 1;
         var i = parseInt(s.substring(pos + 3, pos + 4));
         if (i == 0) return -1;          // length octet '80' indefinite length
@@ -66,7 +66,7 @@ var ASN1HEX = new function() {
      * @param {Number} pos string index
      * @return {String} hexadecimal string for ASN.1 L(length) bytes
      */
-    this.getHexOfL_AtObj = function(s, pos) {
+    this.getHexOfL_AtObj = function (s, pos) {
         var len = this.getByteLengthOfL_AtObj(s, pos);
         if (len < 1) return '';
         return s.substring(pos + 2, pos + 2 + len * 2);
@@ -88,7 +88,7 @@ var ASN1HEX = new function() {
      * @param {Number} pos string index
      * @return ASN.1 L(length) integer value
      */
-    this.getIntOfL_AtObj = function(s, pos) {
+    this.getIntOfL_AtObj = function (s, pos) {
         var hLength = this.getHexOfL_AtObj(s, pos);
         if (hLength == '') return -1;
         var bi;
@@ -108,7 +108,7 @@ var ASN1HEX = new function() {
      * @param {String} s hexadecimal string of ASN.1 DER encoded data
      * @param {Number} pos string index
      */
-    this.getStartPosOfV_AtObj = function(s, pos) {
+    this.getStartPosOfV_AtObj = function (s, pos) {
         var l_len = this.getByteLengthOfL_AtObj(s, pos);
         if (l_len < 0) return l_len;
         return pos + (l_len + 1) * 2;
@@ -123,7 +123,7 @@ var ASN1HEX = new function() {
      * @param {Number} pos string index
      * @return {String} hexadecimal string of ASN.1 value.
      */
-    this.getHexOfV_AtObj = function(s, pos) {
+    this.getHexOfV_AtObj = function (s, pos) {
         var pos1 = this.getStartPosOfV_AtObj(s, pos);
         var len = this.getIntOfL_AtObj(s, pos);
         return s.substring(pos1, pos1 + len * 2);
@@ -139,7 +139,7 @@ var ASN1HEX = new function() {
      * @return {String} hexadecimal string of ASN.1 TLV.
      * @since 1.1
      */
-    this.getHexOfTLV_AtObj = function(s, pos) {
+    this.getHexOfTLV_AtObj = function (s, pos) {
         var hT = s.substr(pos, 2);
         var hL = this.getHexOfL_AtObj(s, pos);
         var hV = this.getHexOfV_AtObj(s, pos);
@@ -155,7 +155,7 @@ var ASN1HEX = new function() {
      * @param {Number} pos string index
      * @return next sibling starting index for ASN.1 object string
      */
-    this.getPosOfNextSibling_AtObj = function(s, pos) {
+    this.getPosOfNextSibling_AtObj = function (s, pos) {
         var pos1 = this.getStartPosOfV_AtObj(s, pos);
         var len = this.getIntOfL_AtObj(s, pos);
         return pos1 + len * 2;
@@ -170,7 +170,7 @@ var ASN1HEX = new function() {
      * @param {Number} start string index of ASN.1 object
      * @return {Array of Number} array of indexes for childen of ASN.1 objects
      */
-    this.getPosArrayOfChildren_AtObj = function(h, pos) {
+    this.getPosArrayOfChildren_AtObj = function (h, pos) {
         var a = new Array();
         var p0 = this.getStartPosOfV_AtObj(h, pos);
         a.push(p0);
@@ -180,15 +180,15 @@ var ASN1HEX = new function() {
         var k = 0;
         while (1) {
             var pNext = this.getPosOfNextSibling_AtObj(h, p);
-            if (pNext == null || (pNext - p0  >= (len * 2))) break;
+            if (pNext == null || (pNext - p0 >= (len * 2))) break;
             if (k >= 200) break;
-            
+
             a.push(pNext);
             p = pNext;
-            
+
             k++;
         }
-        
+
         return a;
     };
 
@@ -203,7 +203,7 @@ var ASN1HEX = new function() {
      * @return {Number} string index of nth child.
      * @since 1.1
      */
-    this.getNthChildIndex_AtObj = function(h, idx, nth) {
+    this.getNthChildIndex_AtObj = function (h, idx, nth) {
         var a = this.getPosArrayOfChildren_AtObj(h, idx);
         return a[nth];
     };
@@ -224,7 +224,7 @@ var ASN1HEX = new function() {
      * reference. Here is a sample structure and "nthList"s which
      * refers each objects.
      *
-     * SQUENCE               - 
+     * SQUENCE               -
      *   SEQUENCE            - [0]
      *     IA5STRING 000     - [0, 0]
      *     UTF8STRING 001    - [0, 1]
@@ -232,7 +232,7 @@ var ASN1HEX = new function() {
      *     IA5STRING 010     - [1, 0]
      *     UTF8STRING 011    - [1, 1]
      */
-    this.getDecendantIndexByNthList = function(h, currentIndex, nthList) {
+    this.getDecendantIndexByNthList = function (h, currentIndex, nthList) {
         if (nthList.length == 0) {
             return currentIndex;
         }
@@ -252,7 +252,7 @@ var ASN1HEX = new function() {
      * @return {Number} hexadecimal string of ASN.1 TLV refered by nthList
      * @since 1.1
      */
-    this.getDecendantHexTLVByNthList = function(h, currentIndex, nthList) {
+    this.getDecendantHexTLVByNthList = function (h, currentIndex, nthList) {
         var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
         return this.getHexOfTLV_AtObj(h, idx);
     };
@@ -268,7 +268,7 @@ var ASN1HEX = new function() {
      * @return {Number} hexadecimal string of ASN.1 V refered by nthList
      * @since 1.1
      */
-    this.getDecendantHexVByNthList = function(h, currentIndex, nthList) {
+    this.getDecendantHexVByNthList = function (h, currentIndex, nthList) {
         var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
         return this.getHexOfV_AtObj(h, idx);
     };
@@ -277,15 +277,15 @@ var ASN1HEX = new function() {
 /*
  * @since asn1hex 1.1.4
  */
-ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
+ASN1HEX.getVbyList = function (h, currentIndex, nthList, checkingTag) {
     var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
     if (idx === undefined) {
         throw "can't find nthList object";
     }
     if (checkingTag !== undefined) {
         if (h.substr(idx, 2) != checkingTag) {
-            throw "checking tag doesn't match: " + 
-                h.substr(idx,2) + "!=" + checkingTag;
+            throw "checking tag doesn't match: " +
+            h.substr(idx, 2) + "!=" + checkingTag;
         }
     }
     return this.getHexOfV_AtObj(h, idx);
@@ -300,8 +300,8 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
  * @return {String} OID string (ex. '1.2.3.4.567')
  * @since asn1hex 1.1.5
  */
-ASN1HEX.hextooidstr = function(hex) {
-    var zeroPadding = function(s, len) {
+ASN1HEX.hextooidstr = function (hex) {
+    var zeroPadding = function (s, len) {
         if (s.length >= len) return s;
         return new Array(len - s.length + 1).join('0') + s;
     };
@@ -315,10 +315,10 @@ ASN1HEX.hextooidstr = function(hex) {
     a[1] = new String(i0 % 40);
 
     // a[2]..a[n]
-   var hex1 = hex.substr(2);
+    var hex1 = hex.substr(2);
     var b = [];
     for (var i = 0; i < hex1.length / 2; i++) {
-    b.push(parseInt(hex1.substr(i * 2, 2), 16));
+        b.push(parseInt(hex1.substr(i * 2, 2), 16));
     }
     var c = [];
     var cbin = "";
@@ -356,7 +356,7 @@ ASN1HEX.hextooidstr = function(hex) {
  * <li>ommit long hexadecimal string</li>
  * <li>dump encapsulated OCTET STRING (good for X.509v3 extensions)</li>
  * <li>structured/primitive context specific tag support (i.e. [0], [3] ...)</li>
- * <li>automatic decode for implicit primitive context specific tag 
+ * <li>automatic decode for implicit primitive context specific tag
  * (good for X.509v3 extension value)
  *   <ul>
  *   <li>if hex starts '68747470'(i.e. http) it is decoded as utf8 encoded string.</li>
@@ -399,139 +399,140 @@ ASN1HEX.hextooidstr = function(hex) {
  *           PrintableString 'US'
  *             :
  */
-ASN1HEX.dump = function(hex, flags, idx, indent) {
-    var _skipLongHex = function(hex, limitNumOctet) {
-	if (hex.length <= limitNumOctet * 2) {
-	    return hex;
-	} else {
-	    var s = hex.substr(0, limitNumOctet) + 
-		    "..(total " + hex.length / 2 + "bytes).." +
-		    hex.substr(hex.length - limitNumOctet, limitNumOctet);
-	    return s;
-	};
+ASN1HEX.dump = function (hex, flags, idx, indent) {
+    var _skipLongHex = function (hex, limitNumOctet) {
+        if (hex.length <= limitNumOctet * 2) {
+            return hex;
+        } else {
+            var s = hex.substr(0, limitNumOctet) +
+                "..(total " + hex.length / 2 + "bytes).." +
+                hex.substr(hex.length - limitNumOctet, limitNumOctet);
+            return s;
+        }
+        ;
     };
 
-    if (flags === undefined) flags = { "ommit_long_octet": 32 };
+    if (flags === undefined) flags = {"ommit_long_octet": 32};
     if (idx === undefined) idx = 0;
     if (indent === undefined) indent = "";
     var skipLongHex = flags.ommit_long_octet;
 
     if (hex.substr(idx, 2) == "01") {
-	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
-	if (v == "00") {
-	    return indent + "BOOLEAN FALSE\n";
-	} else {
-	    return indent + "BOOLEAN TRUE\n";
-	}
+        var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+        if (v == "00") {
+            return indent + "BOOLEAN FALSE\n";
+        } else {
+            return indent + "BOOLEAN TRUE\n";
+        }
     }
     if (hex.substr(idx, 2) == "02") {
-	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
-	return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
+        var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+        return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
     }
     if (hex.substr(idx, 2) == "03") {
-	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
-	return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+        var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+        return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
     }
     if (hex.substr(idx, 2) == "04") {
-	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
-	if (ASN1HEX.isASN1HEX(v)) {
-	    var s = indent + "OCTETSTRING, encapsulates\n";
-	    s = s + ASN1HEX.dump(v, flags, 0, indent + "  ");
-	    return s;
-	} else {
-	    return indent + "OCTETSTRING " + _skipLongHex(v, skipLongHex) + "\n";
-	}
+        var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+        if (ASN1HEX.isASN1HEX(v)) {
+            var s = indent + "OCTETSTRING, encapsulates\n";
+            s = s + ASN1HEX.dump(v, flags, 0, indent + "  ");
+            return s;
+        } else {
+            return indent + "OCTETSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+        }
     }
     if (hex.substr(idx, 2) == "05") {
-	return indent + "NULL\n";
+        return indent + "NULL\n";
     }
     if (hex.substr(idx, 2) == "06") {
-	var hV = ASN1HEX.getHexOfV_AtObj(hex, idx);
+        var hV = ASN1HEX.getHexOfV_AtObj(hex, idx);
         var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(hV);
         var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
-	var oidSpc = oidDot.replace(/\./g, ' ');
+        var oidSpc = oidDot.replace(/\./g, ' ');
         if (oidName != '') {
-  	    return indent + "ObjectIdentifier " + oidName + " (" + oidSpc + ")\n";
-	} else {
-  	    return indent + "ObjectIdentifier (" + oidSpc + ")\n";
-	}
+            return indent + "ObjectIdentifier " + oidName + " (" + oidSpc + ")\n";
+        } else {
+            return indent + "ObjectIdentifier (" + oidSpc + ")\n";
+        }
     }
     if (hex.substr(idx, 2) == "0c") {
-	return indent + "UTF8String '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+        return indent + "UTF8String '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
     }
     if (hex.substr(idx, 2) == "13") {
-	return indent + "PrintableString '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+        return indent + "PrintableString '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
     }
     if (hex.substr(idx, 2) == "14") {
-	return indent + "TeletexString '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+        return indent + "TeletexString '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
     }
     if (hex.substr(idx, 2) == "16") {
-	return indent + "IA5String '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+        return indent + "IA5String '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
     }
     if (hex.substr(idx, 2) == "17") {
-	return indent + "UTCTime " + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "\n";
+        return indent + "UTCTime " + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "\n";
     }
     if (hex.substr(idx, 2) == "18") {
-	return indent + "GeneralizedTime " + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "\n";
+        return indent + "GeneralizedTime " + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "\n";
     }
     if (hex.substr(idx, 2) == "30") {
-	if (hex.substr(idx, 4) == "3000") {
-	    return indent + "SEQUENCE {}\n";
-	}
+        if (hex.substr(idx, 4) == "3000") {
+            return indent + "SEQUENCE {}\n";
+        }
 
-	var s = indent + "SEQUENCE\n";
-	var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+        var s = indent + "SEQUENCE\n";
+        var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
 
-	var flagsTemp = flags;
-	
-	if ((aIdx.length == 2 || aIdx.length == 3) &&
-	    hex.substr(aIdx[0], 2) == "06" &&
-	    hex.substr(aIdx[aIdx.length - 1], 2) == "04") { // supposed X.509v3 extension
-	    var oidHex = ASN1HEX.getHexOfV_AtObj(hex, aIdx[0]);
-	    var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(oidHex);
-	    var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
+        var flagsTemp = flags;
 
-	    var flagsClone = JSON.parse(JSON.stringify(flags));
-	    flagsClone.x509ExtName = oidName;
-	    flagsTemp = flagsClone;
-	}
-	
-	for (var i = 0; i < aIdx.length; i++) {
-	    s = s + ASN1HEX.dump(hex, flagsTemp, aIdx[i], indent + "  ");
-	}
-	return s;
+        if ((aIdx.length == 2 || aIdx.length == 3) &&
+            hex.substr(aIdx[0], 2) == "06" &&
+            hex.substr(aIdx[aIdx.length - 1], 2) == "04") { // supposed X.509v3 extension
+            var oidHex = ASN1HEX.getHexOfV_AtObj(hex, aIdx[0]);
+            var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(oidHex);
+            var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
+
+            var flagsClone = JSON.parse(JSON.stringify(flags));
+            flagsClone.x509ExtName = oidName;
+            flagsTemp = flagsClone;
+        }
+
+        for (var i = 0; i < aIdx.length; i++) {
+            s = s + ASN1HEX.dump(hex, flagsTemp, aIdx[i], indent + "  ");
+        }
+        return s;
     }
     if (hex.substr(idx, 2) == "31") {
-	var s = indent + "SET\n";
-	var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
-	for (var i = 0; i < aIdx.length; i++) {
-	    s = s + ASN1HEX.dump(hex, flags, aIdx[i], indent + "  ");
-	}
-	return s;
+        var s = indent + "SET\n";
+        var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+        for (var i = 0; i < aIdx.length; i++) {
+            s = s + ASN1HEX.dump(hex, flags, aIdx[i], indent + "  ");
+        }
+        return s;
     }
     var tag = parseInt(hex.substr(idx, 2), 16);
     if ((tag & 128) != 0) { // context specific 
-	var tagNumber = tag & 31;
-	if ((tag & 32) != 0) { // structured tag
-	    var s = indent + "[" + tagNumber + "]\n";
-	    var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
-	    for (var i = 0; i < aIdx.length; i++) {
-		s = s + ASN1HEX.dump(hex, flags, aIdx[i], indent + "  ");
-	    }
-	    return s;
-	} else { // primitive tag
-	    var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
-	    if (v.substr(0, 8) == "68747470") { // http
-		v = hextoutf8(v);
-	    }
-	    if (flags.x509ExtName === "subjectAltName" &&
-		tagNumber == 2) {
-		v = hextoutf8(v);
-	    }
-	    
-	    var s = indent + "[" + tagNumber + "] " + v + "\n";
-	    return s;
-	}
+        var tagNumber = tag & 31;
+        if ((tag & 32) != 0) { // structured tag
+            var s = indent + "[" + tagNumber + "]\n";
+            var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+            for (var i = 0; i < aIdx.length; i++) {
+                s = s + ASN1HEX.dump(hex, flags, aIdx[i], indent + "  ");
+            }
+            return s;
+        } else { // primitive tag
+            var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+            if (v.substr(0, 8) == "68747470") { // http
+                v = hextoutf8(v);
+            }
+            if (flags.x509ExtName === "subjectAltName" &&
+                tagNumber == 2) {
+                v = hextoutf8(v);
+            }
+
+            var s = indent + "[" + tagNumber + "] " + v + "\n";
+            return s;
+        }
     }
     return indent + "UNKNOWN(" + hex.substr(idx, 2) + ") " + ASN1HEX.getHexOfV_AtObj(hex, idx) + "\n";
 };
@@ -553,7 +554,7 @@ ASN1HEX.dump = function(hex, flags, idx, indent) {
  * ASN1HEX.isASN1HEX('02030123') &rarr; false // TOO SHORT VALUE
  * ASN1HEX.isASN1HEX('fa3bcd') &rarr; false // WRONG FOR ASN.1
  */
-ASN1HEX.isASN1HEX = function(hex) {
+ASN1HEX.isASN1HEX = function (hex) {
     if (hex.length % 2 == 1) return false;
 
     var intL = ASN1HEX.getIntOfL_AtObj(hex, 0);

@@ -56,7 +56,7 @@ label {
    ========================================================================== */
 
 #head {
-    background: #769625;
+    background: #659D32;
     background-size: cover;
     min-height: 400px;
     text-align: center;
@@ -480,6 +480,18 @@ ul.list-spaces li {
     margin-top: 10px;
 }
 
+.margin-left {
+    margin-left: 10px;
+}
+
+.margin-right {
+    margin-right: 10px;
+}
+
+.margin-all {
+    margin: 10px 10px 10px 10px;
+}
+
 .output-element {
     white-space: pre-wrap;
 }
@@ -634,7 +646,7 @@ footer {
 }
 
 .footer2 {
-    background: #769625;
+    background: #659D32;
     padding: 15px 0;
     color: #fff;
     font-size: 12px;
@@ -829,4 +841,12 @@ footer ul li {
 
 .authorization-error-container {
     max-width: 1200px;
+}
+
+#course-list-description {
+    margin-top: 10px;
+}
+
+.hover-click:hover {
+    cursor: pointer;
 }

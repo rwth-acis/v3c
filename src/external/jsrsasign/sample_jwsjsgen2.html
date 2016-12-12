@@ -1,57 +1,60 @@
 <html>
 <head>
-<title>Sample JWS-JS generator with existing JWS</title>
-<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+    <title>Sample JWS-JS generator with existing JWS</title>
+    <script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
 
-<style type="text/css">
-TD  {vertical-align: top; border: solid 1px #000000; }
-</style>
-<script language="JavaScript" type="text/javascript">
-var jwsjs = null;
+    <style type="text/css">
+        TD {
+            vertical-align: top;
+            border: solid 1px #000000;
+        }
+    </style>
+    <script language="JavaScript" type="text/javascript">
+        var jwsjs = null;
 
-function doGenerate() {
-  var sJWS = document.form1.jws1.value;
+        function doGenerate() {
+            var sJWS = document.form1.jws1.value;
 
-  jwsjs = new KJUR.jws.JWSJS();
-  jwsjs.initWithJWS(sJWS);
-  alert(JSON.stringify(jwsjs.getJSON(), null, 2));
-}
+            jwsjs = new KJUR.jws.JWSJS();
+            jwsjs.initWithJWS(sJWS);
+            alert(JSON.stringify(jwsjs.getJSON(), null, 2));
+        }
 
-function addSignature() {
-  if (jwsjs == null) {
-    alert("Please read first signature");
-    return;
-  }
-  var sHeader = newline_toDos(document.form1.jwshead1.value);
-  var sPrvKey = document.form1.pemprvkey1.value;
-  
-  jwsjs.addSignatureByHeaderKey(sHeader, sPrvKey);
-  document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
-}
-</script>
+        function addSignature() {
+            if (jwsjs == null) {
+                alert("Please read first signature");
+                return;
+            }
+            var sHeader = newline_toDos(document.form1.jwshead1.value);
+            var sPrvKey = document.form1.pemprvkey1.value;
+
+            jwsjs.addSignatureByHeaderKey(sHeader, sPrvKey);
+            document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
+        }
+    </script>
 </head>
 
 <body>
 
 <form name="form1">
-<h1>Sample JWS-JS generator with existing JWS</h1>
+    <h1>Sample JWS-JS generator with existing JWS</h1>
 
-<h3>(STEP1) specify existing JWS signature to add to JWS-JS first time</h3>
-<textarea name="jws1" rows="8" cols="100">eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.qCW4l5nfdvBt-yl_OiYRFrKkribqbDbmQ9ULyemAgCNXAAr70hN5-IERIefzySpm6Er4UuX_aXcnIXgMvK-hFMFhLOuJckrDEe1Pz-OzqScvGSJUbeOsd_nB9E2BNVYZrgMESQOifiEyUtWdbzCoMgf9nQg2AEWbVSaPImqQkGp-JZsJsvMUC-3A3RcimGIjLv-A8skyhNufASd6DPgk46Ydqt6vi2L6d2InvZSkhTSsYhbfm9TgrKyA906YHE0zE-asuXAzI1ISPxAjlO8ZhekEvg6teaa-1cSQQdOFj-ZWpqVsEI1YXr7zuvugWQhqfBqqPcT6fP5t3ff8FKwV9w</textarea>
+    <h3>(STEP1) specify existing JWS signature to add to JWS-JS first time</h3>
+    <textarea name="jws1" rows="8" cols="100">eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.qCW4l5nfdvBt-yl_OiYRFrKkribqbDbmQ9ULyemAgCNXAAr70hN5-IERIefzySpm6Er4UuX_aXcnIXgMvK-hFMFhLOuJckrDEe1Pz-OzqScvGSJUbeOsd_nB9E2BNVYZrgMESQOifiEyUtWdbzCoMgf9nQg2AEWbVSaPImqQkGp-JZsJsvMUC-3A3RcimGIjLv-A8skyhNufASd6DPgk46Ydqt6vi2L6d2InvZSkhTSsYhbfm9TgrKyA906YHE0zE-asuXAzI1ISPxAjlO8ZhekEvg6teaa-1cSQQdOFj-ZWpqVsEI1YXr7zuvugWQhqfBqqPcT6fP5t3ff8FKwV9w</textarea>
 
-<h3>(STEP2) Generate first JWS-JS with existing JWS</h3>
-<input type="button" value="Generate first time" onClick="doGenerate();"/><br/>
+    <h3>(STEP2) Generate first JWS-JS with existing JWS</h3>
+    <input type="button" value="Generate first time" onClick="doGenerate();"/><br/>
 
-<h3>(STEP3) Append signatures</h3>
+    <h3>(STEP3) Append signatures</h3>
 
-<p>
-<b><i>adding JWS Header</i></b><br/>
-<textarea name="jwshead1" rows="3" cols="100">{"alg":"RS256"}</textarea><br/>
-</p>
+    <p>
+        <b><i>adding JWS Header</i></b><br/>
+        <textarea name="jwshead1" rows="3" cols="100">{"alg":"RS256"}</textarea><br/>
+    </p>
 
-<p>
-<b><i>signing private key</i></b><br/>
-<textarea name="pemprvkey1" rows="10" cols="65">-----BEGIN RSA PRIVATE KEY-----
+    <p>
+        <b><i>signing private key</i></b><br/>
+        <textarea name="pemprvkey1" rows="10" cols="65">-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEA4qiw8PWs7PpnnC2BUEoDRcwXF8pq8XT1/3Hc3cuUJwX/otNe
 fr/Bomr3dtM0ERLN3DrepCXvuzEU5FcJVDUB3sI+pFtjjLBXD/zJmuL3Afg91J9p
 79+Dm+43cR6wuKywVJx5DJIdswF6oQDDzhwu89d2V5x02aXB9LqdXkPwiO0eR5s/
@@ -78,33 +81,33 @@ kp+AgfXpg8an4ujAUP7mu8xaxns7zsNzr+BCgYwXmIlhWz2Aiz2UeL/IsfOpRwuV
 T4mvpSeYDJkBD8Hxr3fB1YNDWNbgwrNPGZnUTBNhxIsNLPnV8WySiW57LqVXlggH
 vjFmyDdU5Hh6ma4q+BeAqbXZSJz0cfkBcBLCSe2gIJ/QJ3YJVQI=
 -----END RSA PRIVATE KEY-----</textarea>
-<br/>
-<input type="button" value="Append Signature" onClick="addSignature();"/><br/>
-</p>
-<p><i>
-NOTE: You can modify 'JWS Header' and 'signing private key' and push 'Add Signature' one or
-more time to generate multiple parallel JWS-JS signature.
-</i></p>
+        <br/>
+        <input type="button" value="Append Signature" onClick="addSignature();"/><br/>
+    </p>
+    <p><i>
+        NOTE: You can modify 'JWS Header' and 'signing private key' and push 'Add Signature' one or
+        more time to generate multiple parallel JWS-JS signature.
+    </i></p>
 
-<h2>Result of JWS-JS</h2>
-<textarea name="jwsjs1" rows="100" cols="65"></textarea>
+    <h2>Result of JWS-JS</h2>
+    <textarea name="jwsjs1" rows="100" cols="65"></textarea>
 </form>
 
 <center>
-Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
+    Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
 </center>
 
 <div align="right">
-<a href="index.html">Go back to index</a>
+    <a href="index.html">Go back to index</a>
 </div>
 
 <div align="right">
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
+    <a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+        <img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+    </a>
+    <a href="http://x5.choumusubi.com/bin/gg?069823300">
+        <img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+    </a>
 </div>
 </body>
 </html>

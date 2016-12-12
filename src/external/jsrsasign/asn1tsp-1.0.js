@@ -40,7 +40,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
 /**
  * kjur's ASN.1 class for RFC 3161 Time Stamp Protocol
  * <p>
- * This name space provides 
+ * This name space provides
  * <a href="https://tools.ietf.org/html/rfc3161">RFC 3161
  * Time-Stamp Protocol(TSP)</a> data generator.
  *
@@ -49,7 +49,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>easily generate CMS SignedData</li>
  * <li>APIs are very similar to BouncyCastle library ASN.1 classes. So easy to learn.</li>
  * </ul>
- * 
+ *
  * <h4>PROVIDED CLASSES</h4>
  * <ul>
  * </ul>
@@ -79,18 +79,18 @@ if (typeof KJUR.asn1.tsp == "undefined" || !KJUR.asn1.tsp) KJUR.asn1.tsp = {};
  *                                 millis: 500,
  *                                 micros: 500});
  */
-KJUR.asn1.tsp.Accuracy = function(params) {
+KJUR.asn1.tsp.Accuracy = function (params) {
     KJUR.asn1.tsp.Accuracy.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     this.seconds = null;
     this.millis = null;
     this.micros = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var dSeconds = null;
         var dTagMillis = null;
         var dTagMicros = null;
-        
+
         var a = [];
         if (this.seconds != null) {
             dSeconds = new nA.DERInteger({'int': this.seconds});
@@ -98,16 +98,20 @@ KJUR.asn1.tsp.Accuracy = function(params) {
         }
         if (this.millis != null) {
             var dMillis = new nA.DERInteger({'int': this.millis});
-            dTagMillis = new nA.DERTaggedObject({obj: dMillis,
-                                                 tag: '80',
-                                                 explicit: false});
+            dTagMillis = new nA.DERTaggedObject({
+                obj: dMillis,
+                tag: '80',
+                explicit: false
+            });
             a.push(dTagMillis);
         }
         if (this.micros != null) {
             var dMicros = new nA.DERInteger({'int': this.micros});
-            dTagMicros = new nA.DERTaggedObject({obj: dMicros,
-                                                 tag: '81',
-                                                 explicit: false});
+            dTagMicros = new nA.DERTaggedObject({
+                obj: dMicros,
+                tag: '81',
+                explicit: false
+            });
             a.push(dTagMicros);
         }
         var seq = new nA.DERSequence({array: a});
@@ -140,16 +144,16 @@ YAHOO.lang.extend(KJUR.asn1.tsp.Accuracy, KJUR.asn1.ASN1Object);
  * o = new KJUR.asn1.tsp.MessageImprint({hashAlg: 'sha1',
  *                                       hashValue: '1f3dea...'});
  */
-KJUR.asn1.tsp.MessageImprint = function(params) {
+KJUR.asn1.tsp.MessageImprint = function (params) {
     KJUR.asn1.tsp.MessageImprint.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     var nX = KJUR.asn1.x509;
     this.dHashAlg = null;
     this.dHashValue = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (typeof this.hTLV == "string") return this.hTLV;
-        var seq = 
+        var seq =
             new nA.DERSequence({array: [this.dHashAlg, this.dHashValue]});
         return seq.getEncodedHex();
     };
@@ -157,7 +161,7 @@ KJUR.asn1.tsp.MessageImprint = function(params) {
     if (typeof params != "undefined") {
         if (typeof params.hashAlg == "string") {
             this.dHashAlg = new nX.AlgorithmIdentifier({name: params.hashAlg});
-        } 
+        }
         if (typeof params.hashValue == "string") {
             this.dHashValue = new nA.DEROctetString({hex: params.hashValue});
         }
@@ -183,7 +187,7 @@ YAHOO.lang.extend(KJUR.asn1.tsp.MessageImprint, KJUR.asn1.ASN1Object);
  *    extensions       [0] IMPLICIT Extensions   OPTIONAL  }
  * </pre>
  */
-KJUR.asn1.tsp.TimeStampReq = function(params) {
+KJUR.asn1.tsp.TimeStampReq = function (params) {
     KJUR.asn1.tsp.TimeStampReq.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     var nT = KJUR.asn1.tsp;
@@ -193,7 +197,7 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
     this.dNonce = null;
     this.certReq = true;
 
-    this.setMessageImprint = function(params) {
+    this.setMessageImprint = function (params) {
         if (params instanceof KJUR.asn1.tsp.MessageImprint) {
             this.dMessageImprint = params;
             return;
@@ -203,7 +207,7 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
         }
     };
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.dMessageImprint == null)
             throw "messageImprint shall be specified";
 
@@ -266,7 +270,7 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
  *     tsa:       {str: '/C=US/O=TSA1'}   // OPITON
  * });
  */
-KJUR.asn1.tsp.TSTInfo = function(params) {
+KJUR.asn1.tsp.TSTInfo = function (params) {
     KJUR.asn1.tsp.TSTInfo.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     var nX = KJUR.asn1.x509;
@@ -282,7 +286,7 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
     this.dNonce = null;
     this.dTsa = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var a = [this.dVersion];
 
         if (this.dPolicy == null) throw "policy shall be specified.";
@@ -312,7 +316,7 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
 
     if (typeof params != "undefined") {
         if (typeof params.policy == "string") {
-            if (! params.policy.match(/^[0-9.]+$/))
+            if (!params.policy.match(/^[0-9.]+$/))
                 throw "policy shall be oid like 0.1.4.134";
             this.dPolicy = new nA.DERObjectIdentifier({oid: params.policy});
         }
@@ -356,14 +360,14 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TSTInfo, KJUR.asn1.ASN1Object);
  *    timeStampToken          TimeStampToken     OPTIONAL  }
  * </pre>
  */
-KJUR.asn1.tsp.TimeStampResp = function(params) {
+KJUR.asn1.tsp.TimeStampResp = function (params) {
     KJUR.asn1.tsp.TimeStampResp.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     var nT = KJUR.asn1.tsp;
     this.dStatus = null;
     this.dTST = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.dStatus == null)
             throw "status shall be specified";
         var a = [this.dStatus];
@@ -402,7 +406,7 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampResp, KJUR.asn1.ASN1Object);
  *    failInfo                PKIFailureInfo  OPTIONAL  }
  * </pre>
  */
-KJUR.asn1.tsp.PKIStatusInfo = function(params) {
+KJUR.asn1.tsp.PKIStatusInfo = function (params) {
     KJUR.asn1.tsp.PKIStatusInfo.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     var nT = KJUR.asn1.tsp;
@@ -410,7 +414,7 @@ KJUR.asn1.tsp.PKIStatusInfo = function(params) {
     this.dStatusString = null;
     this.dFailureInfo = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.dStatus == null)
             throw "status shall be specified";
         var a = [this.dStatus];
@@ -426,14 +430,15 @@ KJUR.asn1.tsp.PKIStatusInfo = function(params) {
             this.dStatus = new nT.PKIStatus(params.status);
         }
         if (typeof params.statstr == "object") { // array of str
-            this.dStatusString = 
+            this.dStatusString =
                 new nT.PKIFreeText({array: params.statstr});
         }
         if (typeof params.failinfo == "object") {
-            this.dFailureInfo = 
+            this.dFailureInfo =
                 new nT.PKIFailureInfo(params.failinfo); // param for bitstr
         }
-    };
+    }
+    ;
 };
 YAHOO.lang.extend(KJUR.asn1.tsp.PKIStatusInfo, KJUR.asn1.ASN1Object);
 
@@ -455,13 +460,13 @@ YAHOO.lang.extend(KJUR.asn1.tsp.PKIStatusInfo, KJUR.asn1.ASN1Object);
  *    revocationNotification (5) }
  * </pre>
  */
-KJUR.asn1.tsp.PKIStatus = function(params) {
+KJUR.asn1.tsp.PKIStatus = function (params) {
     KJUR.asn1.tsp.PKIStatus.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     var nT = KJUR.asn1.tsp;
     var dStatus = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         this.hTLV = this.dStatus.getEncodedHex();
         return this.hTLV;
     };
@@ -471,7 +476,7 @@ KJUR.asn1.tsp.PKIStatus = function(params) {
             var list = nT.PKIStatus.valueList;
             if (typeof list[params.name] == "undefined")
                 throw "name undefined: " + params.name;
-            this.dStatus = 
+            this.dStatus =
                 new nA.DERInteger({'int': list[params.name]});
         } else {
             this.dStatus = new nA.DERInteger(params);
@@ -481,11 +486,11 @@ KJUR.asn1.tsp.PKIStatus = function(params) {
 YAHOO.lang.extend(KJUR.asn1.tsp.PKIStatus, KJUR.asn1.ASN1Object);
 
 KJUR.asn1.tsp.PKIStatus.valueList = {
-    granted:                0,
-    grantedWithMods:        1,
-    rejection:              2,
-    waiting:                3,
-    revocationWarning:      4,
+    granted: 0,
+    grantedWithMods: 1,
+    rejection: 2,
+    waiting: 3,
+    revocationWarning: 4,
     revocationNotification: 5
 };
 
@@ -502,12 +507,12 @@ KJUR.asn1.tsp.PKIStatus.valueList = {
  *    SIZE (1..MAX) OF UTF8String }
  * </pre>
  */
-KJUR.asn1.tsp.PKIFreeText = function(params) {
+KJUR.asn1.tsp.PKIFreeText = function (params) {
     KJUR.asn1.tsp.PKIFreeText.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     this.textList = [];
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         var a = [];
         for (var i = 0; i < this.textList.length; i++) {
             a.push(new nA.DERUTF8String({str: this.textList[i]}));
@@ -545,13 +550,13 @@ YAHOO.lang.extend(KJUR.asn1.tsp.PKIFreeText, KJUR.asn1.ASN1Object);
  *    systemFailure          (25) }
  * </pre>
  */
-KJUR.asn1.tsp.PKIFailureInfo = function(params) {
+KJUR.asn1.tsp.PKIFailureInfo = function (params) {
     KJUR.asn1.tsp.PKIFailureInfo.superclass.constructor.call(this);
     var nA = KJUR.asn1;
     var nT = KJUR.asn1.tsp;
     this.value = null;
 
-    this.getEncodedHex = function() {
+    this.getEncodedHex = function () {
         if (this.value == null)
             throw "value shall be specified";
         var binValue = new Number(this.value).toString(2);
@@ -575,14 +580,14 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
 YAHOO.lang.extend(KJUR.asn1.tsp.PKIFailureInfo, KJUR.asn1.ASN1Object);
 
 KJUR.asn1.tsp.PKIFailureInfo.valueList = {
-    badAlg:                 0,
-    badRequest:             2,
-    badDataFormat:          5,
-    timeNotAvailable:       14,
-    unacceptedPolicy:       15,
-    unacceptedExtension:    16,
-    addInfoNotAvailable:    17,
-    systemFailure:          25
+    badAlg: 0,
+    badRequest: 2,
+    badDataFormat: 5,
+    timeNotAvailable: 14,
+    unacceptedPolicy: 15,
+    unacceptedExtension: 16,
+    addInfoNotAvailable: 17,
+    systemFailure: 25
 };
 
 // --- END OF RFC 2510 CMP -------------------------------------------
@@ -595,8 +600,8 @@ KJUR.asn1.tsp.PKIFailureInfo.valueList = {
  * @since jsrsasign 4.7.0 asn1tsp 1.0.1
  * @description
  */
-KJUR.asn1.tsp.AbstractTSAAdapter = function(params) {
-    this.getTSTHex = function(msgHex, hashAlg) {
+KJUR.asn1.tsp.AbstractTSAAdapter = function (params) {
+    this.getTSTHex = function (msgHex, hashAlg) {
         throw "not implemented yet";
     };
 };
@@ -609,16 +614,16 @@ KJUR.asn1.tsp.AbstractTSAAdapter = function(params) {
  * @since jsrsasign 4.7.0 asn1tsp 1.0.1
  * @description
  */
-KJUR.asn1.tsp.SimpleTSAAdapter = function(initParams) {
+KJUR.asn1.tsp.SimpleTSAAdapter = function (initParams) {
     KJUR.asn1.tsp.SimpleTSAAdapter.superclass.constructor.call(this);
     this.params = null;
     this.serial = 0;
 
-    this.getTSTHex = function(msgHex, hashAlg) {
+    this.getTSTHex = function (msgHex, hashAlg) {
         // messageImprint
         var hashHex = KJUR.crypto.Util.hashHex(msgHex, hashAlg);
         this.params.tstInfo.messageImprint =
-            {hashAlg: hashAlg, hashValue: hashHex};
+        {hashAlg: hashAlg, hashValue: hashHex};
 
         // serial
         this.params.tstInfo.serialNumber = {'int': this.serial++};
@@ -627,7 +632,7 @@ KJUR.asn1.tsp.SimpleTSAAdapter = function(initParams) {
         var nonceValue = Math.floor(Math.random() * 1000000000);
         this.params.tstInfo.nonce = {'int': nonceValue};
 
-        var obj = 
+        var obj =
             KJUR.asn1.tsp.TSPUtil.newTimeStampToken(this.params);
         return obj.getContentInfoEncodedHex();
     };
@@ -637,7 +642,7 @@ KJUR.asn1.tsp.SimpleTSAAdapter = function(initParams) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.tsp.SimpleTSAAdapter,
-                  KJUR.asn1.tsp.AbstractTSAAdapter);
+    KJUR.asn1.tsp.AbstractTSAAdapter);
 
 /**
  * class for fixed TimeStampToken generator
@@ -657,17 +662,17 @@ YAHOO.lang.extend(KJUR.asn1.tsp.SimpleTSAAdapter,
  * </ul>
  * Those values are provided by initial parameters.
  */
-KJUR.asn1.tsp.FixedTSAAdapter = function(initParams) {
+KJUR.asn1.tsp.FixedTSAAdapter = function (initParams) {
     KJUR.asn1.tsp.FixedTSAAdapter.superclass.constructor.call(this);
     this.params = null;
 
-    this.getTSTHex = function(msgHex, hashAlg) {
+    this.getTSTHex = function (msgHex, hashAlg) {
         // fixed serialNumber
         // fixed nonce        
         var hashHex = KJUR.crypto.Util.hashHex(msgHex, hashAlg);
         this.params.tstInfo.messageImprint =
-            {hashAlg: hashAlg, hashValue: hashHex};
-        var obj = 
+        {hashAlg: hashAlg, hashValue: hashHex};
+        var obj =
             KJUR.asn1.tsp.TSPUtil.newTimeStampToken(this.params);
         return obj.getContentInfoEncodedHex();
     };
@@ -677,7 +682,7 @@ KJUR.asn1.tsp.FixedTSAAdapter = function(initParams) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.tsp.FixedTSAAdapter,
-                  KJUR.asn1.tsp.AbstractTSAAdapter);
+    KJUR.asn1.tsp.AbstractTSAAdapter);
 
 // --- TSP utilities -------------------------------------------------
 
@@ -686,7 +691,7 @@ YAHOO.lang.extend(KJUR.asn1.tsp.FixedTSAAdapter,
  * @name KJUR.asn1.tsp.TSPUtil
  * @class TSP utilities class
  */
-KJUR.asn1.tsp.TSPUtil = new function() {
+KJUR.asn1.tsp.TSPUtil = new function () {
 };
 /**
  * generate TimeStampToken ASN.1 object specified by JSON parameters
@@ -698,7 +703,7 @@ KJUR.asn1.tsp.TSPUtil = new function() {
  * @description
  * @example
  */
-KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
+KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function (param) {
     var nC = KJUR.asn1.cms;
     var nT = KJUR.asn1.tsp;
     var sd = new nC.SignedData();
@@ -716,10 +721,12 @@ KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
 
     var si = sd.signerInfoList[0];
     si.setSignerIdentifier(param.signerCert);
-    si.setForContentAndHash({sdObj: sd,
-                             eciObj: sd.dEncapContentInfo,
-                             hashAlg: param.hashAlg});
-    var signingCertificate = 
+    si.setForContentAndHash({
+        sdObj: sd,
+        eciObj: sd.dEncapContentInfo,
+        hashAlg: param.hashAlg
+    });
+    var signingCertificate =
         new nC.SigningCertificate({array: [param.signerCert]});
     si.dSignedAttrs.add(signingCertificate);
 
@@ -747,7 +754,7 @@ KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
  *  nonce: '9abcf318...',            // nonce (OPTION)
  *  certreq: true}                   // certReq (OPTION)
  */
-KJUR.asn1.tsp.TSPUtil.parseTimeStampReq = function(reqHex) {
+KJUR.asn1.tsp.TSPUtil.parseTimeStampReq = function (reqHex) {
     var json = {};
     json.certreq = false;
 
@@ -757,7 +764,7 @@ KJUR.asn1.tsp.TSPUtil.parseTimeStampReq = function(reqHex) {
         throw "TimeStampReq must have at least 2 items";
 
     var miHex = ASN1HEX.getHexOfTLV_AtObj(reqHex, idxList[1]);
-    json.mi = KJUR.asn1.tsp.TSPUtil.parseMessageImprint(miHex); 
+    json.mi = KJUR.asn1.tsp.TSPUtil.parseMessageImprint(miHex);
 
     for (var i = 2; i < idxList.length; i++) {
         var idx = idxList[i];
@@ -793,14 +800,14 @@ KJUR.asn1.tsp.TSPUtil.parseTimeStampReq = function(reqHex) {
  * {hashAlg: 'sha256',          // MessageImprint hashAlg
  *  hashValue: 'a1a2a3a4...'}   // MessageImprint hashValue
  */
-KJUR.asn1.tsp.TSPUtil.parseMessageImprint = function(miHex) {
+KJUR.asn1.tsp.TSPUtil.parseMessageImprint = function (miHex) {
     var json = {};
 
     if (miHex.substr(0, 2) != "30")
         throw "head of messageImprint hex shall be '30'";
 
     var idxList = ASN1HEX.getPosArrayOfChildren_AtObj(miHex, 0);
-    var hashAlgOidIdx = 
+    var hashAlgOidIdx =
         ASN1HEX.getDecendantIndexByNthList(miHex, 0, [0, 0]);
     var hashAlgHex = ASN1HEX.getHexOfV_AtObj(miHex, hashAlgOidIdx);
     var hashAlgOid = ASN1HEX.hextooidstr(hashAlgHex);
@@ -813,7 +820,7 @@ KJUR.asn1.tsp.TSPUtil.parseMessageImprint = function(miHex) {
         ASN1HEX.getDecendantIndexByNthList(miHex, 0, [1]);
 
     json.hashAlg = hashAlg;
-    json.hashValue = ASN1HEX.getHexOfV_AtObj(miHex, hashValueIdx); 
+    json.hashValue = ASN1HEX.getHexOfV_AtObj(miHex, hashValueIdx);
 
     return json;
 };

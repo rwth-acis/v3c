@@ -27,9 +27,8 @@ require_once '../config/config.php';
 
 if (isset($_SESSION["currentPage"])) {
 
-  header('Location: '.$_SESSION["currentPage"]);
-}
-else {
-  header('Location: '.$baseUrl.'/src/views/welcome.php');
+    header('Location: ' . $_SESSION["currentPage"]);
+} else {
+    header('Location: ' . $baseUrl . '/src/views/welcome.php');
 }
 

@@ -18,21 +18,21 @@
  * Connects to the database using predefined settings.
  */
 
-  // Sets the variables $host, $database, $user, $password
-	if( (include '../config/config.php') === false) {
-		throw new Exception("The config/config.php is missing! No information about database available.");
-	}
+// Sets the variables $host, $database, $user, $password
+if ((include '../config/config.php') === false) {
+    throw new Exception("The config/config.php is missing! No information about database available.");
+}
 
-	// mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
-    $connection = mysql_connect($host, $user, $password);
-    if(!$connection) {
-		//throw new Exception("Unable to connect! Please check username and password");
-	 }
+// mysql_connect - call for compatibility-reasons. The API is deprecated (http://php.net/manual/de/function.mysql-connect.php)
+$connection = mysqli_connect($host, $user, $password);
+if (!$connection) {
+    //throw new Exception("Unable to connect! Please check username and password");
+}
 
-    if(!mysql_select_db($database)) {
-    	throw new Exception("Requested database does not exist!");
-	}
+if (!mysqli_select_db($connection, $database)) {
+    throw new Exception("Requested database does not exist!");
+}
 
-	$db = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+$db = new PDO("mysql:host=$host;dbname=$database", $user, $password);
 
-	return $db;
+return $db;

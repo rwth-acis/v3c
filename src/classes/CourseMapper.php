@@ -31,7 +31,6 @@ class CourseMapper extends Mapper
             $courses[] = new Course($row);
         }
         return $courses;
-        
     }
 
     /**

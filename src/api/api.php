@@ -74,18 +74,31 @@ $app->get('/', function (Request $request, Response $response) {
     return $response;
 });
 
+function jsonRemoveUnicodeSequences($struct) {
+   return preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", json_encode($struct));
+}
 /**
  * Get Courses
  */
 $app->get('/courses', function (Request $request, Response $response) {
     $mapper = new CourseMapper($this->db);
+    $unit_mapper = new CourseUnitMapper($this->db);
     $courses = $mapper->getCourses($request->getQueryParams());
-    $this->logger->addInfo("array: ", $request->getQueryParams());
+
     $courses_array = array();
     foreach ($courses as $course) {
-        $courses_array[] = (array)$course;
+        //$this->logger->addInfo();
+        $course = (array)$course;
+        foreach ($course as $k => $v) {
+            $this->logger->addInfo(str_replace('\\u0000', '', $k));
+        }
+        //$this->logger->addInfo($course);
+        $courses_array[] = $course;
+        //$this->logger->addInfo(json_encode($course, JSON_UNESCAPED_UNICODE));
     }
-    $response = $response->withJson($courses_array);
+    //$this->logger->addInfo("array: ", $courses_array);
+    //TODO to each object add the course units
+    $response = $response->withJson( $courses_array);
     return $response;
 });
 
@@ -104,7 +117,7 @@ $app->get('/courses/{id}', function (Request $request, Response $response, $args
 /**
  * Get Course Units
  */
-$app->get('/courses/{id}/course_units', function (Request $request, Response $response, $args) use ($app) {
+$app->get('/courses/{id}/course_units', function (Request $request, Response $response, $args) {
     $course_id = (int)$args['id'];
     $this->logger->addInfo("course id : " . $course_id);
     $mapper = new CourseUnitMapper($this->db);
@@ -121,7 +134,7 @@ $app->get('/courses/{id}/course_units', function (Request $request, Response $re
 /**
  * Get Course Unit
  */
-$app->get('/courses/{course_id}/course_units/{unit_id}', function (Request $request, Response $response, $args) use ($app) {
+$app->get('/courses/{course_id}/course_units/{unit_id}', function (Request $request, Response $response, $args) {
     $course_id = (int)$args['course_id'];
     $course_unit_id = (int)$args['unit_id'];
     $mapper = new CourseUnitMapper($this->db);
@@ -134,8 +147,8 @@ $app->get('/courses/{course_id}/course_units/{unit_id}', function (Request $requ
 
 /**
  * Get Course Elements
-
-$app->get('/courses/{id}/course_elements', function (Request $request, Response $response) use ($app) {
+ */
+$app->get('/courses/{course_id}/course_units/{unit_id}/course_elements', function (Request $request, Response $response) {
     $mapper = new CourseElementMapper($this->db);
     $course_elements = $mapper->getCourseElements();
     $course_el_array = array();
@@ -144,10 +157,9 @@ $app->get('/courses/{id}/course_elements', function (Request $request, Response 
     }
     $new_response = $response->withJson($course_el_array);
 
-    //$response = $this->view->render($response, "courses.phtml", ["courses" => $courses, "router" => $this->router] );
     return $new_response;
 });
- */
+
 
 
 

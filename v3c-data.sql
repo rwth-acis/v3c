@@ -54,16 +54,16 @@ VALUES
   (1, 'en', 'Social Entrepreneurship 101', 'This course introduces the basic principles of Social Entrepreneurship', 1,
    'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (1, 'de', 'Social Entrepreneurship Einführung', 'Dieser Kurs behandelt die Grundlagen des Social Entrepreneurship', 1,
-   'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (1, 'es', 'Curso de Social Entrepreneurship', 'Este curso es sobre los fundamentos del Social Entrepreneurship', 1,
-   'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (2, 'en', 'Case Study: Endeavor Greece', 'This case study discusses the Endeavor Greece project and highlights learning takeaways for Social Enterprises', 1,
-   'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (3, 'en', 'Ernesto Sirolli\'s approach to Social Entrepreneurship', 'This course covers the key learning points Ernesto Sirolli during his career as a coach for Social Enterprises', 1,
-   'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (4, 'en', 'Scaling the Social Enterprise', 'Learn how to increase your reach with your Social Enterprise', 1,
-   'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
-  (2, 'en', 'Flight Booking Course', 'In this course you will learn to book flights for a customer.', 2,
+   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+  (5, 'en', 'Flight Booking Course', 'In this course you will learn to book flights for a customer.', 2,
    'Hotel Booker', 'giampoulaki@europeanprogress.gr', '2016-11-20 18:04:34', '2016-11-20 18:04:34');
    
 

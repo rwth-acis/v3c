@@ -39,8 +39,8 @@ include '../php/tools.php';
 
 $subject_id = filter_input(INPUT_GET, "id");
 $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObject();
-$courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, users.family_name AS creator_lastname 
-                           FROM courses JOIN users ON courses.creator=users.email 
+$courses = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
+                           FROM courses JOIN organizations ON courses.creator=organizations.email 
                            WHERE courses.id='$subject_id'")->fetchAll();
 
 ?>
@@ -93,7 +93,7 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                                 <td>
                                     <a href="course.php?id=<?php echo $course["id"]; ?>"><?php echo $course["name"]; ?></a>
                                 </td>
-                                <td><?php echo $course["creator_firstname"] . " " . $course["creator_lastname"]; ?></td>
+                                <td><?php echo $course["orga"]; ?></td>
                                 <td><?php foreach ($course_dates_array as $start_date) {
                                         echo $start_date . "<br>";
                                     } ?></td>

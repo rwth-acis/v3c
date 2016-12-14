@@ -37,8 +37,8 @@ include '../php/tools.php';
 $course_id = $_GET["id"];
 
 // Gets course details with it's creator information
-$course_query = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email 
-                            FROM courses JOIN users ON courses.creator = users.email 
+$course_query = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
+                            FROM courses JOIN organizations ON courses.creator = organizations.email 
                             WHERE courses.id = $course_id");
 $course_details = $course_query->fetchObject();
 
@@ -137,8 +137,8 @@ function replaceLinks($text)
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <label class="col-sm-3 output-element">Created by:</label>
-                        <div class="col-sm-7"><?php echo $course_details->given_name . " " . $course_details->family_name; ?>
-                            (<a href="mailto:<?php echo $course_details->email; ?>"><?php echo $course_details->email; ?></a>)</div>
+                        <div class="col-sm-7"><?php echo $course_details->orga; ?>
+                            (<a href="mailto:<?php echo $course_details->orga_email; ?>"><?php echo $course_details->orga_email; ?></a>)</div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">

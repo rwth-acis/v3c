@@ -123,6 +123,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                     <td><?php foreach ($course_dates_array as $start_date) {
                                             echo $start_date . "<br>";
                                         } ?></td>
+                                    <td class="language-flag-rows"><img class="language-flag-element" src="<?php echo "../images/flags/s_".$course["lang"].".png"?>"></td>
                                     <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
                                                                     class="btn btn-edit btn-sm btn-success btn-block"
                                                                     value="Edit"/></td>

@@ -9,19 +9,10 @@
 function getTranslation($key, $default)
 {
     require_once "locale.php";
-    /*
-     * gettext
-    $translation = gettext($key);
-    if ($key != $translation) {
-        return $translation;
-    }
-    */
-
 
     $filename = $_SERVER['DOCUMENT_ROOT'] . "/locale/translations_". $_SESSION["lang"]  .".php";
 
     if (file_exists($filename)) {
-        //echo $filename;
         require_once $filename;
         $lang = getLanguage();
 

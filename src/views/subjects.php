@@ -34,17 +34,18 @@
 if (filter_input(INPUT_GET, "widget") == "true") {
 
 } else {
-    echo '
-          <header id="head" class="secondary">
-              <div class="container">
-                  <div class="row">
-                      <div class="col-sm-12">
-                          <h1>Subjects</h1>
+    $subjectTranslation = getTranslation("main:subjects:subject", "Subjects");
+    echo "
+          <header id='head' class='secondary'>
+              <div class='container'>
+                  <div class='row'>
+                      <div class='col-sm-12'>
+                         <h1>$subjectTranslation</h1>
                       </div>
                   </div>
               </div>
           </header>
-      ';
+      ";
 }
 ?>
 

@@ -52,7 +52,7 @@ VALUES
   (NULL, 'en', 'Assessing Your Inner Potential', 'What factors make people successful? How to further develop these factors in yourself?',
   '2016-12-07 09:00:00', 12, '2016-11-20 18:06:43', '2016-11-20 18:06:43'),
   (NULL, 'en', 'From Ideas To Action', 'Once being able to assess capabilities, we look, how do these capabilities turn into beneficial action.',
-   '2016-14-12 09:00:00', 12, '2016-11-20 18:07:43', '2016-11-20 18:07:43'),
+   '2016-12-14 09:00:00', 12, '2016-11-20 18:07:43', '2016-11-20 18:07:43'),
   (NULL, 'en', 'Role Of Technology', 'What is the role of technology in social entrepreneurship nowadays?',
    '2016-12-21 09:00:00', 12, '2016-11-20 18:08:43', '2016-11-20 18:08:43'),
   (NULL, 'en', 'History of Social Entrepreneurship and Summary', 'We take a look at some of the biggest social entrepreneurs and see what they have in common. We also wrap up the course with a brief summary.',

@@ -1,0 +1,13 @@
+http://dbis.rwth-aachen.de/gadgets/timetracking/timetracking.xml  |?
+http://dbis.rwth-aachen.de/3dnrt/Anatomy2.0/src/widgets/gallery.xml
+http://dbis.rwth-aachen.de/3dnrt/Anatomy2.0/src/widgets/showcase.xml
+http://dbis.rwth-aachen.de/gadgets/qna/qa.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/access_rights_management_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/graph_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/employee_management_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/documents_viewer_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary/learning_resource_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/search_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/graph_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/bcn_management_widget.xml
+http://buche.informatik.rwth-aachen.de/boost/boostFebruary2/employee_management_widget.xml

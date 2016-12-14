@@ -73,56 +73,80 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
 
                 <!-- List of all courses -->
                 <div class='col-sm-8'>
+                    <form id ="fsearch" class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <select name="lang" id="lang_dropdown" onchange="filter()">
+                                        <option value="en">English</option>
+                                        <option value="de">Deutsch</option>
+                                        <option value="es">Español</option>
+                                        <option value="it">Italiano</option>
+                                        <option value="gr">Eλληνικά</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <input name= "searched" type="text" class="form-control" placeholder="Search" onkeyup = "search()">
+
+                            <input hidden id="subject_input" name="subject_id" value=<?php echo $subject_id; ?>>
+
+                        </div>
+                    </form>
+                    <br>
                     <h3>Choose course</h3>
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Course name</th>
-                            <th>Created by</th>
-                            <th>Start Dates</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody data-link="row" class="rowlink">
-                        <?php
-                        $index = 0;
-                        foreach ($courses as $course) {
-                            // Add line brake after each date for more readability in the table
-                            $course_dates_array = explode("\n", $course["date_created"]);
-                            $index++;
-                            ?>
+                    <div id ="course_table">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
                             <tr>
-                                <td>
-                                    <a href="course.php?id=<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"><?php echo $course["name"]; ?></a>
-                                </td>
-                                <td><?php echo $course["orga"]; ?></td>
-                                <td><?php foreach ($course_dates_array as $start_date) {
-                                        echo $start_date . "<br>";
-                                    } ?></td>
-                                <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
-                                                                class="btn btn-edit btn-sm btn-success btn-block"
-                                                                value="Edit"/></td>
-                                <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
-                                                                class="btn btn-delete btn-sm btn-warning btn-block"
-                                                                value="Delete"></td>
+                                <th>Course name</th>
+                                <th>Created by</th>
+                                <th>Start Dates</th>
+                                <th></th>
+                                <th></th>
                             </tr>
-                            <tr>
-                                <!-- Collapse div for course description -->
-                                <td colspan="5">
-                                    <button type="button" class="btn btn-info" data-toggle="collapse"
-                                            data-target="#description-<?php echo $index; ?>">Description
-                                    </button>
-                                    <div id="description-<?php echo $index; ?>" class="collapse">
-                                        <?php echo $course["description"]; ?>
-                                    </div>
-                                </td>
-                            </tr>
+                            </thead>
+                            <tbody data-link="row" class="rowlink">
                             <?php
-                        }
-                        ?>
-                        </tbody>
-                    </table>
+                            $index = 0;
+                            foreach ($courses as $course) {
+                                // Add line brake after each date for more readability in the table
+                                $course_dates_array = explode("\n", $course["date_created"]);
+                                $index++;
+                                ?>
+                                <tr>
+                                    <td>
+                                        <a href="course.php?id=<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"><?php echo $course["name"]; ?></a>
+                                    </td>
+                                    <td><?php echo $course["orga"]; ?></td>
+                                    <td><?php foreach ($course_dates_array as $start_date) {
+                                            echo $start_date . "<br>";
+                                        } ?></td>
+                                    <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
+                                                                    class="btn btn-edit btn-sm btn-success btn-block"
+                                                                    value="Edit"/></td>
+                                    <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
+                                                                    class="btn btn-delete btn-sm btn-warning btn-block"
+                                                                    value="Delete"></td>
+                                </tr>
+                                <tr>
+                                    <!-- Collapse div for course description -->
+                                    <td colspan="5">
+                                        <button type="button" class="btn btn-info" data-toggle="collapse"
+                                                data-target="#description-<?php echo $index; ?>">Description
+                                        </button>
+                                        <div id="description-<?php echo $index; ?>" class="collapse">
+                                            <?php echo $course["description"]; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -142,5 +166,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
 <script src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
 <script src="../js/course-list.js"></script>
+<script src="../js/search-course.js"></script>
+<script src="../js/filter-courses.js"></script>
 </body>
 </html>

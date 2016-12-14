@@ -14,9 +14,10 @@ else {
 }
 
 // save language preference for future page requests
-$_SESSION["Language"]  = $language;
+$_SESSION["lang"]  = $language;
 
 /*
+ * gettext variant...
 $folder = '../../locale';
 $domain = "default";
 $encoding = "UTF-8";

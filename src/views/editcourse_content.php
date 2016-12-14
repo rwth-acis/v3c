@@ -26,6 +26,7 @@ try {
 } catch (Exception $e) {
     error_log($e->getMessage());
 }
+
 ?>
 
 <div id='courses'>
@@ -34,13 +35,6 @@ try {
         <div class='container'>
             <div class='row'>
                 <div class='col-md-10 col-md-offset-1'>
-                    <!-- User information box -->
-                    <div class='featured-box'>
-                        Change you course room information. To create a new ROLE space click "+" and for help on ROLE
-                        click
-                        "?".<br>
-                        Don't forget to click the save button.
-                    </div>
 
                     <!-- FORM FOR EDITING INPUT VALUES -->
                     <form role="form"
@@ -53,29 +47,6 @@ try {
                                 <input type="hidden" name="targetId" value="<?php echo $course_id; ?>">
                                 <input type="text" class="form-control" rows="1" name="name" id="targetName"
                                        value="<?php echo htmlentities($entry['name']); ?>" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
-                            <div class="col-sm-10">
-                                <div class="course-room-div">
-                                    <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole"
-                                           placeholder="Enter ROLE space name"
-                                           value="<?php echo $entry['role_url']; ?>">
-                                </div>
-                                <a href="#">
-                                    <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline"
-                                           type="button" value="+"/>
-                                </a>
-                                <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
-                                <a target="_blank" href="help.php">
-                                    <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
-                                </a>
-                                <div class="featured-box">
-                                    <p><?php echo $baseUrl . "/src/widgets/showcase.xml"; ?></p>
-                                    <p><?php echo $baseUrl . "/src/widgets/gallery.xml"; ?></p>
-                                </div>
-
                             </div>
                         </div>
                         <div class="form-group">
@@ -99,6 +70,11 @@ try {
                                           placeholder="Enter course description"><?php echo htmlentities($entry['description']); ?></textarea>
                             </div>
                         </div>
+
+                        <div class="center">
+                            <a href="arrwidgetmockup.php">Design learning environment</a>
+                        </div>
+
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Upload">
                             Save
                         </button>
@@ -115,13 +91,3 @@ try {
 <!-- Darken background when model select window appears -->
 <div id="blackout" onclick="editCourse.endBlackout()"></div>
 
-<!-- Show models in a pop-up -->
-<div id="modelbox">
-    <div id="closebox" onclick="editCourse.endBlackout()">close</div>
-    <button class='btn btn-success' type='button' id="addmodels" onclick="editCourse.addModels()">Add models to course
-    </button>
-    <?php include("search.php"); ?>
-    <div id="result-container">
-        <!-- Models will be inserted here -->
-    </div>
-</div>

@@ -23,7 +23,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collaborative Viewing of 3D Models </title>
+    <title>All Courses | V3C</title>
 
     <link rel="stylesheet" href="../external/jasny-bootstrap/dist/css/jasny-bootstrap.min.css"/>
 </head>
@@ -39,8 +39,9 @@ include '../php/tools.php';
 
 $subject_id = filter_input(INPUT_GET, "id");
 $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObject();
-$courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, users.family_name AS creator_lastname 
-                           FROM courses JOIN users ON courses.creator=users.email 
+
+$courses = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
+                           FROM courses JOIN organizations ON courses.creator=organizations.email 
                            WHERE courses.id='$subject_id'")->fetchAll();
 
 ?>
@@ -85,15 +86,17 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                         </thead>
                         <tbody data-link="row" class="rowlink">
                         <?php
+                        $index = 0;
                         foreach ($courses as $course) {
                             // Add line brake after each date for more readability in the table
                             $course_dates_array = explode("\n", $course["date_created"]);
+                            $index++;
                             ?>
                             <tr>
                                 <td>
-                                    <a href="course.php?id=<?php echo $course["id"]; ?>"><?php echo $course["name"]; ?></a>
+                                    <a href="course.php?id=<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"><?php echo $course["name"]; ?></a>
                                 </td>
-                                <td><?php echo $course["creator_firstname"] . " " . $course["creator_lastname"]; ?></td>
+                                <td><?php echo $course["orga"]; ?></td>
                                 <td><?php foreach ($course_dates_array as $start_date) {
                                         echo $start_date . "<br>";
                                     } ?></td>
@@ -102,15 +105,15 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                                                                 value="Edit"/></td>
                                 <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
                                                                 class="btn btn-delete btn-sm btn-warning btn-block"
-                                                                value="Delete"</td>
+                                                                value="Delete"></td>
                             </tr>
                             <tr>
                                 <!-- Collapse div for course description -->
                                 <td colspan="5">
                                     <button type="button" class="btn btn-info" data-toggle="collapse"
-                                            data-target="#course-list-description">Description
+                                            data-target="#description-<?php echo $index; ?>">Description
                                     </button>
-                                    <div id="course-list-description" class="collapse">
+                                    <div id="description-<?php echo $index; ?>" class="collapse">
                                         <?php echo $course["description"]; ?>
                                     </div>
                                 </td>

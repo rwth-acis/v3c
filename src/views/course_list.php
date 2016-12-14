@@ -42,7 +42,7 @@ $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObj
 
 $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
                            FROM courses JOIN organizations ON courses.creator=organizations.email 
-                           WHERE courses.id='$subject_id'")->fetchAll();
+                           WHERE courses.domain='$subject_id'")->fetchAll();
 
 ?>
 <header id='head' class='secondary'>

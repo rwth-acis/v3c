@@ -26,6 +26,7 @@ try {
 } catch (Exception $e) {
     error_log($e->getMessage());
 }
+
 ?>
 
 <div id='courses'>
@@ -69,6 +70,11 @@ try {
                                           placeholder="Enter course description"><?php echo htmlentities($entry['description']); ?></textarea>
                             </div>
                         </div>
+
+                        <div class="center">
+                            <a href="arrwidgetmockup.php">Design learning environment</a>
+                        </div>
+
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Upload">
                             Save
                         </button>
@@ -85,13 +91,3 @@ try {
 <!-- Darken background when model select window appears -->
 <div id="blackout" onclick="editCourse.endBlackout()"></div>
 
-<!-- Show models in a pop-up -->
-<div id="modelbox">
-    <div id="closebox" onclick="editCourse.endBlackout()">close</div>
-    <button class='btn btn-success' type='button' id="addmodels" onclick="editCourse.addModels()">Add models to course
-    </button>
-    <?php include("search.php"); ?>
-    <div id="result-container">
-        <!-- Models will be inserted here -->
-    </div>
-</div>

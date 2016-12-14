@@ -21,7 +21,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V3C</title>
 </head>
@@ -35,19 +35,28 @@ include '../php/tools.php';
 
 // The course unit id from URL parameter
 $course_id = $_GET["id"];
+$course_lang = $_GET["lang"];
 
 // Gets course details with it's creator information
 $course_query = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
                             FROM courses JOIN organizations ON courses.creator = organizations.email 
                             WHERE courses.id = $course_id");
+
 $course_details = $course_query->fetchObject();
 
 // Get course subject
 $course_subject_details = $db->query("SELECT subjects.* FROM subjects WHERE id= $course_id")->fetch(PDO::FETCH_ASSOC);
 
 // Gets the course units that correspond the particular course
-$course_units = $db->query("SELECT DISTINCT course_units.* 
-                            FROM course_units JOIN course_to_unit AS ctu ON ctu.course_id = $course_id")->fetchAll();
+$query = "SELECT DISTINCT course_units.*
+          FROM course_units
+          LEFT JOIN course_to_unit AS ctu
+          ON (ctu.course_id = $course_id
+            AND ctu.course_lang = '$course_lang'
+            AND ctu.unit_lang = '$course_lang')
+          WHERE course_units.lang = '$course_lang'";
+
+$course_units = $db->query($query)->fetchAll();
 /**
  * Replaces all URLs in the given text by <a> tags
  * Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
@@ -109,7 +118,7 @@ function replaceLinks($text)
                                     <span class="glyphicon glyphicon-calendar margin-right"></span>
                                             <?php echo $course_unit["start_date"] ?>
                                             <!-- TODO: href to course room-->
-                                    <a href="#" class="margin-left btn btn-xs btn-warning">
+                                    <a href="http://role-sandbox.eu/spaces/v3c_demo" target="_blank" class="margin-left btn btn-xs btn-warning">
                                         Enter Course Room
                                     </a>
                                 </span>

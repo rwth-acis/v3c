@@ -54,4 +54,7 @@ $database = "";
 $user = "";
 // The password for the database user
 $password = "";
+
+// gettext directory for windows users, leave empty if using linux/mac
+$gettextinstalldir = "";
 ?>

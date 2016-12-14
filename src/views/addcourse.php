@@ -41,7 +41,7 @@
 // Check whether the currently logged in user is allowed to create courses
 require '../php/access_control.php';
 $accessControl = new AccessControl();
-$canCreateCourse = $accessControl->canCreateCourse();
+$canCreateCourse = true;
 
 if ($canCreateCourse) {
     include 'addcourse_content.php';

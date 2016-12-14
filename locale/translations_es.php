@@ -9,8 +9,12 @@
 function getLanguage()
 {
     return array(
+        "general:button:courses" => "Cursos",
+        "main:welcome:courses" => "Cursos",
+        "main:welcome:headline" => "¡Bienvenido de V3C proyecto!",
+        "main:subjects:subject" => "Temas"
+
  /*       "general:button:home" => "Startseite",
-        "general:button:courses" => "Kurse",
         "general:button:signin" => "Anmelden",
 
         "main:welcome:headline" => "Willkommen im V3C Projekt!",

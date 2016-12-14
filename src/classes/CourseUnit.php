@@ -8,14 +8,14 @@
  */
 class CourseUnit
 {
-    protected $id;
-    protected $lang;
-    protected $title;
-    protected $description;
-    protected $start_date;
-    protected $points;
-    protected $date_created;
-    protected $date_updated;
+    public $id;
+    public $lang;
+    public $title;
+    public $description;
+    public $start_date;
+    public $points;
+    public $date_created;
+    public $date_updated;
 
     /**
      * Accept an array of data matching properties of this class
@@ -23,9 +23,10 @@ class CourseUnit
      *
      * @param array $data The data to use to create
      */
-    public function __construct(array $data) {
+    public function __construct(array $data)
+    {
         // no id if we're creating
-        if(isset($data['id'])) {
+        if (isset($data['id'])) {
             $this->id = $data['id'];
         }
         $this->lang = $data['lang'];
@@ -36,31 +37,49 @@ class CourseUnit
         $this->date_created = $data['date_created'];
         $this->date_updated = $data['date_updated'];
     }
-    public function getId() {
+
+    public function getId()
+    {
         return $this->id;
     }
-    public function getTitle() {
+
+    public function getTitle()
+    {
         return $this->title;
     }
-    public function getDescription() {
+
+    public function getDescription()
+    {
         return $this->description;
     }
-    public function getShortDescription() {
+
+    public function getShortDescription()
+    {
         return substr($this->description, 0, 20);
     }
-    public function getLang() {
+
+    public function getLang()
+    {
         return $this->lang;
     }
-    public function getStartDate() {
+
+    public function getStartDate()
+    {
         return $this->start_date;
     }
-    public function getPoints() {
+
+    public function getPoints()
+    {
         return $this->points;
     }
-    public function getDateCreated() {
+
+    public function getDateCreated()
+    {
         return $this->date_created;
     }
-    public function getDateUpdated() {
+
+    public function getDateUpdated()
+    {
         return $this->date_updated;
     }
 }

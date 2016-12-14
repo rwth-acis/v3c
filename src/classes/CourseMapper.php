@@ -8,16 +8,22 @@
  */
 class CourseMapper extends Mapper
 {
-    public function getCourses($args = array()) {
+    public function getCourses($args = array())
+    {
         $courses_sql = "SELECT * FROM courses";
         if (!empty($args)) {
             $where_clause = " WHERE ";
             end($args);
             $key = key($args);
-            foreach($args as $k => $v) {
-                if (!is_numeric($v)) $v = "" . $v . "";
-                if ($k == $key) $where_clause .= " ". $k . " = " . $v;
-                else $where_clause .= " " . $k . " = " . $v . " AND ";
+            foreach ($args as $k => $v) {
+                if (!is_numeric($v)) {
+                    $v = "" . $v . "";
+                }
+                if ($k == $key) {
+                    $where_clause .= " " . $k . " = " . $v;
+                } else {
+                    $where_clause .= " " . $k . " = " . $v . " AND ";
+                }
             }
 
             $courses_sql .= $where_clause;
@@ -27,7 +33,8 @@ class CourseMapper extends Mapper
 
         $courses = [];
 
-        while($row = $stmt->fetch()) {
+        while ($row = $stmt->fetch()) {
+
             $courses[] = new Course($row);
         }
         return $courses;
@@ -39,22 +46,27 @@ class CourseMapper extends Mapper
      * @param int $course_id The ID of the ticket
      * @return Course  The course
      */
-    public function getCourseById($course_id) {
+    public function getCourseById($course_id)
+    {
         $course_by_id_sql = "SELECT * FROM courses WHERE id = :course_id";
         $stmt = $this->db->prepare($course_by_id_sql);
         $result = $stmt->execute(["course_id" => $course_id]);
 
-        if($result) {
+        if ($result) {
             return new Course($stmt->fetch());
         }
     }
 
-    public function getCourseByQueryParams($params) {
+    public function getCourseByQueryParams($params)
+    {
         $where_clause = "";
         $last_param = end($params);
         foreach ($params as $k => $v) {
-            if ($v = $last_param) $where_clause .= $k . " = " . $v;
-            else $where_clause .= $k . " = " . $v . " AND ";
+            if ($v = $last_param) {
+                $where_clause .= $k . " = " . $v;
+            } else {
+                $where_clause .= $k . " = " . $v . " AND ";
+            }
         }
         $course_by_query_params = "SELECT * FROM courses WHERE $where_clause";
         $stmt = $this->db->query($course_by_query_params);

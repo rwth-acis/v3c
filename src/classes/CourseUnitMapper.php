@@ -25,7 +25,8 @@ class CourseUnitMapper extends Mapper
         return $course_units;
     }
 
-    public function getCourseUnitById($course_id, $course_unit_id) {
+    public function getCourseUnitById($course_id, $course_unit_id)
+    {
         $course_unit_sql = "SELECT course_units.* 
                             FROM course_units JOIN course_to_unit AS ctu ON ctu.course_id = :course_id
                             WHERE course_units.id = :course_unit_id";

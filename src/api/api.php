@@ -4,6 +4,8 @@
  * User: laurieuren
  * Date: 08/12/2016
  * Time: 13:07
+ *
+ *  This is the VIRTUS API
  */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -15,24 +17,25 @@ use Monolog\Handler\FirePHPHandler;
 include '../php/db_connect.php';
 include '../config/config.php';
 require '../vendor/autoload.php';
-require_once '../api/helper_methods.php';
 
 spl_autoload_register(function ($classname) {
-    require ("../classes/" . $classname . ".php");
+    require("../classes/" . $classname . ".php");
 });
 
 spl_autoload_register(function ($classname) {
-    require ("../classes/" . $classname . ".php");
+    require("../classes/" . $classname . ".php");
 });
 
+// The $config array is set up with the database credentials
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
 
-$config['db']['host']   = $host;
-$config['db']['user']   = $user;
-$config['db']['pass']   = $password;
+$config['db']['host'] = $host;
+$config['db']['user'] = $user;
+$config['db']['pass'] = $password;
 $config['db']['dbname'] = $database;
 
+// The application is created
 $app = new \Slim\App(["settings" => $config]);
 $container = $app->getContainer();
 
@@ -48,11 +51,11 @@ $c['notFoundHandler'] = function ($c) {
 };
 
 
-$container['logger'] = function($c) {
+$container['logger'] = function ($c) {
     // Create the logger
     $logger = new \Monolog\Logger('my_logger');
     // Now add some handlers
-    $logger->pushHandler(new StreamHandler(__DIR__.'/my_app.log', Logger::DEBUG));
+    $logger->pushHandler(new StreamHandler(__DIR__ . '/my_app.log', Logger::DEBUG));
     $logger->pushHandler(new FirePHPHandler());
 
     // You can now use your logger
@@ -74,95 +77,49 @@ $app->get('/', function (Request $request, Response $response) {
     return $response;
 });
 
-function jsonRemoveUnicodeSequences($struct) {
-   return preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", json_encode($struct));
-}
 /**
- * Get Courses
+ * Get all courses and included course units
  */
 $app->get('/courses', function (Request $request, Response $response) {
     $mapper = new CourseMapper($this->db);
     $unit_mapper = new CourseUnitMapper($this->db);
     $courses = $mapper->getCourses($request->getQueryParams());
-
     $courses_array = array();
+    // In the foreach, the course units are queried and then added to the course object
     foreach ($courses as $course) {
-        //$this->logger->addInfo();
-        $course = (array)$course;
-        foreach ($course as $k => $v) {
-            $this->logger->addInfo(str_replace('\\u0000', '', $k));
-        }
-        //$this->logger->addInfo($course);
         $courses_array[] = $course;
-        //$this->logger->addInfo(json_encode($course, JSON_UNESCAPED_UNICODE));
+        $course_units = $unit_mapper->getCourseUnits($course->id);
+        $course->course_units = $course_units;
     }
-    //$this->logger->addInfo("array: ", $courses_array);
-    //TODO to each object add the course units
-    $response = $response->withJson( $courses_array);
+    $response = $response->withJson($courses_array, null, JSON_PRETTY_PRINT);
     return $response;
 });
 
 /**
- * Get Course
+ * Get a particular course with an id
  */
 $app->get('/courses/{id}', function (Request $request, Response $response, $args) {
     $course_id = (int)$args['id'];
-    $mapper = new CourseMapper($this->db);
-    $course = $mapper->getCourseById($course_id);
-    $course = (array)$course;
-    $response = $response->withJson($course, null, JSON_UNESCAPED_UNICODE);
+    $course_mapper = new CourseMapper($this->db);
+    $unit_mapper = new CourseUnitMapper($this->db);
+    $course = $course_mapper->getCourseById($course_id);
+    $course_units = $unit_mapper->getCourseUnits($course_id);
+
+    $course->course_units = $course_units;
+    $response = $response->withJson($course, null, JSON_PRETTY_PRINT);
     return $response;
 });
 
 /**
- * Get Course Units
+ * Get all subjects
  */
-$app->get('/courses/{id}/course_units', function (Request $request, Response $response, $args) {
-    $course_id = (int)$args['id'];
-    $this->logger->addInfo("course id : " . $course_id);
-    $mapper = new CourseUnitMapper($this->db);
-    $course_elements = $mapper->getCourseUnits($course_id);
-    $course_units_array = array();
-    foreach ($course_elements as $course_unit) {
-        $course_units_array[] = (array)$course_unit;
-    }
-    $new_response = $response->withJson($course_units_array);
+$app->get('/subjects', function (Request $request, Response $response, $args) {
+    $subject_mapper = new SubjectMapper($this->db);
+    $subjects = $subject_mapper->getSubjects($request->getQueryParams());
 
+    $new_response = $response->withJson($subjects, null, JSON_PRETTY_PRINT);
     return $new_response;
 });
-
-/**
- * Get Course Unit
- */
-$app->get('/courses/{course_id}/course_units/{unit_id}', function (Request $request, Response $response, $args) {
-    $course_id = (int)$args['course_id'];
-    $course_unit_id = (int)$args['unit_id'];
-    $mapper = new CourseUnitMapper($this->db);
-    $course_unit = $mapper->getCourseUnitById($course_id, $course_unit_id);
-    $course_unit = (array)$course_unit;
-    $new_response = $response->withJson($course_unit);
-
-    return $new_response;
-});
-
-/**
- * Get Course Elements
- */
-$app->get('/courses/{course_id}/course_units/{unit_id}/course_elements', function (Request $request, Response $response) {
-    $mapper = new CourseElementMapper($this->db);
-    $course_elements = $mapper->getCourseElements();
-    $course_el_array = array();
-    foreach ($course_elements as $course_el) {
-        $course_elements_array[] = (array)$course_el;
-    }
-    $new_response = $response->withJson($course_el_array);
-
-    return $new_response;
-});
-
-
-
-
 
 $app->run();
 ?>

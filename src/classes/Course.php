@@ -8,15 +8,15 @@
  */
 class Course
 {
-    protected $id;
-    protected $lang;
-    protected $name;
-    protected $description;
-    protected $profession;
-    protected $creator;
-    protected $domain;
-    protected $date_created;
-    protected $date_updated;
+    public $id;
+    public $lang;
+    public $name;
+    public $description;
+    public $profession;
+    public $creator;
+    public $domain;
+    public $date_created;
+    public $date_updated;
 
     /**
      * Accept an array of data matching properties of this class
@@ -24,9 +24,10 @@ class Course
      *
      * @param array $data The data to use to create
      */
-    public function __construct(array $data) {
+    public function __construct(array $data)
+    {
         // no id if we're creating
-        if(isset($data['id'])) {
+        if (isset($data['id'])) {
             $this->id = $data['id'];
         }
         $this->lang = $data['lang'];
@@ -38,34 +39,54 @@ class Course
         $this->date_created = $data['date_created'];
         $this->date_updated = $data['date_updated'];
     }
-    public function getId() {
+
+    public function getId()
+    {
         return $this->id;
     }
-    public function getName() {
+
+    public function getName()
+    {
         return $this->name;
     }
-    public function getDescription() {
+
+    public function getDescription()
+    {
         return $this->description;
     }
-    public function getShortDescription() {
+
+    public function getShortDescription()
+    {
         return substr($this->description, 0, 20);
     }
-    public function getLang() {
+
+    public function getLang()
+    {
         return $this->lang;
     }
-    public function getCreator() {
+
+    public function getCreator()
+    {
         return $this->creator;
     }
-    public function getProfession() {
+
+    public function getProfession()
+    {
         return $this->profession;
     }
-    public function getDomain() {
+
+    public function getDomain()
+    {
         return $this->domain;
     }
-    public function getDateCreated() {
+
+    public function getDateCreated()
+    {
         return $this->date_created;
     }
-    public function getDateUpdated() {
+
+    public function getDateUpdated()
+    {
         return $this->date_updated;
     }
 }

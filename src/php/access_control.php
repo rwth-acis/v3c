@@ -108,7 +108,7 @@ class AccessControl
         } else {
             $user = $this->getSessionUser();
             if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
-
+                
                 $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
                 if ($user->id === $course['creator']) {
                     $ret = true;

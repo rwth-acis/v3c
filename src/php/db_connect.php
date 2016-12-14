@@ -33,6 +33,6 @@ if (!mysqli_select_db($connection, $database)) {
     throw new Exception("Requested database does not exist!");
 }
 
-$db = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+$db = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $user, $password);
 
 return $db;

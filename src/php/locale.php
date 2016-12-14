@@ -1,6 +1,9 @@
 <?php
 // use sessions
-//session_start();
+/*if () {
+    session_start();
+}
+*/
 require '../config/config.php';
 // get language preference
 if (isset($_GET["lang"])) {

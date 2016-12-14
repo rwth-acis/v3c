@@ -37,7 +37,8 @@ $links = filter_input(INPUT_POST, 'links');
 //Creator stays the same
 
 // modify database-entry
-$sql = "UPDATE courses SET name='$name', domain='$domain', profession='$profession', description='$text', role_url='$role_link', contact='$contact', dates='$dates', links='$links' WHERE id=$id";
+// TODO: insert correct language and creator
+$sql = "UPDATE courses SET lang='en', name='$name', description='$text', domain='$domain', profession='$profession', creator='petersommerhoff@gmail.com' WHERE id=$id";
 
 //echo "sqlquery: $sql";
 

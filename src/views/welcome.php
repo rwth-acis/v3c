@@ -69,6 +69,9 @@
                         <p><?php echo getTranslation("main:welcome:listcourses", "Check for the list of all the courses available here.");?></p>
                     </div>
                 </div>
+                <!--<div class="temp">
+                    <a href="arrwidgetmockup.php">mockup</a>
+                </div>-->
             </div>
         </div>
     </div>

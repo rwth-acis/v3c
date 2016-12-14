@@ -50,8 +50,6 @@ try {
                             </div>
                         </div>
                         <div class="form-group">
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetDomain">Course Domain:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" rows="1" name="domain" id="targetDomain"

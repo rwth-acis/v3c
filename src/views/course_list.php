@@ -39,9 +39,10 @@ include '../php/tools.php';
 
 $subject_id = filter_input(INPUT_GET, "id");
 $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObject();
-$courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, users.family_name AS creator_lastname 
-                           FROM courses JOIN users ON courses.creator=users.email 
-                           WHERE courses.domain='$subject_id'")->fetchAll();
+
+$courses = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
+                           FROM courses JOIN organizations ON courses.creator=organizations.email 
+                           WHERE courses.id='$subject_id'")->fetchAll();
 
 ?>
 <header id='head' class='secondary'>
@@ -95,7 +96,7 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                                 <td>
                                     <a href="course.php?id=<?php echo $course["id"] . "&lang=" . $course["lang"]; ?>"><?php echo $course["name"]; ?></a>
                                 </td>
-                                <td><?php echo $course["creator_firstname"] . " " . $course["creator_lastname"]; ?></td>
+                                <td><?php echo $course["orga"]; ?></td>
                                 <td><?php foreach ($course_dates_array as $start_date) {
                                         echo $start_date . "<br>";
                                     } ?></td>
@@ -104,7 +105,7 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                                                                 value="Edit"/></td>
                                 <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
                                                                 class="btn btn-delete btn-sm btn-warning btn-block"
-                                                                value="Delete"</td>
+                                                                value="Delete"></td>
                             </tr>
                             <tr>
                                 <!-- Collapse div for course description -->

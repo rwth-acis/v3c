@@ -18,6 +18,21 @@ INSERT INTO `roles` (`id`, `role`) VALUES
   (3, 'Learner'),
   (4, 'Operator');
 
+
+
+--
+-- Data for table `organizations`
+--
+
+INSERT INTO `organizations` (`id`, `name`, `email`, `logo_url`) VALUES
+  (1, 'EUROTraining', 'kpapavramidis@mastgroup.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/eurotraining-logo-e1459274552478.jpg'),
+  (2, 'EuropeanProgress', 'giampoulaki@europeanprogress.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/EUROPEAN-PROGRESS-LOGO-e1459274456103.jpg'),
+  (3, 'BEST', 'office@best.at', 'http://virtus-project.eu/wp-content/uploads/2016/03/BEST-Logo-gro%C3%9F-e1459273908202.jpg'),
+  (4, 'FFeuskadi', 'lorena.corral@ffeuskadi.net', 'http://virtus-project.eu/wp-content/uploads/2016/03/Logo-FFE-e1459273835655.jpg'),
+  (5, 'cesie', 'irene.pizzo@cesie.org', 'http://virtus-project.eu/wp-content/uploads/2016/03/CESIE_Logo_jpg-e1459273896421.jpg');
+
+
+
 --
 -- Data for table `users`
 --
@@ -37,7 +52,7 @@ VALUES
 INSERT INTO `courses` (`id`, `lang`, `name`, `description`, `domain`, `profession`, `creator`, `date_created`, `date_updated`)
 VALUES
   (1, 'en', 'Social Entrepreneurship 101', 'This course introduces the basic principles of Social Entrepreneurship', 1,
-   'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (1, 'de', 'Social Entrepreneurship Einführung', 'Dieser Kurs behandelt die Grundlagen des Social Entrepreneurship', 1,
    'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (1, 'es', 'Curso de Social Entrepreneurship', 'Este curso es sobre los fundamentos del Social Entrepreneurship', 1,
@@ -48,8 +63,9 @@ VALUES
    'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (4, 'en', 'Scaling the Social Enterprise', 'Learn how to increase your reach with your Social Enterprise', 1,
    'Social Entrepreneur', 'petersommerhoff@gmail.com', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
-  (5, 'en', 'Flight Booking Course', 'In this course you will learn to book flights for a customer.', 2,
-   'Hotel Booker', 'tilman.berres@rwth-aachen.de', '2016-11-20 18:04:34', '2016-11-20 18:04:34');
+  (2, 'en', 'Flight Booking Course', 'In this course you will learn to book flights for a customer.', 2,
+   'Hotel Booker', 'giampoulaki@europeanprogress.gr', '2016-11-20 18:04:34', '2016-11-20 18:04:34');
+   
 
 --
 -- Data for table `course_units`

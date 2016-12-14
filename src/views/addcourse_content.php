@@ -53,13 +53,6 @@
                                        placeholder="Enter your course profession" required>
                             </div>
                         </div>
-                        <!--<div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetContact">Contact:</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" rows="3" name="contact" id="targetContact"
-                                          placeholder="Enter your contact details, e.g. enter university name, department, address, phone number, fax number"></textarea>
-                            </div>
-                        </div>-->
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetText">Description:</label>
                             <div class="col-sm-10">

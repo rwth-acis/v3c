@@ -36,6 +36,7 @@ echo"<table class=\"table table-striped table-bordered table-hover\">
                             <th>Start Dates</th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody data-link=\"row\" class=\"rowlink\">";
@@ -48,7 +49,7 @@ $index++;
 
 echo"                        <tr>
                                 <td>
-                                    <a href=\"course.php?id=\"".$course["id"] . "&lang=" . $course["lang"]."\">".$course["name"]."</a>
+                                    <a href='course.php?id=" . $course["id"] . "&lang=" . $course["lang"] . "'>" . $course["name"] . "</a>
                                 </td>
                                 <td>".$course["orga"]."</td>
                                 <td>";
@@ -69,7 +70,7 @@ foreach ($course_dates_array as $start_date) {
                             </tr>
                             <tr>
                                 <!-- Collapse div for course description -->
-                                <td colspan=\"5\">
+                                <td colspan=\"6\">
                                     <button type=\"button\" class=\"btn btn-info\" data-toggle=\"collapse\"
                                             data-target=\"#description-". $index."\">Description
                                     </button>

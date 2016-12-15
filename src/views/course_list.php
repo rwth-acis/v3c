@@ -105,6 +105,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                 <th>Start Dates</th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
@@ -133,7 +134,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                 </tr>
                                 <tr>
                                     <!-- Collapse div for course description -->
-                                    <td colspan="5">
+                                    <td colspan="6">
                                         <button type="button" class="btn btn-info" data-toggle="collapse"
                                                 data-target="#description-<?php echo $index; ?>">Description
                                         </button>

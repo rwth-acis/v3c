@@ -71,14 +71,12 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                     </div>
                 </div>
 
-                <!-- List of all courses -->
-                <div class='col-sm-8'>
-                    <form id ="fsearch" class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
 
-                            <div class="form-group">
-                                <div class="col-sm-10">
-                                    <select name="lang" id="lang_dropdown" onchange="filter()">
+                <div class ="row col-sm-8">
+                    <form id ="fsearch" class="navbar-form navbar-left" role="search">
+                            <div class = "row">
+                                <div class = "row col-sm-6">
+                                    <select class="form-control" name="lang" id="lang_dropdown" onchange="filter()">
                                         <option value="en">English</option>
                                         <option value="de">Deutsch</option>
                                         <option value="es">Español</option>
@@ -86,15 +84,17 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                         <option value="gr">Eλληνικά</option>
                                     </select>
                                 </div>
+                                <div class = "row col-sm-6">
+                                    <input name= "searched" type="text" class="form-control" placeholder="Search" onkeyup = "search()">
+                                    <br/>
+                                </div>
                             </div>
-
-                            <input name= "searched" type="text" class="form-control" placeholder="Search" onkeyup = "search()">
-
-                            <input hidden id="subject_input" name="subject_id" value=<?php echo $subject_id; ?>>
-
-                        </div>
+                        <input hidden id="subject_input" name="subject_id" value=<?php echo $subject_id; ?>>
                     </form>
-                    <br>
+                </div>
+
+                <!-- List of all courses -->
+                <div class='col-sm-8'>
                     <h3>Choose course</h3>
                     <div id ="course_table">
                         <table class="table table-striped table-bordered table-hover">

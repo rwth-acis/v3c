@@ -52,9 +52,12 @@ echo"                        <tr>
                                 </td>
                                 <td>".$course["orga"]."</td>
                                 <td>";
+
 foreach ($course_dates_array as $start_date) {
     echo $start_date . "<br>";
 }
+
+
                               echo"  </td>
                                     <td class=\"language-flag-rows\"><img class=\"language-flag-element\" src=\"../images/flags/s_".$course["lang"].".png\"></td>
                                 <td class=\"rowlink-skip\"><input type=\"button\" data-id=\"".$course["id"]."\"

@@ -84,8 +84,8 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                 </select>
                             </div>
                             <div class="row col-sm-6">
-                                <input name="searched" type="text" class="form-control" placeholder="Search"
-                                       onkeyup="search()">
+                                <input id ="searchString" name="searched" type="text" class="form-control" placeholder="Search"
+                                       onkeyup="filter()">
                                 <br/>
                             </div>
                         </div>
@@ -97,7 +97,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                 <div class='col-sm-8'>
                     <h3>Choose course</h3>
                     <div id="course_table">
-                        <table class="table table-striped table-bordered table-hover">
+                        <table id="courseTable" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>Course name</th>
@@ -114,7 +114,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                             for ($cntr = 0; $cntr < count($courses); $cntr++) {
                                 $initCntr = $cntr;
                                 $lang_array = array($courses[$cntr]["lang"]);
-                                while ($cntr <= count($courses)) {
+                                while ($cntr < count($courses)-1) {
                                     if ($courses[$cntr]["id"] == $courses[$cntr + 1]["id"]) {
                                         array_push($lang_array, $courses[$cntr + 1]["lang"]);
                                         $cntr++;
@@ -138,6 +138,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                     <td class="language-flag-rows">
                                         <?php $i=0; foreach ($lang_array as $c_lang) {
                                             ?>
+                                            <input hidden value=<?php echo $c_lang; ?>>
                                             <a href="course.php?id=<?php echo $courses[$initCntr]["id"] . "&lang=" . $c_lang ?>">
                                             <img class="language-flag-element language-flag-onhover <?php if($i==0){?>language-flag-active<?php } ?>"
                                                  src="<?php echo "../images/flags/s_" . $c_lang . ".png" ?>">

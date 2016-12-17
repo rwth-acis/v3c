@@ -76,11 +76,22 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                         <div class="row">
                             <div class="row col-sm-6">
                                 <select class="form-control" name="lang" id="lang_dropdown" onchange="filter()">
-                                    <option value="en">English</option>
-                                    <option value="de">Deutsch</option>
-                                    <option value="es">Español</option>
-                                    <option value="it">Italiano</option>
-                                    <option value="gr">Eλληνικά</option>
+                                    <?php
+                                    $languages = array(
+                                        "en" => "English",
+                                        "de" => "Deutsch",
+                                        "es" => "Español",
+                                        "it" => "Italiano",
+                                        "gr" => "ελληνικά",
+                                        "all" => "All Courses"
+                                    );
+                                    foreach ($languages as $code => $language) {
+                                        echo $_SESSION["lang"];
+                                        $selected = ($_SESSION["lang"] == $code) ? "selected" : "";
+
+                                        echo "<option class='flag flag-$code' value='$code' $selected>$language</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <div class="row col-sm-6">

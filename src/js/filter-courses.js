@@ -28,6 +28,7 @@
     xmlhttp.send(filtered);
 }
 */
+window.onload(filter());
 
 function filter(){
 
@@ -45,7 +46,7 @@ function filter(){
     for (i = 0; i < tr.length; i++) {
         flag = false;
 
-        if(selected.localeCompare("All Courses") == 0){
+        if(selected.localeCompare("all") == 0){
             flag = true;
         }
         else{

@@ -81,13 +81,13 @@ class CourseMapper extends Mapper
 
     public function save(Course $course) {
         $sql = "insert into courses
-            (id, lang, \name, description, creator, date_created, date_updated) values
-            (:id, :lang, :\name, :description, :date_created, :date_updated)";
+            (lang, \name, description, creator, date_created, date_updated) values
+            (:lang, :\name, :description, :date_created, :date_updated)";
         $stmt = $this->db->prepare($sql);
         $result = $stmt->execute([
-            "id" => $course->getId(),
             "lang" => $course->getLang(),
             "name" => $course->getName(),
+            "domain" => $course->getdomain(),
             "description" => $course->getDescription(),
             "creator" => $course->getCreator(),
             "date_created" => $course->getDateCreated(),

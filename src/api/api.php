@@ -126,18 +126,23 @@ $app->get('/subjects', function (Request $request, Response $response, $args) {
 $app->post('/courses/new', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
     $course_data = [];
-    $course_data['title'] = filter_var($data['title'], FILTER_SANITIZE_STRING);
-    $course_data['description'] = filter_var($data['description'], FILTER_SANITIZE_STRING);
-
-    $course_id = (int)$data['id'];
+    $course_data['name'] = filter_var($data['targetName'], FILTER_SANITIZE_STRING);
+    $course_data['domain'] = filter_var($data['targetDomain'], FILTER_SANITIZE_STRING);
+    $course_data['profession'] = filter_var($data['targetProfession'], FILTER_SANITIZE_STRING);
+    $course_data['desription'] = filter_var($data['targetDescription'], FILTER_SANITIZE_STRING);
+    $course_data['lang'] = "en"; //TODO Add language implementation from the form when the creation form is decided
+    $course_data['date_created'] = date('Y/m/d h:i:s', time());
+    $course_data['date_updated'] = date('Y/m/d h:i:s', time());
     $course_mapper = new CourseMapper($this->db);
 
     $course = new Course($course_data);
     $course_mapper->save($course);
-    $response = $response->withRedirect("/tickets");
+    $response = $response->withRedirect("/courses");
 
     return $response;
 });
+
+
 
 $app->run();
 ?>

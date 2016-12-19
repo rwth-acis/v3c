@@ -121,5 +121,23 @@ $app->get('/subjects', function (Request $request, Response $response, $args) {
     return $new_response;
 });
 
+// POST
+
+$app->post('/courses/new', function (Request $request, Response $response) {
+    $data = $request->getParsedBody();
+    $course_data = [];
+    $course_data['title'] = filter_var($data['title'], FILTER_SANITIZE_STRING);
+    $course_data['description'] = filter_var($data['description'], FILTER_SANITIZE_STRING);
+
+    $course_id = (int)$data['id'];
+    $course_mapper = new CourseMapper($this->db);
+
+    $course = new Course($course_data);
+    $course_mapper->save($course);
+    $response = $response->withRedirect("/tickets");
+
+    return $response;
+});
+
 $app->run();
 ?>

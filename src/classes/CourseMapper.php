@@ -78,4 +78,23 @@ class CourseMapper extends Mapper
         }
         return $courses;
     }
+
+    public function save(Course $course) {
+        $sql = "insert into courses
+            (id, lang, \name, description, creator, date_created, date_updated) values
+            (:id, :lang, :\name, :description, :date_created, :date_updated)";
+        $stmt = $this->db->prepare($sql);
+        $result = $stmt->execute([
+            "id" => $course->getId(),
+            "lang" => $course->getLang(),
+            "name" => $course->getName(),
+            "description" => $course->getDescription(),
+            "creator" => $course->getCreator(),
+            "date_created" => $course->getDateCreated(),
+            "date_updated" => $course->getDateUpdated()
+        ]);
+        if(!$result) {
+            throw new Exception("could not save course");
+        }
+    }
 }

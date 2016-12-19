@@ -8,6 +8,13 @@
  */
 class CourseUnitMapper extends Mapper
 {
+    /**
+     *
+     * Get all the course_units for certain course
+     *
+     * @param $course_id
+     * @return array
+     */
     public function getCourseUnits($course_id)
     {
         $course_units_sql = "SELECT DISTINCT course_units.* 

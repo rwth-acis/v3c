@@ -42,8 +42,8 @@ $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObj
 $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
                            FROM courses JOIN organizations ON courses.creator=organizations.email 
                            WHERE courses.domain='$subject_id' ORDER BY id ASC")->fetchAll();
-
 ?>
+
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>

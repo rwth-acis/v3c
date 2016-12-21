@@ -35,4 +35,5 @@ function template_substitution($template, $data) {
     }
     return $result;
 }
+
 ?>

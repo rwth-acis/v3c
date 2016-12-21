@@ -56,6 +56,7 @@ try {
 <?php
 // Check whether the currently logged in user is allowed to delete courses
 require '../php/access_control.php';
+
 $accessControl = new AccessControl();
 $canCreateCourse = $accessControl->canDeleteCourse($course_id);
 

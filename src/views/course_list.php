@@ -47,8 +47,8 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo template_substitution(getTranslation("courselist:head:subcourses", "Courses"),
-                    array("{COURSENAME}", $subject->name)); ?></h1>
+            <h1><?php echo template_substitution(getTranslation("courselist:head:subcourses", "{SUBJECT} Courses"),
+                    array("{SUBJECT}" => $subject->name)); ?></h1>
         </div>
     </div>
 </header>

@@ -29,10 +29,10 @@ function getTranslation($key, $default)
 }
 
 function template_substitution($template, $data) {
-    $placeholders = array_keys($data);
-    foreach ($placeholders as &$placeholder) {
-        $placeholder = strtoupper("{{$placeholder}}");
+    $result = $template;
+    foreach ($data as $key => $value) {
+        $result = str_replace($key, $value, $result);
     }
-    return str_replace($placeholders, array_values($data), $template);
+    return $result;
 }
 ?>

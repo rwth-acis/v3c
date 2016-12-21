@@ -48,7 +48,7 @@ try {
     <div class='container'>
         <div class='row'>
             <h1><?php echo template_substitution(getTranslation("coursedel:head:name", "Delete course {COURSENAME}"),
-                    array("{COURSENAME}", $course['name'])); ?></h1>
+                    array("{COURSENAME}" => $course['name'])); ?></h1>
         </div>
     </div>
 </header>
@@ -66,7 +66,7 @@ if ($canCreateCourse) {
     <div class="center-block container">
         <div class="featured-box container delete-confirm-div">
             <p><strong><?php echo template_substitution(getTranslation("coursedel:head:confirm", "Do you really want to delete course {COURSENAME}?"),
-                        array("{COURSENAME}", $course['name'])); ?></strong></p>
+                        array("{COURSENAME}" => $course['name'])); ?></strong></p>
             <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no"
                    value="<?php echo getTranslation('general:button:yes', 'Yes');?>"/>
             <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no"

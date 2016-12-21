@@ -46,10 +46,10 @@ function getLanguage()
         "course:content:profession" => "Επάγγελμα:",
         "course:content:description" => "Περιγραφή:",
 
-        "coursedel:head:name" => "Διαγραφή φυσικά",
-        "coursedel:head:confirm" => "Θέλετε πραγματικά να διαγράψετε φυσικά;",
+        "coursedel:head:name" => "Διαγραφή φυσικά {COURSENAME}",
+        "coursedel:head:confirm" => "Θέλετε πραγματικά να διαγράψετε φυσικά {COURSENAME};",
 
-        "courselist:head:subcourses" => "μαθήματα",
+        "courselist:head:subcourses" => "{SUBJECT} μαθήματα",
         "courselist:head:add" => "Προσθέστε νέα πορεία",
         "courselist:choose:choose" => "Επιλέξτε μάθημα",
         "courselist:choose:name" => "Το όνομά του μαθήματος",

@@ -240,6 +240,15 @@ label {
 .flag-gr {
     background-image: url("/src/images/flags/gr.svg");
 }
+.language-flag-onhover{
+    opacity: 0.6;
+}
+.language-flag-active{
+    opacity: 1;
+}
+.language-flag-onhover:hover{
+    opacity: 1;
+}
 
 @media (max-width: 767px) {
     .headline-btn {

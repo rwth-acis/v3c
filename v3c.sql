@@ -7,7 +7,7 @@
 
 
 CREATE TABLE IF NOT EXISTS `subjects` (
-  `id`         INT(11)     NOT NULL     AUTO_INCREMENT,
+  `id`         INT         NOT NULL     AUTO_INCREMENT,
   `name`       VARCHAR(64) NOT NULL UNIQUE,
   `img_url`    TEXT        NOT NULL,
   `created_at` TIMESTAMP   NOT NULL     DEFAULT CURRENT_TIMESTAMP,
@@ -22,6 +22,20 @@ CREATE TABLE IF NOT EXISTS `subjects` (
 CREATE TABLE IF NOT EXISTS `roles` (
   `id`   INT          NOT NULL,
   `role` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = latin1;
+
+
+
+CREATE TABLE IF NOT EXISTS `organizations` (
+  `id`        INT NOT NULL AUTO_INCREMENT,
+  `name`      VARCHAR(255) NOT NULL,
+  `email`     VARCHAR(255) NOT NULL UNIQUE,  -- TODO: may be replaced by users associated with organizations (then using the user's email)
+  `logo_url`  TEXT NOT NULL ,
+  `created_at` TIMESTAMP   NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP   NOT NULL     DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 )
   ENGINE = InnoDB
@@ -56,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `date_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id, lang),
-  FOREIGN KEY (creator) REFERENCES users (email),
+  FOREIGN KEY (creator) REFERENCES organizations (email),
   FOREIGN KEY (domain) REFERENCES subjects (id)
 )
   ENGINE = InnoDB

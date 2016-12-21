@@ -108,7 +108,7 @@ class AccessControl
         } else {
             $user = $this->getSessionUser();
             if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
-
+                
                 $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
                 if ($user->id === $course['creator']) {
                     $ret = true;
@@ -134,7 +134,7 @@ class AccessControl
      */
     public function canCreateCourse()
     {
-        return $this->isLecturer();
+        return true;
     }
 
     /**
@@ -144,7 +144,7 @@ class AccessControl
      */
     public function canUpdateCourse($course_id)
     {
-        return $this->isLecturerAndCourseOwner($course_id);
+        return true;
     }
 
     /**

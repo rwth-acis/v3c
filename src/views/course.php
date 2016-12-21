@@ -34,13 +34,19 @@ include '../php/db_connect.php';
 include '../php/tools.php';
 
 // The course unit id from URL parameter
-$course_id = $_GET["id"];
-$course_lang = $_GET["lang"];
+$course_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+
+$course_lang = "en";  // default value
+if (isset($_GET["lang"])) {
+    $course_lang = filter_input(INPUT_GET, "lang");
+}
 
 // Gets course details with it's creator information
-$course_query = $db->query("SELECT courses.*, users.given_name, users.family_name, users.email 
-                            FROM courses JOIN users ON courses.creator = users.email 
-                            WHERE courses.id = $course_id AND courses.lang = '$course_lang'");
+$query = "SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
+                            FROM courses JOIN organizations ON courses.creator = organizations.email 
+                            WHERE courses.id = $course_id AND courses.lang = '$course_lang'";
+
+$course_query = $db->query($query);
 $course_details = $course_query->fetchObject();
 
 // Get course subject
@@ -145,8 +151,8 @@ function replaceLinks($text)
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <label class="col-sm-3 output-element"><?php echo getTranslation("course:content:createdby", "Created by:");?></label>
-                        <div class="col-sm-7"><?php echo $course_details->given_name . " " . $course_details->family_name; ?>
-                            (<a href="mailto:<?php echo $course_details->email; ?>"><?php echo $course_details->email; ?></a>)</div>
+                        <div class="col-sm-7"><?php echo $course_details->orga; ?>
+                            (<a href="mailto:<?php echo $course_details->orga_email; ?>"><?php echo $course_details->orga_email; ?></a>)</div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">

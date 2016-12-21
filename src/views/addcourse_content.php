@@ -33,37 +33,38 @@
                               echo '?widget=true';
                           } ?>" method="post" enctype="multipart/form-data" id="UploadForm">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetName">Course name:</label>
+                            <label class="col-sm-2 control-label" for="targetName">
+                                <?php echo getTranslation("addcourse:content:name", "Course name:");?>
+                            </label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" rows="1" name="name" id="targetName"
-                                       placeholder="Enter your course name" required>
+                                       placeholder="<?php echo getTranslation('addcourse:placeholder:name', 'Enter your course name');?>" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetDomain">Course Domain:</label>
+                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("addcourse:content:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" rows="1" name="domain" id="targetDomain"
-                                       placeholder="Enter your course domain" required>
+                                       placeholder="<?php echo getTranslation('addcourse:placeholder:domain', 'Enter your course domain');?>" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetProfession">Course Profession:</label>
+                            <label class="col-sm-2 control-label" for="targetProfession"><?php echo getTranslation("addcourse:content:profession", "Course Profession:");?></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" rows="1" name="profession" id="targetProfession"
-                                       placeholder="Enter your course profession" required>
+                                       placeholder="<?php echo getTranslation('addcourse:placeholder:profession', 'Enter your course profession');?>" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetText">Description:</label>
+                            <label class="col-sm-2 control-label" for="targetText"><?php echo getTranslation("addcourse:content:desription", "Description:");?></label>
                             <div class="col-sm-10">
                 <textarea class="form-control" rows="3" name="text" id="targetText"
-                          placeholder="Enter course description"></textarea>
+                          placeholder="<?php echo getTranslation('addcourse:placeholder:description', 'Enter course description');?>"></textarea>
                             </div>
                         </div>
                         <input hidden id="subject_input" name="subject_id">
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton"
-                                value="Upload">Save
-                        </button>
+                                value="Upload"><?php echo getTranslation("general:button:save", "Save");?></button>
                     </form>
                     <div id="output"></div>
                     <br>

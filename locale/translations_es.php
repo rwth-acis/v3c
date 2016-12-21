@@ -9,23 +9,59 @@
 function getLanguage()
 {
     return array(
+        "general:button:home" => "Home",
         "general:button:courses" => "Cursos",
+        "general:button:signin" => "Registrarse",
+        "general:button:save" => "Salvar",
+        "general:button:delete" => "Borrar",
+        "general:button:edit" => "Editar",
+        "general:button:yes" => "Sí",
+        "general:button:no" => "No",
+        "general:button:description" => "Descripción",
+
         "main:welcome:courses" => "Cursos",
         "main:welcome:headline" => "¡Bienvenido de V3C proyecto!",
-        "main:subjects:subject" => "Temas"
+        "main:subjects:subject" => "Temas",
+        "main:welcome:v3cgoal" => "El proyecto “Virtual Vocational Education and Training – VIRTUS” desarrollará un centro de formación y formación profesional virtual innovador y totalmente funcional, que ofrecerá cursos modulares modulares adecuadamente diseñados en MEC (Modular Employable Skills), correspondientes a una amplia gama de circunstancias como el potencial de crecimiento regional y / o la reestructuración de empresas Y con el objetivo de aumentar la tasa de participación de los alumnos adultos en la formación profesional",
+        "main:welcome:v3ccourses" => "En particular, el centro VET virtual proporcionará dos cursos modulares certificados en:",
+        "main:welcome:tourism" => "Servicios de Turismo y Hospitalidad",
+        "main:welcome:social" => "El emprendimiento social",
+        "main:welcome:listcourses" => "Consulte la lista de todos los cursos disponibles aquí.",
 
- /*       "general:button:home" => "Startseite",
-        "general:button:signin" => "Anmelden",
+        "addcourse:add:create" => "Crear un nuevo curso",
+        "addcourse:content:name" => "Nombre del curso:",
+        "addcourse:placeholder:name" => "Ingrese el nombre de su curso",
+        "addcourse:content:domain" => "Dominio del curso:",
+        'addcourse:placeholder:domain' => 'Ingrese el dominio de su curso',
+        "addcourse:content:profession" => "Curso Profesión:",
+        'addcourse:placeholder:profession' => 'Ingrese a su profesión de curso',
+        "addcourse:content:desription" => "Descripción:",
+        'addcourse:placeholder:description' => 'Introduzca la descripción del curso',
 
-        "main:welcome:headline" => "Willkommen im V3C Projekt!",
-        "main:welcome:v3cgoal" => "Das “Virtual Vocational Education and Training – VIRTUS” Projekt entwickelt eine innovative, voll funktionsfähige vitruelle Ausbildungs- und Trainigsplattform. Es bietet angemessen modular zertifizierete Kurse in Modular Employable Skills (MES), angepasst an eine weite Bandbreite an Umständen wie reginale Wachstumspotentiale und/oder Geschäftsumstrukturierung. Das Ziel ist die Erhöhung der Anzahl der Teilnehmerzahl Erwachsener in Ausbildungen.",
-        "main:welcome:v3ccourses" => "Das virtuell VET Center bietet derzeit folgende modular zertifizierte Kurse:",
-        "main:welcome:tourism" => "Tourismus und Gastgewerbe",
-        "main:welcome:social" => "Social Entrepreneurship",
-        "main:welcome:courses" => "Kurse",
-        "main:welcome:listcourses" => "Für eine vollständige Liste aller Kurse klicken Sie hier.",
+        "course:content:courseunits" => "Unidades del curso",
+        "course:content:enterroom" => "Entrar en la sala de cursos",
+        "course:content:createdby" > "Creado por:",
+        "course:content:domain" => "Dominio:",
+        "course:content:profession" => "Profesión:",
+        "course:content:description" => "Descripción:",
 
-        "main:subjects:subject" => "Themen"
- */
+        "coursedel:head:name" => "Eliminar curso {COURSENAME}",
+        "coursedel:head:confirm" => "¿Realmente desea eliminar el curso {COURSENAME}?",
+
+        "courselist:head:subcourses" => "{SUBJECT} cursos",
+        "courselist:head:add" => "Agregar nuevo curso",
+        "courselist:choose:choose" => "Elija el curso",
+        "courselist:choose:name" => "Nombre del curso",
+        "courselist:choose:creator" => "Creado por",
+        "courselist:choose:start" => "Fechas de Inicio",
+
+        "editcourse:head:edit" => "Editar su curso",
+        "editcourse:edit:name" => "Nombre del curso:",
+        "editcourse:edit:domain" => "Dominio del curso:",
+        "editcourse:edit:profession" => "Profesión del curso:",
+        "editcourse:edit:description" => "Descripción:",
+        "editcourse:edit:design" => "Diseñar un entorno de aprendizaje",
+
+        "overview:head:gallery" => "Galería"
     );
 }

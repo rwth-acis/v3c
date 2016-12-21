@@ -15,7 +15,10 @@ else if (isset($_SESSION["lang"])) {
 else {
     $language = "en";
 }
-
+if (strlen ($language) <= 5) {
 // save language preference for future page requests
-$_SESSION["lang"]  = $language;
+    $_SESSION["lang"] = $language;
+} else {
+    echo "Selected language is not supported!";
+}
 

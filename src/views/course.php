@@ -101,7 +101,7 @@ function replaceLinks($text)
                 <div class='col-md-12 non-overflow-div'>
                     <div class="row">
                         <div class='col-md-12 text-center'>
-                            <h2>Course Units</h2>
+                            <h2><?php echo getTranslation("course:content:courseunits", "Course Units");?></h2>
                             <!--<?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
                                 <a id="enter-course-a" href="#" data-rolespace="<?php echo $course_details->role_url; ?>">
                                     <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room
@@ -124,7 +124,7 @@ function replaceLinks($text)
                                             <?php echo $course_unit["start_date"] ?>
                                             <!-- TODO: href to course room-->
                                     <a href="http://role-sandbox.eu/spaces/v3c_demo" target="_blank" class="margin-left btn btn-xs btn-warning">
-                                        Enter Course Room
+                                        <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
                                     </a>
                                 </span>
                                     </li>
@@ -150,27 +150,27 @@ function replaceLinks($text)
                 <div class="col-md-8 non-overflow-div" style="margin: 0 auto;">
                     <div class="row">
                         <div class="col-sm-1"></div>
-                        <label class="col-sm-3 output-element">Created by:</label>
+                        <label class="col-sm-3 output-element"><?php echo getTranslation("course:content:createdby", "Created by:");?></label>
                         <div class="col-sm-7"><?php echo $course_details->orga; ?>
                             (<a href="mailto:<?php echo $course_details->orga_email; ?>"><?php echo $course_details->orga_email; ?></a>)</div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-1"></div>
-                        <label class="col-sm-3">Domain:</label>
+                        <label class="col-sm-3"><?php echo getTranslation("course:content:domain", "Domain:");?></label>
                         <p class="col-sm-7 output-element"><?php echo $course_subject_details["name"]; ?></p>
                         <div class="col-sm-1"></div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-1"></div>
-                        <label class="col-sm-3">Profession:</label>
+                        <label class="col-sm-3"><?php echo getTranslation("course:content:profession", "Profession:");?></label>
                         <p class="col-sm-7 output-element"><?php echo $course_details->profession; ?></p>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-1"></div>
-                        <label class="col-sm-3">Description:</label>
+                        <label class="col-sm-3"><?php echo getTranslation("course:content:description", "Description:");?></label>
                         <p class="col-sm-7 output-element"><?php echo $course_details->description; ?></p>
                         <div class="col-sm-1"></div>
                     </div>
@@ -178,11 +178,11 @@ function replaceLinks($text)
                         <div class="col-sm-1"></div>
                         <div class=" col-sm-5">
                             <?php printLinkBtn("editcourse.php?id=$course_id",
-                                "btn btn-success btn-block btn-lg", "Edit"); ?>
+                                "btn btn-success btn-block btn-lg", getTranslation("general:button:edit", "Edit")) ?>
                         </div>
                         <div class="col-sm-5">
                             <button class="btn btn-warning col-sm-5 btn-block btn-lg " type='button'
-                                    id="btn-delete">Delete
+                                    id="btn-delete"><?php echo getTranslation("general:button:delete", "Delete");?>
                             </button>
                         </div>
                         <div class="col-md-1"></div>

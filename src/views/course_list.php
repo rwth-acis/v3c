@@ -47,7 +47,8 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo "$subject->name courses"; ?></h1>
+            <h1><?php echo template_substitution(getTranslation("courselist:head:subcourses", "{SUBJECT} courses"),
+                    array("{COURSENAME}", $subject->name)); ?></h1>
         </div>
     </div>
 </header>
@@ -62,8 +63,8 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                         <img src="<?php echo "$subject->img_url" ?>">
                         <?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
                             <a href="addcourse.php?id=<?php echo $subject->id; ?>">
-                                <button class='btn btn-success btn-lg btn-block margin-top' type='button'>Add new
-                                    course
+                                <button class='btn btn-success btn-lg btn-block margin-top' type='button'>
+                                    <?php echo getTranslation("courselist:head:add", "Add new course");?>
                                 </button>
                             </a>
                         <?php } ?>
@@ -106,14 +107,14 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
 
                 <!-- List of all courses -->
                 <div class='col-sm-8'>
-                    <h3>Choose course</h3>
+                    <h3><?php echo getTranslation("courselist:choose:choose", "Choose course");?></h3>
                     <div id="course_table">
                         <table id="courseTable" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>Course name</th>
-                                <th>Created by</th>
-                                <th>Start Dates</th>
+                                <th><?php echo getTranslation("courselist:choose:name", "Course name");?></th>
+                                <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
+                                <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>

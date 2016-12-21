@@ -47,10 +47,10 @@ function getLanguage()
         "course:content:profession" => "Profession:",
         "course:content:description" => "Beschreibung:",
 
-        "coursedel:head:name" => "Lösche Kurs {COURSENAME}",
-        "coursedel:head:confirm" => "Wollen Sie wirklich den Kurs {COURSENAME} löschen?",
+        "coursedel:head:name" => "Lösche Kurs",
+        "coursedel:head:confirm" => "Wollen Sie wirklich den Kurs löschen?",
 
-        "courselist:head:subcourses" => "{SUBJECT} Kurse",
+        "courselist:head:subcourses" => "Kurse",
         "courselist:head:add" => "Neuen Kurs hinzufügen",
         "courselist:choose:choose" => "Kurs wählen",
         "courselist:choose:name" => "Kursname",

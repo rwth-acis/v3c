@@ -36,7 +36,7 @@
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1>Edit Your Course</h1>
+            <h1><?php echo getTranslation("editcourse:head:edit", "Edit Your Course");?></h1>
         </div>
     </div>
 </header>

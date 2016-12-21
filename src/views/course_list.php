@@ -47,7 +47,8 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo "$subject->name courses"; ?></h1>
+            <h1><?php echo template_substitution(getTranslation("courselist:head:subcourses", "{SUBJECT} courses"),
+                    array("{COURSENAME}", $subject->name)); ?></h1>
         </div>
     </div>
 </header>
@@ -62,8 +63,8 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                         <img src="<?php echo "$subject->img_url" ?>">
                         <?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
                             <a href="addcourse.php?id=<?php echo $subject->id; ?>">
-                                <button class='btn btn-success btn-lg btn-block margin-top' type='button'>Add new
-                                    course
+                                <button class='btn btn-success btn-lg btn-block margin-top' type='button'>
+                                    <?php echo getTranslation("courselist:head:add", "Add new course");?>
                                 </button>
                             </a>
                         <?php } ?>
@@ -72,13 +73,13 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
 
                 <!-- List of all courses -->
                 <div class='col-sm-8'>
-                    <h3>Choose course</h3>
+                    <h3><?php echo getTranslation("courselist:choose:choose", "Choose course");?></h3>
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Course name</th>
-                            <th>Created by</th>
-                            <th>Start Dates</th>
+                            <th><?php echo getTranslation("courselist:choose:name", "Course name");?></th>
+                            <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
+                            <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -101,16 +102,17 @@ $courses = $db->query("SELECT courses.*, users.given_name AS creator_firstname, 
                                     } ?></td>
                                 <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
                                                                 class="btn btn-edit btn-sm btn-success btn-block"
-                                                                value="Edit"/></td>
+                                                                value="<?php echo getTranslation('general:button:edit', 'Edit');?>"/></td>
                                 <td class="rowlink-skip"><input type="button" data-id="<?php echo $course["id"]; ?>"
                                                                 class="btn btn-delete btn-sm btn-warning btn-block"
-                                                                value="Delete"</td>
+                                                                value="<?php echo getTranslation('general:button:delete', 'Delete');?>"</td>
                             </tr>
                             <tr>
                                 <!-- Collapse div for course description -->
                                 <td colspan="5">
                                     <button type="button" class="btn btn-info" data-toggle="collapse"
-                                            data-target="#description-<?php echo $index; ?>">Description
+                                            data-target="#description-<?php echo $index; ?>">
+                                        <?php echo getTranslation("general:button:description", "Description");?>
                                     </button>
                                     <div id="description-<?php echo $index; ?>" class="collapse">
                                         <?php echo $course["description"]; ?>

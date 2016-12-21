@@ -42,7 +42,7 @@ try {
                               echo '?widget=true';
                           } ?>" method="post" enctype="multipart/form-data" id="UploadForm">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetName">Course name:</label>
+                            <label class="col-sm-2 control-label" for="targetName"><?php echo getTranslation("editcourse:edit:name", "Course name:");?></label>
                             <div class="col-sm-10">
                                 <input type="hidden" name="targetId" value="<?php echo $course_id; ?>">
                                 <input type="text" class="form-control" rows="1" name="name" id="targetName"
@@ -52,21 +52,21 @@ try {
                         <div class="form-group">
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetDomain">Course Domain:</label>
+                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" rows="1" name="domain" id="targetDomain"
                                        value="<?php echo htmlentities($entry['domain']); ?>" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetProfession">Course Profession:</label>
+                            <label class="col-sm-2 control-label" for="targetProfession"><?php echo getTranslation("editcourse:edit:profession", "Course Profession:");?></label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" rows="1" name="profession" id="targetProfession"
                                        value="<?php echo htmlentities($entry['profession']); ?>" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetText">Description:</label>
+                            <label class="col-sm-2 control-label" for="targetText"><?php echo getTranslation("editcourse:edit:description", "Description:");?></label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" rows="3" name="text" id="targetText"
                                           placeholder="Enter course description"><?php echo htmlentities($entry['description']); ?></textarea>
@@ -74,11 +74,11 @@ try {
                         </div>
 
                         <div class="center">
-                            <a href="arrwidgetmockup.php">Design learning environment</a>
+                            <a href="arrwidgetmockup.php"><?php echo getTranslation("editcourse:edit:design", "Design learning environment");?></a>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Upload">
-                            Save
+                            <?php echo getTranslation("general:button:save", "Save");?>
                         </button>
                     </form>
                     <!-- FROM FOR EDITING INPUT VALUES ENDING -->

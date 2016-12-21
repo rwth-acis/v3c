@@ -62,20 +62,6 @@
                           placeholder="<?php echo getTranslation('addcourse:placeholder:description', 'Enter course description');?>"></textarea>
                             </div>
                         </div>
-                        <!--<div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetDates">Dates:</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" rows="3" name="dates" id="targetDates"
-                                          placeholder="Enter dates for online appointments which are relevant for your students"></textarea>
-                            </div>
-                        </div>-->
-                        <!--<div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetLinks">Links:</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" rows="3" name="links" id="targetLinks"
-                                          placeholder="Enter external links which provide additional information, e.g. links to Campus Office, L2P"></textarea>
-                            </div>
-                        </div>-->
                         <input hidden id="subject_input" name="subject_id">
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton"
                                 value="Upload"><?php echo getTranslation("general:button:save", "Save");?></button>

@@ -32,6 +32,7 @@ class Authentication
 //      return true
 
         if ($_SESSION == null) {
+
             session_start();
         }
 

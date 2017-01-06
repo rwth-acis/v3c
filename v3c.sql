@@ -30,13 +30,12 @@ CREATE TABLE IF NOT EXISTS `roles` (
 
 
 CREATE TABLE IF NOT EXISTS `organizations` (
-  `id`        INT NOT NULL AUTO_INCREMENT,
   `name`      VARCHAR(255) NOT NULL,
   `email`     VARCHAR(255) NOT NULL UNIQUE,  -- TODO: may be replaced by users associated with organizations (then using the user's email)
   `logo_url`  TEXT NOT NULL ,
   `created_at` TIMESTAMP   NOT NULL     DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP   NOT NULL     DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
+  PRIMARY KEY (email)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = latin1;

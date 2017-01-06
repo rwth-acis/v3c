@@ -30,14 +30,17 @@
 </head>
 <body>
 <?php
-// LOAD COURSE DATA FROM OUR DATABASE //////////////////////////////////////
+
 include '../php/tools.php';
+
 $course_id = filter_input(INPUT_GET, 'id');
+
 try {
     $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
 } catch (Exception $e) {
     error_log($e->getMessage());
 }
+
 ?>
 
 <!-- Top level navigation and logo -->
@@ -59,10 +62,12 @@ require '../php/access_control.php';
 $accessControl = new AccessControl();
 $canCreateCourse = $accessControl->canDeleteCourse($course_id);
 
+// FIXME: debug
+$canCreateCourse = true;
+
 if ($canCreateCourse) {
     ?>
-    <!-- Confirmation check UI elements to ask user whether or not to delete the
-      selected course.-->
+    <!-- Confirmation check UI elements to ask user whether or not to delete the selected course -->
     <div class="center-block container">
         <div class="featured-box container delete-confirm-div">
             <p><strong><?php echo template_substitution(getTranslation("coursedel:head:confirm", "Do you really want to delete course {COURSENAME}?"),

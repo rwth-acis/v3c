@@ -5,7 +5,7 @@
  * Date: 08/12/2016
  * Time: 13:07
  *
- *  This is the VIRTUS API
+ * This is the VIRTUS API
  */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,13 +14,10 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\FirePHPHandler;
 
-include '../php/db_connect.php';
-include '../config/config.php';
-require '../vendor/autoload.php';
+require_once '../php/db_connect.php';
+require_once '../config/config.php';
+require_once '../vendor/autoload.php';
 
-spl_autoload_register(function ($classname) {
-    require("../classes/" . $classname . ".php");
-});
 
 spl_autoload_register(function ($classname) {
     require("../classes/" . $classname . ".php");
@@ -122,7 +119,6 @@ $app->get('/subjects', function (Request $request, Response $response, $args) {
 });
 
 // POST
-
 $app->post('/courses/new', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
     $course_data = [];

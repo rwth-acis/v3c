@@ -30,13 +30,12 @@ CREATE TABLE IF NOT EXISTS `roles` (
 
 
 CREATE TABLE IF NOT EXISTS `organizations` (
-  `id`        INT NOT NULL AUTO_INCREMENT,
   `name`      VARCHAR(255) NOT NULL,
   `email`     VARCHAR(255) NOT NULL UNIQUE,  -- TODO: may be replaced by users associated with organizations (then using the user's email)
   `logo_url`  TEXT NOT NULL ,
   `created_at` TIMESTAMP   NOT NULL     DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP   NOT NULL     DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
+  PRIMARY KEY (email)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = latin1;
@@ -100,8 +99,8 @@ CREATE TABLE IF NOT EXISTS `course_to_unit` (
   `unit_id`     INT     NOT NULL,
   `unit_lang`   CHAR(2) NOT NULL,
   PRIMARY KEY (course_id, course_lang, unit_id, unit_lang),
-  FOREIGN KEY (course_id, course_lang) REFERENCES courses (id, lang),
-  FOREIGN KEY (unit_id, unit_lang) REFERENCES course_units (id, lang)
+  FOREIGN KEY (course_id, course_lang) REFERENCES courses (id, lang) ON DELETE CASCADE,
+  FOREIGN KEY (unit_id, unit_lang) REFERENCES course_units (id, lang) ON DELETE CASCADE
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = latin1;

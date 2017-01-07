@@ -63,6 +63,16 @@ function getLanguage()
         "editcourse:edit:profession" => "Kursprofession:",
         "editcourse:edit:description" => "Beschreibung:",
         "editcourse:edit:design" => "Entwerfe Lernumgebung",
+        "editcourseunit:edit:addunit" => "Neue Kurseinheit",
+
+        "addcourseunit:add:create" => "Kurseinheit erstellen",
+        "addcourseunit:content:name" => "Name der Kurseinheit:",
+        "addcourseunit:placeholder:name" => "Name der Kurseinheit eingeben",
+        "addcourseunit:content:points" => "ECVET Punkte:",
+        "addcourseunit:content:startdate" => "Startdatum:",
+        "addcourseunit:placeholder:startdate" => "Startdatum eingeben",
+        "addcourseunit:content:description" => "Beschreibung",
+        "addcourseunit:placeholder:description" => "Beschreibung eingeben",
 
         "overview:head:gallery" => "Gallerie"
     );

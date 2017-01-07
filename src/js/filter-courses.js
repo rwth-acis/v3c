@@ -2,44 +2,18 @@
  * Created by Rouchdi on 12/14/2016.
  */
 
-//this function is used to filter courses by language
-/*function filter()
-{
-    var xmlhttp;
-    if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-    }
-    else
-    {// code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange=function()
-    {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200)
-        {
-            document.getElementById("course_table").innerHTML=xmlhttp.responseText;
-        }
-    }
-
-    var filtered = $("#fsearch").serialize();
-    xmlhttp.open("POST","../php/filter_course_list.php",true);
-    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send(filtered);
-}
-*/
-window.onload(filter());
+window.onload = filter;
 
 function filter(){
 
-    var input, filter, table, body, tr, tdlang, td, lang, a, dropdown, selected ,i,j, input,inputs;
+    var input, filter, table, body, tr, tdlang, td, lang, a, dropdown, selected ,i, j,inputs;
     var flag = new Boolean();
 
     input = document.getElementById("searchString");
     filter = input.value.toUpperCase();
     dropdown = document.getElementById("lang_dropdown");
     selected = dropdown.options[dropdown.selectedIndex].value;
-    table = document.getElementById("courseTable");
+    table = document.getElementById("course-table");
     tr = table.getElementsByTagName("tr");
 
     // Loop through all displayed courses, and hide those who don't match the filter criteria

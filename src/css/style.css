@@ -655,6 +655,9 @@ img.pull-left {
 /* ==========================================================================
    FOOTER
    ========================================================================== */
+#footer {
+    margin-top: 100px;
+}
 
 footer {
     border-top: 1px solid #e5e5e5;
@@ -924,3 +927,14 @@ footer ul li {
 .hover-click:hover {
     cursor: pointer;
 }
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 3px 10px;
+}
+
+.dropdown-item:hover {
+    text-decoration: none;
+}
+

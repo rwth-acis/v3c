@@ -26,42 +26,44 @@ session_start();
 $conn = require '../php/db_connect.php';
 require_once '../php/tools.php';
 
-if ((include '../config/config.php') === false) {
-    throw new Exception("The config.php is missing! Cannot create widget automatically.");
-}
-
 //Get input data from form
-$name = mysql_real_escape_string(filter_input(INPUT_POST, 'name'));
-$text = mysql_real_escape_string(filter_input(INPUT_POST, 'text'));
-$role_link = filter_input(INPUT_POST, 'roleLink');
-$contact = filter_input(INPUT_POST, 'contact');
-$dates = filter_input(INPUT_POST, 'dates');
-$links = filter_input(INPUT_POST, 'links');
+$name = filter_input(INPUT_POST, 'name');
 $profession = filter_input(INPUT_POST, 'profession');
 $domain = filter_input(INPUT_POST, 'domain');
-$subject_id = filter_input(INPUT_POST, 'subject_id');
+$description = filter_input(INPUT_POST, 'description');
 
 // Get the ID (of our DB) of the currently logged in user. Required, because this 
 // user will be registered as the creator of the course.
-ob_start();
-$user_database_entry = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $_SESSION['sub']);
-ob_end_clean();
-$creator = $user_database_entry['id'];
+//ob_start();
+//$user_database_entry = getSingleDatabaseEntryByValue('users', 'openIdConnectSub', $_SESSION['sub']);
+//ob_end_clean();
+
+// TODO: Add organization (creator) to form
+$creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
 
 // Create database-entry
-$sql = "INSERT INTO courses (name, domain, profession, description, creator, role_url, contact, dates, links, subject_id) VALUES ('$name', '$domain', '$profession', '$text', $creator, '$role_link', '$contact', '$dates', '$links', '$subject_id')";
+// TODO: Get lang from form
+$statement = $conn->prepare("INSERT INTO courses (lang, name, description, domain, profession, creator) 
+                             VALUES ('en', :name, :description, :domain, :profession, :creator)");
+$statement->bindParam(":name", $name, PDO::PARAM_STR);
+$statement->bindParam(":description", $description, PDO::PARAM_STR);
+$statement->bindParam(":domain", $domain, PDO::PARAM_STR);
+$statement->bindParam(":profession", $profession, PDO::PARAM_STR);
+$statement->bindParam(":creator", $creator, PDO::PARAM_INT);
 
-$conn->query($sql);
-
-$last_id = $conn->lastInsertId();
-
-$html = "";
-if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
-    $html = "&widget=true";
+$success = $statement->execute();
+if (!$success) {
+    print_r($statement->errorInfo());
+    die("Error saving course.");
 }
+
+// TODO: Get lang from form
+$course_id = $conn->lastInsertId();
+$course_lang = "en";
+
 
 // After creating a course, the user is redirected to the edit page. The reason
 // for this is, that it is not possible to add models on addcourse.php. But the user
 // can add models on editcourse.php
-header("Location: ../views/editcourse.php?id=$last_id$html");
+header("Location: ../views/editcourse.php?id=$course_id&lang=$course_lang");
 ?>

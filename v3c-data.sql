@@ -24,12 +24,12 @@ INSERT INTO `roles` (`id`, `role`) VALUES
 -- Data for table `organizations`
 --
 
-INSERT INTO `organizations` (`id`, `name`, `email`, `logo_url`) VALUES
-  (1, 'EUROTraining', 'kpapavramidis@mastgroup.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/eurotraining-logo-e1459274552478.jpg'),
-  (2, 'EuropeanProgress', 'giampoulaki@europeanprogress.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/EUROPEAN-PROGRESS-LOGO-e1459274456103.jpg'),
-  (3, 'BEST', 'office@best.at', 'http://virtus-project.eu/wp-content/uploads/2016/03/BEST-Logo-gro%C3%9F-e1459273908202.jpg'),
-  (4, 'FFeuskadi', 'lorena.corral@ffeuskadi.net', 'http://virtus-project.eu/wp-content/uploads/2016/03/Logo-FFE-e1459273835655.jpg'),
-  (5, 'cesie', 'irene.pizzo@cesie.org', 'http://virtus-project.eu/wp-content/uploads/2016/03/CESIE_Logo_jpg-e1459273896421.jpg');
+INSERT INTO `organizations` (`name`, `email`, `logo_url`) VALUES
+  ('EUROTraining', 'kpapavramidis@mastgroup.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/eurotraining-logo-e1459274552478.jpg'),
+  ('EuropeanProgress', 'giampoulaki@europeanprogress.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/EUROPEAN-PROGRESS-LOGO-e1459274456103.jpg'),
+  ('BEST', 'office@best.at', 'http://virtus-project.eu/wp-content/uploads/2016/03/BEST-Logo-gro%C3%9F-e1459273908202.jpg'),
+  ('FFeuskadi', 'lorena.corral@ffeuskadi.net', 'http://virtus-project.eu/wp-content/uploads/2016/03/Logo-FFE-e1459273835655.jpg'),
+  ('cesie', 'irene.pizzo@cesie.org', 'http://virtus-project.eu/wp-content/uploads/2016/03/CESIE_Logo_jpg-e1459273896421.jpg');
 
 
 

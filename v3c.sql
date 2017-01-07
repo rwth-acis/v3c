@@ -99,8 +99,8 @@ CREATE TABLE IF NOT EXISTS `course_to_unit` (
   `unit_id`     INT     NOT NULL,
   `unit_lang`   CHAR(2) NOT NULL,
   PRIMARY KEY (course_id, course_lang, unit_id, unit_lang),
-  FOREIGN KEY (course_id, course_lang) REFERENCES courses (id, lang),
-  FOREIGN KEY (unit_id, unit_lang) REFERENCES course_units (id, lang)
+  FOREIGN KEY (course_id, course_lang) REFERENCES courses (id, lang) ON DELETE CASCADE,
+  FOREIGN KEY (unit_id, unit_lang) REFERENCES course_units (id, lang) ON DELETE CASCADE
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = latin1;

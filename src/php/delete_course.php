@@ -1,7 +1,5 @@
 <?php
 
-// TODO: DELETION DOES NOT WORK YET
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,17 +11,34 @@ $conn = require '../php/db_connect.php';
 $course_id = filter_input(INPUT_POST, 'course_id');
 $course_lang = filter_input(INPUT_POST, 'course_lang');
 
-// Get all models associated with the course
-$sql = "DELETE FROM courses WHERE courses.id = :course_id AND courses.lang = :course_lang";
+// Get subject of course to return this to JS (for correct redirect)
+$stmt = $conn->prepare("SELECT courses.domain
+                        FROM courses
+                        WHERE courses.id = :course_id 
+                            AND courses.lang = :course_lang 
+                        LIMIT 1");
 
-$stmt = $conn->prepare($sql);
+$stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+
+$success = $stmt->execute();
+$subject = "";
+if ($success) {
+    $subject = $stmt->fetch()[0];
+}
+
+// TODO: Instead of deleting courses, allow only to deactivate them (when do you really need to completely delete a course?)
+$stmt = $conn->prepare("DELETE FROM courses 
+                        WHERE courses.id = :course_id 
+                          AND courses.lang = :course_lang");
+
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
 
 // TODO: Check whether user is creator of this course, only the creator can delete the course
 $success = $stmt->execute();
 if ($success) {
-    die("<p>Course successfully deleted.</p>");  // FIXME: die() does not prevent redirect
+    echo $subject;  // echos get returned to JS
 } else {
-    die("<p class='error'>Could not delete course.</p>");
+    echo "FALSE";
 }

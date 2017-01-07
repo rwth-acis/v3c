@@ -9,9 +9,10 @@
 </head>
 
 <body>
-<?php include("menu.php"); ?>
-
 <?php
+
+include("menu.php");
+
 // Get all course data and name + email of their creators from our database based
 // on the subject id given in the website URL
 include '../php/db_connect.php';
@@ -24,7 +25,13 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                            FROM courses JOIN organizations ON courses.creator=organizations.email 
                            WHERE courses.domain='$subject_id' ORDER BY id ASC")->fetchAll();
 
+$course_deletion_notice = "";
+if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
+    $course_deletion_notice = "<p class='alert alert-success'>Course was deleted successfully.</p>";
+}
+
 ?>
+
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
@@ -37,6 +44,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
 <div id='courses'>
     <section class='container'>
         <div class='container'>
+
             <div class='row'>
                 <!-- Info box with data about subject -->
                 <div class='col-sm-4'>
@@ -52,10 +60,13 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                     </div>
                 </div>
 
-
                 <div class="row col-sm-8">
+
+                    <?php echo $course_deletion_notice; ?>
+
                     <form id="fsearch" class="navbar-form navbar-left" role="search">
                         <div class="row">
+
                             <div class="row col-sm-6">
                                 <select class="form-control" name="lang" id="lang_dropdown" onchange="filter()">
                                     <?php
@@ -89,8 +100,8 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                 <!-- List of all courses -->
                 <div class='col-sm-8'>
                     <h3><?php echo getTranslation("courselist:choose:choose", "Choose course");?></h3>
-                    <div id="course_table">
-                        <table id="courseTable" class="table table-striped table-bordered table-hover">
+                    <div>
+                        <table id="course-table" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th><?php echo getTranslation("courselist:choose:name", "Course name");?></th>
@@ -105,8 +116,10 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                             <?php
                             $index = 0;
                             for ($cntr = 0; $cntr < count($courses); $cntr++) {
+
                                 $initCntr = $cntr;
                                 $lang_array = array($courses[$cntr]["lang"]);
+
                                 while ($cntr < count($courses)-1) {
                                     if ($courses[$cntr]["id"] == $courses[$cntr + 1]["id"]) {
                                         array_push($lang_array, $courses[$cntr + 1]["lang"]);
@@ -119,10 +132,13 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                 $course_dates_array = explode("\n", $courses[$initCntr]["date_created"]);
                                 $index++;
 
+                                $current_course_id = $courses[$initCntr]["id"];
+                                $current_course_lang = $courses[$cntr]["lang"];
+
                                 ?>
                                 <tr>
                                     <td>
-                                        <a href="course.php?id=<?php echo $courses[$initCntr]["id"] . "&lang=" . $courses[$initCntr]["lang"]; ?>"><?php echo $courses[$initCntr]["name"]; ?></a>
+                                        <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $current_course_lang; ?>"><?php echo $courses[$initCntr]["name"]; ?></a>
                                     </td>
                                     <td><?php echo $courses[$initCntr]["orga"]; ?></td>
                                     <td><?php foreach ($course_dates_array as $start_date) {
@@ -132,7 +148,7 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                         <?php $i=0; foreach ($lang_array as $c_lang) {
                                             ?>
                                             <input hidden value=<?php echo $c_lang; ?>>
-                                            <a href="course.php?id=<?php echo $courses[$initCntr]["id"] . "&lang=" . $c_lang ?>">
+                                            <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $c_lang ?>">
                                             <img class="language-flag-element language-flag-onhover <?php if($i==0){?>language-flag-active<?php } ?>"
                                                  src="<?php echo "../images/flags/s_" . $c_lang . ".png" ?>">
                                             </a>
@@ -141,12 +157,28 @@ $courses = $db->query("SELECT courses.*, organizations.name AS orga, organizatio
                                         }
                                         ?>
                                     </td>
+                                    <td     class="rowlink-skip">
+                                        <?php if (count($lang_array) > 1): ?>
+                                        <div class="dropdown">
+                                            <button class="btn btn-success dropdown-toggle" type="button" id="edit-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Edit
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="edit-dropdown">
+                                                <?php
+                                                foreach($lang_array as $c_lang) {
+                                                    echo "<a class='dropdown-item' href='editcourse.php?id=$current_course_id&lang=$c_lang'>$c_lang</a>";
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <a href="editcourse.php?id=<?php echo $current_course_id; ?>&lang=<?php echo $current_course_lang; ?>" class="btn btn-edit btn-sm btn-success btn-block">Edit</a>
+                                    <?php endif; ?>
+                                    </td>
+
                                     <td class="rowlink-skip"><input type="button"
-                                                                    data-id="<?php echo $courses[$initCntr]["id"]; ?>"
-                                                                    class="btn btn-edit btn-sm btn-success btn-block"
-                                                                    value="Edit"/></td>
-                                    <td class="rowlink-skip"><input type="button"
-                                                                    data-id="<?php echo $courses[$initCntr]["id"]; ?>"
+                                                                    data-id="<?php echo $current_course_id; ?>"
+                                                                    data-lang="<?php echo $current_course_lang; ?>"
                                                                     class="btn btn-delete btn-sm btn-warning btn-block"
                                                                     value="Delete"></td>
                                 </tr>

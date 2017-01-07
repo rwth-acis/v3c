@@ -29,7 +29,7 @@ if ($success) {
                             </label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" id="name"
-                                       placeholder="<?php echo getTranslation('addcourseunit:placeholder:name', 'Enter your course name');?>" required>
+                                       placeholder="<?php echo getTranslation('addcourseunit:placeholder:name', 'Enter your course unit name');?>" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -37,7 +37,7 @@ if ($success) {
                                 <?php echo getTranslation("addcourseunit:content:points", "ECVET Points:");?>
                             </label>
                             <div class="col-sm-10">
-                                <input type="number" name="points" id="points" min="0" max="20">
+                                <input type="number" name="points" id="points" min="0" max="20" value="5">
                             </div>
                         </div>
                         <div class="form-group">
@@ -48,7 +48,7 @@ if ($success) {
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="description"><?php echo getTranslation("addcourseunit:content:desription", "Description:");?></label>
+                            <label class="col-sm-2 control-label" for="description"><?php echo getTranslation("addcourseunit:content:description", "Description:");?></label>
                             <div class="col-sm-10">
                 <textarea class="form-control" rows="3" name="description" id="description"
                           placeholder="<?php echo getTranslation('addcourseunit:placeholder:description', 'Enter course description');?>"></textarea>

@@ -97,7 +97,7 @@ VALUES
   (5, 'es', 'Poniendolo todo junto', '¿Qué factores hacen que la gente tenga éxito? ¿Cómo desarrollar más estos factores en sí mismo?',
    '2016-12-07 09:00:00', 12, '2016-11-20 18:06:43', '2016-11-20 18:06:43');
 
-   
+
 --
 -- Data for table `course_to_unit`
 --

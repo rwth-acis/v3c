@@ -36,7 +36,7 @@ if ($success) {
                             <div class="col-sm-10">
 
                                 <!-- TODO: Refactor (extract method) to display such language select elements -->
-                                <select class="form-control" name="langauge" id="language">
+                                <select class="form-control" name="language" id="language">
                                     <?php
                                     $languages = array(
                                         "en" => "English",
@@ -56,7 +56,7 @@ if ($success) {
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("addcourse:content:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
-                                <select name="domain" id="domain">
+                                <select class="form-control" name="domain" id="domain">
                                     <?php
                                     foreach ($subjects as $subject) {
                                         $id = $subject["id"];

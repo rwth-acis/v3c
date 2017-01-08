@@ -119,10 +119,19 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
 
                                 $initCntr = $cntr;
                                 $lang_array = array($courses[$cntr]["lang"]);
+                                $name_array = array($courses[$cntr]["name"]);
+
+                                $displayed_course_flag = false;
 
                                 while ($cntr < count($courses)-1) {
                                     if ($courses[$cntr]["id"] == $courses[$cntr + 1]["id"]) {
+                                        if($_SESSION["lang"]== $courses[$cntr]["lang"]){
+                                            $displayed_course_flag = true;
+                                            $temp_name = $courses[$cntr]["name"];
+                                            $temp_lang = $courses[$cntr]["lang"];
+                                            }
                                         array_push($lang_array, $courses[$cntr + 1]["lang"]);
+                                        array_push($name_array, $courses[$cntr + 1]["name"]);
                                         $cntr++;
                                     } else {
                                         break;
@@ -133,12 +142,26 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 $index++;
 
                                 $current_course_id = $courses[$initCntr]["id"];
-                                $current_course_lang = $courses[$cntr]["lang"];
+
+                                if($displayed_course_flag){
+                                    $current_course_name = $temp_name;
+                                    $current_course_lang = $temp_lang;
+                                }else{
+                                    $current_course_name = $courses[$cntr]["name"];
+                                    $current_course_lang = $courses[$cntr]["lang"];
+                                }
 
                                 ?>
                                 <tr>
                                     <td>
-                                        <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $current_course_lang; ?>"><?php echo $courses[$initCntr]["name"]; ?></a>
+                                        <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $current_course_lang; ?>"><?php echo $current_course_name; ?></a>
+                                        <?php $i=0; foreach ($name_array as $c_name) {
+                                            ?>
+                                            <p hidden><?php echo $c_name; ?></p>
+                                            <?php
+                                            $i++;
+                                        }
+                                        ?>
                                     </td>
                                     <td><?php echo $courses[$initCntr]["orga"]; ?></td>
                                     <td><?php foreach ($course_dates_array as $start_date) {

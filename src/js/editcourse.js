@@ -104,27 +104,3 @@ editCourse.expand = function (element) {
         }
     }, 10);
 }
-
-/**
- * Selects the clicked element or removes it from the list
- * @param  {event} event The click event
- */
-editCourse.toggleSelectModel = function (event) {
-    var element = event.target.parentElement.previousElementSibling;
-    // The link has an id of the form image-over<db_id>. This will extract the database id.
-    var id = element.id.substr(10);
-
-    // Look if the clicked element is already selected
-    if (editCourse.selectedModels[id]) {
-        delete editCourse.selectedModels[id];
-
-        // Remove highlight
-        var index = (' ' + element.className + ' ').indexOf('highlight-model ');
-        element.className = element.className.substr(0, index - 1);
-    } else {
-        editCourse.selectedModels[id] = id;
-
-        // Highlight model
-        element.className += 'highlight-model';
-    }
-}

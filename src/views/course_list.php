@@ -129,6 +129,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                             $displayed_course_flag = true;
                                             $temp_name = $courses[$cntr]["name"];
                                             $temp_lang = $courses[$cntr]["lang"];
+                                            $temp_description = $courses[$cntr]["description"];
                                             }
                                         array_push($lang_array, $courses[$cntr + 1]["lang"]);
                                         array_push($name_array, $courses[$cntr + 1]["name"]);
@@ -146,9 +147,11 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 if($displayed_course_flag){
                                     $current_course_name = $temp_name;
                                     $current_course_lang = $temp_lang;
+                                    $current_course_description = $temp_description;
                                 }else{
                                     $current_course_name = $courses[$cntr]["name"];
                                     $current_course_lang = $courses[$cntr]["lang"];
+                                    $current_course_description= $courses[$cntr]["description"];
                                 }
 
                                 ?>
@@ -212,7 +215,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                                 data-target="#description-<?php echo $index; ?>">Description
                                         </button>
                                         <div id="description-<?php echo $index; ?>" class="collapse">
-                                            <?php echo $courses[$initCntr]["description"]; ?>
+                                            <?php echo $current_course_description; ?>
                                         </div>
                                     </td>
                                 </tr>

@@ -52,6 +52,9 @@ if ($success) {
                     <form role="form"
                           action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
 
+                        <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
+                        <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">
+
                         <!-- COURSE NAME -->
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetName"><?php echo getTranslation("editcourse:edit:name", "Course name:");?></label>
@@ -84,7 +87,7 @@ if ($success) {
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetText"><?php echo getTranslation("editcourse:edit:description", "Description:");?></label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="3" name="text" id="targetText"
+                                <textarea class="form-control" rows="3" name="description" id="description"
                                           placeholder="Enter course description"><?php echo htmlentities($course['description']); ?></textarea>
                             </div>
                         </div>

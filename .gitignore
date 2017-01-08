@@ -160,3 +160,9 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml
 # *.ipr
+
+#Composer Vendor Directory
+src/composer.phar
+composer.phar
+vendor/*
+src/vendor/*

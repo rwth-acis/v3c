@@ -33,21 +33,14 @@
     <div class="row">
         <div class="col-md-12">
             <div class="featured-box">
-                <h3>Welcome to the V3C Project!</h3>
-                <p>V3C is an innovative virtual vocational education and training centre,
-                    which will provide appropriately designed modular certified courses in Modular Employable Skills.
-                </p>
-                <p>The “Virtual Vocational Education and Training – VIRTUS” project will develop an innovative, fully
-                    functional virtual vocational education and training centre, which will provide appropriately
-                    designed modular certified courses in Modular Employable Skills (MES), corresponding to a wide range
-                    of circumstances such as regional growth potential and/or company restructuring and aiming at
-                    increasing the participation rate of adult learners in vocational education and training.</p>
-                <p>In particular, the virtual VET center will provide two modular certified courses on:
+                <h3><?php echo getTranslation("main:welcome:headline", "Welcome to the V3C Project!"); ?></h3>
+                <p><?php echo getTranslation("main:welcome:v3cgoal", "The “Virtual Vocational Education and Training – VIRTUS” project will develop an innovative, fully functional virtual vocational education and training centre, which will provide appropriately designed modular certified courses in Modular Employable Skills (MES), corresponding to a wide range of circumstances such as regional growth potential and/or company restructuring and aiming at increasing the participation rate of adult learners in vocational education and training."); ?></p>
+                <p><?php echo getTranslation("main:welcome:v3ccourses", "In particular, the virtual VET center will provide two modular certified courses on:"); ?></p>
                 <ol>
-                    <li>Tourism and Hospitality Services.</li>
-                    <li>Social Entrepreneurship.</li>
+                    <li><?php echo getTranslation("main:welcome:tourism","Tourism and Hospitality Services."); ?></li>
+                    <li><?php echo getTranslation("main:welcome:social", "Social Entrepreneurship."); ?></li>
                 </ol>
-                </p>
+
             </div>
         </div>
     </div>
@@ -72,14 +65,13 @@
                     ?>
                     <i class="fa fa-file fa-2x"></i>
                     <div class="text">
-                        <h3>Courses</h3>
-                        <p>Check for the the list of all the courses available here.</p>
-                        </a>
+                        <h3><?php echo getTranslation("main:welcome:courses", "Courses");?></h3>
+                        <p><?php echo getTranslation("main:welcome:listcourses", "Check for the list of all the courses available here.");?></p>
                     </div>
                 </div>
-                <div class="temp">
+                <!--<div class="temp">
                     <a href="arrwidgetmockup.php">mockup</a>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>

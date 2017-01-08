@@ -1,36 +1,15 @@
-<?php
-/**
- * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @file course_delete.php
- * Webpage for deleting a single course
- */
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Widget arrangement mockup </title>
+
     <link rel="stylesheet" href="../external/redacted/fonts/stylesheet.css"/>
     <link rel="stylesheet" href="../external/jasny-bootstrap/dist/css/jasny-bootstrap.min.css"/>
     <link rel="stylesheet" href="../external/gridstack/gridstack.css"/>
     <link rel="stylesheet" href="../external/gridstack/gridstack-extra.css"/>
     <link rel="stylesheet" href="../css/widget-arrangement.css"/>
-
-
 </head>
 
 <body>

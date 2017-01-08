@@ -1,53 +1,47 @@
 <?php
-/**
- * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @file upload_script_course.php
- *
- * Adds new course to the course database on the server
- * adds metadata about it database.
- */
 
-//create database connection (needs to be done before mysql_real_escape_string)
+// Create database connection
 $conn = require '../php/db_connect.php';
 
+
 //Get input data from form
-$id = filter_input(INPUT_POST, 'targetId');
-$name = mysql_escape_string(filter_input(INPUT_POST, 'name'));
-$text = mysql_escape_string(filter_input(INPUT_POST, 'text'));
-$domain = filter_input(INPUT_POST, 'domain');
+$course_id = filter_input(INPUT_POST, 'courseid', FILTER_VALIDATE_INT);
+$course_lang = filter_input(INPUT_POST, 'courselang');
+
+$name = filter_input(INPUT_POST, 'name');
 $profession = filter_input(INPUT_POST, 'profession');
-$role_link = filter_input(INPUT_POST, 'roleLink');
-$contact = filter_input(INPUT_POST, 'contact');
-$dates = filter_input(INPUT_POST, 'dates');
-$links = filter_input(INPUT_POST, 'links');
+$domain = filter_input(INPUT_POST, 'domain');
+$description = filter_input(INPUT_POST, 'description');
 
-//Creator stays the same
+// TODO: Add organization (creator) to form
+$creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
 
-// modify database-entry
-$sql = "UPDATE courses SET name='$name', domain='$domain', profession='$profession', description='$text', role_url='$role_link', contact='$contact', dates='$dates', links='$links' WHERE id=$id";
+// Create database-entry
+$statement = $conn->prepare("UPDATE courses 
+                              SET name = :name, 
+                                description = :description, 
+                                domain = :domain, 
+                                profession = :profession, 
+                                creator = :creator 
+                             WHERE courses.id = :course_id
+                              AND courses.lang = :course_lang");
 
-//echo "sqlquery: $sql";
+$statement->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$statement->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+$statement->bindParam(":name", $name, PDO::PARAM_STR);
+$statement->bindParam(":description", $description, PDO::PARAM_STR);
+$statement->bindParam(":domain", $domain, PDO::PARAM_STR);
+$statement->bindParam(":profession", $profession, PDO::PARAM_STR);
+$statement->bindParam(":creator", $creator, PDO::PARAM_INT);
 
-$conn->query($sql);
-
-$html = "";
-if (isset($_GET['widget']) && $_GET['widget'] == 'true') {
-    $html = "&widget=true";
+$success = $statement->execute();
+if (!$success) {
+    print_r($statement->errorInfo());
+    die("Error saving course.");
 }
 
-header("Location:../views/course.php?id=$id$html");
+
+// Return back to the edit page, now reflecting the changes
+header("Location: ../views/editcourse.php?id=$course_id&lang=$course_lang");
 
 ?>

@@ -37,9 +37,17 @@ function filter(){
 
         td = tr[i].getElementsByTagName("td")[0];
         if (td) {
-            a = td.getElementsByTagName("a")[0];
 
-            if (a.innerHTML.toUpperCase().indexOf(filter) > -1 && flag) {
+            p = td.getElementsByTagName("p");
+            var found_flag = false;
+
+            for(var k = 0; k< p.length; k++){
+                if(p[k].innerHTML.toUpperCase().indexOf(filter) > -1){
+                    found_flag = true;
+                }
+            }
+
+            if (found_flag && flag) {
                 tr[i].style.display = "";
                 tr[i+1].style.display = "";
                 i++;
@@ -48,6 +56,7 @@ function filter(){
                 tr[i+1].style.display = "none";
                 i++;
             }
+
         }
     }
 }

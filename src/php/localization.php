@@ -28,7 +28,8 @@ function getTranslation($key, $default)
     return $translation;
 }
 
-function template_substitution($template, $data) {
+function template_substitution($template, $data)
+{
     $result = $template;
     foreach ($data as $key => $value) {
         $result = str_replace($key, $value, $result);

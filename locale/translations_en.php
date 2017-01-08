@@ -47,9 +47,13 @@ function getLanguage()
         "course:content:description" => "Description:",
 
         "coursedel:head:name" => "Delete course {COURSENAME}",
+        "coursedel:head:name_tmp" => "Delete course ",
         "coursedel:head:confirm" => "Do you really want to delete course {COURSENAME}?",
+        "coursedel:head:confirm_tmp1" => "Do you really want to delete course ",
+        "coursedel:head:confirm_tmp2" => "?",
 
         "courselist:head:subcourses" => "{SUBJECT} courses",
+        "courselist:head:subcourses_tmp" => " courses",
         "courselist:head:add" => "Add new course",
         "courselist:choose:choose" => "Choose course",
         "courselist:choose:name" => "Course name",

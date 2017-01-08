@@ -46,9 +46,13 @@ function getLanguage()
         "course:content:description" => "Descripción:",
 
         "coursedel:head:name" => "Eliminar curso {COURSENAME}",
+        "coursedel:head:name_tmp" => "Eliminar curso ",
         "coursedel:head:confirm" => "¿Realmente desea eliminar el curso {COURSENAME}?",
+        "coursedel:head:confirm_tmp1" => "¿Realmente desea eliminar el curso ",
+        "coursedel:head:confirm_tmp2" => "?",
 
         "courselist:head:subcourses" => "{SUBJECT} cursos",
+        "courselist:head:subcourses_tmp" => " cursos",
         "courselist:head:add" => "Agregar nuevo curso",
         "courselist:choose:choose" => "Elija el curso",
         "courselist:choose:name" => "Nombre del curso",

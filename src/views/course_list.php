@@ -29,14 +29,15 @@ $course_deletion_notice = "";
 if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
     $course_deletion_notice = "<p class='alert alert-success'>Course was deleted successfully.</p>";
 }
-
 ?>
 
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo template_substitution(getTranslation("courselist:head:subcourses", "{SUBJECT} courses"),
-                    array("{COURSENAME}", $subject->name)); ?></h1>
+            <h1><?php
+                echo  $subject->name . getTranslation("courselist:head:subcourses_tmp", " Courses");
+                //echo template_substitution(getTranslation("courselist:head:subcourses", "{SUBJECT} Courses"), array("{SUBJECT}" => $subject->name));
+                ?></h1>
         </div>
     </div>
 </header>

@@ -50,8 +50,9 @@ try {
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo template_substitution(getTranslation("coursedel:head:name", "Delete course {COURSENAME}"),
-                    array("{COURSENAME}", $course['name'])); ?></h1>
+           <h1><?php echo getTranslation("coursedel:head:name_tmp", "Delete course ") . $course['name'];
+               //echo template_substitution(getTranslation("coursedel:head:name", "Delete course {COURSENAME}"), array("{COURSENAME}" => $course['name']));
+               ?></h1>
         </div>
     </div>
 </header>
@@ -59,6 +60,7 @@ try {
 <?php
 // Check whether the currently logged in user is allowed to delete courses
 require '../php/access_control.php';
+
 $accessControl = new AccessControl();
 $canCreateCourse = $accessControl->canDeleteCourse($course_id);
 
@@ -70,8 +72,11 @@ if ($canCreateCourse) {
     <!-- Confirmation check UI elements to ask user whether or not to delete the selected course -->
     <div class="center-block container">
         <div class="featured-box container delete-confirm-div">
-            <p><strong><?php echo template_substitution(getTranslation("coursedel:head:confirm", "Do you really want to delete course {COURSENAME}?"),
-                        array("{COURSENAME}", $course['name'])); ?></strong></p>
+            <p><strong><?php
+                    echo getTranslation("coursedel:head:confirm_tmp1", "Do you really want to delete course ") . $course['name'] .
+                    getTranslation("coursedel:head:confirm_tmp2", "?");
+                    //echo template_substitution(getTranslation("coursedel:head:confirm", "Do you really want to delete course {COURSENAME}?"), array("{COURSENAME}" => $course['name']));
+                    ?></strong></p>
             <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no"
                    value="<?php echo getTranslation('general:button:yes', 'Yes');?>"/>
             <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no"

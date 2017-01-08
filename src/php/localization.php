@@ -23,6 +23,7 @@ function getTranslation($key, $default)
     return $translation;
 }
 
+
 function template_substitution($template, $data) {
     return str_replace(array_keys($data), array_values($data), $template);
 }

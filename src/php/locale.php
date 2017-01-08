@@ -1,24 +1,25 @@
 <?php
-// use sessions
-/*if () {
+
+// TODO: Make this a service to set the site's language
+
+require_once '../config/config.php';
+
+// Start session if necessary
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-*/
-require '../config/config.php';
-// get language preference
-if (isset($_GET["lang"])) {
-    $language = $_GET["lang"];
-}
-else if (isset($_SESSION["lang"])) {
+
+// Get language preferences
+if (isset($_GET["sitelang"])) {
+    $language = $_GET["sitelang"];
+} else if (isset($_SESSION["lang"])) {
     $language  = $_SESSION["lang"];
-}
-else {
+} else {
     $language = "en";
 }
-if (strlen ($language) <= 5) {
-// save language preference for future page requests
+
+if (strlen ($language) == 2) {
+    // Save language preference for future page requests
     $_SESSION["lang"] = $language;
-} else {
-    echo "Selected language is not supported!";
 }
 

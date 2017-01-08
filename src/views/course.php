@@ -1,23 +1,3 @@
-<?php
-/**
- * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @file course.php
- * Webpage for viewing a single course
- */
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +10,7 @@
 <?php include("menu.php"); ?>
 
 <?php
-include '../php/db_connect.php';
+$conn = require '../php/db_connect.php';
 include '../php/tools.php';
 
 // The course unit id from URL parameter
@@ -42,26 +22,47 @@ if (isset($_GET["lang"])) {
 }
 
 // Gets course details with it's creator information
-$query = "SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
-                            FROM courses JOIN organizations ON courses.creator = organizations.email 
-                            WHERE courses.id = $course_id AND courses.lang = '$course_lang'";
+$stmt = $conn->prepare("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
+          FROM courses 
+          JOIN organizations 
+            ON courses.creator = organizations.email 
+          WHERE courses.id = :course_id
+            AND courses.lang = :course_lang
+          LIMIT 1");
 
-$course_query = $db->query($query);
-$course_details = $course_query->fetchObject();
+$stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+
+$success = $stmt->execute();
+if (!$success) {
+    echo "Error loading course.";
+} else {
+    $course_details = $stmt->fetch();
+}
 
 // Get course subject
-$course_subject_details = $db->query("SELECT subjects.* FROM subjects WHERE id= $course_id")->fetch(PDO::FETCH_ASSOC);
+$course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id= $course_id")->fetch(PDO::FETCH_ASSOC);
 
-// Gets the course units that correspond the particular course
-$query = "SELECT DISTINCT course_units.*
-          FROM course_units
-          LEFT JOIN course_to_unit AS ctu
-          ON (ctu.course_id = $course_id
-            AND ctu.course_lang = '$course_lang'
-            AND ctu.unit_lang = '$course_lang')
-          WHERE course_units.lang = '$course_lang'";
 
-$course_units = $db->query($query)->fetchAll();
+// Get course units
+$stmt = $conn->prepare("SELECT course_units.*
+                        FROM courses 
+                        JOIN course_to_unit 
+                        ON courses.id = course_to_unit.course_id 
+                          AND courses.lang = course_to_unit.course_lang
+                        JOIN course_units 
+                        ON course_to_unit.unit_id = course_units.id 
+                          AND course_to_unit.unit_lang = course_units.lang
+                        WHERE courses.id = :course_id
+                          AND course_units.lang = :course_lang");
+
+$stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+
+$success = $stmt->execute();
+if ($success) {
+    $course_units = $stmt->fetchAll();
+}
 /**
  * Replaces all URLs in the given text by <a> tags
  * Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
@@ -86,7 +87,7 @@ function replaceLinks($text)
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo "$course_details->name"; ?></h1>
+            <h1><?php echo $course_details["name"]; ?></h1>
         </div>
     </div>
 </header>
@@ -102,12 +103,6 @@ function replaceLinks($text)
                     <div class="row">
                         <div class='col-md-12 text-center'>
                             <h2><?php echo getTranslation("course:content:courseunits", "Course Units");?></h2>
-                            <!--<?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
-                                <a id="enter-course-a" href="#" data-rolespace="<?php echo $course_details->role_url; ?>">
-                                    <button class='btn btn-success btn-lg btn-block' type='button'>Enter course room
-                                    </button>
-                                </a>
-                            <?php } ?>-->
                         </div>
                     </div>
                     <!-- Course Units -->
@@ -151,8 +146,8 @@ function replaceLinks($text)
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <label class="col-sm-3 output-element"><?php echo getTranslation("course:content:createdby", "Created by:");?></label>
-                        <div class="col-sm-7"><?php echo $course_details->orga; ?>
-                            (<a href="mailto:<?php echo $course_details->orga_email; ?>"><?php echo $course_details->orga_email; ?></a>)</div>
+                        <div class="col-sm-7"><?php echo $course_details["orga"]; ?>
+                            (<a href="mailto:<?php echo $course_details["orga_email"]; ?>"><?php echo $course_details["orga_email"]; ?></a>)</div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">
@@ -165,19 +160,19 @@ function replaceLinks($text)
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <label class="col-sm-3"><?php echo getTranslation("course:content:profession", "Profession:");?></label>
-                        <p class="col-sm-7 output-element"><?php echo $course_details->profession; ?></p>
+                        <p class="col-sm-7 output-element"><?php echo $course_details["profession"]; ?></p>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <label class="col-sm-3"><?php echo getTranslation("course:content:description", "Description:");?></label>
-                        <p class="col-sm-7 output-element"><?php echo $course_details->description; ?></p>
+                        <p class="col-sm-7 output-element"><?php echo $course_details["description"]; ?></p>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class=" col-sm-5">
-                            <?php printLinkBtn("editcourse.php?id=$course_id",
+                            <?php printLinkBtn("editcourse.php?id=$course_id&lang=$course_lang",
                                 "btn btn-success btn-block btn-lg", getTranslation("general:button:edit", "Edit")) ?>
                         </div>
                         <div class="col-sm-5">
@@ -201,14 +196,8 @@ function replaceLinks($text)
 <?php include("footer.php"); ?>
 
 <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-
 <script type="text/javascript" src="../js/tools.js"></script>
-<?php
-//Decide if this site is inside a separate widget
-if (filter_input(INPUT_GET, "widget") == "true") {
-    print("<script src='../js/overview-widget.js'> </script>");
-}
-?>
 <script type="text/javascript" src="../js/course.js"></script>
+
 </body>
 </html>

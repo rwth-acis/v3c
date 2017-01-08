@@ -18,9 +18,9 @@ function search()
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
-            document.getElementById("course_table").innerHTML=xmlhttp.responseText;
+            document.getElementById("course-table").innerHTML=xmlhttp.responseText;
         }
-    }
+    };
 
     var searched = $("#fsearch").serialize();
     xmlhttp.open("POST","../php/search_course.php",true);

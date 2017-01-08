@@ -17,7 +17,7 @@
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1>Widget Arrangement Mockup</h1>
+            <h1>Edit Course Unit</h1>
         </div>
     </div>
 </header>
@@ -295,16 +295,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             }
             cntr = 0;
         });
-
-
-        //Buttons on prototype toolbar remove:
-        /*$('.rm-icon').click(function(e){
-            console.log("click")
-            e.stopPropagation();
-            $canvas.removeWidget($(this).parent().parent().parent().parent().parent().remove());
-        });*/
-
     });
+
     function createSidebarElement(name, index) {
         $parentEl = $('.gridstack-sidebar');
         if (index == 0) {

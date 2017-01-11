@@ -16,6 +16,7 @@ use Monolog\Handler\FirePHPHandler;
 
 include '../php/db_connect.php';
 include '../config/config.php';
+include_once '../classes/helper_methods.php';
 require '../vendor/autoload.php';
 
 spl_autoload_register(function ($classname) {
@@ -77,19 +78,22 @@ $app->get('/', function (Request $request, Response $response) {
     return $response;
 });
 
-/**
- * Get all courses and included course units
- */
 $app->get('/courses', function (Request $request, Response $response) {
     $mapper = new CourseMapper($this->db);
     $unit_mapper = new CourseUnitMapper($this->db);
     $courses = $mapper->getCourses($request->getQueryParams());
     $courses_array = array();
     // In the foreach, the course units are queried and then added to the course object
-    foreach ($courses as $course) {
-        $courses_array[] = $course;
+    foreach ($courses as &$course) {
+        $course = utf8_encode_object($course);
+
         $course_units = $unit_mapper->getCourseUnits($course->id);
-        $course->course_units = $course_units;
+        $encoded_course_units = array();
+        foreach ($course_units as $unit) {
+            $encoded_course_units[] = utf8_encode_object($unit);
+        }
+        $course->course_units = $encoded_course_units;
+        $courses_array[] = $course;
     }
     $response = $response->withJson($courses_array, null, JSON_PRETTY_PRINT);
     return $response;
@@ -116,7 +120,9 @@ $app->get('/courses/{id}', function (Request $request, Response $response, $args
 $app->get('/subjects', function (Request $request, Response $response, $args) {
     $subject_mapper = new SubjectMapper($this->db);
     $subjects = $subject_mapper->getSubjects($request->getQueryParams());
-
+    foreach ($subjects as &$subject) {
+        $subject = utf8_encode_object($subject);
+    }
     $new_response = $response->withJson($subjects, null, JSON_PRETTY_PRINT);
     return $new_response;
 });

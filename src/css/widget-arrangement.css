@@ -110,8 +110,21 @@
 }
 
 .virtus-pw-sliderviewer-img {
+    z-index: 1;
+    position: absolute;
+    left: 0px;
+    top: 0px;
     height: 100%;
     width: 100%;
+}
+.virtus-pw-content-toolbox-wrapper{
+    margin-top: 5px;
+    padding-right: 5px !important;
+    z-index: 2;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    //background-color: rgba(256, 256, 256,0.85);
 }
 
 .virtus-pw-slide-img-wrapper {
@@ -217,4 +230,10 @@
 .virtus-pw-padding-sides-02rem{
     padding-left: 0.2rem;
     padding-right: 0.2rem;
+}
+.pw-alert-color{
+    color: #ff3822;
+}
+.pw-right-alignement{
+    text-align: right;
 }

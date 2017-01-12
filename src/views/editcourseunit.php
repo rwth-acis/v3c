@@ -22,22 +22,36 @@
     </div>
 </header>
 <!--Prototype Templates -->
-<div class="virtus-pw-prototype virtus-pw-hide " id="prototypeSlideViewer">
+<div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer" id="prototypeSlideViewer">
     <div class="row virtus-pw-prototype-topbar">
         <div class="virtus-pw-name col-sm-12">
             Slides Widget
         </div>
         <div class="virtus-pw-prototype-top-toolbar">
-            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
             <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"  aria-hidden="true"></span>
+            <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
         </div>
     </div>
 
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
-            <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img"
-                                                                    src='../images/widgetsPrototypes/slides-mockup.jpg'>
+            <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                    <!--<span class="pw-alert-color"></span>-->
+                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align" data-toggle="modal"
+                            data-target=".pw-modal-slideviewer">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Add Content
+                    </button>
+                    <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
+
+
+                </div>
+                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/slides-mockup.jpg'>
+
+
             </div>
             <div class="col-sm-12 virtus-pw-content">
                 <div class="row">
@@ -56,21 +70,55 @@
         </div>
     </div>
 </div>
-<div class="virtus-pw-prototype virtus-pw-hide " id="prototypeVideoViewer">
+<div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="slides-title">Sildes Title</label>
+                            <input type="text" class="form-control protocontent" id=-slides-title" name="slides-title" placeholder="Title" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="slides-upload">Upload Slides</label><br>
+                            <label class="btn btn-default glyphicon glyphicon-upload" aria-hidden="true">
+                                Browse <input type="file" class="hidden protocontent" id=slides-upload" name="slides-upload">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="virtus-pw-prototype virtus-pw-hide pw-video-viewer" id="prototypeVideoViewer">
     <div class="row virtus-pw-prototype-topbar">
         <div class="virtus-pw-name col-sm-12">
             Video Widget
         </div>
         <div class="virtus-pw-prototype-top-toolbar">
-            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
             <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
         </div>
     </div>
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img"
-                                                                    src='../images/widgetsPrototypes/video-mockup.jpg'></div>
+                                                                    src='../images/widgetsPrototypes/video-mockup.jpg'>
+            </div>
             <div class="col-sm-12 virtus-pw-content">
                 <div class="row">
                     <div class="col-sm-3">
@@ -93,21 +141,24 @@
         </div>
     </div>
 </div>
-<div class="virtus-pw-prototype virtus-pw-hide " id="prototypeQuizzesViewer">
+<div class="virtus-pw-prototype virtus-pw-hide pw-quizzes-viewer" id="prototypeQuizzesViewer">
     <div class="row virtus-pw-prototype-topbar">
         <div class="virtus-pw-name col-sm-12">
             Quizzes Widget
         </div>
         <div class="virtus-pw-prototype-top-toolbar">
-            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
             <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
         </div>
     </div>
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-quizzes-img-wrapper"><img class="virtus-pw-sliderviewer-img"
-                                                                      src='../images/widgetsPrototypes/quizzes-mockup.jpg'></div>
+                                                                      src='../images/widgetsPrototypes/quizzes-mockup.jpg'>
+            </div>
             <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor ?
             </div>
@@ -143,7 +194,8 @@
                     <div class='featured-box sidebar-container'>
                         <div class="row">
                             <div class="col-sm-2 lock-sidebar-icon-container virtus-pw-hide">
-                                <span class="glyphicon glyphicon glyphicon-lock locked-color-style sidbeback-lock-icon" aria-hidden="true"
+                                <span class="glyphicon glyphicon glyphicon-lock locked-color-style sidbeback-lock-icon"
+                                      aria-hidden="true"
                                       data-toggle="tooltip"
                                       data-placement="bottom"
                                       title="The sidebar is locked, because you already filled the rolespace with the maximum amount of Widgets. Remove Widgets to be able to add new Widgets again."></span>
@@ -202,6 +254,12 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../js/course-list.js"></script>
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
+    $(function(){
+        $(".modal-save-button").click(function () {
+            appendDataAttributes($(this).parent().parent().find(".modal-body"));
+
+        });
+    });
     initWidgets = [
         {name: 'slide viewer', prototypeName: 'prototypeSlideViewer'}, {
             name: 'video viewer',
@@ -320,6 +378,9 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 });
         }
 
+    }
+    function appendDataAttributes(pwModalbodyObj, widgetClassID){
+        console.log($(pwModalbodyObj).find(".protocontent").length);
     }
 </script>
 </body>

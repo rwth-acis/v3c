@@ -1,31 +1,45 @@
 <?php
 
-/* 
- * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *  http://www.apache.org/licenses/LICENSE-2.0
- * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- * 
- *  @file editcourse_content.php
- *  The content of 'editcourse.php' if the user is allowed to edit courses
- */
+$conn = require '../php/db_connect.php';
 
-$db = require '../php/db_connect.php';
 $course_id = filter_input(INPUT_GET, 'id');
-try {
-    $entry = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-} catch (Exception $e) {
-    error_log($e->getMessage());
+$course_lang = filter_input(INPUT_GET, 'lang');
+
+// Get course units
+$stmt = $conn->prepare("SELECT course_units.*
+                        FROM courses 
+                        JOIN course_to_unit 
+                        ON courses.id = course_to_unit.course_id 
+                          AND courses.lang = course_to_unit.course_lang
+                        JOIN course_units 
+                        ON course_to_unit.unit_id = course_units.id 
+                          AND course_to_unit.unit_lang = course_units.lang
+                        WHERE courses.id = :course_id
+                          AND course_units.lang = :course_lang");
+
+$stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+
+$success = $stmt->execute();
+if ($success) {
+    $course_units = $stmt->fetchAll();
 }
+
+// Get course info
+$stmt2 = $conn->prepare("SELECT courses.*
+                        FROM courses 
+                        WHERE courses.id = :course_id
+                          AND courses.lang = :course_lang
+                        LIMIT 1");
+
+$stmt2->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$stmt2->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+
+$success = $stmt2->execute();
+if ($success) {
+    $course = $stmt2->fetch();
+}
+
 ?>
 
 <div id='courses'>
@@ -34,76 +48,92 @@ try {
         <div class='container'>
             <div class='row'>
                 <div class='col-md-10 col-md-offset-1'>
-                    <!-- User information box -->
-                    <div class='featured-box'>
-                        Change you course room information. To create a new ROLE space click "+" and for help on ROLE
-                        click
-                        "?".<br>
-                        Don't forget to click the save button.
-                    </div>
 
-                    <!-- FORM FOR EDITING INPUT VALUES -->
                     <form role="form"
-                          action="../php/edit_script_course.php<?php if (isset($_GET['widget']) && $_GET['widget'] == true) {
-                              echo '?widget=true';
-                          } ?>" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+
+                        <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
+                        <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">
+
+                        <!-- COURSE NAME -->
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetName">Course name:</label>
+                            <label class="col-sm-2 control-label" for="targetName"><?php echo getTranslation("editcourse:edit:name", "Course name:");?></label>
                             <div class="col-sm-10">
                                 <input type="hidden" name="targetId" value="<?php echo $course_id; ?>">
-                                <input type="text" class="form-control" rows="1" name="name" id="targetName"
-                                       value="<?php echo htmlentities($entry['name']); ?>" required>
+                                <input type="text" class="form-control" name="name" id="targetName"
+                                       value="<?php echo htmlentities($course['name']); ?>" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetRole">Course room:</label>
-                            <div class="col-sm-10">
-                                <div class="course-room-div">
-                                    <input type="text" class="form-control" rows="1" name="roleLink" id="targetRole"
-                                           placeholder="Enter ROLE space name"
-                                           value="<?php echo $entry['role_url']; ?>">
-                                </div>
-                                <a href="#">
-                                    <input id="create-room-btn" class="col-xs-1 btn btn-default btn-inline"
-                                           type="button" value="+"/>
-                                </a>
-                                <!-- Help button which opens role.php in new tab. TODO: Could be done more specific and in place. Also in addcourse.php -->
-                                <a target="_blank" href="help.php">
-                                    <input class="col-xs-1 btn btn-default btn-inline" type="button" value="?"/>
-                                </a>
-                                <div class="featured-box">
-                                    <p><?php echo $baseUrl . "/src/widgets/showcase.xml"; ?></p>
-                                    <p><?php echo $baseUrl . "/src/widgets/gallery.xml"; ?></p>
-                                </div>
 
-                            </div>
-                        </div>
+                        <!-- COURSE DOMAIN -->
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetDomain">Course Domain:</label>
+                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" rows="1" name="domain" id="targetDomain"
-                                       value="<?php echo htmlentities($entry['domain']); ?>" required>
+                                <input type="text" class="form-control" name="domain" id="targetDomain"
+                                       value="<?php echo htmlentities($course['domain']); ?>" required>
                             </div>
                         </div>
+
+                        <!-- COURSE PROFESSION -->
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetProfession">Course Profession:</label>
+                            <label class="col-sm-2 control-label" for="targetProfession"><?php echo getTranslation("editcourse:edit:profession", "Course Profession:");?></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" rows="1" name="profession" id="targetProfession"
-                                       value="<?php echo htmlentities($entry['profession']); ?>" required>
+                                <input type="text" class="form-control" name="profession" id="targetProfession"
+                                       value="<?php echo htmlentities($course['profession']); ?>" required>
                             </div>
                         </div>
+
+                        <!-- COURSE DESCRIPTION -->
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetText">Description:</label>
+                            <label class="col-sm-2 control-label" for="targetText"><?php echo getTranslation("editcourse:edit:description", "Description:");?></label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="3" name="text" id="targetText"
-                                          placeholder="Enter course description"><?php echo htmlentities($entry['description']); ?></textarea>
+                                <textarea class="form-control" rows="3" name="description" id="description"
+                                          placeholder="Enter course description"><?php echo htmlentities($course['description']); ?></textarea>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Upload">
-                            Save
+
+                        <h3>Course Units</h3>
+                        <div class="form-group row">
+                                    <ul class="list-group">
+                                        <!-- List element for each course unit is created -->
+                                        <?php foreach($course_units as $course_unit): ?>
+
+                                            <?php $unit_id = $course_unit["id"]; ?>
+
+                                    <li data-toggle="collapse" data-target="#<?php echo $course_unit["id"] ?>" href="#" class="hover-click list-group-item clearfix">
+                                        <span class="glyphicon glyphicon-book margin-right"></span>
+                                        <?php echo $course_unit["title"] ?>
+                                        <span class="pull-right">
+                                        <span class="glyphicon glyphicon-calendar margin-right"></span>
+                                                    <?php echo $course_unit["start_date"] ?>
+                                        <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
+                                            <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
+                                        </a>
+                                        </span>
+                                    </li>
+                                    <div id="<?php echo $unit_id ?>" class="collapse">
+                                        <div class="margin-top margin-left">
+                                            <?php echo $course_unit["description"] ?>
+                                        </div>
+                                        <div id="collapse1" class="panel-collapse collapse">
+                                            <div class="panel-body">Panel Body</div>
+                                        </div>
+
+                                    </div>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php if (count($course_units) < 5): ?>
+                        <a href="/src/views/addcourseunit.php?courseid=<?php echo $course_id; ?>&lang=<?php echo $course_lang; ?>" class="btn btn-success">+ <?php echo getTranslation("editcourseunit:edit:addunit", "Add Course Unit");?></a>
+                        <?php endif; ?>
+
+                        <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Save">
+                            <?php echo getTranslation("general:button:save", "Save");?>
                         </button>
                     </form>
-                    <!-- FROM FOR EDITING INPUT VALUES ENDING -->
                     <br>
                 </div>
             </div>
@@ -111,17 +141,3 @@ try {
     </section>
 </div>
 <!-- container -->
-
-<!-- Darken background when model select window appears -->
-<div id="blackout" onclick="editCourse.endBlackout()"></div>
-
-<!-- Show models in a pop-up -->
-<div id="modelbox">
-    <div id="closebox" onclick="editCourse.endBlackout()">close</div>
-    <button class='btn btn-success' type='button' id="addmodels" onclick="editCourse.addModels()">Add models to course
-    </button>
-    <?php include("search.php"); ?>
-    <div id="result-container">
-        <!-- Models will be inserted here -->
-    </div>
-</div>

@@ -254,17 +254,13 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../js/course-list.js"></script>
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
-    $(function(){
-        $(".modal-save-button").click(function () {
-            appendDataAttributes($(this).parent().parent().find(".modal-body"));
-
-        });
-    });
     initWidgets = [
         {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal'},
         {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal'},
         {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal'}
     ];
+
+
 
 
     $(function () {
@@ -339,8 +335,14 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
                     var $prototypeModal = $('#'+ initWidgets[itemIndex].modalname);
                     $prototypeModalClone = $prototypeModal.clone();
-                    $prototypeModalClone.attr("id", initWidgets[itemIndex].modalname + "-"+totalWidgets)
+                    $prototypeModalClone.attr("id", initWidgets[itemIndex].modalname + "-"+totalWidgets);
                     $( "body" ).append($prototypeModalClone);
+
+                    var prototypeWidgetId = initWidgets[itemIndex].prototypeName + "-"+totalWidgets; //call by value
+                    var prototypeWidgetModalId = initWidgets[itemIndex].modalname + "-"+totalWidgets;//call by value
+                    $prototypeModalClone.find(".modal-save-button").click(function () {
+                        appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
+                    });
                     totalWidgets++;
 
                 }
@@ -386,8 +388,9 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         }
 
     }
-    function appendDataAttributes(pwModalbodyObj, widgetClassID){
-        console.log($(pwModalbodyObj).find(".protocontent").length);
+    function appendDataAttributes(modalObj, widgetObj){
+        console.log(modalObj);
+        console.log(widgetObj);
     }
 </script>
 </body>

@@ -41,9 +41,9 @@
             <div class="col-sm-12 virtus-pw-slide-img-wrapper">
                 <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
                     <!--<span class="pw-alert-color"></span>-->
-                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align" data-toggle="modal"
+                    <button type="button" class="btn btn-warning btn-sm modal-toggler-button" aria-label="Left Align" data-toggle="modal"
                             data-target=".pw-modal-slideviewer">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Add Content
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
 
@@ -70,7 +70,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal">
+<div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal" id="prototypeSlideViewerModal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -261,10 +261,9 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         });
     });
     initWidgets = [
-        {name: 'slide viewer', prototypeName: 'prototypeSlideViewer'}, {
-            name: 'video viewer',
-            prototypeName: 'prototypeVideoViewer'
-        }, {name: 'quiz', prototypeName: 'prototypeQuizzesViewer'}
+        {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal'},
+        {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal'},
+        {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal'}
     ];
 
 
@@ -314,14 +313,13 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             scroll: false,
             appendTo: 'body',
         });
-        //fix for static sidebar items
+        var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.
         $('.grid-stack').on('change', function (event, items) {
 
             console.log("CHANGE EVENT FIRED");
             var cntr = 0;
             $.each(items, function (index, item) {
                 var $item = (item.el).find('.grid-stack-sidebar-item');
-                //console.log($item);
                 if ($item.hasClass('grid-stack-sidebar-item')) {
                     console.log('found an item with class grid-stack-sidebar-item');
                     //This one needs to be added
@@ -334,8 +332,17 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     var $prototypeWidget = $('#' + initWidgets[itemIndex].prototypeName);
                     $prototypeClone = $prototypeWidget.clone();
                     $prototypeClone.removeClass('virtus-pw-hide');
+                    $prototypeClone.attr("id",initWidgets[itemIndex].prototypeName + "-"+totalWidgets);
+                    $prototypeClone.find(".modal-toggler-button").attr("data-target", "#"+initWidgets[itemIndex].modalname + "-"+totalWidgets );
                     $item.html("");
                     $item.append($prototypeClone);
+
+                    var $prototypeModal = $('#'+ initWidgets[itemIndex].modalname);
+                    $prototypeModalClone = $prototypeModal.clone();
+                    $prototypeModalClone.attr("id", initWidgets[itemIndex].modalname + "-"+totalWidgets)
+                    $( "body" ).append($prototypeModalClone);
+                    totalWidgets++;
+
                 }
                 cntr++;
             });

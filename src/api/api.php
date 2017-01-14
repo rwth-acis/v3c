@@ -102,16 +102,57 @@ $app->get('/courses', function (Request $request, Response $response) {
 /**
  * Get a particular course with an id
  */
-$app->get('/courses/{id}', function (Request $request, Response $response, $args) {
-    $course_id = (int)$args['id'];
-    $course_mapper = new CourseMapper($this->db);
-    $unit_mapper = new CourseUnitMapper($this->db);
-    $course = $course_mapper->getCourseById($course_id);
-    $course_units = $unit_mapper->getCourseUnits($course_id);
+$app->any('/courses/{id}', function (Request $request, Response $response, $args) {
+    // GET
+    if ($request->isGet()) {
+        $course_id = (int)$args['id'];
+        $course_mapper = new CourseMapper($this->db);
+        $unit_mapper = new CourseUnitMapper($this->db);
+        $course = $course_mapper->getCourseById($course_id);
+        $course_units = $unit_mapper->getCourseUnits($course_id);
 
-    $course->course_units = $course_units;
-    $response = $response->withJson($course, null, JSON_PRETTY_PRINT);
-    return $response;
+        $course->course_units = $course_units;
+        $response = $response->withJson($course, null, JSON_PRETTY_PRINT);
+        return $response;
+    // PUT
+    } else if ($request->isPut() || $request->isPost()) {
+        $conn = require '../php/db_connect.php';
+
+        $data = $request->getParsedBody();
+        //Get input data from form
+        $course_id = filter_input(INPUT_POST, 'courseid');
+        $course_lang = filter_input(INPUT_POST, 'courselang');
+        $name = filter_input(INPUT_POST, 'name');
+        $profession = filter_input(INPUT_POST, 'profession');
+        $domain = filter_input(INPUT_POST, 'domain');
+        $description = filter_input(INPUT_POST, 'description');
+        $creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
+
+        // Create database-entry
+        $statement = $conn->prepare("UPDATE courses 
+                              SET name = :name, 
+                                description = :description, 
+                                domain = :domain, 
+                                profession = :profession, 
+                                creator = :creator 
+                             WHERE courses.id = :course_id
+                              AND courses.lang = :course_lang");
+
+        $statement->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+        $statement->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+        $statement->bindParam(":name", $name, PDO::PARAM_STR);
+        $statement->bindParam(":description", $description, PDO::PARAM_STR);
+        $statement->bindParam(":domain", $domain, PDO::PARAM_STR);
+        $statement->bindParam(":profession", $profession, PDO::PARAM_STR);
+        $statement->bindParam(":creator", $creator, PDO::PARAM_INT);
+
+        $success = $statement->execute();
+        if (!$success) {
+            print_r($statement->errorInfo());
+            die("Error saving course.");
+        }
+        return $response->withStatus(302)->withHeader('Location', "/src/views/editcourse.php?id=$course_id&lang=$course_lang");
+    }
 });
 
 /**
@@ -128,27 +169,30 @@ $app->get('/subjects', function (Request $request, Response $response, $args) {
 });
 
 // POST
-
-$app->post('/courses/new', function (Request $request, Response $response) {
+$app->post('/courses', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
     $course_data = [];
-    $course_data['name'] = filter_var($data['targetName'], FILTER_SANITIZE_STRING);
-    $course_data['domain'] = filter_var($data['targetDomain'], FILTER_SANITIZE_STRING);
-    $course_data['profession'] = filter_var($data['targetProfession'], FILTER_SANITIZE_STRING);
-    $course_data['desription'] = filter_var($data['targetDescription'], FILTER_SANITIZE_STRING);
-    $course_data['lang'] = "en"; //TODO Add language implementation from the form when the creation form is decided
+    $course_data['creator'] = 'kpapavramidis@mastgroup.gr';
+    $course_data['name'] = filter_var($data['name'], FILTER_SANITIZE_STRING);
+    $course_data['domain'] = filter_var($data['domain'], FILTER_SANITIZE_STRING);
+    $course_data['profession'] = filter_var($data['profession'], FILTER_SANITIZE_STRING);
+    $course_data['description'] = filter_var($data['description'], FILTER_SANITIZE_STRING);
+    $course_data['lang'] = filter_var($data['language'], FILTER_SANITIZE_STRING);
     $course_data['date_created'] = date('Y/m/d h:i:s', time());
     $course_data['date_updated'] = date('Y/m/d h:i:s', time());
     $course_mapper = new CourseMapper($this->db);
 
     $course = new Course($course_data);
-    $course_mapper->save($course);
-    $response = $response->withRedirect("/courses");
+    $inserted_course = $course_mapper->save($course);
+    $course_id = $inserted_course["course_id"];
+    $course_lang = $inserted_course["course_lang"];
 
-    return $response;
+    // After creating a course, the user is redirected to the edit page. The reason
+    // for this is, that it is not possible to add models on addcourse.php. But the user
+    // can add models on editcourse.php
+
+    return $response->withStatus(302)->withHeader('Location', "../views/editcourse.php?id=$course_id&lang=$course_lang");
 });
-
-
 
 $app->run();
 ?>

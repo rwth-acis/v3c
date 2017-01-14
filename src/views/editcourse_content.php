@@ -41,7 +41,6 @@ if ($success) {
 }
 
 ?>
-
 <div id='courses'>
     <section class='container'>
         <br><br>
@@ -50,7 +49,7 @@ if ($success) {
                 <div class='col-md-10 col-md-offset-1'>
 
                     <form role="form"
-                          action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../api/courses/<?php echo $course_id ?>" method="post" enctype="multipart/form-data" id="UploadForm">
 
                         <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
                         <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">

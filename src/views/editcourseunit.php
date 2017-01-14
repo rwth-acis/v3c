@@ -339,7 +339,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     $( "body" ).append($prototypeModalClone);
 
                     var prototypeWidgetId = initWidgets[itemIndex].prototypeName + "-"+totalWidgets; //call by value
-                    var prototypeWidgetModalId = initWidgets[itemIndex].modalname + "-"+totalWidgets;//call by value
+                    var prototypeWidgetModalId = initWidgets[itemIndex].modalname + "-"+totalWidgets;//call by value7
                     $prototypeModalClone.find(".modal-save-button").click(function () {
                         appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
                     });
@@ -388,9 +388,15 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         }
 
     }
-    function appendDataAttributes(modalObj, widgetObj){
-        console.log(modalObj);
-        console.log(widgetObj);
+    function appendDataAttributes(widgetId, modalId){
+        $widget = $("#"+widgetId);
+        $modal = $("#"+modalId);
+
+        $inputObj = $modal.find(".modal-body").find(".protocontent");
+        $inputObj.each(function (index) {
+            $widget.parent().parent().attr("data-"+$(this).attr("name"), $(this).val());
+        });
+        console.log($inputObj)
     }
 </script>
 </body>

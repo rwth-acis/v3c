@@ -184,6 +184,9 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                         }
                                         ?>
                                     </td>
+                                    <td class="rowlink-skip">
+                                        <a href="addcourse.php?id=<?php echo $current_course_id; ?>" class="btn btn-translate btn-sm btn-danger btn-block">Translate</a>
+                                    </td>
                                     <td     class="rowlink-skip">
                                         <?php if (count($lang_array) > 1): ?>
                                         <div class="dropdown">

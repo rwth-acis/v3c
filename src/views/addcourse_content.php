@@ -9,6 +9,13 @@ if ($success) {
     $subjects = $stmt->fetchAll();
 }
 
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    $string = "?id=".$id;
+}
+
+$upload_script_url = "../php/upload_script_course.php{$string}";
+
 ?>
 <div id='courses'>
     <section class='container'>
@@ -19,7 +26,7 @@ if ($success) {
 
                     <!--- CREATE COURSE INPUT FORM -->
                     <form role="form" class="form-horizontal"
-                          action="../php/upload_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="<?php echo $upload_script_url?>" method="post" enctype="multipart/form-data" id="UploadForm">
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetName">
                                 <?php echo getTranslation("addcourse:content:name", "Course name:");?>

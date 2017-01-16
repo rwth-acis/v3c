@@ -44,6 +44,9 @@ $accessControl = new AccessControl();
 $canCreateCourse = true;
 
 if ($canCreateCourse) {
+    if (isset($_GET['id'])) {
+        $id = filter_input(INPUT_GET, 'id');
+    }
     include 'addcourse_content.php';
 } else {
     include 'not_authorized.php';

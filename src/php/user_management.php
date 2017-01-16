@@ -72,7 +72,7 @@ class UserManagement
      */
     public function updateUser($userProfile)
     {
-        // TODO
+        //TODO
     }
 
     /**
@@ -83,4 +83,25 @@ class UserManagement
     {
         // TODO
     }
+
+    /**
+     * Updates user permission status.
+     * @param $id
+     * @param $confirmed
+     * @param $role
+     */
+    function setUserPermissions($id, $role)
+    {
+        if ($_POST != null) {
+
+            $sqlUpdate = 'UPDATE users SET role = ' . $role . ' WHERE id = ' . $id;
+            $sth = $db->prepare($sqlUpdate);
+            $ret = $sth->execute();
+            if ($ret === false) {
+                error_log('Error: user update in database failed!');
+                die('Could not update user.');
+            }
+        }
+    }
+
 }

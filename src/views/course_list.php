@@ -185,7 +185,22 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                         ?>
                                     </td>
                                     <td class="rowlink-skip">
-                                        <a href="addcourse.php?id=<?php echo $current_course_id; ?>" class="btn btn-translate btn-sm btn-danger btn-block">Translate</a>
+                                        <?php if (count($lang_array) > 1): ?>
+                                            <div class="dropdown">
+                                                <button class="btn btn-danger dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Translate
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="translate-dropdown">
+                                                    <?php
+                                                    foreach($lang_array as $c_lang) {
+                                                        echo "<a class='dropdown-item' href='addcourse.php?tid=$current_course_id&tlang=$c_lang'>$c_lang</a>";
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        <?php else: ?>
+                                            <a href="addcourse.php?tid=<?php echo $current_course_id; ?>&tlang=<?php echo $current_course_lang?>" class="btn btn-translate btn-sm btn-danger btn-block">Translate</a>
+                                        <?php endif; ?>
                                     </td>
                                     <td     class="rowlink-skip">
                                         <?php if (count($lang_array) > 1): ?>

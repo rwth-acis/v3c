@@ -9,9 +9,11 @@ if ($success) {
     $subjects = $stmt->fetchAll();
 }
 
-if(isset($_GET['id'])){
-    $id = $_GET['id'];
-    $string = "?id=".$id;
+$string ="";
+
+if(isset($_GET['tid'])){
+    $id = filter_input(INPUT_GET, 'tid');
+    $string = "?tid=".$id;
 }
 
 $upload_script_url = "../php/upload_script_course.php{$string}";

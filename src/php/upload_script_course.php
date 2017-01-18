@@ -9,8 +9,8 @@ $conn = require '../php/db_connect.php';
 require_once '../php/tools.php';
 
 //Get course id in case of course translatation
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if (isset($_GET['tid'])) {
+    $id = $_GET['tid'];
 }
 
 
@@ -46,15 +46,26 @@ $course_id = $conn->lastInsertId();
 $course_lang = $language;
 
 //in case of course translation
-if (isset($_GET['id'])) {
+if (isset($_GET['tid'])) {
     //Get the units for the course to be translated
-    $course_units = $conn->query("SELECT * 
+    /*$course_units = $conn->query("SELECT *
                             FROM course_to_unit 
                             JOIN course_units 
                             ON course_to_unit.unit_id = course_units.id
                             AND course_to_unit.unit_lang = course_units.lang
                             WHERE course_id = $id
                             AND course_lang ='en'")->fetchAll();
+*/
+    $statement = $conn->prepare("SELECT * 
+                            FROM course_to_unit 
+                            JOIN course_units 
+                            ON course_to_unit.unit_id = course_units.id
+                            AND course_to_unit.unit_lang = course_units.lang
+                            WHERE course_id = :tid
+                            AND course_lang ='en'");
+    $statement->bindParam(":tid",$id,PDO::PARAM_INT);
+    $statement->execute();
+    $course_units = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     //create course units for the translated courses
     foreach($course_units as $course_unit){
@@ -73,6 +84,11 @@ if (isset($_GET['id'])) {
 
         $success = $units_stmt->execute();
 
+        if (!$success) {
+            print_r($statement->errorInfo());
+            die("Error saving course units for translated course.");
+        }
+
         //assign the copied course units to the translated course
         $c2u_stmt = $conn->prepare("INSERT INTO course_to_unit (course_id,course_lang,unit_id, unit_lang) 
                              VALUES (:cid,:ulanguage,:uid,:ulanguage)");
@@ -82,6 +98,11 @@ if (isset($_GET['id'])) {
         $c2u_stmt->bindParam(":uid", $course_unit['id'], PDO::PARAM_INT);
 
         $success = $c2u_stmt->execute();
+
+        if (!$success) {
+            print_r($statement->errorInfo());
+            die("Error adding course units to translated course.");
+        }
     }
 }
 

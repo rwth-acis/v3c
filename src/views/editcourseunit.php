@@ -100,12 +100,15 @@
                     <div class="col-sm-3">
                     </div>
                     <div class="col-sm-6">
-                        <span class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-backward slideviewer-nav-icon videoviewer-icons-side-padding"
-                              aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon glyphicon glyphicon-play slideviewer-nav-icon videoviewer-icons-side-padding"
-                              aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-forward slideviewer-nav-icon videoviewer-icons-side-padding"
-                              aria-hidden="true"></span><br>
+                        <span
+                            class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-backward slideviewer-nav-icon videoviewer-icons-side-padding"
+                            aria-hidden="true"></span>
+                        <span
+                            class="glyphicon glyphicon glyphicon glyphicon-play slideviewer-nav-icon videoviewer-icons-side-padding"
+                            aria-hidden="true"></span>
+                        <span
+                            class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-forward slideviewer-nav-icon videoviewer-icons-side-padding"
+                            aria-hidden="true"></span><br>
                         <span class="videoviewer-time-style">00:30:43/01:15:00</span>
                     </div>
                     <div class="col-sm-3">
@@ -179,7 +182,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
             </div>
             <div class="modal-body">
@@ -214,7 +217,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Video Widget</h4>
             </div>
             <div class="modal-body">
@@ -249,65 +252,94 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Quizzes Widget</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                <div class="col-sm-10 col-sm-offset-1">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <label for="video-title">Quizzes Title</label>
-                            <input type="text" class="form-control protocontent" id=-quizzes-title" name="quizzes-title"
-                                   placeholder="Title" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="col-sm-12">
-                            <h4 class="">Questions</h4>
-                            <hr>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="question-title-counter">Question 1</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <label for="quizzes-question-0">Question:</label>
-                                            <input type="text" class="form-control protocontent" id=-quizzes-question-0" name="quizzes-question-0"
-                                                   placeholder="Question" aria-describedby="basic-addon1">
-                                        </div>
-                                        <label class="col-sm-12">Answers:</label>
-
-                                        <div class="col-sm-6 padding-bottom-1em">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control protocontent" id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                       placeholder="Answer 1" aria-describedby="basic-addon1">
-                                                <button class="btn btn-default" type="button">-</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 padding-bottom-1em">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control protocontent" id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                       placeholder="Answer 2" aria-describedby="basic-addon1">
-                                                <button class="btn btn-default" type="button">-</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 padding-bottom-1em">
-                                            <button type="button" class="btn btn-default btn-block">Add Answer</button>
-                                        </div>
-
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="video-title">Quizzes Title</label>
+                                <input type="text" class="form-control protocontent" id=-quizzes-title"
+                                       name="quizzes-title"
+                                       placeholder="Title" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="col-sm-12">
+                                <h4 class="">Questions</h4>
+                                <hr>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="question-title-counter">Question 1</h3>
                                     </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label for="quizzes-question-0">Question:</label>
+                                                <input type="text" class="form-control protocontent"
+                                                       id=-quizzes-question-0" name="quizzes-question-0"
+                                                       placeholder="Question" aria-describedby="basic-addon1">
+                                            </div>
+                                            <label class="col-sm-12">Answers:</label>
 
+                                            <div class="col-sm-6 padding-bottom-1em">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control protocontent"
+                                                           id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                                                           placeholder="Answer 1" aria-describedby="basic-addon1"
+                                                           placeholder="Add Answer">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary" type="button"
+                                                                disabled>-</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 padding-bottom-1em">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control protocontent"
+                                                           id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                                                           placeholder="Answer 2" aria-describedby="basic-addon1"
+                                                           placeholder="Add Answer">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary" type="button"
+                                                                disabled>-</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 padding-bottom-1em">
+                                                <button type="button" class="btn btn-default btn-block btn-add-answer">
+                                                    Add Answer
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-sm-12 padding-bottom-1em text-center">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination">
+                                            <li>
+                                                <a href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li><a href="#">1</a></li>
+                                            <li>
+                                                <a href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
-                            <br>
-                            <button type="button" class="btn btn-default btn-block">Add Question</button>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success modal-add-button">Add Question +</button>
                 <button type="button" class="btn btn-success modal-save-button">Save changes</button>
             </div>
         </div>
@@ -372,6 +404,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     print("<script src='../js/overview-widget.js'> </script>");
 }
 ?>
+
 <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
 <script src="../external/jquery/dist/jquery.js"></script>
 <script src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
@@ -382,6 +415,20 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../external/gridstack/gridstack.jQueryUI.min.js"></script>
 
 <!-- Plugin JavaScript -->
+<script type="text/template" id="answerBlock">
+    <div class="col-sm-6 padding-bottom-1em">
+        <div class="input-group">
+            <input type="text" class="form-control protocontent"
+                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                   placeholder="Answer 2" aria-describedby="basic-addon1"
+                   placeholder="Add Answer">
+            <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">-</button>
+            </span>
+        </div>
+    </div>
+</script>
+
 
 <script src="../js/course-list.js"></script>
 <!--<script src="../js/widget-arrangement.js"><script/>-->
@@ -394,6 +441,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
 
     $(function () {
+
         // TODO: FIX TOOLTIP HOVERING
         //$('[data-toggle="tooltip"]').tooltip()
 
@@ -472,7 +520,14 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     var prototypeWidgetModalId = initWidgets[itemIndex].modalname + "-" + totalWidgets;//call by value7
                     $prototypeModalClone.find(".modal-save-button").click(function () {
                         appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
+                        //$(this).modal('toggle');
                     });
+                    $prototypeModalClone.find(".btn-add-answer").click(function () {
+
+                        var template = $("#answerBlock").html();
+                        $(template).insertBefore($(this).parent());
+                    });
+
                     totalWidgets++;
 
                 }
@@ -524,10 +579,12 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
         $inputObj = $modal.find(".modal-body").find(".protocontent");
         $inputObj.each(function (index) {
+            //For unknown reason, replacing attr() with data() does not work
             $widget.parent().parent().attr("data-" + $(this).attr("name"), $(this).val());
         });
         console.log($inputObj)
     }
+
 </script>
 </body>
 </html>

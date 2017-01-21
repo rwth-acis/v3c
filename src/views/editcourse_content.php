@@ -106,9 +106,12 @@ if ($success) {
                                         <span class="pull-right">
                                         <span class="glyphicon glyphicon-calendar margin-right"></span>
                                                     <?php echo $course_unit["start_date"] ?>
-                                        <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
-                                            <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
-                                        </a>
+                                            <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-success">
+                                                Edit
+                                            </a>
+                                            <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
+                                                <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
+                                            </a>
                                         </span>
                                     </li>
                                     <div id="<?php echo $unit_id ?>" class="collapse">

@@ -9,10 +9,9 @@ $conn = require '../php/db_connect.php';
 require_once '../php/tools.php';
 
 //Get course id in case of course translatation
-if (isset($_GET['tid'])) {
-    $id = $_GET['tid'];
-}
 
+$id = filter_input(INPUT_GET, 'tid');
+$lang = filter_input(INPUT_GET, 'tlang');
 
 //Get input data from form
 $name = filter_input(INPUT_POST, 'name');
@@ -62,14 +61,16 @@ if (isset($_GET['tid'])) {
                             ON course_to_unit.unit_id = course_units.id
                             AND course_to_unit.unit_lang = course_units.lang
                             WHERE course_id = :tid
-                            AND course_lang ='en'");
+                            AND course_lang = :tlang");
     $statement->bindParam(":tid",$id,PDO::PARAM_INT);
+    $statement->bindParam(":tlang",$lang,PDO::PARAM_INT);
     $statement->execute();
     $course_units = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     //create course units for the translated courses
     foreach($course_units as $course_unit){
 
+        //ADD TRANSLATION FOR is to indicate that course units for translated course are not translated yet
         $utitle = "ADD TRANSLATION FOR : " . $course_unit['title'];
         $udescription = "ADD TRANSLATION FOR : " . $course_unit['description'];
 

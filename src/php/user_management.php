@@ -44,23 +44,32 @@ class UserManagement
         $sqlSelect = "SELECT * FROM `users` WHERE openIdConnectSub='" . $sub . "'";
         // This will escape symbols in the SQL statement (also supposed to prevent 
         // SQL injection attacks). Returns a PDOStatement
-        $sth = $this->db->prepare($sqlSelect);
-        $sth->execute();
-        return $sth->fetch(PDO::FETCH_OBJ);
+        $stmt = $this->db->prepare($sqlSelect);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
     /**
      * Create a user entry in our database
      * @param type $userProfile Object with properties email, sub, given_name,
      * family_name
+     * @param type $role Integer representing the user's desired role, where 1=Admin, 2=Teacher, 3=Learner, 4=Operator
      */
-    public function createUser($userProfile)
+    public function createUser($userProfile, $role)
     {
+        echo "Email: " . $userProfile->email . " sub: " . $userProfile->sub . "given_name: " . $userProfile->given_name . " last_name: " . $userProfile->last_name . " role: " . $role;
+
         // CREATE A NEW USER DATABASE ENTRY
-        $sqlInsert = "INSERT INTO users (email, openIdConnectSub, given_name, family_name) VALUES ('" . $userProfile->email . "','" . $userProfile->sub . "','" . $userProfile->given_name . "','" . $userProfile->family_name . "')";
-        $sth = $this->db->prepare($sqlInsert);
-        $ret = $sth->execute();
-        if ($ret === false) {
+        $stmt = $this->db->prepare("INSERT INTO users (email, openIdConnectSub, given_name, family_name, role)
+                          VALUES (:email, :sub, :given_name, :family_name, :role");
+        $stmt->bindParam(":email", $userProfile->email, PDO::PARAM_STR);
+        $stmt->bindParam(":sub", $userProfile->sub, PDO::PARAM_STR);
+        $stmt->bindParam(":given_name", $userProfile->given_name, PDO::PARAM_STR);
+        $stmt->bindParam(":family_name", $userProfile->family_name, PDO::PARAM_STR);
+        $stmt->bindParam(":role", $role, PDO::PARAM_INT);
+
+        $success = $stmt->execute();
+        if ($success === false) {
             error_log('Error: user insertion in database failed!');
             die('Could not create new user.');
         }
@@ -68,19 +77,33 @@ class UserManagement
 
     /**
      * Update a user entry in our database
-     * @param type $userProfile
+     * @param type $userProfile Object with properties email, sub, given_name,
+     * family_name
+     * @param type $role Integer representing the user's desired role, where 1=Admin, 2=Teacher, 3=Learner, 4=Operator
      */
-    public function updateUser($userProfile)
+    public function updateUser($userProfile, $role)
     {
-        // TODO
+        $sqlUpdate = "UPDATE users SET email = '" . $userProfile->email . "', given_name = '" . $userProfile->given_name . "', family_name ='" . $userProfile->family_name . "', role = '" . $role . "' WHERE openIdConnectSub = '" . $userProfile->sub . "'";
+        $stmt = $this->db->prepare($sqlUpdate);
+        $success = $stmt->execute();
+        if ($success === false) {
+            error_log('Error: user update in database failed!');
+            die('Could not update user data.');
+        }
     }
 
     /**
      * Delete a user entry in our database
-     * @param type $sub
+     * @param type $sub openIdConnect Sub identifying a user.
      */
     public function deleteUser($sub)
     {
-        // TODO
+        $sqlDelete = "DELETE * FROM users WHERE openIdConnectSub = " . $sub;
+        $stmt = $this->db->prepare($sqlDelete);
+        $success = $stmt->execute();
+        if ($success === false) {
+            error_log('Error: user deletion from database failed!');
+            die('Could not delete user from database.');
+        }
     }
 }

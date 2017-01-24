@@ -30,14 +30,17 @@
 </head>
 <body>
 <?php
-// LOAD COURSE DATA FROM OUR DATABASE //////////////////////////////////////
+
 include '../php/tools.php';
+
 $course_id = filter_input(INPUT_GET, 'id');
+
 try {
     $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
 } catch (Exception $e) {
     error_log($e->getMessage());
 }
+
 ?>
 
 <!-- Top level navigation and logo -->
@@ -47,7 +50,9 @@ try {
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1>Delete course <?php echo $course['name']; ?></h1>
+           <h1><?php echo getTranslation("coursedel:head:name_tmp", "Delete course ") . $course['name'];
+               //echo template_substitution(getTranslation("coursedel:head:name", "Delete course {COURSENAME}"), array("{COURSENAME}" => $course['name']));
+               ?></h1>
         </div>
     </div>
 </header>
@@ -55,18 +60,27 @@ try {
 <?php
 // Check whether the currently logged in user is allowed to delete courses
 require '../php/access_control.php';
+
 $accessControl = new AccessControl();
 $canCreateCourse = $accessControl->canDeleteCourse($course_id);
 
+// FIXME: debug
+$canCreateCourse = true;
+
 if ($canCreateCourse) {
     ?>
-    <!-- Confirmation check UI elements to ask user whether or not to delete the
-      selected course.-->
+    <!-- Confirmation check UI elements to ask user whether or not to delete the selected course -->
     <div class="center-block container">
         <div class="featured-box container delete-confirm-div">
-            <p><strong>Do you really want to delete course <?php echo $course['name']; ?>?</strong></p>
-            <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no" value="Yes"/>
-            <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no" value="No"/>
+            <p><strong><?php
+                    echo getTranslation("coursedel:head:confirm_tmp1", "Do you really want to delete course ") . $course['name'] .
+                    getTranslation("coursedel:head:confirm_tmp2", "?");
+                    //echo template_substitution(getTranslation("coursedel:head:confirm", "Do you really want to delete course {COURSENAME}?"), array("{COURSENAME}" => $course['name']));
+                    ?></strong></p>
+            <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no"
+                   value="<?php echo getTranslation('general:button:yes', 'Yes');?>"/>
+            <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no"
+                   value="<?php echo getTranslation('general:button:no', 'No');?>"/>
         </div>
     </div>
 

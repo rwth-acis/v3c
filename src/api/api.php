@@ -99,73 +99,74 @@ $app->get('/courses', function (Request $request, Response $response) {
     return $response;
 });
 
-/**
- * Get a particular course with an id
- */
-$app->any('/courses/{id}', function (Request $request, Response $response, $args) {
-    // GET
-    if ($request->isGet()) {
-        $course_id = (int)$args['id'];
-        $course_mapper = new CourseMapper($this->db);
-        $unit_mapper = new CourseUnitMapper($this->db);
-        $course = $course_mapper->getCourseById($course_id);
-        $course_units = $unit_mapper->getCourseUnits($course_id);
+$app->get('/courses/{id}', function (Request $request, Response $response, $args) {
+    $course_id = (int)$args['id'];
+    $course_mapper = new CourseMapper($this->db);
+    $unit_mapper = new CourseUnitMapper($this->db);
 
-        $course->course_units = $course_units;
-        $response = $response->withJson($course, null, JSON_PRETTY_PRINT);
-        return $response;
-    // PUT
-    } else if ($request->isPut() || $request->isPost()) {
-        $conn = require '../php/db_connect.php';
+    $courses = $course_mapper->getCoursesById($course_id);
+    $courses_array = array();
 
-        $data = $request->getParsedBody();
-        //Get input data from form
-        $course_id = filter_input(INPUT_POST, 'courseid');
-        $course_lang = filter_input(INPUT_POST, 'courselang');
-        $name = filter_input(INPUT_POST, 'name');
-        $profession = filter_input(INPUT_POST, 'profession');
-        $domain = filter_input(INPUT_POST, 'domain');
-        $description = filter_input(INPUT_POST, 'description');
-        $creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
+    foreach ($courses as &$course) {
+        $course = utf8_encode_object($course);
+        $course_units = $unit_mapper->getCourseUnitsByIdAndLang($course->id, $course->lang);
 
-        // Create database-entry
-        $statement = $conn->prepare("UPDATE courses 
-                              SET name = :name, 
-                                description = :description, 
-                                domain = :domain, 
-                                profession = :profession, 
-                                creator = :creator 
-                             WHERE courses.id = :course_id
-                              AND courses.lang = :course_lang");
+        $encoded_course_units = utf8_encode_array($course_units);
+        $course->course_units = $encoded_course_units;
+        $courses_array[] = $course;
 
-        $statement->bindParam(":course_id", $course_id, PDO::PARAM_INT);
-        $statement->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
-        $statement->bindParam(":name", $name, PDO::PARAM_STR);
-        $statement->bindParam(":description", $description, PDO::PARAM_STR);
-        $statement->bindParam(":domain", $domain, PDO::PARAM_STR);
-        $statement->bindParam(":profession", $profession, PDO::PARAM_STR);
-        $statement->bindParam(":creator", $creator, PDO::PARAM_INT);
-
-        $success = $statement->execute();
-        if (!$success) {
-            print_r($statement->errorInfo());
-            die("Error saving course.");
-        }
-        return $response->withStatus(302)->withHeader('Location', "/src/views/editcourse.php?id=$course_id&lang=$course_lang");
     }
+    return $response->withJson($courses_array, null, JSON_PRETTY_PRINT);
 });
 
 /**
- * Get all subjects
+ *  Get a course by ID or update a course by ID
  */
-$app->get('/subjects', function (Request $request, Response $response, $args) {
-    $subject_mapper = new SubjectMapper($this->db);
-    $subjects = $subject_mapper->getSubjects($request->getQueryParams());
-    foreach ($subjects as &$subject) {
-        $subject = utf8_encode_object($subject);
+$app->any('/courses/{id}/{lang}', function (Request $request, Response $response, $args) {
+    $course_lang = $args['lang'];
+
+    // Create course mapper for mapping the data between API and db
+    $course_mapper = new CourseMapper($this->db);
+
+    // GET
+    if ($request->isGet()) {
+        $course_id = (int)$args['id'];
+        // Create course unit mapper for mapping data between API and db
+        $unit_mapper = new CourseUnitMapper($this->db);
+
+        // Get Courses and Course Units from db
+        $courses = $course_mapper->getCourseByIdAndLang($course_id, $course_lang);
+
+        $courses_array = array();
+        // In the foreach, the course units are queried and then added to the course object
+        foreach ($courses as &$course) {
+            $course = utf8_encode_object($course);
+            $course_units = $unit_mapper->getCourseUnitsByIdAndLang($course->id, $course_lang);
+
+            $encoded_course_units = utf8_encode_array($course_units);
+            $course->course_units = $encoded_course_units;
+            $courses_array[] = $course;
+
+            $courses_array = $course;
+
+        }
+
+        // Show response in JSON
+        return $response->withJson($courses_array, null, JSON_PRETTY_PRINT);
+
+        // PUT
+    } else if ($request->isPut()) {
+        // Get updated fields and pas them to course_mappers put-function
+        $updated_fields = $request->getParsedBody();
+        $updated_course = $course_mapper->put($updated_fields);
+        $course_id = $updated_course['course_id'];
+        $course_lang = $updated_course['course_lang'];
+
+        // Redirect with status 302
+        return $response->withStatus(302)->withHeader('Location',
+            "/src/views/editcourse.php?id=$course_id&lang=$course_lang");
+        // POST
     }
-    $new_response = $response->withJson($subjects, null, JSON_PRETTY_PRINT);
-    return $new_response;
 });
 
 // POST
@@ -191,8 +192,64 @@ $app->post('/courses', function (Request $request, Response $response) {
     // for this is, that it is not possible to add models on addcourse.php. But the user
     // can add models on editcourse.php
 
-    return $response->withStatus(302)->withHeader('Location', "../views/editcourse.php?id=$course_id&lang=$course_lang");
+    return $response->withStatus(302)->withHeader('Location',
+        "../views/editcourse.php?id=$course_id&lang=$course_lang");
 });
 
+/**
+ * Get all subjects
+ */
+$app->get('/subjects', function (Request $request, Response $response, $args) {
+    $subject_mapper = new SubjectMapper($this->db);
+    $subjects = $subject_mapper->getSubjects($request->getQueryParams());
+    foreach ($subjects as &$subject) {
+        $subject = utf8_encode_object($subject);
+    }
+    $new_response = $response->withJson($subjects, null, JSON_PRETTY_PRINT);
+    return $new_response;
+});
+
+
+$app->get('/courses/{id}/{lang}/units', function (Request $request, Response $response, $args) {
+    $course_id = (int)$args['id'];
+    $course_lang = $args['lang'];
+
+    $unit_mapper = new CourseUnitMapper($this->db);
+    $course_units = $unit_mapper->getCourseUnitsByIdAndLang($course_id, $course_lang);
+
+    $encoded_course_units = utf8_encode_array($course_units);
+
+    // Show response in JSON
+    return $response->withJson($encoded_course_units, null, JSON_PRETTY_PRINT);
+});
+
+$app->post('/courses/{id}/{lang}/units', function (Request $request, Response $response, $args) {
+    $data = $request->getParsedBody();
+    $course_id = (int)$args['id'];
+    $course_lang = $args['lang'];
+
+    $unit_mapper = new CourseUnitMapper($this->db);
+    $course_unit_data = [];
+
+    // Get input data from form
+    $course_id = filter_var($data["courseid"], FILTER_SANITIZE_NUMBER_INT);
+    $course_lang = filter_var($data["courselang"], FILTER_SANITIZE_STRING);
+
+    $course_unit_data["lang"] = $course_lang;
+    $course_unit_data['title'] = filter_var($data["name"], FILTER_SANITIZE_STRING);
+    $course_unit_data['points'] = filter_var($data["points"], FILTER_SANITIZE_STRING);
+    $course_unit_data['start_date'] = filter_var($data["startdate"], FILTER_SANITIZE_STRING);
+    $course_data['date_created'] = date('Y/m/d h:i:s', time());
+    $course_unit_data['description'] = filter_var($data["description"], FILTER_SANITIZE_STRING);
+
+    $course_unit = new CourseUnit($course_unit_data);
+    $unit_mapper->save($course_id, $course_lang, $course_unit);
+
+    // After creating a course, the user is redirected to the edit page. The reason
+    // for this is, that it is not possible to add models on addcourse.php. But the user
+    // can add models on editcourse.php
+    return $response->withStatus(302)->withHeader('Location',
+        "../../../../views/editcourse.php?id=$course_id&lang=$course_lang");
+});
 $app->run();
 ?>

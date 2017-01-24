@@ -6,8 +6,6 @@
  * Date: 09/12/2016
  * Time: 23:37
  */
-
-
 class CourseMapper extends Mapper
 {
     public function getCourses($args = array())
@@ -48,15 +46,17 @@ class CourseMapper extends Mapper
      * @param int $course_id The ID of the ticket
      * @return Course  The course
      */
-    public function getCourseById($course_id)
+    public function getCoursesById($course_id)
     {
-        $course_by_id_sql = "SELECT * FROM courses WHERE id = :course_id";
-        $stmt = $this->db->prepare($course_by_id_sql);
-        $result = $stmt->execute(["course_id" => $course_id]);
+        $course_by_id_sql = "SELECT * FROM courses WHERE id = $course_id";
+        $stmt = $this->db->query($course_by_id_sql);;
 
-        if ($result) {
-            return new Course($stmt->fetch());
+        $courses = [];
+        while ($row = $stmt->fetch()) {
+
+            $courses[] = new Course($row);
         }
+        return $courses;
     }
 
     public function getCourseByIdAndLang($course_id, $course_lang)
@@ -66,7 +66,7 @@ class CourseMapper extends Mapper
         $result = $stmt->execute(["course_id" => $course_id, "course_lang" => $course_lang]);
 
         if ($result) {
-            return new Course($stmt->fetch());
+            return array(new Course($stmt->fetch()));
         }
     }
 
@@ -96,7 +96,8 @@ class CourseMapper extends Mapper
         return $courses;
     }
 
-    public function save(Course $course) {
+    public function save(Course $course)
+    {
         $conn = require '../php/db_connect.php';
         $statement = $conn->prepare("INSERT INTO courses 
                                             (lang, name, description, domain, profession, creator) 
@@ -120,9 +121,18 @@ class CourseMapper extends Mapper
 
     }
 
-    public function put($updated_fields) {
+    public function put($updated_fields)
+    {
         // Create database connection
         $conn = require '../php/db_connect.php';
+
+        $course_id = filter_var($updated_fields['courseid'], FILTER_SANITIZE_STRING);
+        $creator = 'kpapavramidis@mastgroup.gr';
+        $name = filter_var($updated_fields['name'], FILTER_SANITIZE_STRING);
+        $domain = filter_var($updated_fields['domain'], FILTER_SANITIZE_NUMBER_INT);
+        $profession = filter_var($updated_fields['profession'], FILTER_SANITIZE_STRING);
+        $description = filter_var($updated_fields['description'], FILTER_SANITIZE_STRING);
+        $language = filter_var($updated_fields['courselang'], FILTER_SANITIZE_STRING);
 
         // Create database-entry
         $statement = $conn->prepare("UPDATE courses 
@@ -133,21 +143,20 @@ class CourseMapper extends Mapper
                                       creator = :creator 
                                     WHERE courses.id = :course_id AND courses.lang = :course_lang");
 
-        $statement->bindParam(":course_id", $course->getId(), PDO::PARAM_INT);
-        $statement->bindParam(":course_lang", $course->getLang(), PDO::PARAM_STR);
-        $statement->bindParam(":name", $course->getName(), PDO::PARAM_STR);
-        $statement->bindParam(":description", $course->getDescription(), PDO::PARAM_STR);
-        $statement->bindParam(":domain", $course->getDomain(), PDO::PARAM_INT);
-        $statement->bindParam(":profession", $course->getProfession(), PDO::PARAM_STR);
-        $statement->bindParam(":creator", $course->getCreator(), PDO::PARAM_STR);
-        var_dump($course);
-        die();
+        $statement->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+        $statement->bindParam(":course_lang", $language, PDO::PARAM_STR);
+        $statement->bindParam(":name", $name, PDO::PARAM_STR);
+        $statement->bindParam(":description", $description, PDO::PARAM_STR);
+        $statement->bindParam(":domain", $domain, PDO::PARAM_INT);
+        $statement->bindParam(":profession", $profession, PDO::PARAM_STR);
+        $statement->bindParam(":creator", $creator, PDO::PARAM_STR);
+
         $success = $statement->execute();
         if (!$success) {
             print_r($statement->errorInfo());
             die("Error saving course.");
         }
 
-        return array("course_id" => $course->getId(), "course_lang" => $course->getLang());
+        return array("course_id" => $course_id, "course_lang" => $language);
     }
 }

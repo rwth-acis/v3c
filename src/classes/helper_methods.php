@@ -25,3 +25,16 @@ function utf8_encode_object($object)
     return $encoded_object;
 
 }
+
+function utf8_encode_array($array)
+{
+    $encoded_array = array();
+    foreach ($array as $key => $val) {
+        if (is_string($val)) {
+            $val = utf8_encode($val);
+        }
+        $encoded_array[$key] = $val;
+    }
+    return $encoded_array;
+
+}

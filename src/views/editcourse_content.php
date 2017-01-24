@@ -22,7 +22,7 @@ $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
 
 $success = $stmt->execute();
 if ($success) {
-    $course_units = $stmt->fetchAll();
+    $course_units = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Get course info
@@ -41,7 +41,6 @@ if ($success) {
 }
 
 ?>
-
 <div id='courses'>
     <section class='container'>
         <br><br>
@@ -50,8 +49,8 @@ if ($success) {
                 <div class='col-md-10 col-md-offset-1'>
 
                     <form role="form"
-                          action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
-
+                          action="../api/courses/<?php echo $course_id . "/" . $course_lang ?>" method="post" enctype="multipart/form-data" id="UploadForm">
+                        <input type="hidden" name="_METHOD" value="PUT"/>
                         <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
                         <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">
 

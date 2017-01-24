@@ -22,7 +22,7 @@ $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
 
 $success = $stmt->execute();
 if ($success) {
-    $course_units = $stmt->fetchAll();
+    $course_units = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Get course info
@@ -53,7 +53,6 @@ if ($success) {
 
 
 ?>
-
 <div id='courses'>
     <section class='container'>
         <br><br>
@@ -62,8 +61,8 @@ if ($success) {
                 <div class='col-md-10 col-md-offset-1'>
 
                     <form role="form"
-                          action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
-
+                          action="../api/courses/<?php echo $course_id . "/" . $course_lang ?>" method="post" enctype="multipart/form-data" id="UploadForm">
+                        <input type="hidden" name="_METHOD" value="PUT"/>
                         <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
                         <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">
 
@@ -77,20 +76,20 @@ if ($success) {
                             </div>
                         </div>
 
-                        <!-- COURSE DOMAIN -->
+                        <!-- COURSE DOMAIN-->
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
+                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("addcourse:content:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
                                 <select class="form-control" name="domain" id="domain">
                                     <?php
+                                    // Get subjects
+                                    $subjects = $conn->query("SELECT subjects.* FROM subjects")->fetchAll(PDO::FETCH_ASSOC);
+
                                     foreach ($subjects as $subject) {
                                         $id = $subject["id"];
                                         $name = $subject["name"];
-                                        if ($id == $course["domain"]) {
-                                            echo "<option value='$id' selected>$name</option>";
-                                        } else {
-                                            echo "<option value='$id'>$name</option>";
-                                        }
+                                        $selected = ( $id == $course['domain']) ? "selected" : "";
+                                        echo "<option value='$id' $selected>$name</option>";
                                     }
                                     ?>
                                 </select>
@@ -129,9 +128,12 @@ if ($success) {
                                         <span class="pull-right">
                                         <span class="glyphicon glyphicon-calendar margin-right"></span>
                                                     <?php echo $course_unit["start_date"] ?>
-                                        <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
-                                            <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
-                                        </a>
+                                            <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-success">
+                                                Edit
+                                            </a>
+                                            <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
+                                                <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
+                                            </a>
                                         </span>
                                     </li>
                                     <div id="<?php echo $unit_id ?>" class="collapse">

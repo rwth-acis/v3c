@@ -9,6 +9,32 @@ if ($success) {
     $subjects = $stmt->fetchAll();
 }
 
+
+$string ="";
+
+if(isset($_GET['tid'])){
+    $id = filter_input(INPUT_GET, 'tid');
+    $lang = filter_input(INPUT_GET, 'tlang');
+    $string = "?tid=$id&tlang=$lang";
+
+
+    //get languages that are already supported for the class to be trasnlated
+    $stmt = $conn->prepare("SELECT lang FROM courses WHERE id = $id");
+    $success = $stmt->execute();
+
+    $course_languages = null;
+    if ($success) {
+        $course_languages = $stmt->fetchAll();
+    }
+
+    $courses_lcode = Array();
+    foreach($course_languages as $cl){
+        array_push($courses_lcode,$cl["lang"]);
+    }
+}
+
+$upload_script_url = "../php/upload_script_course.php{$string}";
+
 ?>
 <div id='courses'>
     <section class='container'>
@@ -47,7 +73,9 @@ if ($success) {
                                     );
                                     foreach ($languages as $code => $language) {
                                         $selected = ($_SESSION["lang"] == $code) ? "selected" : "";
-                                        echo "<option class='flag flag-$code' value='$code' $selected>$language</option>";
+                                        if(!in_array($code,$courses_lcode)){
+                                            echo "<option class='flag flag-$code' value='$code' $selected>$language</option>";
+                                        }
                                     }
                                     ?>
                                 </select>

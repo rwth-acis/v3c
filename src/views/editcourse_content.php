@@ -64,12 +64,24 @@ if ($success) {
                             </div>
                         </div>
 
-                        <!-- COURSE DOMAIN -->
+                        <!-- COURSE DOMAIN-->
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
+                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("addcourse:content:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="domain" id="targetDomain"
-                                       value="<?php echo htmlentities($course['domain']); ?>" required>
+                                <select class="form-control" name="domain" id="domain">
+                                    <?php
+
+                                    // Getsubjects
+                                    $subjects = $conn->query("SELECT subjects.* FROM subjects")->fetchAll(PDO::FETCH_ASSOC);
+
+                                    foreach ($subjects as $subject) {
+                                        $id = $subject["id"];
+                                        $name = $subject["name"];
+                                        $selected = ( $id == $course['domain']) ? "selected" : "";
+                                        echo "<option value='$id' $selected>$name</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
 
@@ -105,9 +117,12 @@ if ($success) {
                                         <span class="pull-right">
                                         <span class="glyphicon glyphicon-calendar margin-right"></span>
                                                     <?php echo $course_unit["start_date"] ?>
-                                        <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
-                                            <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
-                                        </a>
+                                            <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-success">
+                                                Edit
+                                            </a>
+                                            <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
+                                                <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
+                                            </a>
                                         </span>
                                     </li>
                                     <div id="<?php echo $unit_id ?>" class="collapse">

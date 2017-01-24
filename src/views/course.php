@@ -41,7 +41,8 @@ if (!$success) {
 }
 
 // Get course subject
-$course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id= $course_id")->fetch(PDO::FETCH_ASSOC);
+$course_domain = $course_details["domain"];
+$course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id= $course_domain")->fetch(PDO::FETCH_ASSOC);
 
 
 // Get course units

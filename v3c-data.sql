@@ -56,17 +56,27 @@ VALUES
   (1, 'en', 'Social Entrepreneurship 101', 'This course introduces the basic principles of Social Entrepreneurship', 1,
    'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (1, 'de', 'Social Entrepreneurship Einführung', 'Dieser Kurs behandelt die Grundlagen des Social Entrepreneurship', 1,
-   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'office@best.at', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (1, 'es', 'Curso de Social Entrepreneurship', 'Este curso es sobre los fundamentos del Social Entrepreneurship', 1,
-   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'lorena.corral@ffeuskadi.net', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (2, 'en', 'Case Study: Endeavor Greece', 'This case study discusses the Endeavor Greece project and highlights learning takeaways for Social Enterprises', 1,
-   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'irene.pizzo@cesie.org', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+  (2, 'it', 'Caso di studio: Endeavor Grecia', 'Questo caso di studio illustra il progetto e mette in evidenza la Grecia Endeavor take away per le imprese sociali di apprendimento', 1,
+   'Social Entrepreneur', 'irene.pizzo@cesie.org', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+  (2, 'gr', 'Μελέτη περίπτωσης: Endeavor Ελλάδα', 'Αυτή η μελέτη περίπτωσης συζητά την Endeavor έργο Ελλάδα και τονίζει τη μάθηση takeaways για τις Κοινωνικές Επιχειρήσεις', 1,
+   'Social Entrepreneur', 'irene.pizzo@cesie.org', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+  (2, 'es', 'Estudio de caso: Endeavor Greece', 'Este estudio de caso discute el proyecto Endeavor Grecia y destaca las oportunidades de aprendizaje para las empresas sociales', 1,
+   'Social Entrepreneur', 'irene.pizzo@cesie.org', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (3, 'en', 'Ernesto Sirolli\'s approach to Social Entrepreneurship', 'This course covers the key learning points Ernesto Sirolli during his career as a coach for Social Enterprises', 1,
-   'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+   'Social Entrepreneur', 'giampoulaki@europeanprogress.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (4, 'en', 'Scaling the Social Enterprise', 'Learn how to increase your reach with your Social Enterprise', 1,
    'Social Entrepreneur', 'kpapavramidis@mastgroup.gr', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (5, 'en', 'Flight Booking Course', 'In this course you will learn to book flights for a customer.', 2,
-   'Hotel Booker', 'giampoulaki@europeanprogress.gr', '2016-11-20 18:04:34', '2016-11-20 18:04:34');
+   'Social Entrepreneur', 'lorena.corral@ffeuskadi.net', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+  (5, 'it', 'Prenotazione Volo', 'In questo corso imparerai a prenotare un volo per un cliente.', 2,
+   'Social Entrepreneur', 'office@best.at', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
+  (5, 'gr', 'Κράτηση πτήσης', 'Σε αυτό το μάθημα θα μάθετε να κάνετε κράτηση εισιτηρίων για έναν πελάτη.', 2,
+   'ξενοδοχείο Booker', 'giampoulaki@europeanprogress.gr', '2016-11-20 18:04:34', '2016-11-20 18:04:34');
    
 
 --

@@ -40,6 +40,18 @@ if ($success) {
     $course = $stmt2->fetch();
 }
 
+
+// Get subjects
+$stmt3 = $conn->prepare("SELECT id, name
+                        FROM subjects");
+
+
+$success = $stmt3->execute();
+if ($success) {
+    $subjects = $stmt3->fetchAll();
+}
+
+
 ?>
 
 <div id='courses'>
@@ -69,8 +81,19 @@ if ($success) {
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="domain" id="targetDomain"
-                                       value="<?php echo htmlentities($course['domain']); ?>" required>
+                                <select class="form-control" name="domain" id="domain">
+                                    <?php
+                                    foreach ($subjects as $subject) {
+                                        $id = $subject["id"];
+                                        $name = $subject["name"];
+                                        if ($id == $course["domain"]) {
+                                            echo "<option value='$id' selected>$name</option>";
+                                        } else {
+                                            echo "<option value='$id'>$name</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
 

@@ -22,7 +22,7 @@ if ($success) {
 
                     <!--- CREATE COURSE INPUT FORM -->
                     <form role="form" class="form-horizontal"
-                          action="../php/upload_script_courseunit.php" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../api/courses/<?php echo $course_id . "/" . $course_lang . "/units"?>" method="post" enctype="multipart/form-data" id="UploadForm">
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="name">
                                 <?php echo getTranslation("addcourseunit:content:name", "Course unit name:");?>

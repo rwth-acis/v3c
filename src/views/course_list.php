@@ -29,6 +29,8 @@ $course_deletion_notice = "";
 if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
     $course_deletion_notice = "<p class='alert alert-success'>Course was deleted successfully.</p>";
 }
+
+
 ?>
 
 <header id='head' class='secondary'>
@@ -185,7 +187,13 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                         ?>
                                     </td>
                                     <td class="rowlink-skip">
-                                        <?php if (count($lang_array) > 1): ?>
+                                        <?php
+                                        $languages_count = 5;
+                                        //uncomment the line below to set the languages count to the number of available languages
+                                        //$languages_count = $db->query("SELECT COUNT(*)as alLanguages FROM languages ")->fetchObject();
+                                        if (count($lang_array) == $languages_count){?>
+                                            <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block">Translate</a>
+                                        <?php }else{ if (count($lang_array) > 1): ?>
                                             <div class="dropdown">
                                                 <button class="btn btn-danger dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Translate
@@ -200,7 +208,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                             </div>
                                         <?php else: ?>
                                             <a href="addcourse.php?tid=<?php echo $current_course_id; ?>&tlang=<?php echo $current_course_lang?>" class="btn btn-translate btn-sm btn-danger btn-block">Translate</a>
-                                        <?php endif; ?>
+                                        <?php endif;} ?>
                                     </td>
                                     <td     class="rowlink-skip">
                                         <?php if (count($lang_array) > 1): ?>

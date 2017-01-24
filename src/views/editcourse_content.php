@@ -40,6 +40,18 @@ if ($success) {
     $course = $stmt2->fetch();
 }
 
+
+// Get subjects
+$stmt3 = $conn->prepare("SELECT id, name
+                        FROM subjects");
+
+
+$success = $stmt3->execute();
+if ($success) {
+    $subjects = $stmt3->fetchAll();
+}
+
+
 ?>
 <div id='courses'>
     <section class='container'>
@@ -70,8 +82,7 @@ if ($success) {
                             <div class="col-sm-10">
                                 <select class="form-control" name="domain" id="domain">
                                     <?php
-
-                                    // Getsubjects
+                                    // Get subjects
                                     $subjects = $conn->query("SELECT subjects.* FROM subjects")->fetchAll(PDO::FETCH_ASSOC);
 
                                     foreach ($subjects as $subject) {

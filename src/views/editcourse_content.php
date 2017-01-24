@@ -64,7 +64,7 @@ if ($success) {
                                        value="<?php echo htmlentities($course['name']); ?>" required>
                             </div>
                         </div>
-                        
+
                         <!-- COURSE DOMAIN-->
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("addcourse:content:domain", "Course Domain:");?></label>

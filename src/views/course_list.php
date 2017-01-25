@@ -29,6 +29,8 @@ $course_deletion_notice = "";
 if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
     $course_deletion_notice = "<p class='alert alert-success'>Course was deleted successfully.</p>";
 }
+
+
 ?>
 
 <header id='head' class='secondary'>
@@ -111,6 +113,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 <th></th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
@@ -184,6 +187,30 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                         }
                                         ?>
                                     </td>
+                                    <td class="rowlink-skip">
+                                        <?php
+                                        $languages_count = 5;
+                                        //uncomment the line below to set the languages count to the number of available languages
+                                        //$languages_count = $db->query("SELECT COUNT(*)as alLanguages FROM languages ")->fetchObject();
+                                        if (count($lang_array) == $languages_count){?>
+                                            <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block">Translate from</a>
+                                        <?php }else{ if (count($lang_array) > 1): ?>
+                                            <div class="dropdown">
+                                                <button class="btn btn-danger dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Translate from
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="translate-dropdown">
+                                                    <?php
+                                                    foreach($lang_array as $c_lang) {
+                                                        echo "<a class='dropdown-item' href='addcourse.php?tid=$current_course_id&tlang=$c_lang'>$c_lang</a>";
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        <?php else: ?>
+                                            <a href="addcourse.php?tid=<?php echo $current_course_id; ?>&tlang=<?php echo $current_course_lang?>" class="btn btn-translate btn-sm btn-danger btn-block">Translate from</a>
+                                        <?php endif;} ?>
+                                    </td>
                                     <td     class="rowlink-skip">
                                         <?php if (count($lang_array) > 1): ?>
                                         <div class="dropdown">
@@ -211,7 +238,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 </tr>
                                 <tr>
                                     <!-- Collapse div for course description -->
-                                    <td colspan="6">
+                                    <td colspan="7">
                                         <button type="button" class="btn btn-info" data-toggle="collapse"
                                                 data-target="#description-<?php echo $index; ?>">Description
                                         </button>

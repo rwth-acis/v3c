@@ -52,7 +52,7 @@ if (isset($access_token) && $access_token != 'null') {
     $_SESSION['given_name'] = $userProfile->given_name;
     $_SESSION['family_name'] = $userProfile->family_name;
     // fake_end		
-    
+
     ////// Search database for user and create new entry if it doesn't have      
     require '../php/db_connect.php';
     $userManagement = new UserManagement();

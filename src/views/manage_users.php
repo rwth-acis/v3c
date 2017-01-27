@@ -18,7 +18,24 @@ include("menu.php");
 include '../php/db_connect.php';
 include '../php/tools.php';
 
-$user_list = $db->query("SELECT * FROM users ORDER BY family_name")->fetchAll();
+$user_list = $db->query("SELECT * FROM users
+                                  JOIN organizations
+                                  ON users.affiliation = organizations.id
+                                  ORDER BY family_name")->fetchAll();
+
+require_once '../php/db_connect.php';
+//prepare role array for select boxes
+$role_object = $db->query("SELECT * FROM roles ORDER BY id ASC")->fetchAll();
+foreach ($role_object as $role_el) {
+    $roles[$role_el['id']] = $role_el['role'];
+}
+//prepare organizations array for select boxes
+$orga_object = $db->query("SELECT * FROM organizations ORDER BY id ASC")->fetchAll();
+foreach ($orga_object as $orga_el) {
+    $orgas[$orga_el['id']] = $orga_el['name'];
+}
+
+
 
 $user_update_notice = "";
 //TODO Info about Update result
@@ -30,7 +47,6 @@ $user_update_notice = "";
         <div class='row'>
             <h1><?php
                 echo getTranslation("usermanagement:head:headline", " Manage Users");
-                //echo template_substitution(getTranslation("courselist:head:subcourses", "{SUBJECT} Courses"), array("{SUBJECT}" => $subject->name));
                 ?></h1>
         </div>
     </div>
@@ -44,58 +60,42 @@ $user_update_notice = "";
 
                 <div class="row col-sm-12">
 
-                    <?php echo $user_update_notice; ?>
+                    <?php echo $user_update_notice;
+                    //DEBUG print_r($_SESSION);
+
+                    ?>
 
                     <form id="fsearch" class="navbar-form navbar-left" role="search">
                         <div class="row">
-
-                            <div class="row col-sm-6">
-                                <select class="form-control" name="lang" id="lang_dropdown" onchange="filter()">
-                                    <?php
-                                    $roles = array(
-                                        "1" => "Administrator",
-                                        "2" => "Teacher",
-                                        "3" => "Learner",
-                                        "4" => "Operator",
-                                    );
-                                    foreach ($roles as $role_id => $role) {
-                                        echo "<option value='$role_id'>$role</option>";
-                                    }
-                                    echo "<option value='all' selected>All Roles</option>";
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="row col-sm-6">
                                 <input id="searchString" name="searched" type="text" class="form-control"
-                                       placeholder="Search"
+                                       placeholder="Search by Name"
                                        onkeyup="filter()">
                                 <br/>
-                            </div>
                         </div>
                     </form>
                 </div>
 
-                <!-- List of all courses -->
+                <!-- List of all users -->
                 <div class='col-sm-8'>
                     <div>
                         <table id="user-table" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th><?php echo getTranslation("usermanagement:choose:family_name",
-                                        "Family Name"); ?></th>
-                                <th><?php echo getTranslation("usermanagement:choose:given_name", "Given Name"); ?></th>
+                                        "Family Name"); ?>
+                                    , <?php echo getTranslation("usermanagement:choose:given_name",
+                                        "Given Name"); ?></th>
                                 <th><?php echo getTranslation("usermanagement:choose:role", "Role"); ?></th>
                                 <th><?php echo getTranslation("usermanagment:choose:affiliation",
                                         "Affiliation"); ?></th>
-                                <th></th> <!--column for submit button -->
+                                <th></th> <!--column for submit buttons -->
 
                             </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
                             <?php
                             foreach ($user_list as $user) {
-                                echo "<tr><td>" . $user['family_name'] . "</td>";
-                                echo "<td>" . $user['given_name'] . "</td>";
+                                echo "<tr><td>" . $user['family_name'] . ", " . $user['given_name'] . "</td>";
                                 echo "<form METHOD='POST' action='../php/update_users.php'>";
                                 echo "<input type='hidden' name='sub' value='$user[openIdConnectSub]'>";
                                 echo "<td>";
@@ -103,11 +103,17 @@ $user_update_notice = "";
                                 foreach ($roles as $role_id => $role) {
                                     $selected = ($user['role'] == $role_id) ? "selected" : "";
                                     echo "<option value='$role_id' $selected>$role</option>";
-
                                 }
                                 echo "</select>";
                                 echo "</td>";
-                                echo "<td>Company_name</td>";
+                                echo "<td>";
+                                echo "<select name='orga'>";
+                                foreach ($orgas as $orga_id => $orga) {
+                                    $selected = ($user['affiliation'] == $orga_id) ? "selected" : "";
+                                    echo "<option value='$orga_id' $selected>$orga</option>";
+                                }
+                                echo "</select>";
+                                echo "</td>";
                                 echo "<td><button type='submit' class='btn btn-success btn-sm btn-block' id='SubmitButton' value='Update User'>Update User</button></td>";
                                 echo "</form></tr>";
                             }
@@ -133,8 +139,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 ?>
 <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
 <script src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
-<!-- <script src="../js/course-list.js"></script>
+<script src="../js/course-list.js"></script>
 <script src="../js/search-course.js"></script>
-<script src="../js/filter-courses.js"></script> -->
+<script src="../js/filter-users.js"></script>
 </body>
 </html>

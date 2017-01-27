@@ -59,7 +59,8 @@ if (isset($access_token) && $access_token != 'null') {
     // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
     // THIS IS DONE BY CHECKING WHETHER THE UNIQUE OPEN ID CONNECT SUB EXISTS IN OUR DATABASE
     $user = $userManagement->readUser($userProfile->sub);
-
+    //set user ROLE.
+    $_SESSION['role'] = $user->role;
 
     // If $user is empty, the user is not known
     if (!$user) {

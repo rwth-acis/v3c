@@ -9,13 +9,15 @@
 $db = require 'db_connect.php';
 
 //get data from POST
-$role = filter_input(INPUT_POST, 'role');
+$role = filter_input(INPUT_POST, 'role', FILTER_VALIDATE_INT);
+$orga = filter_input(INPUT_POST, 'orga', FILTER_VALIDATE_INT);
 $sub = filter_input(INPUT_POST, 'sub');
 
 //update database entry
 $sql = "UPDATE users SET role = :role WHERE openIdConnectSub = :sub";
 $statement = $db->prepare($sql);
 $statement->bindParam(":role", $role, PDO::PARAM_INT);
+$statement->bindParam(":orga", $orga, PDO:PARAM_INT);
 $statement->bindParam(":sub", $sub, PDO::PARAM_STR);
 $success = $statement->execute();
 if (!$success) {

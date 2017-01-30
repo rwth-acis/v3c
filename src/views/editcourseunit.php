@@ -273,7 +273,7 @@
                                         <h3 class="question-title-counter">Question 1</h3>
                                     </div>
                                     <div class="panel-body">
-                                        <div class="row">
+                                        <div class="row qa-div">
                                             <div class="col-sm-12">
                                                 <label for="quizzes-question-0">Question:</label>
                                                 <input type="text" class="form-control protocontent"
@@ -289,7 +289,7 @@
                                                            placeholder="Answer 1" aria-describedby="basic-addon1"
                                                            placeholder="Add Answer">
                                                     <span class="input-group-btn">
-                                                        <button class="btn btn-secondary" type="button"
+                                                        <button class="btn btn-secondary remove-answer" type="button"
                                                                 disabled>-</button>
                                                     </span>
                                                 </div>
@@ -301,7 +301,7 @@
                                                            placeholder="Answer 2" aria-describedby="basic-addon1"
                                                            placeholder="Add Answer">
                                                     <span class="input-group-btn">
-                                                        <button class="btn btn-secondary" type="button"
+                                                        <button class="btn btn-secondary remove-answer" type="button"
                                                                 disabled>-</button>
                                                     </span>
                                                 </div>
@@ -345,6 +345,23 @@
         </div>
     </div>
 </div>
+
+
+<!-- Templates -->
+<!-- Plugin JavaScript -->
+<script type="text/template" id="answerBlock">
+    <div class="col-sm-6 padding-bottom-1em">
+        <div class="input-group">
+            <input type="text" class="form-control protocontent"
+                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                   placeholder="Answer" aria-describedby="basic-addon1"
+                   placeholder="Add Answer">
+            <span class="input-group-btn">
+                <button class="btn btn-secondary remove-answer" type="button">-</button>
+            </span>
+        </div>
+    </div>
+</script>
 
 <!--Course edit site -->
 <!-- ################################################################################### -->
@@ -414,20 +431,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../external/gridstack/gridstack.js"></script>
 <script src="../external/gridstack/gridstack.jQueryUI.min.js"></script>
 
-<!-- Plugin JavaScript -->
-<script type="text/template" id="answerBlock">
-    <div class="col-sm-6 padding-bottom-1em">
-        <div class="input-group">
-            <input type="text" class="form-control protocontent"
-                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                   placeholder="Answer 2" aria-describedby="basic-addon1"
-                   placeholder="Add Answer">
-            <span class="input-group-btn">
-                <button class="btn btn-secondary" type="button">-</button>
-            </span>
-        </div>
-    </div>
-</script>
+
 
 
 <script src="../js/course-list.js"></script>
@@ -522,10 +526,47 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                         appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
                         //$(this).modal('toggle');
                     });
-                    $prototypeModalClone.find(".btn-add-answer").click(function () {
 
+                    //add function to the template quizzies form
+                    $('.remove-answer').click(function(){
+                        qaparent =$(this).parent().parent().parent().parent();
+                        $(this).parent().parent().parent().remove();
+                        removeButtons = $(qaparent).find(".remove-answer")
+                        if (removeButtons.length <=2){
+                            removeButtons.each(function(){
+                                $(this).prop('disabled', true);
+                            })
+                        }
+                    });
+
+
+
+
+
+
+
+                    $prototypeModalClone.find(".btn-add-answer").click(function () {
                         var template = $("#answerBlock").html();
-                        $(template).insertBefore($(this).parent());
+                        template = $(template).insertBefore($(this).parent());
+                        //qa-div
+                        $(template).find('.remove-answer').click(function(){
+                            //console.log($(this))
+                            //console.log(this)
+                            qaparent =$(this).parent().parent().parent().parent();
+                            $(this).parent().parent().parent().remove();
+                            console.log($(qaparent));
+                            removeButtons = $(qaparent).find(".remove-answer")
+                            if (removeButtons.length <=2){
+                                removeButtons.each(function(){
+                                    $(this).prop('disabled', true);
+                                })
+                            }
+                        });
+                        removeButtons = $(this).parent().parent().find(".remove-answer");
+                        removeButtons.each(function(){
+                            $(this).prop('disabled', false);
+                        });
+
                     });
 
                     totalWidgets++;

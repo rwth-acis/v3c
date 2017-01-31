@@ -4,7 +4,36 @@
  * User: Sabine
  */
 
-//require_once $_SERVER['DOCUMENT_ROOT'] . "/locale/translations_de.php";
+// returns a list of supported languages for dropdown with language code for dropdown flags
+function getSelectableLanguages() {
+
+    $path = $_SERVER['DOCUMENT_ROOT'] . "/locale/";
+    require_once $path . "languages.php";
+
+    $files = array_diff(scandir($path), array('.', '..'));
+
+    $languages = array();
+
+    // get every translation file and check which languages are supported
+    foreach ($files as $file) {
+        $pattern = "translations_";
+        // languagecode might look like: "de" or "de_DE", "en", "en_us" ..
+        // only use files that match pattern "translation_<languagecode>.php
+        if (substr($file, 0, strlen($pattern)) === $pattern) {
+
+            // extract language code (see pattern above)
+            $languageCode = substr($file,
+                strpos($file, $pattern) + strlen($pattern), // starting after pattern
+                strlen($file) - strlen(".php") - strlen($pattern)); // exclude ending .php
+
+            // get language name in the language itself
+            // currently extracted from array in languages.php.
+            // Could also use Locale::getDisplayLanguage
+            $languages[$languageCode] = getLanguageFullName($languageCode);
+        }
+    }
+    return $languages;
+}
 
 function getTranslation($key, $default)
 {

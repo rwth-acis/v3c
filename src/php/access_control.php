@@ -134,7 +134,7 @@ class AccessControl
      */
     public function canCreateCourse()
     {
-        return true;
+        return $this->isLecturer();
     }
 
     /**
@@ -144,7 +144,7 @@ class AccessControl
      */
     public function canUpdateCourse($course_id)
     {
-        return true;
+        return $this->isLecturerAndCourseOwner($course_id);
     }
 
     /**

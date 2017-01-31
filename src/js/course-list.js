@@ -24,24 +24,10 @@ $(document).ready(function () {
 
     // Event propagation for dynamically created elements (which is the case when courses are filtered)
     body.on("click", ".btn-edit", function () {
-        window.location = "editcourse.php?id=" + $(this).data("id");
+        window.location = "editcourse.php?id=" + $(this).data("id") + "&lang=" + $(this).data("lang");
     });
 
     body.on("click", ".btn-delete", function () {
-        window.location = "course_delete.php?id=" + $(this).data("id");
+        window.location = "course_delete.php?id=" + $(this).data("id") + "&lang=" + $(this).data("lang");
     });
-    // var editBtns = document.getElementsByClassName("btn-edit");
-    // var deleteBtns = document.getElementsByClassName("btn-delete");
-    //
-    // for (var i = 0; i < editBtns.length; i++) {
-    //     editBtns[i].onclick = function (event) {
-    //         window.location = "editcourse.php?id=" + event.target.dataset.id;
-    //     };
-    // }
-    //
-    // for (var i = 0; i < deleteBtns.length; i++) {
-    //     deleteBtns[i].onclick = function (event) {
-    //         window.location = "course_delete.php?id=" + event.target.dataset.id;
-    //     };
-    // }
 });

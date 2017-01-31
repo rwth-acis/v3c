@@ -47,6 +47,7 @@ function getTranslation($key, $default)
 
     if (file_exists($filename)) {
         require_once $filename;
+
         $lang = getLanguage();
 
         if (array_key_exists ($key, $lang )) {
@@ -57,13 +58,9 @@ function getTranslation($key, $default)
     return $translation;
 }
 
-function template_substitution($template, $data)
-{
-    $result = $template;
-    foreach ($data as $key => $value) {
-        $result = str_replace($key, $value, $result);
-    }
-    return $result;
+
+function template_substitution($template, $data) {
+    return str_replace(array_keys($data), array_values($data), $template);
 }
 
 ?>

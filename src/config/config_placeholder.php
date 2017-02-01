@@ -45,10 +45,9 @@ array_push($admins, array("<your@email.de>", "<GivenName>", "<FamilyName>"));
 $oidcClientId = "";
 
 // URL to the server where the database is hosted
-// example: "buche.informatik.rwth-aachen.de"
 $host = "";
 // The name of the database
-// example: "3dnrtdev"
+// example: "v3c_databases"
 $database = "";
 // The database user which can access the database
 $user = "";

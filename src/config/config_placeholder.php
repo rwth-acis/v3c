@@ -45,11 +45,13 @@ array_push($admins, array("<your@email.de>", "<GivenName>", "<FamilyName>"));
 $oidcClientId = "";
 
 // URL to the server where the database is hosted
+// example "localhost"
 $host = "";
 // The name of the database
 // example: "v3c_databases"
 $database = "";
 // The database user which can access the database
+// example "v3c"
 $user = "";
 // The password for the database user
 $password = "";

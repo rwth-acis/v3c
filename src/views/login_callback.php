@@ -20,6 +20,8 @@
  *  user was originally on.
  */
 ?>
+<?php include '../external/vendor/autoload.php';
+require '../config/config.php'; ?>
 <!DOCTYPE html>
 <html>
 
@@ -39,6 +41,20 @@
         </div>
     </div>
 </header>
+<?php
+//$oidc = new OpenIDConnectClient('https://api.learning-layers.eu/o/oauth2',$oidcClientId,$oidcClientSecret);
+//if($oidc)
+//    print_r($oidc);
+//$oidc->providerConfigParam(array('token_endpoint'=>'https://api.learning-layers.eu/o/oauth2/connect/token'));
+
+//$clientCredentialsToken = $oidc->requestClientCredentialsToken()->access_token;
+
+
+?>
+
+
+<?php print_r($_SESSION); ?>
+
 
 <?php include("footer.php"); ?>
 

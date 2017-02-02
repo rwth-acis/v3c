@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management | V3C</title>
 
-    <link rel="stylesheet" href="../external/jasny-bootstrap/dist/css/jasny-bootstrap.min.css"/>
+    <link rel='stylesheet' type='text/css' href='../css/style.css'>
 </head>
 
 <body>
@@ -82,8 +82,8 @@ $user_update_notice = "";
                             <thead>
                             <tr>
                                 <th><?php echo getTranslation("usermanagement:choose:family_name",
-                                        "Family Name"); ?>
-                                    , <?php echo getTranslation("usermanagement:choose:given_name",
+                                        "Family Name"); ?>,
+                                    <?php echo getTranslation("usermanagement:choose:given_name",
                                         "Given Name"); ?></th>
                                 <th><?php echo getTranslation("usermanagement:choose:role", "Role"); ?></th>
                                 <th><?php echo getTranslation("usermanagment:choose:affiliation",
@@ -96,7 +96,7 @@ $user_update_notice = "";
                             <?php
                             foreach ($user_list as $user) {
                                 echo "<tr><td>" . $user['family_name'] . ", " . $user['given_name'] . "</td>";
-                                echo "<form METHOD='POST' action='../php/update_users.php'>";
+                                echo "<form METHOD='POST' action='../php/update_users.php' enctype='multipart/form-data'>";
                                 echo "<input type='hidden' name='sub' value='$user[openIdConnectSub]'>";
                                 echo "<td>";
                                 echo "<select name='role'>";
@@ -114,7 +114,8 @@ $user_update_notice = "";
                                 }
                                 echo "</select>";
                                 echo "</td>";
-                                echo "<td><button type='submit' class='btn btn-success btn-sm btn-block' id='SubmitButton' value='Update User'>Update User</button></td>";
+                                echo "<td><button type='submit' class='btn btn-success btn-sm btn-block'>" . getTranslation("usermanagement:button:update",
+                                        "Update User") . "</button></td>";
                                 echo "</form></tr>";
                             }
                             ?>

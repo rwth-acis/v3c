@@ -18,6 +18,10 @@ function getLanguage()
         "general:button:yes" => "Sí",
         "general:button:no" => "No",
         "general:button:description" => "Descripción",
+        "general:button:help" => "Ayuda",
+
+        "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
+        "general:footer:reach" => "Llámenos a: ",
 
         "main:welcome:courses" => "Cursos",
         "main:welcome:headline" => "¡Bienvenido de V3C proyecto!",

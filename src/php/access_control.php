@@ -66,10 +66,10 @@ class AccessControl
     {
         if (!$user) {
             // User has no databaseentry
-            $status = USER_STATUS::USER_NOT_CONFIRMED;
+            $status = USER_STATUS::USER_IS_LEARNER;
         } else {
-            if ($user->confirmed != 1) {
-                $status = USER_STATUS::USER_NOT_CONFIRMED;
+            if ($user->role == 3) {
+                $status = USER_STATUS::USER_IS_LEARNER;
             } else {
                 $status = USER_STATUS::USER_IS_TUTOR;
             }
@@ -110,7 +110,7 @@ class AccessControl
             if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
                 
                 $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-                if ($user->id === $course['creator']) {
+                if ($user->affiliation === $course['creator']) {
                     $ret = true;
                 } else {
                     $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
@@ -122,12 +122,15 @@ class AccessControl
     }
 
     /**
-     * @return boolean true, if user is allowed to create / upload models
+     * @return boolean true, if user has administrator role
      */
-    public function canCreateModel()
+
+    public function isAdmin()
     {
-        return $this->isLecturer();
+        return (($this->getSessionUser()->role) == 1);
+
     }
+
 
     /**
      * @return boolean true, if user is allowed to create courses
@@ -184,7 +187,8 @@ abstract class USER_STATUS
     const OIDC_UNAUTHORIZED = 2;
     const OIDC_ERROR = 3;
     const DATABASE_ERROR = 4;
-    const USER_NOT_CONFIRMED = 5;
+    const USER_IS_LEARNER = 5;
     const USER_IS_TUTOR = 6;
     const USER_NOT_CREATOR_COURSE = 7;
+    const USER_IS_ADMIN = 8;
 }

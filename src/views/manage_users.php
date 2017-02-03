@@ -137,7 +137,7 @@ $user_update_notice = "";
     </section>
 </div>
 <!-- container -->
-
+<script src="../js/search-course.js"></script>
 <?php include("footer.php"); ?>
 
 </body>

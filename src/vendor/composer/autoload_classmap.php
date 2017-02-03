@@ -6,6 +6,4 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'JsonApiMiddleware' => $vendorDir . '/entomb/slim-json-api/jsonAPI/JsonApiMiddleware.php',
-    'JsonApiView' => $vendorDir . '/entomb/slim-json-api/jsonAPI/JsonApiView.php',
 );

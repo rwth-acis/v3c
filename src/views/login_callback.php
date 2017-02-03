@@ -1,27 +1,10 @@
 <?php
 
-/* 
- * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *  http://www.apache.org/licenses/LICENSE-2.0
- * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- * 
- *  @file login_callback.php
- *  Callback page for the Learning Layers service. Will redirect to the page the
- *  user was originally on.
- */
+include dirname(__FILE__) . "/../vendor/autoload.php";
+require_once dirname(__FILE__) . "/../config/config.php";
+require_once dirname(__FILE__) . "/../php/OpenIdConnectClient.php";
+
 ?>
-<?php include '../external/vendor/autoload.php';
-require '../config/config.php'; ?>
 <!DOCTYPE html>
 <html>
 
@@ -42,24 +25,52 @@ require '../config/config.php'; ?>
     </div>
 </header>
 <?php
-//$oidc = new OpenIDConnectClient('https://api.learning-layers.eu/o/oauth2',$oidcClientId,$oidcClientSecret);
-//if($oidc)
+
+//$oidc = new OpenIDConnectClient(
+//    'https://api.learning-layers.eu/o/oauth2',
+//    $oidcClientId,
+//    $oidcClientSecret);
+//
+//// FIXME: Avoid error with SSL certificate in dev environment (use SSL in production!!)
+//$oidc->setVerifyHost(false);
+//$oidc->setVerifyPeer(false);
+//
+//
+//$name = $oidc->requestUserInfo('given_name');
+//echo "<br>oidc name: " . $name;
+//
+//if($oidc) {
 //    print_r($oidc);
-//$oidc->providerConfigParam(array('token_endpoint'=>'https://api.learning-layers.eu/o/oauth2/connect/token'));
+//} else {
+//    echo "Could not establish OIDC connection";
+//}
 
-//$clientCredentialsToken = $oidc->requestClientCredentialsToken()->access_token;
+//$oidc->providerConfigParam(array(
+//    'token_endpoint' => 'https://api.learning-layers.eu/o/oauth2/connect/token')
+//);
 
+//$oidcInfo = $oidc->getAccessToken();
+//$accessToken = $oidcInfo["access_token"];
+//$userEmail = $oidcInfo["email"];
+//$userGivenName = $oidcInfo["given_name"];
+//$userFamilyName = $oidcInfo["family_name"];
+//
+//echo "<br>access token: " . $accessToken;
+//echo "<br>email: " . $userEmail;
+//echo "<br>family name: " . $userFamilyName;
+//echo "<br>given name: " . $userGivenName;
+
+// FIXME: debug
+//session_destroy();
+//session_start();
+die();
+return;
 
 ?>
-
-
-<?php print_r($_SESSION); ?>
-
 
 <?php include("footer.php"); ?>
 
 </body>
-
 </html>
 
 

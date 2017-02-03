@@ -13,6 +13,15 @@
 
 include("menu.php");
 
+
+// FIXME: debug
+echo "<pre>";
+print_r($_SESSION);
+echo "</pre>";
+
+//unset($_SESSION);
+
+
 // Get all entries from the user table in the database
 
 include '../php/db_connect.php';

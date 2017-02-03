@@ -315,23 +315,6 @@
                                     </div>
                                 </div>
                                 <br>
-                                <div class="col-sm-12 padding-bottom-1em text-center">
-                                    <nav aria-label="Page navigation">
-                                        <ul class="pagination">
-                                            <li>
-                                                <a href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            <li><a href="#">1</a></li>
-                                            <li>
-                                                <a href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -362,6 +345,58 @@
         </div>
     </div>
 </script>
+
+
+<!-- Plugin JavaScript -->
+<script type="text/template" id="questionBlock">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="question-title-counter">Question 1</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row qa-div">
+                <div class="col-sm-12">
+                    <label for="quizzes-question-0">Question:</label>
+                    <input type="text" class="form-control protocontent"
+                           id=-quizzes-question-0" name="quizzes-question-0"
+                           placeholder="Question" aria-describedby="basic-addon1">
+                </div>
+                <label class="col-sm-12">Answers:</label>
+
+                <div class="col-sm-6 padding-bottom-1em">
+                    <div class="input-group">
+                        <input type="text" class="form-control protocontent"
+                               id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                               placeholder="Answer 1" aria-describedby="basic-addon1"
+                               placeholder="Add Answer">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary remove-answer" type="button"
+                                    disabled>-</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6 padding-bottom-1em">
+                    <div class="input-group">
+                        <input type="text" class="form-control protocontent"
+                               id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                               placeholder="Answer 2" aria-describedby="basic-addon1"
+                               placeholder="Add Answer">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary remove-answer" type="button"
+                                    disabled>-</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6 padding-bottom-1em">
+                    <button type="button" class="btn btn-default btn-block btn-add-answer">
+                        Add Answer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 
 <!--Course edit site -->
 <!-- ################################################################################### -->
@@ -430,8 +465,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../external/lodash/lodash.js"></script>
 <script src="../external/gridstack/gridstack.js"></script>
 <script src="../external/gridstack/gridstack.jQueryUI.min.js"></script>
-
-
 
 
 <script src="../js/course-list.js"></script>
@@ -527,47 +560,31 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                         //$(this).modal('toggle');
                     });
 
+                    $('.modal-add-button').click(function () {
+                        var $qb = $('#questionBlock').html();
+                        var count = $(this).parent().parent().find('.panel-default').parent().find(".question-title-counter")
+                        var aNum = count.length +1 ;
+
+                        $(this).parent().parent().find('.panel-default').parent().append($qb);
+                        var $elem = $(this).parent().parent().find('.panel-default').last();
+                        $elem.find(".question-title-counter").text("Question "+ aNum);
+                        quizzesButtonFunc($elem);
+                    });
+
                     //add function to the template quizzies form
-                    $('.remove-answer').click(function(){
-                        qaparent =$(this).parent().parent().parent().parent();
+                    $('.remove-answer').click(function () {
+                        qaparent = $(this).parent().parent().parent().parent();
                         $(this).parent().parent().parent().remove();
                         removeButtons = $(qaparent).find(".remove-answer")
-                        if (removeButtons.length <=2){
-                            removeButtons.each(function(){
+                        if (removeButtons.length <= 2) {
+                            removeButtons.each(function () {
                                 $(this).prop('disabled', true);
                             })
                         }
                     });
 
 
-
-
-
-
-
-                    $prototypeModalClone.find(".btn-add-answer").click(function () {
-                        var template = $("#answerBlock").html();
-                        template = $(template).insertBefore($(this).parent());
-                        //qa-div
-                        $(template).find('.remove-answer').click(function(){
-                            //console.log($(this))
-                            //console.log(this)
-                            qaparent =$(this).parent().parent().parent().parent();
-                            $(this).parent().parent().parent().remove();
-                            console.log($(qaparent));
-                            removeButtons = $(qaparent).find(".remove-answer")
-                            if (removeButtons.length <=2){
-                                removeButtons.each(function(){
-                                    $(this).prop('disabled', true);
-                                })
-                            }
-                        });
-                        removeButtons = $(this).parent().parent().find(".remove-answer");
-                        removeButtons.each(function(){
-                            $(this).prop('disabled', false);
-                        });
-
-                    });
+                    quizzesButtonFunc($prototypeModalClone);
 
                     totalWidgets++;
 
@@ -624,6 +641,32 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             $widget.parent().parent().attr("data-" + $(this).attr("name"), $(this).val());
         });
         console.log($inputObj)
+    }
+    function quizzesButtonFunc($elem){
+        $elem.find(".btn-add-answer").click(function () {
+            var template = $("#answerBlock").html();
+            template = $(template).insertBefore($(this).parent());
+            //qa-div
+            $(template).find('.remove-answer').click(function () {
+                //console.log($(this))
+                //console.log(this)
+                qaparent = $(this).parent().parent().parent().parent();
+                $(this).parent().parent().parent().remove();
+                console.log($(qaparent));
+                removeButtons = $(qaparent).find(".remove-answer")
+                if (removeButtons.length <= 2) {
+                    removeButtons.each(function () {
+                        $(this).prop('disabled', true);
+                    })
+                }
+            });
+            removeButtons = $(this).parent().parent().find(".remove-answer");
+            removeButtons.each(function () {
+                $(this).prop('disabled', false);
+            });
+
+        });
+
     }
 
 </script>

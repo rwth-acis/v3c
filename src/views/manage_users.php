@@ -89,12 +89,12 @@ $user_update_notice = "";
                                 <th><?php echo getTranslation("usermanagment:choose:affiliation",
                                         "Affiliation"); ?></th>
                                 <th></th> <!--column for submit buttons -->
-
                             </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
                             <?php
                             foreach ($user_list as $user) {
+
                                 echo "<tr><td>" . $user['family_name'] . ", " . $user['given_name'] . "</td>";
                                 echo "<form METHOD='POST' action='../php/update_users.php' enctype='multipart/form-data'>";
                                 echo "<input type='hidden' name='sub' value='$user[openIdConnectSub]'>";
@@ -114,8 +114,8 @@ $user_update_notice = "";
                                 }
                                 echo "</select>";
                                 echo "</td>";
-                                echo "<td><button type='submit' class='btn btn-success btn-sm btn-block'>" . getTranslation("usermanagement:button:update",
-                                        "Update User") . "</button></td>";
+                                echo "<td><input type='submit' class='btn btn-success btn-sm btn-block'>" . getTranslation("usermanagement:button:update",
+                                        "Update User") . "</input></td>";
                                 echo "</form></tr>";
                             }
                             ?>
@@ -131,17 +131,5 @@ $user_update_notice = "";
 
 <?php include("footer.php"); ?>
 
-<script type="text/javascript" src="../js/tools.js"></script>
-<?php
-//Decide if this site is inside a separate widget
-if (filter_input(INPUT_GET, "widget") == "true") {
-    print("<script src='../js/overview-widget.js'> </script>");
-}
-?>
-<!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
-<script src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
-<script src="../js/course-list.js"></script>
-<script src="../js/search-course.js"></script>
-<script src="../js/filter-users.js"></script>
 </body>
 </html>

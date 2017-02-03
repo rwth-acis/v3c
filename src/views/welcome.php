@@ -80,7 +80,7 @@
 <div class="featured-box">
 
 
-    <? include("../php/create_user_session.php"); ?>
+<? include("../php/create_user_session.php"); ?>
 <?php include("footer.php"); ?>
 
 </body>

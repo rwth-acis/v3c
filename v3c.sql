@@ -46,11 +46,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `given_name`       VARCHAR(255) NOT NULL,
   `family_name`      VARCHAR(255) NOT NULL,
   `role`             INT          NOT NULL,
+  `affiliation`       INT   NOT NULL DEFAULT 0,
   `openIdConnectSub` VARCHAR(255)              DEFAULT NULL UNIQUE,
   `date_created`     TIMESTAMP    NOT NULL     DEFAULT CURRENT_TIMESTAMP,
   `date_updated`     TIMESTAMP    NOT NULL     DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  FOREIGN KEY (role) REFERENCES roles (id)
+  FOREIGN KEY (role) REFERENCES roles (id),
+  FOREIGN KEY (affiliation) REFERENCES organizations(id)
 )
   ENGINE = InnoDB COLLATE utf8_general_ci;
 

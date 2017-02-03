@@ -70,12 +70,8 @@ if (isset($access_token) && $access_token != 'null') {
         // VERIFY, THAT LOCAL DATABASE ENTRY HOLDS THE SAME INFORMATION AS REMOTE ENTRY IN OIDC DATABASE
         if ($user['email'] != $_SESSION['email'] || $user['given_name'] != $_SESSION['given_name'] || $user['family_name'] != $_SESSION['family_name']) {
             $success = $userManagement->updateUser($user, $user->role);
-
         }
-
     }
-
-
 }
 
 // TODO: this is not good solution to know in the frontend about user-privileges

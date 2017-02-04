@@ -29,9 +29,10 @@ INSERT INTO `organizations` (`name`, `email`, `logo_url`) VALUES
   ('EuropeanProgress', 'giampoulaki@europeanprogress.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/EUROPEAN-PROGRESS-LOGO-e1459274456103.jpg'),
   ('BEST', 'office@best.at', 'http://virtus-project.eu/wp-content/uploads/2016/03/BEST-Logo-gro%C3%9F-e1459273908202.jpg'),
   ('FFeuskadi', 'lorena.corral@ffeuskadi.net', 'http://virtus-project.eu/wp-content/uploads/2016/03/Logo-FFE-e1459273835655.jpg'),
-  ('cesie', 'irene.pizzo@cesie.org', 'http://virtus-project.eu/wp-content/uploads/2016/03/CESIE_Logo_jpg-e1459273896421.jpg');
+  ('cesie', 'irene.pizzo@cesie.org', 'http://virtus-project.eu/wp-content/uploads/2016/03/CESIE_Logo_jpg-e1459273896421.jpg'),
+  ('none', NULL, NULL);
 
-
+UPDATE `organizations` SET `id` = 0 WHERE `name`='none';
 
 --
 -- Data for table `users`

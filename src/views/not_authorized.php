@@ -30,7 +30,7 @@ $status = $accessControl->getLastErrorStatus();
 // Create a human understandable error description for the error code in $status
 switch ($status) {
     case USER_STATUS::NO_SESSION:
-        $err_msg = 'This feature can only be used as a lecturer. If you are a lecturer, please click the "Sign in" button to log in.';
+        $err_msg = 'This feature can only be used with sufficient permissions. Please make sure you are logged in.';
         break;
     case USER_STATUS::LAS2PEER_CONNECT_ERROR:
         $err_msg = 'Unable to check your login, sorry!';
@@ -44,14 +44,14 @@ switch ($status) {
     case USER_STATUS::DATABASE_ERROR:
         $err_msg = 'Your tutor-status could not be checked, sorry! You may try again later.';
         break;
-    case USER_STATUS::USER_NOT_CONFIRMED:
+    case USER_STATUS::USER_IS_LEARNER:
         $err_msg = 'You do not have sufficient permission to perform this action';
         break;
     case USER_STATUS::USER_IS_TUTOR:
         $err_msg = '';
         break;
     case USER_STATUS::USER_NOT_CREATOR_COURSE:
-        $err_msg = 'A different Company created this course. Only content creators affiliated with this company are able to modify or delete this course.';
+        $err_msg = 'A different company created this course. Only content creators affiliated with this company are able to modify or delete this course.';
         break;
 }
 ?>
@@ -73,7 +73,7 @@ weird on very large screens)
         case USER_STATUS::OIDC_UNAUTHORIZED:
         case USER_STATUS::OIDC_ERROR:
         case USER_STATUS::DATABASE_ERROR:
-        case USER_STATUS::USER_NOT_CONFIRMED:
+        case USER_STATUS::USER_IS_LEARNER:
         case USER_STATUS::USER_NOT_CREATOR_COURSE:
             // show error
             ?>

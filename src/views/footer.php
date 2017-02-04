@@ -1,3 +1,6 @@
+<?php require_once '../php/access_control.php';
+$accessControl = new AccessControl(); ?>
+
 <footer id="footer">
     <div class="container">
         <div class="clear"></div>
@@ -11,7 +14,7 @@
                         <p class="simplenav">
                             <a href="welcome.php">Home</a> |
                             <a href="subjects.php">Courses</a> |
-                            <a href="help.php">Help</a> <?php if (isset($_SESSION) && $_SESSION['role'] == 1) {
+                            <a href="help.php">Help</a> <?php if ($accessControl->isAdmin()) {
                                 echo " | <a href='manage_users.php'>User Management</a>";
                             } ?>
                         </p>

@@ -21,6 +21,14 @@
         </div>
     </div>
 </header>
+<?php
+include '../php/access_control.php';
+$accessControl = new AccessControl();
+$courseid = filter_input(INPUT_GET, 'courseid');
+$canCreateCourse = $accessControl->canUpdateCourse($courseid);
+
+if ($canCreateCourse) {
+    ?>
 <!--Prototype Templates -->
 <div class="virtus-pw-prototype virtus-pw-hide " id="prototypeSlideViewer">
     <div class="row virtus-pw-prototype-topbar">
@@ -177,6 +185,10 @@
         </div>
     </section>
 </div>
+    <?php
+} else {
+    include 'not_authorized.php';
+} ?>
 <!-- container -->
 
 <?php include("footer.php"); ?>

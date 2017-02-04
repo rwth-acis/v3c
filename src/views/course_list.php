@@ -17,6 +17,10 @@ include("menu.php");
 // on the subject id given in the website URL
 include '../php/db_connect.php';
 include '../php/tools.php';
+include '../php/access_control.php';
+
+$accessControl = new AccessControl();
+$isLecturer = $accessControl->canCreateCourse();
 
 $subject_id = filter_input(INPUT_GET, "id");
 

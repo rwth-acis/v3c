@@ -31,10 +31,10 @@ class Authentication
         // FIXME: debug
 //      return true
 
-        //if (!$_SESSION) {
+        if (!$_SESSION) {
 
             session_start();
-        //}
+        }
 
         // Implementation depends on the service used to authenticate a user 
         // (e.g. Learning Layers)

@@ -23,8 +23,10 @@
 // Check whether the currently logged in user is allowed to create courses
 require '../php/access_control.php';
 $accessControl = new AccessControl();
+$course_id = filter_input(INPUT_GET, 'courseid');
 
-// FIXME: debug
+$canCreateCourse = $accessControl->canUpdateCourse($course_id);
+//FIXME DEBUG
 $canCreateCourse = true;
 
 if ($canCreateCourse) {

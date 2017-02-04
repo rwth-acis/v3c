@@ -28,8 +28,9 @@
 require '../php/access_control.php';
 
 $accessControl = new AccessControl();
-// FIXME: debug
-$canEditCourse = true;
+
+$course_id = filter_input(INPUT_GET, 'cid');
+$canEditCourse = $accessControl->canUpdateCourse($course_id);
 
 if ($canEditCourse) {
     include 'editcourseunit_content.php';

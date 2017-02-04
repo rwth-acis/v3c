@@ -110,7 +110,8 @@ class AccessControl
             if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
                 
                 $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-                if ($user->affiliation === $course['creator']) {
+                $creator = getSingleDatabaseEntryByValue('organizations', 'email', $course['creator']);
+                if ($user->affiliation == $creator['id']) {
                     $ret = true;
                 } else {
                     $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;

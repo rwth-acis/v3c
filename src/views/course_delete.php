@@ -65,9 +65,9 @@ $accessControl = new AccessControl();
 $canCreateCourse = $accessControl->canDeleteCourse($course_id);
 
 // FIXME: debug
-$canCreateCourse = true;
+//$canDeleteCourse = true;
 
-if ($canCreateCourse) {
+if ($canDeleteCourse) {
     ?>
     <!-- Confirmation check UI elements to ask user whether or not to delete the selected course -->
     <div class="center-block container">

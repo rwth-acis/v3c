@@ -82,6 +82,7 @@ class CourseTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(200, $response->getStatusCode());
 
         $data = json_decode($response->getBody());
+
         for($i=0; $i<sizeof($data);$i++){
             $d = json_decode(json_encode($data[$i]),true);
             $this->assertArrayHasKey('id',$d);
@@ -119,8 +120,7 @@ class CourseTest extends PHPUnit_Framework_TestCase {
         }
     }
 
-    public function testPostCourse(){
-        //$id = rand(0,999);
+    public function testPostCourseAndunits(){
         $response =$this->client->request('POST','courses',[
             'creator' =>'kpapavramidis@mastgroup.gr',
             'name'=> 'Test course',
@@ -131,9 +131,16 @@ class CourseTest extends PHPUnit_Framework_TestCase {
         ]);
 
         $this->assertEquals(200,$response->getStatusCode());
-        $data = json_decode($response->getBody());
-        var_dump($data);
     }
+
+    /*public function testPutCourse(){
+
+        $response =$this->client->request('PUT','courses/59/en',[
+            'name'=> 'Test course changed'
+        ]);
+
+        $this->assertEquals(200,$response->getStatusCode());
+    }*/
 
     public function tearDown() {
         $this->client = null;

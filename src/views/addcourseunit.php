@@ -27,7 +27,7 @@ $course_id = filter_input(INPUT_GET, 'courseid');
 
 $canCreateCourse = $accessControl->canUpdateCourse($course_id);
 //FIXME DEBUG
-$canCreateCourse = true;
+//$canCreateCourse = true;
 
 if ($canCreateCourse) {
     include 'addcourseunit_content.php';

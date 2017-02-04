@@ -1,4 +1,4 @@
-
+use v3c_database;
 -- Correct order of table drops
 
 DROP TABLE IF EXISTS course_to_unit;

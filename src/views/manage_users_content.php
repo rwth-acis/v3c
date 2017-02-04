@@ -11,7 +11,7 @@ $user_list = $db->query("SELECT * FROM users
                                   ON users.affiliation = organizations.id
                                   ORDER BY family_name")->fetchAll();
 
-require_once '../php/db_connect.php';
+require '../php/db_connect.php';
 //prepare role array for select boxes
 $role_object = $db->query("SELECT * FROM roles ORDER BY id ASC")->fetchAll();
 foreach ($role_object as $role_el) {

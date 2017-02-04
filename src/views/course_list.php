@@ -57,7 +57,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                 <div class='col-sm-4'>
                     <div class='featured-box'>
                         <img src="<?php echo "$subject->img_url" ?>">
-                        <?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
+                        <?php if (!(filter_input(INPUT_GET, "widget") == "true") && $isLecturer) { ?>
                             <a href="addcourse.php?id=<?php echo $subject->id; ?>">
                                 <button class='btn btn-success btn-lg btn-block margin-top' type='button'>
                                     <?php echo getTranslation("courselist:head:add", "Add new course");?>
@@ -115,9 +115,11 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                 <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                 <th></th>
+                                <?php if ($isLecturer) { ?>
                                 <th></th>
                                 <th></th>
                                 <th></th>
+                                <?php } ?>
                             </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
@@ -191,6 +193,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                         }
                                         ?>
                                     </td>
+                                    <?php if ($isLecturer) { ?>
                                     <td class="rowlink-skip">
                                         <?php
                                         $languages_count = 5;
@@ -239,6 +242,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                                     class="btn btn-delete btn-sm btn-warning btn-block"
                                                                     value="Delete"></td>
+                                    <?php } ?>
                                 </tr>
                                 <tr>
                                     <!-- Collapse div for course description -->

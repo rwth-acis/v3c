@@ -1,6 +1,6 @@
 <?php
 
-$conn = require_once "../php/db_connect.php";
+$conn = require "../php/db_connect.php";
 $stmt = $conn->prepare("SELECT * FROM subjects");
 $success = $stmt->execute();
 
@@ -8,7 +8,6 @@ $subjects = null;
 if ($success) {
     $subjects = $stmt->fetchAll();
 }
-
 
 $string ="";
 

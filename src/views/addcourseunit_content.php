@@ -1,6 +1,6 @@
 <?php
 
-$conn = require_once "../php/db_connect.php";
+$conn = require "../php/db_connect.php";
 $stmt = $conn->prepare("SELECT * FROM subjects");
 $success = $stmt->execute();
 
@@ -29,7 +29,8 @@ if ($success) {
                             </label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" id="name"
-                                       placeholder="<?php echo getTranslation('addcourseunit:placeholder:name', 'Enter your course unit name');?>" required>
+                                       placeholder="<?php echo getTranslation('addcourseunit:placeholder:name',
+                                           'Enter your course unit name'); ?>" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -62,6 +63,7 @@ if ($success) {
                                 value="Save"><?php echo getTranslation("general:button:save", "Save");?></button>
                     </form>
                     <div id="output"></div>
+
                     <br>
                 </div>
             </div>

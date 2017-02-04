@@ -4,7 +4,7 @@
 --
 
 -- TODO: Where/when to use ON UPDATE CASCADE and ON DELETE CASCADE?
-
+USE v3c_database;
 
 CREATE TABLE IF NOT EXISTS `subjects` (
   `id`         INT         NOT NULL     AUTO_INCREMENT,

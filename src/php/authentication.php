@@ -29,8 +29,8 @@ class Authentication
     {
 
         if (!$_SESSION) {
-
             session_start();
+            return false;
         }
 
         // Implementation depends on the service used to authenticate a user 

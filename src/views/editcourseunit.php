@@ -282,11 +282,11 @@
                                             </div>
                                             <label class="col-sm-12">Answers:</label>
 
-                                            <div class="col-sm-6 padding-bottom-1em">
+                                            <div class="col-sm-6 padding-bottom-1em single-answer-block">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control protocontent"
                                                            id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                           placeholder="Answer 1" aria-describedby="basic-addon1"
+                                                           placeholder="Answer" aria-describedby="basic-addon1"
                                                            placeholder="Add Answer">
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-secondary remove-answer" type="button"
@@ -294,11 +294,11 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6 padding-bottom-1em">
+                                            <div class="col-sm-6 padding-bottom-1em single-answer-block">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control protocontent"
                                                            id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                           placeholder="Answer 2" aria-describedby="basic-addon1"
+                                                           placeholder="Answer" aria-describedby="basic-addon1"
                                                            placeholder="Add Answer">
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-secondary remove-answer" type="button"
@@ -333,7 +333,7 @@
 <!-- Templates -->
 <!-- Plugin JavaScript -->
 <script type="text/template" id="answerBlock">
-    <div class="col-sm-6 padding-bottom-1em">
+    <div class="col-sm-6 padding-bottom-1em single-answer-block">
         <div class="input-group">
             <input type="text" class="form-control protocontent"
                    id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
@@ -363,11 +363,11 @@
                 </div>
                 <label class="col-sm-12">Answers:</label>
 
-                <div class="col-sm-6 padding-bottom-1em">
+                <div class="col-sm-6 padding-bottom-1em single-answer-block">
                     <div class="input-group">
                         <input type="text" class="form-control protocontent"
                                id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                               placeholder="Answer 1" aria-describedby="basic-addon1"
+                               placeholder="Answer" aria-describedby="basic-addon1"
                                placeholder="Add Answer">
                         <span class="input-group-btn">
                             <button class="btn btn-secondary remove-answer" type="button"
@@ -375,11 +375,11 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-sm-6 padding-bottom-1em">
+                <div class="col-sm-6 padding-bottom-1em single-answer-block">
                     <div class="input-group">
                         <input type="text" class="form-control protocontent"
                                id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                               placeholder="Answer 2" aria-describedby="basic-addon1"
+                               placeholder="Answer" aria-describedby="basic-addon1"
                                placeholder="Add Answer">
                         <span class="input-group-btn">
                             <button class="btn btn-secondary remove-answer" type="button"
@@ -502,6 +502,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             createSidebarElement(value.name, i);
         });
 
+
+        //TODO: Load Canvas Elements like that
         //$canvas.cellHeight($canvas.height);
         /*var items = [
          {x: 4, y: 1, width: 1, height: 2},
@@ -570,9 +572,9 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
                     //add function to the template quizzies form
                     $('.remove-answer').click(function () {
-                        qaparent = $(this).parent().parent().parent().parent();
-                        $(this).parent().parent().parent().remove();
-                        removeButtons = $(qaparent).find(".remove-answer")
+                        qaparent = $(this).parent(".qa-div");
+                        $(this).parents(".single-answer-block").remove();
+                        removeButtons = $(qaparent).find(".remove-answer");
                         if (removeButtons.length <= 2) {
                             removeButtons.each(function () {
                                 $(this).prop('disabled', true);
@@ -643,8 +645,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             template = $(template).insertBefore($(this).parent());
             //qa-div
             $(template).find('.remove-answer').click(function () {
-                qaparent = $(this).parent().parent().parent().parent();
-                $(this).parent().parent().parent().remove();
+                qaparent = $(this).parent(".qa-div");
+                $(this).parents(".single-answer-block").remove();
                 removeButtons = $(qaparent).find(".remove-answer")
                 if (removeButtons.length <= 2) {
                     removeButtons.each(function () {

@@ -56,7 +56,7 @@ $date_picker_date = date('Y-m-d',strtotime('+1 week',strtotime($date_picker_date
 
                     <!--- CREATE COURSE INPUT FORM -->
                     <form role="form" class="form-horizontal"
-                          action="../api/courses/<?php echo $course_id . "/" . $course_lang . "/units"?>" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../api/api.php/courses/<?php echo $course_id . "/" . $course_lang . "/units"?>" method="post" enctype="multipart/form-data" id="UploadForm">
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="name">
                                 <?php echo getTranslation("addcourseunit:content:name", "Course unit name:");?>

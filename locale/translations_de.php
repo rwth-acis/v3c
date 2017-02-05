@@ -19,6 +19,10 @@ function getLanguage()
         "general:button:yes" => "Ja",
         "general:button:no" => "Nein",
         "general:button:description" => "Beschreibung",
+        "general:button:help" => "Hilfe",
+
+        "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
+        "general:footer:reach" => "Sie erreichen uns unter: ",
 
         "main:welcome:headline" => "Willkommen im V3C Projekt!",
         "main:welcome:v3cgoal" => "Das “Virtual Vocational Education and Training – VIRTUS” Projekt entwickelt eine innovative, voll funktionsfähige vitruelle Ausbildungs- und Trainigsplattform. Es bietet angemessen modular zertifizierete Kurse in Modular Employable Skills (MES), angepasst an eine weite Bandbreite an Umständen wie reginale Wachstumspotentiale und/oder Geschäftsumstrukturierung. Das Ziel ist die Erhöhung der Anzahl der Teilnehmerzahl Erwachsener in Ausbildungen.",

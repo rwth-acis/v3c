@@ -152,9 +152,7 @@ if ($success) {
                             </div>
                         </div>
 
-                        <?php if (count($course_units) < 5): ?>
                         <a href="/src/views/addcourseunit.php?courseid=<?php echo $course_id; ?>&lang=<?php echo $course_lang; ?>" class="btn btn-success">+ <?php echo getTranslation("editcourseunit:edit:addunit", "Add Course Unit");?></a>
-                        <?php endif; ?>
 
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Save">
                             <?php echo getTranslation("general:button:save", "Save");?>

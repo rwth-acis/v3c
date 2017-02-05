@@ -277,7 +277,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
 <script src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
 <script src="../js/course-list.js"></script>
-<script src="../js/search-course.js"></script>
 <script src="../js/filter-courses.js"></script>
 </body>
 </html>

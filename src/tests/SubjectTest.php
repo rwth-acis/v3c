@@ -1,6 +1,6 @@
 <?php
 
-require '../../vendor/autoload.php';
+require '../vendor/autoload.php';
 
 class SubjectTest extends PHPUnit_Framework_TestCase
 {

@@ -1,5 +1,7 @@
 <?php
 
+require '../vendor/autoload.php';
+
 class CourseTest extends PHPUnit_Framework_TestCase {
 
     private $client;
@@ -78,7 +80,7 @@ class CourseTest extends PHPUnit_Framework_TestCase {
             $this->assertArrayHasKey('date_updated',$d);
         }
     }
-/*
+
     public function testPostCourse(){
         $response =$this->client->request('POST','courses',['json' =>[
             'name'=> 'Introduction to testing',
@@ -86,12 +88,13 @@ class CourseTest extends PHPUnit_Framework_TestCase {
             'profession'=> 'Tester',
             'description'=> 'testing API using test course',
             'language'=> 'en',
+            'creator' => 'kpapavramidis@mastgroup.gr'
         ]]);
 
         $this->assertEquals(200,$response->getStatusCode());
 
     }
-*/
+
     public function tearDown() {
         $this->client = null;
     }

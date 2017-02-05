@@ -1,6 +1,6 @@
 <?php
 
-require '../../vendor/autoload.php';
+require '../vendor/autoload.php';
 
 class CourseUnitsTest extends PHPUnit_Framework_TestCase
 {
@@ -34,22 +34,24 @@ class CourseUnitsTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    /*
+
     public function testPostCourseUnits(){
+
+        $date = date('Y-m-d');
 
         $response =$this->client->request('POST',"courses/1/en/units",['json' =>[
             'courseid'=>'1',
             'courselang'=> 'en',
             'name'=> 'Test course unit',
             'points'=> '12',
-            'startdate'=> '2017-12-30',
-            'description'=> 'this is a description for course unit',
+            'startdate'=> "$date",
+            'description'=> 'this is a description for test course unit',
         ]]);
 
         $this->assertEquals(200,$response->getStatusCode());
 
     }
-*/
+
     public function tearDown() {
         $this->client = null;
     }

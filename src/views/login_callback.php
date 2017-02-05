@@ -60,9 +60,6 @@ require_once dirname(__FILE__) . "/../php/OpenIdConnectClient.php";
 //echo "<br>family name: " . $userFamilyName;
 //echo "<br>given name: " . $userGivenName;
 
-// FIXME: debug
-//session_destroy();
-//session_start();
 die();
 return;
 

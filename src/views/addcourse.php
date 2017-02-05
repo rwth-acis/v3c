@@ -46,8 +46,6 @@ $lang = filter_input(INPUT_GET, 'tlang');
 
 $accessControl = new AccessControl();
 $canCreateCourse = $accessControl->canCreateCourse();
-//FIXME DEBUG
-//$canCreateCourse = true;
 
 if ($canCreateCourse) {
     include 'addcourse_content.php';

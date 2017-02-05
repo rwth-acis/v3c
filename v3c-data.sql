@@ -1,4 +1,4 @@
-
+use v3c_database;
 --
 -- Data for table `subjects`
 --
@@ -29,21 +29,22 @@ INSERT INTO `organizations` (`name`, `email`, `logo_url`) VALUES
   ('EuropeanProgress', 'giampoulaki@europeanprogress.gr', 'http://virtus-project.eu/wp-content/uploads/2016/03/EUROPEAN-PROGRESS-LOGO-e1459274456103.jpg'),
   ('BEST', 'office@best.at', 'http://virtus-project.eu/wp-content/uploads/2016/03/BEST-Logo-gro%C3%9F-e1459273908202.jpg'),
   ('FFeuskadi', 'lorena.corral@ffeuskadi.net', 'http://virtus-project.eu/wp-content/uploads/2016/03/Logo-FFE-e1459273835655.jpg'),
-  ('cesie', 'irene.pizzo@cesie.org', 'http://virtus-project.eu/wp-content/uploads/2016/03/CESIE_Logo_jpg-e1459273896421.jpg');
+  ('cesie', 'irene.pizzo@cesie.org', 'http://virtus-project.eu/wp-content/uploads/2016/03/CESIE_Logo_jpg-e1459273896421.jpg'),
+  ('none', NULL, NULL);
 
-
+UPDATE `organizations` SET `id` = 0 WHERE `name`='none';
 
 --
 -- Data for table `users`
 --
 
-INSERT INTO `users` (`email`, `given_name`, `family_name`, `role`, `openIdConnectSub`, `date_created`, `date_updated`)
+INSERT INTO `users` (`email`, `given_name`, `family_name`, `role`, `affiliation`, `openIdConnectSub`, `date_created`, `date_updated`)
 VALUES
-  ('petersommerhoff@gmail.com', 'Peter', 'Sommerhoff', 1, 'bfc09ba5-b56d-4647-a83e-c1ce153d1230', '2016-11-17 14:33:49',
+  ('petersommerhoff@gmail.com', 'Peter', 'Sommerhoff', 1, 1, 'bfc09ba5-b56d-4647-a83e-c1ce153d1230', '2016-11-17 14:33:49',
    '2016-11-17 14:33:49'),
-  ('tilman.berres@rwth-aachen.de', 'Tilman', 'Berres', 1, '1cec8880-664d-4307-bf4f-7569161041ed', '2016-11-19 12:42:35',
+  ('tilman.berres@rwth-aachen.de', 'Tilman', 'Berres', 1, 1, '1cec8880-664d-4307-bf4f-7569161041ed', '2016-11-19 12:42:35',
    '2016-11-19 12:42:35'),
-  ('lauri.euren@rwth-aachen.de', 'Lauri', 'Euren', 1, 'b7221a72-2c14-4525-a840-2d0703cc494d', '2016-11-20 14:33:49',
+  ('lauri.euren@rwth-aachen.de', 'Lauri', 'Euren', 1, 1, 'b7221a72-2c14-4525-a840-2d0703cc494d', '2016-11-20 14:33:49',
    '2016-11-20 14:33:49');
 
 

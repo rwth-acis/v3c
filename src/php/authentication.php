@@ -28,17 +28,13 @@ class Authentication
     public function isAuthenticated()
     {
 
-        // FIXME: debug
-//      return true
-
-        if ($_SESSION == null) {
-
+        if (!$_SESSION) {
             session_start();
         }
 
         // Implementation depends on the service used to authenticate a user 
         // (e.g. Learning Layers)
-        if ($_SESSION['service_type'] === 'LearningLayers') {
+        if (isset($_SESSION['service_type']) && $_SESSION['service_type'] === 'LearningLayers') {
             // fake implementation: As we cannot connect to the Learning Layers server,
             // there is no way to find out whether the access token is still valid
             // so we always return true if there is an access token at all
@@ -48,6 +44,8 @@ class Authentication
                 return false;
             }
         }
+
+        return false;
     }
 
     /**

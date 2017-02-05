@@ -1,3 +1,6 @@
+<?php require_once '../php/access_control.php';
+$accessControl = new AccessControl(); ?>
+
 <footer id="footer">
     <div class="container">
         <div class="clear"></div>

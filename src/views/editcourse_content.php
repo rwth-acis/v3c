@@ -61,7 +61,7 @@ if ($success) {
                 <div class='col-md-10 col-md-offset-1'>
 
                     <form role="form"
-                          action="../api/courses/<?php echo $course_id . "/" . $course_lang ?>" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../api/api.php/courses/<?php echo $course_id . "/" . $course_lang ?>" method="post" enctype="multipart/form-data" id="UploadForm">
                         <input type="hidden" name="_METHOD" value="PUT"/>
                         <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
                         <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">
@@ -131,7 +131,8 @@ if ($success) {
                                             <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-success">
                                                 Edit
                                             </a>
-                                            <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
+                                            <a href="/src/views/editcourseunit.php?cid=<?php echo $course_id; ?>&ulang=<?php echo $course_unit["lang"] ?>"
+                                               class="margin-left btn btn-xs btn-warning">
                                                 <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
                                             </a>
                                         </span>
@@ -151,9 +152,7 @@ if ($success) {
                             </div>
                         </div>
 
-                        <?php if (count($course_units) < 5): ?>
                         <a href="/src/views/addcourseunit.php?courseid=<?php echo $course_id; ?>&lang=<?php echo $course_lang; ?>" class="btn btn-success">+ <?php echo getTranslation("editcourseunit:edit:addunit", "Add Course Unit");?></a>
-                        <?php endif; ?>
 
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Save">
                             <?php echo getTranslation("general:button:save", "Save");?>

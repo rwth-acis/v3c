@@ -165,4 +165,4 @@ fabric.properties
 src/composer.phar
 composer.phar
 vendor/*
-src/vendor/*
+#src/vendor/*

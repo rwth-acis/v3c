@@ -23,7 +23,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collaborative Viewing of 3D Models </title>
+    <title>V3C - Course Subjects</title>
 
 </head>
 <body>

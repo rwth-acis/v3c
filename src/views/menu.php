@@ -121,9 +121,12 @@ require_once '../config/config.php';
     })();
 
     $(document).ready(function () {
+
+        var baseUrl = window.location.protocol + "//" + window.location.host;
+
         $("#select-lang").change(function () {
             var selectedLanguage = $(this).val();
-            var url = "http://v3c.dev/src/php/set_language.php?setlang=" + selectedLanguage;
+            var url = baseUrl + "/src/php/set_language.php?setlang=" + selectedLanguage;
 
             $.ajax({
                 url: url

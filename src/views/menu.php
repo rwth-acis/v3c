@@ -91,13 +91,7 @@ require_once '../config/config.php';
 
             <select class="form-control" name="" id="select-lang">
                 <?php
-                $languages = array(
-                    "en" => "English",
-                    "de" => "Deutsch",
-                    "es" => "Español",
-                    "it" => "Italiano",
-                    "gr" => "ελληνικά"
-                );
+                $languages = getSelectableLanguages();
                 foreach ($languages as $code => $language) {
                     echo $_SESSION["lang"];
                     $selected = ($_SESSION["lang"] == $code) ? "selected" : "";
@@ -121,9 +115,12 @@ require_once '../config/config.php';
     })();
 
     $(document).ready(function () {
+
+        var baseUrl = window.location.protocol + "//" + window.location.host;
+
         $("#select-lang").change(function () {
             var selectedLanguage = $(this).val();
-            var url = "http://v3c.dev/src/php/set_language.php?setlang=" + selectedLanguage;
+            var url = baseUrl + "/src/php/set_language.php?setlang=" + selectedLanguage;
 
             $.ajax({
                 url: url

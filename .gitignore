@@ -164,5 +164,5 @@ fabric.properties
 #Composer Vendor Directory
 src/composer.phar
 composer.phar
-vendor/*
-src/vendor/*
+#vendor/*
+#src/vendor/*

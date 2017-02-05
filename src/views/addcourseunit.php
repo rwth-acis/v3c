@@ -18,14 +18,14 @@
 </header>
 
 <?php
-// TODO: Check whether page was called manually for a course that already has 5 units
 
 // Check whether the currently logged in user is allowed to create courses
 require '../php/access_control.php';
 $accessControl = new AccessControl();
+$course_id = filter_input(INPUT_GET, 'courseid', FILTER_VALIDATE_INT);
+$course_lang = filter_input(INPUT_GET, 'lang');
 
-// FIXME: debug
-$canCreateCourse = true;
+$canCreateCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
 
 if ($canCreateCourse) {
     include 'addcourseunit_content.php';

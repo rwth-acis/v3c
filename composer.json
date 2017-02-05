@@ -1,0 +1,10 @@
+{
+    "require": {
+        "slim/slim": "^3.6",
+        "monolog/monolog": "^1.22",
+        "slim/php-view": "^2.2",
+        "phpunit/phpunit": "^5.7",
+        "guzzlehttp/guzzle": "^6.2",
+        "curl/curl": "^1.6"
+    }
+}

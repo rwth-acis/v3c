@@ -28,6 +28,7 @@
 <body>
 <?php include("menu.php"); ?>
 
+
 <!-- DESCRIPTION OF THE V3C WEBSITE -->
 <div class="container">
     <div class="row">
@@ -76,7 +77,10 @@
         </div>
     </div>
 </div>
+<div class="featured-box">
 
+
+<? include("../php/create_user_session.php"); ?>
 <?php include("footer.php"); ?>
 
 </body>

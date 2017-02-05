@@ -26,6 +26,15 @@ require_once 'authentication.php';
 class AccessControl
 {
 
+    // Roles as represented in the database
+    const ADMIN_ROLE = 1;
+    const TEACHER_ROLE = 2;
+    const LEARNER_ROLE = 3;
+    const OPERATOR_ROLE = 4;
+
+    // Currently, a guest is considered a learner
+    // const GUEST_ROLE = 0;
+
     /**
      * @var USER_STATUS The last status describing the users access control rights
      */
@@ -60,16 +69,16 @@ class AccessControl
     /**
      * Evaluates the status of a authenticated user further (is it a tutor or not?)
      * @param Object $user A user object from our database
-     * @return USER_STATUS The status of the authenticated user
+     * @return int The status of the authenticated user
      */
     private function getUserStatus($user)
     {
         if (!$user) {
-            // User has no databaseentry
-            $status = USER_STATUS::USER_NOT_CONFIRMED;
+            // User has no database entry
+            $status = USER_STATUS::USER_IS_LEARNER;
         } else {
-            if ($user->confirmed != 1) {
-                $status = USER_STATUS::USER_NOT_CONFIRMED;
+            if ($user->role == 3) {
+                $status = USER_STATUS::USER_IS_LEARNER;
             } else {
                 $status = USER_STATUS::USER_IS_TUTOR;
             }
@@ -100,34 +109,49 @@ class AccessControl
      * @param String $course_id ID of the course whose owner the user has to be
      * @return boolean true, if user is a lecturer and the owner of the course
      */
-    private function isLecturerAndCourseOwner($course_id)
+    private function isLecturerAndCourseOwner($course_id, $course_lang)
     {
         $ret = false;
         if (!$this->getAuthentication()->isAuthenticated()) {
             $this->lastStatus = USER_STATUS::NO_SESSION;
-        } else {
-            $user = $this->getSessionUser();
-            if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
-                
-                $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-                if ($user->id === $course['creator']) {
-                    $ret = true;
-                } else {
-                    $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
-                    $ret = false;
-                }
+            return false;
+        }
+
+        $user = $this->getSessionUser();
+        if ($user->role == AccessControl::ADMIN_ROLE) {
+            return true;
+        }
+
+        if ($user->role == AccessControl::TEACHER_ROLE || $this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
+
+            $course = getSingleDatabaseEntryByValues('courses', array(
+                'id' => $course_id,
+                'lang' => $course_lang
+            ));
+
+            $creator = getSingleDatabaseEntryByValue('organizations', 'email', $course['creator']);
+
+            if ($user->affiliation == $creator['id']) {
+                return true;
+            } else {
+                $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
+                return false;
             }
         }
-        return $ret;
     }
 
     /**
-     * @return boolean true, if user is allowed to create / upload models
+     * @return boolean true, if user has administrator role
      */
-    public function canCreateModel()
+
+    public function isAdmin()
     {
-        return $this->isLecturer();
+        $user = $this->getSessionUser();
+
+        return (isset($user) && ($user->role == AccessControl::ADMIN_ROLE));
+
     }
+
 
     /**
      * @return boolean true, if user is allowed to create courses
@@ -142,9 +166,9 @@ class AccessControl
      * @return boolean true, if user is allowed to update the course whose ID is
      * given
      */
-    public function canUpdateCourse($course_id)
+    public function canUpdateCourse($course_id, $course_lang)
     {
-        return $this->isLecturerAndCourseOwner($course_id);
+        return $this->isLecturerAndCourseOwner($course_id, $course_lang);
     }
 
     /**
@@ -152,9 +176,9 @@ class AccessControl
      * @return boolean true, if user is allowed to delete the course whose ID is
      * given
      */
-    public function canDeleteCourse($course_id)
+    public function canDeleteCourse($course_id, $course_lang)
     {
-        return $this->isLecturerAndCourseOwner($course_id);
+        return $this->isLecturerAndCourseOwner($course_id, $course_lang);
     }
 
     /**
@@ -184,7 +208,8 @@ abstract class USER_STATUS
     const OIDC_UNAUTHORIZED = 2;
     const OIDC_ERROR = 3;
     const DATABASE_ERROR = 4;
-    const USER_NOT_CONFIRMED = 5;
+    const USER_IS_LEARNER = 5;
     const USER_IS_TUTOR = 6;
     const USER_NOT_CREATOR_COURSE = 7;
+    const USER_IS_ADMIN = 8;
 }

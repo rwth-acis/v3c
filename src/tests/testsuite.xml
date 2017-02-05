@@ -1,0 +1,9 @@
+<phpunit>
+    <testsuites>
+        <testsuite name="apitest">
+            <file>CourseTest.php</file>
+            <file>CourseUnitTest.php</file>
+            <file>SubjectTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

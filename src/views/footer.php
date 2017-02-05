@@ -15,6 +15,8 @@ $accessControl = new AccessControl(); ?>
                             <a href="welcome.php"><?php echo getTranslation("general:button:home", "Home");?></a> |
                             <a href="subjects.php"><?php echo getTranslation("general:button:courses", "Courses");?></a> |
                             <a href="help.php"><?php echo getTranslation("general:button:help", "Help");?></a>
+                            <?php if ($accessControl->isAdmin()) { ?> | <a href="manage_users.php">Manage
+                                Users</a> <?php } ?>
                         </p>
                     </div>
                 </div>

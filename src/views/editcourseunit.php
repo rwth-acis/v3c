@@ -193,12 +193,11 @@
                             <input type="text" class="form-control protocontent" id=-slides-title" name="slides-title"
                                    placeholder="Title" aria-describedby="basic-addon1">
                         </div>
-                        <div class="col-sm-6">
-                            <label for="slides-upload">Upload Slides</label><br>
-                            <label class="btn btn-default glyphicon glyphicon-upload" aria-hidden="true">
-                                Browse <input type="file" class="hidden protocontent" id=slides-upload"
-                                              name="slides-upload">
-                            </label>
+                        <div class="col-sm-12">
+                            <label for="slides-link">Slides Link</label><br>
+                            <input type="text" class="form-control protocontent" id=-slides-title" name="slides-link"
+                                   placeholder="http://..." aria-describedby="basic-addon1">
+
                         </div>
                     </div>
                 </div>
@@ -225,14 +224,14 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <label for="video-title">Video Title</label>
-                            <input type="text" class="form-control protocontent" id=-video-title" name="video-title"
+                            <input type="text" class="form-control protocontent" id="video-title" name="video-title"
                                    placeholder="Title" aria-describedby="basic-addon1">
                         </div>
-                        <div class="col-sm-6">
-                            <label for="video-upload">Upload Video</label><br>
-                            <label class="btn btn-default glyphicon glyphicon-upload" aria-hidden="true">
-                                Browse <input type="file" class="hidden protocontent" id=video-upload"
-                                              name="video-upload">
+                        <div class="col-sm-12">
+                            <label for="video-link">Video Link</label><br>
+                            <input type="text" class="form-control protocontent" id="video-link" name="video-link"
+                                   placeholder="http://..." aria-describedby="basic-addon1">
+
                             </label>
                         </div>
                     </div>

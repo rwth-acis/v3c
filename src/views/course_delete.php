@@ -62,10 +62,7 @@ try {
 require '../php/access_control.php';
 
 $accessControl = new AccessControl();
-$canCreateCourse = $accessControl->canDeleteCourse($course_id);
-
-// FIXME: debug
-//$canDeleteCourse = true;
+$canDeleteCourse = $accessControl->canDeleteCourse($course_id);
 
 if ($canDeleteCourse) {
     ?>

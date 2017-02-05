@@ -31,460 +31,490 @@ $canCreateCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
 
 if ($canCreateCourse) {
     ?>
-<!--Prototype Templates -->
-<!-- ################################################################################### -->
-<div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer" id="prototypeSlideViewer">
-    <div class="row virtus-pw-prototype-topbar">
-        <div class="virtus-pw-name col-sm-12">
-            Slides Widget
-        </div>
-        <div class="virtus-pw-prototype-top-toolbar">
+    <!--Prototype Templates -->
+    <!-- ################################################################################### -->
+    <div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer" id="prototypeSlideViewer">
+        <div class="row virtus-pw-prototype-topbar">
+            <div class="virtus-pw-name col-sm-12">
+                Slides Widget
+            </div>
+            <div class="virtus-pw-prototype-top-toolbar">
             <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
                   aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
-        </div>
-    </div>
-    <div class="virtus-pw-content-container">
-        <div class="row virtus-pw-content-wrapper">
-            <div class="col-sm-12 virtus-pw-slide-img-wrapper">
-                <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
-                    <button type="button" class="btn btn-warning btn-sm modal-toggler-button" aria-label="Left Align"
-                            data-toggle="modal"
-                            data-target=".pw-modal-slideviewer">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
-                    </button>
-                    <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
-                </div>
-                <div class="virtus-pw-sliderviewer-content">
-                        <ul>
-                            <li type="square"><br><div class="slides-question-text"> dolor</div></li>
-                            <li type="square"><div class="slides-question-text ">Lorem ipsum dolor sit amet</div></li>
-                            <li type="square"><div class="slides-question-text">Lorem ipor sit amet</div></li>
-                            <li type="square"><div class="slides-question-text">Lorem ipor sit amet</div></li>
-                        </ul>
-                </div>
-
+                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
+                <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
             </div>
-            <div class="col-sm-12 virtus-pw-content">
-                <div class="row">
-                    <div class="col-sm-4">
+        </div>
+        <div class="virtus-pw-content-container">
+            <div class="row virtus-pw-content-wrapper">
+                <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                        <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                                aria-label="Left Align"
+                                data-toggle="modal"
+                                data-target=".pw-modal-slideviewer">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                        </button>
+                        <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
+                    </div>
+                    <div class="virtus-pw-sliderviewer-content">
+                        <ul>
+                            <li type="square"><br>
+                                <div class="slides-question-text"> dolor</div>
+                            </li>
+                            <li type="square">
+                                <div class="slides-question-text ">Lorem ipsum dolor sit amet</div>
+                            </li>
+                            <li type="square">
+                                <div class="slides-question-text">Lorem ipor sit amet</div>
+                            </li>
+                            <li type="square">
+                                <div class="slides-question-text">Lorem ipor sit amet</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="col-sm-12 virtus-pw-content">
+                    <div class="row">
+                        <div class="col-sm-4">
                         <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon"
                               aria-hidden="true"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="slide-viewer-slideindex-style">1/20</span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon" aria-hidden="true"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="slide-viewer-slideindex-style">1/20</span>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon"
+                                  aria-hidden="true"></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<div class="virtus-pw-prototype virtus-pw-hide pw-hangouts" id="prototypeHangouts">
-    <div class="row virtus-pw-prototype-topbar">
-        <div class="virtus-pw-name col-sm-12">
-            Hangouts Widget
-        </div>
-        <div class="virtus-pw-prototype-top-toolbar">
+    <div class="virtus-pw-prototype virtus-pw-hide pw-hangouts" id="prototypeHangouts">
+        <div class="row virtus-pw-prototype-topbar">
+            <div class="virtus-pw-name col-sm-12">
+                Hangouts Widget
+            </div>
+            <div class="virtus-pw-prototype-top-toolbar">
             <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
                   aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
-        </div>
-    </div>
-    <div class="virtus-pw-content-container">
-        <div class="row virtus-pw-content-wrapper">
-            <div class="col-sm-12 virtus-pw-slide-img-wrapper-full">
-                <img class="virtus-pw-hangouts-img" src='../images/widgetsPrototypes/hangouts-mockup.png'>
+                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
+                <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
             </div>
         </div>
-    </div>
-</div>
-
-
-<div class="virtus-pw-prototype virtus-pw-hide pw-video-viewer" id="prototypeVideoViewer">
-    <div class="row virtus-pw-prototype-topbar">
-        <div class="virtus-pw-name col-sm-12">
-            Video Widget
-        </div>
-        <div class="virtus-pw-prototype-top-toolbar">
-            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
-        </div>
-    </div>
-    <div class="virtus-pw-content-container">
-        <div class="row virtus-pw-content-wrapper">
-            <div class="col-sm-12 virtus-pw-slide-img-wrapper">
-                <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
-                    <!--<span class="pw-alert-color"></span>-->
-                    <button type="button" class="btn btn-warning btn-sm modal-toggler-button" aria-label="Left Align"
-                            data-toggle="modal"
-                            data-target=".pw-modal-videoviewer">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
-                    </button>
-                    <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
+        <div class="virtus-pw-content-container">
+            <div class="row virtus-pw-content-wrapper">
+                <div class="col-sm-12 virtus-pw-slide-img-wrapper-full">
+                    <img class="virtus-pw-hangouts-img" src='../images/widgetsPrototypes/hangouts-mockup.png'>
                 </div>
-                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/video-mockup.png'>
             </div>
-            <div class="col-sm-12 virtus-pw-content">
-                <div class="row">
-                    <div class="col-sm-3">
+        </div>
+    </div>
+
+
+    <div class="virtus-pw-prototype virtus-pw-hide pw-video-viewer" id="prototypeVideoViewer">
+        <div class="row virtus-pw-prototype-topbar">
+            <div class="virtus-pw-name col-sm-12">
+                Video Widget
+            </div>
+            <div class="virtus-pw-prototype-top-toolbar">
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
+            </div>
+        </div>
+        <div class="virtus-pw-content-container">
+            <div class="row virtus-pw-content-wrapper">
+                <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                        <!--<span class="pw-alert-color"></span>-->
+                        <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                                aria-label="Left Align"
+                                data-toggle="modal"
+                                data-target=".pw-modal-videoviewer">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                        </button>
+                        <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                     </div>
-                    <div class="col-sm-6">
+                    <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/video-mockup.png'>
+                </div>
+                <div class="col-sm-12 virtus-pw-content">
+                    <div class="row">
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-6">
                         <span
-                            class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-backward slideviewer-nav-icon videoviewer-icons-side-padding"
-                            aria-hidden="true"></span>
-                        <span
-                            class="glyphicon glyphicon glyphicon glyphicon-play slideviewer-nav-icon videoviewer-icons-side-padding"
-                            aria-hidden="true"></span>
-                        <span
-                            class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-forward slideviewer-nav-icon videoviewer-icons-side-padding"
-                            aria-hidden="true"></span><br>
-                        <span class="videoviewer-time-style">00:30:43/01:15:00</span>
-                    </div>
-                    <div class="col-sm-3">
+                                class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-backward slideviewer-nav-icon videoviewer-icons-side-padding"
+                                aria-hidden="true"></span>
+                            <span
+                                    class="glyphicon glyphicon glyphicon glyphicon-play slideviewer-nav-icon videoviewer-icons-side-padding"
+                                    aria-hidden="true"></span>
+                            <span
+                                    class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-forward slideviewer-nav-icon videoviewer-icons-side-padding"
+                                    aria-hidden="true"></span><br>
+                            <span class="videoviewer-time-style">00:30:43/01:15:00</span>
+                        </div>
+                        <div class="col-sm-3">
                         <span class="glyphicon glyphicon glyphicon-fullscreen slideviewer-nav-icon"
                               aria-hidden="true"></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="virtus-pw-prototype virtus-pw-hide pw-quizzes-viewer" id="prototypeQuizzesViewer">
-    <div class="row virtus-pw-prototype-topbar">
-        <div class="virtus-pw-name col-sm-12">
-            Quizzes Widget
-        </div>
-        <div class="virtus-pw-prototype-top-toolbar">
+    <div class="virtus-pw-prototype virtus-pw-hide pw-quizzes-viewer" id="prototypeQuizzesViewer">
+        <div class="row virtus-pw-prototype-topbar">
+            <div class="virtus-pw-name col-sm-12">
+                Quizzes Widget
+            </div>
+            <div class="virtus-pw-prototype-top-toolbar">
             <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
                   aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                      aria-hidden="true"></span>
+            </div>
         </div>
-    </div>
-    <div class="virtus-pw-content-container">
-        <div class="row virtus-pw-content-wrapper">
-            <div class="col-sm-12 virtus-pw-quizzes-img-wrapper">
-                <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
-                    <button type="button" class="btn btn-warning btn-sm modal-toggler-button" aria-label="Left Align"
-                            data-toggle="modal"
-                            data-target=".pw-modal-quizzes">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
-                    </button>
-                    <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
-                </div>
-                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.png'>
-            </div>
-            <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor ?
-            </div>
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-sm-12 quizzes-answers-container">
-                        <div class="row">
-                            <div class="col-sm-6 quizzes-answer-box-container">
-                                <div class="quizzes-answer-box">some answer</div>
-                            </div>
-                            <div class="col-sm-6 quizzes-answer-box-container">
-                                <div class="quizzes-answer-box">The answer is b</div>
-                            </div>
-                            <div class="col-sm-6 quizzes-answer-box-container">
-                                <div class="quizzes-answer-box">No that is the</div>
-                            </div>
-                            <div class="col-sm-6 quizzes-answer-box-container">
-                                <div class="quizzes-answer-box">ture that</div>
-                            </div>
-                        </div>
+        <div class="virtus-pw-content-container">
+            <div class="row virtus-pw-content-wrapper">
+                <div class="col-sm-12 virtus-pw-quizzes-img-wrapper">
+                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                        <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                                aria-label="Left Align"
+                                data-toggle="modal"
+                                data-target=".pw-modal-quizzes">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                        </button>
+                        <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                     </div>
+                    <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.png'>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Prototype Modal Templates -->
-<!-- ################################################################################### -->
-<div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
-     id="prototypeSlideViewerModal">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
-            </div>
-            <div class="modal-body">
-                <div class="input-group">
+                <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                    sed
+                    diam nonumy eirmod tempor ?
+                </div>
+                <div class="col-sm-12">
                     <div class="row">
-                        <div class="col-sm-12">
-                            <label for="slides-title">Sildes Title</label>
-                            <input type="text" class="form-control protocontent" id=-slides-title" name="slides-title"
-                                   placeholder="Title" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="col-sm-12">
-                            <label for="slides-link">Slides Link</label><br>
-                            <input type="text" class="form-control protocontent" id=-slides-title" name="slides-link"
-                                   placeholder="http://..." aria-describedby="basic-addon1">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success modal-save-button">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade pw-modal-video" tabindex="-1" role="dialog" aria-labelledby="modal"
-     id="prototypeVideoViewerModal">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Video Widget</h4>
-            </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label for="video-title">Video Title</label>
-                            <input type="text" class="form-control protocontent" id="video-title" name="video-title"
-                                   placeholder="Title" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="col-sm-12">
-                            <label for="video-link">Video Link</label><br>
-                            <input type="text" class="form-control protocontent" id="video-link" name="video-link"
-                                   placeholder="http://..." aria-describedby="basic-addon1">
-
-                            </label>
+                        <div class="col-sm-12 quizzes-answers-container">
+                            <div class="row">
+                                <div class="col-sm-6 quizzes-answer-box-container">
+                                    <div class="quizzes-answer-box">some answer</div>
+                                </div>
+                                <div class="col-sm-6 quizzes-answer-box-container">
+                                    <div class="quizzes-answer-box">The answer is b</div>
+                                </div>
+                                <div class="col-sm-6 quizzes-answer-box-container">
+                                    <div class="quizzes-answer-box">No that is the</div>
+                                </div>
+                                <div class="col-sm-6 quizzes-answer-box-container">
+                                    <div class="quizzes-answer-box">ture that</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success modal-save-button">Save changes</button>
-            </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade pw-modal-quizzes" tabindex="-1" role="dialog" aria-labelledby="modal"
-     id="prototypeQuizzesViewerModal">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Quizzes Widget</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-10 col-sm-offset-1">
+    <!--Prototype Modal Templates -->
+    <!-- ################################################################################### -->
+    <div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
+         id="prototypeSlideViewerModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
                         <div class="row">
-                            <div class="col-sm-6">
-                                <label for="video-title">Quizzes Title</label>
-                                <input type="text" class="form-control protocontent" id=-quizzes-title"
-                                       name="quizzes-title"
+                            <div class="col-sm-12">
+                                <label for="slides-title">Sildes Title</label>
+                                <input type="text" class="form-control protocontent" id=-slides-title"
+                                       name="slides-title"
                                        placeholder="Title" aria-describedby="basic-addon1">
                             </div>
-                            <div class="col-sm-12 qa-block-container">
-                                <h4 class="">Questions</h4>
-                                <hr>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="question-title-counter">Question 1</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row qa-div">
-                                            <div class="col-sm-12">
-                                                <label for="quizzes-question-0">Question:</label>
-                                                <input type="text" class="form-control protocontent"
-                                                       id=-quizzes-question-0" name="quizzes-question-0"
-                                                       placeholder="Question" aria-describedby="basic-addon1">
-                                            </div>
-                                            <label class="col-sm-12">Answers:</label>
+                            <div class="col-sm-12">
+                                <label for="slides-link">Slides Link</label><br>
+                                <input type="text" class="form-control protocontent" id=-slides-title"
+                                       name="slides-link"
+                                       placeholder="http://..." aria-describedby="basic-addon1">
 
-                                            <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                                                <div class="input-group">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade pw-modal-video" tabindex="-1" role="dialog" aria-labelledby="modal"
+         id="prototypeVideoViewerModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Video Widget</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="video-title">Video Title</label>
+                                <input type="text" class="form-control protocontent" id="video-title" name="video-title"
+                                       placeholder="Title" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="col-sm-12">
+                                <label for="video-link">Video Link</label><br>
+                                <input type="text" class="form-control protocontent" id="video-link" name="video-link"
+                                       placeholder="http://..." aria-describedby="basic-addon1">
+
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade pw-modal-quizzes" tabindex="-1" role="dialog" aria-labelledby="modal"
+         id="prototypeQuizzesViewerModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Quizzes Widget</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label for="video-title">Quizzes Title</label>
+                                    <input type="text" class="form-control protocontent" id=-quizzes-title"
+                                           name="quizzes-title"
+                                           placeholder="Title" aria-describedby="basic-addon1">
+                                </div>
+                                <div class="col-sm-12 qa-block-container">
+                                    <h4 class="">Questions</h4>
+                                    <hr>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="question-title-counter">Question 1</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row qa-div">
+                                                <div class="col-sm-12">
+
+                                                    <label for="quizzes-question-0">Question:</label>
                                                     <input type="text" class="form-control protocontent"
-                                                           id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                           placeholder="Answer" aria-describedby="basic-addon1"
-                                                           placeholder="Add Answer">
-                                                    <span class="input-group-btn">
+                                                           id=-quizzes-question-0" name="quizzes-question-0"
+                                                           placeholder="Question" aria-describedby="basic-addon1">
+                                                </div>
+                                                <label class="col-sm-12">Answers:</label>
+                                                <div class="radio">
+                                                    <div class="col-sm-6 padding-bottom-1em single-answer-block">
+                                                        <div class="input-group">
+                                                            <input type="radio" name="answerRadio1" id="optionsRadios1"
+                                                                   value="correct" checked>
+                                                            <input type="text" class="form-control protocontent"
+                                                                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                                                                   placeholder="Answer" aria-describedby="basic-addon1"
+                                                                   placeholder="Add Answer">
+                                                            <span class="input-group-btn">
                                                         <button class="btn btn-secondary remove-answer" type="button"
                                                                 disabled>-</button>
                                                     </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control protocontent"
-                                                           id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                           placeholder="Answer" aria-describedby="basic-addon1"
-                                                           placeholder="Add Answer">
-                                                    <span class="input-group-btn">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 padding-bottom-1em single-answer-block">
+                                                        <div class="input-group">
+                                                            <input type="radio" name="answerRadio1" id="optionsRadios1"
+                                                                   value="correct">
+                                                            <input type="text" class="form-control protocontent"
+                                                                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                                                                   placeholder="Answer" aria-describedby="basic-addon1"
+                                                                   placeholder="Add Answer">
+                                                            <span class="input-group-btn">
                                                         <button class="btn btn-secondary remove-answer" type="button"
                                                                 disabled>-</button>
                                                     </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 padding-bottom-1em">
+                                                        <button type="button"
+                                                                class="btn btn-default btn-block btn-add-answer">
+                                                            Add Answer
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 padding-bottom-1em">
-                                                <button type="button" class="btn btn-default btn-block btn-add-answer">
-                                                    Add Answer
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
+                                    <br>
                                 </div>
-                                <br>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success modal-add-button">Add Question +</button>
-                <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success modal-add-button">Add Question +</button>
+                    <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<!-- Templates -->
-<!-- Plugin JavaScript -->
-<script type="text/template" id="answerBlock">
-    <div class="col-sm-6 padding-bottom-1em single-answer-block">
-        <div class="input-group">
-            <input type="text" class="form-control protocontent"
-                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                   placeholder="Answer" aria-describedby="basic-addon1"
-                   placeholder="Add Answer">
-            <span class="input-group-btn">
+    <!-- Templates -->
+    <!-- Plugin JavaScript -->
+    <script type="text/template" id="answerBlock">
+        <div class="col-sm-6 padding-bottom-1em single-answer-block">
+            <div class="input-group">
+                <input type="radio" name="optionsRadios" id="optionsRadios1" value="correct">
+                <input type="text" class="form-control protocontent"
+                       id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                       placeholder="Answer" aria-describedby="basic-addon1"
+                       placeholder="Add Answer">
+                <span class="input-group-btn">
                 <button class="btn btn-secondary remove-answer" type="button">-</button>
             </span>
+            </div>
         </div>
-    </div>
-</script>
+    </script>
 
 
-<!-- Plugin JavaScript -->
-<script type="text/template" id="questionBlock">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="question-title-counter">Question 1</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row qa-div">
-                <div class="col-sm-12">
-                    <label for="quizzes-question-0">Question:</label>
-                    <input type="text" class="form-control protocontent"
-                           id=-quizzes-question-0" name="quizzes-question-0"
-                           placeholder="Question" aria-describedby="basic-addon1">
-                </div>
-                <label class="col-sm-12">Answers:</label>
-
-                <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                    <div class="input-group">
+    <!-- Plugin JavaScript -->
+    <script type="text/template" id="questionBlock">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="question-title-counter">Question 1</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row qa-div">
+                    <div class="col-sm-12"><br><button class="btn btn-danger remove-answer" type="button" onClick = "removeQuestion($(this))">Remove</button><br>
+                        <label for="quizzes-question-0">Question:</label>
                         <input type="text" class="form-control protocontent"
-                               id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                               placeholder="Answer" aria-describedby="basic-addon1"
-                               placeholder="Add Answer">
-                        <span class="input-group-btn">
+                               id=-quizzes-question-0" name="quizzes-question-0"
+                               placeholder="Question" aria-describedby="basic-addon1">
+                    </div>
+                    <label class="col-sm-12">Answers:</label>
+                    <div class="radio">
+                        <div class="col-sm-6 padding-bottom-1em single-answer-block">
+                            <div class="input-group">
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="correct" checked>
+                                <input type="text" class="form-control protocontent"
+                                       id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                                       placeholder="Answer" aria-describedby="basic-addon1"
+                                       placeholder="Add Answer">
+                                <span class="input-group-btn">
                             <button class="btn btn-secondary remove-answer" type="button"
                                     disabled>-</button>
                         </span>
-                    </div>
-                </div>
-                <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                    <div class="input-group">
-                        <input type="text" class="form-control protocontent"
-                               id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                               placeholder="Answer" aria-describedby="basic-addon1"
-                               placeholder="Add Answer">
-                        <span class="input-group-btn">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 padding-bottom-1em single-answer-block">
+                            <div class="input-group">
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="correct" checked>
+                                <input type="text" class="form-control protocontent"
+                                       id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
+                                       placeholder="Answer" aria-describedby="basic-addon1"
+                                       placeholder="Add Answer">
+                                <span class="input-group-btn">
                             <button class="btn btn-secondary remove-answer" type="button"
                                     disabled>-</button>
                         </span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-6 padding-bottom-1em">
-                    <button type="button" class="btn btn-default btn-block btn-add-answer">
-                        Add Answer
-                    </button>
+                    <div class="col-sm-6 padding-bottom-1em">
+                        <button type="button" class="btn btn-default btn-block btn-add-answer">
+                            Add Answer
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</script>
+    </script>
 
 
-<!--Course edit site -->
-<!-- ################################################################################### -->
+    <!--Course edit site -->
+    <!-- ################################################################################### -->
 
-<div id='courses'>
-    <section class='container'>
-        <div class='container'>
-            <div class='row'>
-                <!-- Info box with data about subject -->
-                <div class='col-sm-2 virtus-margin-top-15'>
-                    <div class='featured-box sidebar-container'>
-                        <div class="row">
-                            <div class="col-sm-2 lock-sidebar-icon-container virtus-pw-hide">
+    <div id='courses'>
+        <section class='container'>
+            <div class='container'>
+                <div class='row'>
+                    <!-- Info box with data about subject -->
+                    <div class='col-sm-2 virtus-margin-top-15'>
+                        <div class='featured-box sidebar-container'>
+                            <div class="row">
+                                <div class="col-sm-2 lock-sidebar-icon-container virtus-pw-hide">
                                 <span class="glyphicon glyphicon glyphicon-lock locked-color-style sidbeback-lock-icon"
                                       aria-hidden="true"
                                       data-toggle="tooltip"
                                       data-placement="bottom"
                                       title="The sidebar is locked, because you already filled the rolespace with the maximum amount of Widgets. Remove Widgets to be able to add new Widgets again."></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="sidebar-title">Toolbox:</div>
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <div class="sidebar-title">Toolbox:</div>
-                            </div>
-                        </div>
-                        <div class="gridstack-sidebar">
+                            <div class="gridstack-sidebar">
 
-                        </div>
-                        <div class="row sidebar-widget-counter-container">
-                            <div class="col-sm-12 sidebar-widget-counter-text">total Widgets used:</div>
-                            <div class="col-sm-12 sidebar-widget-counter-number">0/6</div>
-                        </div>
-                        <div class="trash">
+                            </div>
+                            <div class="row sidebar-widget-counter-container">
+                                <div class="col-sm-12 sidebar-widget-counter-text">total Widgets used:</div>
+                                <div class="col-sm-12 sidebar-widget-counter-number">0</div>
+                            </div>
+                            <div class="trash">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- List of all courses -->
-                <div class='col-sm-10 virtus-margin-top-15'>
-                    <div class="gridstack-canvas-container">
-                        <div class="canvas-title">Rolespace</div>
-                        <div class="grid-stack grid-stack-10 grid-stack-main" id="grid1">
-                            <!--<div class="grid-stack-item test" data-gs-x="10" data-gs-y="0" data-gs-width="2" data-gs-height="8" data-gs-no-resize="" data-gs-no-move="" data-gs-locked=""></div>-->
+                    <!-- List of all courses -->
+                    <div class='col-sm-10 virtus-margin-top-15'>
+                        <div class="gridstack-canvas-container">
+                            <div class="canvas-title">Rolespace</div>
+                            <div class="grid-stack grid-stack-10 grid-stack-main" id="grid1">
+                                <!--<div class="grid-stack-item test" data-gs-x="10" data-gs-y="0" data-gs-width="2" data-gs-height="8" data-gs-no-resize="" data-gs-no-move="" data-gs-locked=""></div>-->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
     <?php
 } else {
     include 'not_authorized.php';
@@ -607,11 +637,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     $('.modal-add-button').click(function () {
                         var $qb = $('#questionBlock').html();
                         var count = $(this).parents(".modal-content").find(".qa-block-container").find(".question-title-counter")
-                        var aNum = count.length +1 ;
+                        var aNum = count.length + 1;
 
                         $(this).parents(".modal-content").find(".qa-block-container").append($qb);
                         var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
-                        $elem.find(".question-title-counter").text("Question "+ aNum);
+                        $elem.find(".question-title-counter").text("Question " + aNum);
                         quizzesButtonFunc($elem);
                     });
 
@@ -635,19 +665,19 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 }
                 cntr++;
             });
-            $('.sidebar-widget-counter-number').text(cntr + "/6");
-            if (cntr >= 6) {
-                $('.gridstack-sidebar').addClass('disable-item locked-sidebar');
-                $('.sidebar-widget-counter-container').addClass('locked-color-style');
-                $('.lock-sidebar-icon-container').removeClass('virtus-pw-hide');
+            $('.sidebar-widget-counter-number').text(cntr);
+            /*if (cntr >= 6) {
+             $('.gridstack-sidebar').addClass('disable-item locked-sidebar');
+             $('.sidebar-widget-counter-container').addClass('locked-color-style');
+             $('.lock-sidebar-icon-container').removeClass('virtus-pw-hide');
 
-            } else {
-                $('.gridstack-sidebar').removeClass('disable-item locked-sidebar');
-                $('.gridstack-sidebar').find('.sidbeback-lock-icon').remove();
-                $('.sidebar-widget-counter-container').removeClass('locked-color-style');
-                $('.lock-sidebar-icon-container').addClass('virtus-pw-hide');
-            }
-            cntr = 0;
+             } else {
+             $('.gridstack-sidebar').removeClass('disable-item locked-sidebar');
+             $('.gridstack-sidebar').find('.sidbeback-lock-icon').remove();
+             $('.sidebar-widget-counter-container').removeClass('locked-color-style');
+             $('.lock-sidebar-icon-container').addClass('virtus-pw-hide');
+             }
+             cntr = 0;*/
         });
     });
 
@@ -684,7 +714,15 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             $widget.parent().parent().attr("data-" + $(this).attr("name"), $(this).val());
         });
     }
-    function quizzesButtonFunc($elem){
+
+    function removeQuestion($elem) {
+        $parentEl = $elem.parents(".qa-block-container");
+        $elem.parents(".panel-default").remove();
+        $parentEl.find(".question-title-counter").each(function (index) {
+            $(this).html("Question "+ (index +1));
+        });
+    }
+    function quizzesButtonFunc($elem) {
         $elem.find(".btn-add-answer").click(function () {
             var template = $("#answerBlock").html();
             template = $(template).insertBefore($(this).parent());

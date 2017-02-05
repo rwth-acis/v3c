@@ -78,6 +78,7 @@ VALUES
    'Social Entrepreneur', 'office@best.at', '2016-11-20 18:04:43', '2016-11-20 18:04:43'),
   (5, 'gr', 'Κράτηση πτήσης', 'Σε αυτό το μάθημα θα μάθετε να κάνετε κράτηση εισιτηρίων για έναν πελάτη.', 2,
    'ξενοδοχείο Booker', 'giampoulaki@europeanprogress.gr', '2016-11-20 18:04:34', '2016-11-20 18:04:34');
+
    
 
 --
@@ -108,6 +109,7 @@ VALUES
   (5, 'es', 'Poniendolo todo junto', '¿Qué factores hacen que la gente tenga éxito? ¿Cómo desarrollar más estos factores en sí mismo?',
    '2016-12-07 09:00:00', 12, '2016-11-20 18:06:43', '2016-11-20 18:06:43');
 
+--
 
 --
 -- Data for table `course_to_unit`

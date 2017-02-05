@@ -162,7 +162,7 @@ fabric.properties
 # *.ipr
 
 #Composer Vendor Directory
-#src/composer.phar
-#composer.phar
+src/composer.phar
+composer.phar
 #vendor/*
 #src/vendor/*

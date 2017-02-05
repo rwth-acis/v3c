@@ -341,10 +341,10 @@ if ($canCreateCourse) {
                                                            placeholder="Question" aria-describedby="basic-addon1">
                                                 </div>
                                                 <label class="col-sm-12">Answers:</label>
-                                                <div class="radio">
+                                                <div class="checkbox">
                                                     <div class="col-sm-6 padding-bottom-1em single-answer-block">
                                                         <div class="input-group">
-                                                            <input type="radio" name="answerRadio1" id="optionsRadios1"
+                                                            <input type="checkbox" name="checkbox1"
                                                                    value="correct" checked>
                                                             <input type="text" class="form-control protocontent"
                                                                    id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
@@ -358,7 +358,7 @@ if ($canCreateCourse) {
                                                     </div>
                                                     <div class="col-sm-6 padding-bottom-1em single-answer-block">
                                                         <div class="input-group">
-                                                            <input type="radio" name="answerRadio1" id="optionsRadios1"
+                                                            <input type="checkbox" name="checkbox1"
                                                                    value="correct">
                                                             <input type="text" class="form-control protocontent"
                                                                    id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
@@ -401,7 +401,7 @@ if ($canCreateCourse) {
     <script type="text/template" id="answerBlock">
         <div class="col-sm-6 padding-bottom-1em single-answer-block">
             <div class="input-group">
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="correct">
+                <input type="checkbox" name="checkbox2" id="checkbox2" value="correct">
                 <input type="text" class="form-control protocontent"
                        id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
                        placeholder="Answer" aria-describedby="basic-addon1"
@@ -429,10 +429,10 @@ if ($canCreateCourse) {
                                placeholder="Question" aria-describedby="basic-addon1">
                     </div>
                     <label class="col-sm-12">Answers:</label>
-                    <div class="radio">
+                    <div class="checkbox">
                         <div class="col-sm-6 padding-bottom-1em single-answer-block">
                             <div class="input-group">
-                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="correct" checked>
+                                <input type="checkbox" name="checkbox2" value="correct" checked>
                                 <input type="text" class="form-control protocontent"
                                        id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
                                        placeholder="Answer" aria-describedby="basic-addon1"
@@ -445,7 +445,7 @@ if ($canCreateCourse) {
                         </div>
                         <div class="col-sm-6 padding-bottom-1em single-answer-block">
                             <div class="input-group">
-                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="correct" checked>
+                                <input type="checkbox" name="checkbox2"value="correct">
                                 <input type="text" class="form-control protocontent"
                                        id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
                                        placeholder="Answer" aria-describedby="basic-addon1"
@@ -456,11 +456,11 @@ if ($canCreateCourse) {
                         </span>
                             </div>
                         </div>
-                    </div>
                     <div class="col-sm-6 padding-bottom-1em">
                         <button type="button" class="btn btn-default btn-block btn-add-answer">
                             Add Answer
                         </button>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -493,10 +493,10 @@ if ($canCreateCourse) {
                             <div class="gridstack-sidebar">
 
                             </div>
-                            <div class="row sidebar-widget-counter-container">
+                            <!--<div class="row sidebar-widget-counter-container">
                                 <div class="col-sm-12 sidebar-widget-counter-text">total Widgets used:</div>
                                 <div class="col-sm-12 sidebar-widget-counter-number">0</div>
-                            </div>
+                            </div>-->
                             <div class="trash">
                             </div>
                         </div>
@@ -595,6 +595,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
          node.x, node.y, node.width, node.height)
          }, this);
          });*/
+
         $prevItems.draggable({
             revert: 'invalid',
             handle: '.grid-stack-item-content',
@@ -665,19 +666,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 }
                 cntr++;
             });
-            $('.sidebar-widget-counter-number').text(cntr);
-            /*if (cntr >= 6) {
-             $('.gridstack-sidebar').addClass('disable-item locked-sidebar');
-             $('.sidebar-widget-counter-container').addClass('locked-color-style');
-             $('.lock-sidebar-icon-container').removeClass('virtus-pw-hide');
-
-             } else {
-             $('.gridstack-sidebar').removeClass('disable-item locked-sidebar');
-             $('.gridstack-sidebar').find('.sidbeback-lock-icon').remove();
-             $('.sidebar-widget-counter-container').removeClass('locked-color-style');
-             $('.lock-sidebar-icon-container').addClass('virtus-pw-hide');
-             }
-             cntr = 0;*/
         });
     });
 
@@ -726,6 +714,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         $elem.find(".btn-add-answer").click(function () {
             var template = $("#answerBlock").html();
             template = $(template).insertBefore($(this).parent());
+            cntrPanels = template.parents(".qa-block-container").find(".panel-default").length;
+            console.log(cntrPanels)
             //qa-div
             $(template).find('.remove-answer').click(function () {
                 qaparent = $(this).parent(".qa-div");

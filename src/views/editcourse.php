@@ -31,8 +31,8 @@ $course_id = filter_input(INPUT_GET, 'id');
 $course_lang = filter_input(INPUT_GET, 'lang');
 
 $accessControl = new AccessControl();
-// FIXME: debug
-$canEditCourse = true;
+
+$canEditCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
 
 if ($canEditCourse) {
     include 'editcourse_content.php';

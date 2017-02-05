@@ -42,6 +42,10 @@ $container = $app->getContainer();
 
 $container['view'] = new \Slim\Views\PhpRenderer("../api_templates/");
 
+$protocol = (isset($_SERVER['HTTPS']) ? "https://" : "http://");
+$baseUrl =  $protocol . $_SERVER['SERVER_NAME'];
+
+
 $c['notFoundHandler'] = function ($c) {
     return function ($request, $response) use ($c) {
         return $c['response']
@@ -163,8 +167,9 @@ $app->any('/courses/{id}/{lang}', function (Request $request, Response $response
         $course_lang = $updated_course['course_lang'];
 
         // Redirect with status 302
+        global $baseUrl;
         return $response->withStatus(302)->withHeader('Location',
-            "/src/views/editcourse.php?id=$course_id&lang=$course_lang");
+            $baseUrl . "/src/views/editcourse.php?id=$course_id&lang=$course_lang");
         // POST
     }
 });
@@ -192,8 +197,10 @@ $app->post('/courses', function (Request $request, Response $response) {
     // for this is, that it is not possible to add models on addcourse.php. But the user
     // can add models on editcourse.php
 
+    global $baseUrl;
+
     return $response->withStatus(302)->withHeader('Location',
-        "../views/editcourse.php?id=$course_id&lang=$course_lang");
+        $baseUrl . "/src/views/editcourse.php?id=$course_id&lang=$course_lang");
 });
 
 /**
@@ -248,8 +255,9 @@ $app->post('/courses/{id}/{lang}/units', function (Request $request, Response $r
     // After creating a course, the user is redirected to the edit page. The reason
     // for this is, that it is not possible to add models on addcourse.php. But the user
     // can add models on editcourse.php
+    global $baseUrl;
     return $response->withStatus(302)->withHeader('Location',
-        "../../../../views/editcourse.php?id=$course_id&lang=$course_lang");
+        $baseUrl . "/src/views/editcourse.php?id=$course_id&lang=$course_lang");
 });
 $app->run();
 ?>

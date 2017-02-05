@@ -17,6 +17,10 @@ include("menu.php");
 // on the subject id given in the website URL
 include '../php/db_connect.php';
 include '../php/tools.php';
+include '../php/access_control.php';
+
+$accessControl = new AccessControl();
+$isLecturer = $accessControl->canCreateCourse();
 
 $subject_id = filter_input(INPUT_GET, "id");
 
@@ -29,6 +33,8 @@ $course_deletion_notice = "";
 if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
     $course_deletion_notice = "<p class='alert alert-success'>Course was deleted successfully.</p>";
 }
+
+
 ?>
 
 <header id='head' class='secondary'>
@@ -51,7 +57,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                 <div class='col-sm-4'>
                     <div class='featured-box'>
                         <img src="<?php echo "$subject->img_url" ?>">
-                        <?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
+                        <?php if (!(filter_input(INPUT_GET, "widget") == "true") && $isLecturer) { ?>
                             <a href="addcourse.php?id=<?php echo $subject->id; ?>">
                                 <button class='btn btn-success btn-lg btn-block margin-top' type='button'>
                                     <?php echo getTranslation("courselist:head:add", "Add new course");?>
@@ -109,8 +115,11 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                 <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                 <th></th>
+                                <?php if ($isLecturer) { ?>
                                 <th></th>
                                 <th></th>
+                                <th></th>
+                                <?php } ?>
                             </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
@@ -159,13 +168,10 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 <tr>
                                     <td>
                                         <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $current_course_lang; ?>"><?php echo $current_course_name; ?></a>
-                                        <?php $i=0; foreach ($name_array as $c_name) {
-                                            ?>
-                                            <p hidden><?php echo $c_name; ?></p>
-                                            <?php
-                                            $i++;
-                                        }
-                                        ?>
+
+                                        <?php $i=0; foreach ($name_array as $c_name) { ?>
+                                            <p class="hidden"><?php echo $c_name; ?></p>
+                                        <?php $i++; } ?>
                                     </td>
                                     <td><?php echo $courses[$initCntr]["orga"]; ?></td>
                                     <td><?php foreach ($course_dates_array as $start_date) {
@@ -183,6 +189,31 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                             $i++;
                                         }
                                         ?>
+                                    </td>
+                                    <?php if ($isLecturer) { ?>
+                                    <td class="rowlink-skip">
+                                        <?php
+                                        $languages_count = 5;
+                                        //uncomment the line below to set the languages count to the number of available languages
+                                        //$languages_count = $db->query("SELECT COUNT(*)as alLanguages FROM languages ")->fetchObject();
+                                        if (count($lang_array) == $languages_count){?>
+                                            <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block">Translate from</a>
+                                        <?php }else{ if (count($lang_array) > 1): ?>
+                                            <div class="dropdown">
+                                                <button class="btn btn-danger dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Translate from
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="translate-dropdown">
+                                                    <?php
+                                                    foreach($lang_array as $c_lang) {
+                                                        echo "<a class='dropdown-item' href='addcourse.php?tid=$current_course_id&tlang=$c_lang'>$c_lang</a>";
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        <?php else: ?>
+                                            <a href="addcourse.php?tid=<?php echo $current_course_id; ?>&tlang=<?php echo $current_course_lang?>" class="btn btn-translate btn-sm btn-danger btn-block">Translate from</a>
+                                        <?php endif;} ?>
                                     </td>
                                     <td     class="rowlink-skip">
                                         <?php if (count($lang_array) > 1): ?>
@@ -208,10 +239,11 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                                     class="btn btn-delete btn-sm btn-warning btn-block"
                                                                     value="Delete"></td>
+                                    <?php } ?>
                                 </tr>
                                 <tr>
                                     <!-- Collapse div for course description -->
-                                    <td colspan="6">
+                                    <td colspan="7">
                                         <button type="button" class="btn btn-info" data-toggle="collapse"
                                                 data-target="#description-<?php echo $index; ?>">Description
                                         </button>
@@ -245,7 +277,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!-- Library which defines behavior of the <table class="table table-striped table-bordered table-hover"> -->
 <script src="../external/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
 <script src="../js/course-list.js"></script>
-<script src="../js/search-course.js"></script>
 <script src="../js/filter-courses.js"></script>
 </body>
 </html>

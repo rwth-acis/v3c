@@ -2,6 +2,8 @@
     "require": {
         "slim/slim": "^3.6",
         "monolog/monolog": "^1.22",
-        "slim/php-view": "^2.2"
+        "slim/php-view": "^2.2",
+
+        "phpseclib/phpseclib" : "2.0.1"
     }
 }

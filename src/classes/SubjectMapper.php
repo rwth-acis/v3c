@@ -8,18 +8,25 @@
  */
 class SubjectMapper extends Mapper
 {
+    /**
+     *
+     * Get all the courses that match the query from database
+     *
+     * @param array $args
+     * @return array
+     */
+
     public function getSubjects($args = array())
     {
         $subjects_sql = "SELECT * FROM subjects";
         if (!empty($args)) {
             $where_clause = " WHERE ";
-            end($args);
-            $key = key($args);
+            $last_key = key(end($args));
             foreach ($args as $k => $v) {
                 if (!is_numeric($v)) {
                     $v = "" . $v . "";
                 }
-                if ($k == $key) {
+                if ($k == $last_key) {
                     $where_clause .= " " . $k . " = " . $v;
                 } else {
                     $where_clause .= " " . $k . " = " . $v . " AND ";

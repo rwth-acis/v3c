@@ -22,7 +22,7 @@ $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
 
 $success = $stmt->execute();
 if ($success) {
-    $course_units = $stmt->fetchAll();
+    $course_units = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Get course info
@@ -40,8 +40,19 @@ if ($success) {
     $course = $stmt2->fetch();
 }
 
-?>
 
+// Get subjects
+$stmt3 = $conn->prepare("SELECT id, name
+                        FROM subjects");
+
+
+$success = $stmt3->execute();
+if ($success) {
+    $subjects = $stmt3->fetchAll();
+}
+
+
+?>
 <div id='courses'>
     <section class='container'>
         <br><br>
@@ -50,7 +61,10 @@ if ($success) {
                 <div class='col-md-10 col-md-offset-1'>
 
                     <form role="form"
-                          action="../php/edit_script_course.php" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../api/api.php/courses/<?php echo $course_id . "/" . $course_lang ?>" method="post" enctype="multipart/form-data" id="UploadForm">
+                        <input type="hidden" name="_METHOD" value="PUT"/>
+                        <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
+                        <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">
 
                         <!-- COURSE NAME -->
                         <div class="form-group">
@@ -62,12 +76,23 @@ if ($success) {
                             </div>
                         </div>
 
-                        <!-- COURSE DOMAIN -->
+                        <!-- COURSE DOMAIN-->
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
+                            <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("addcourse:content:domain", "Course Domain:");?></label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="domain" id="targetDomain"
-                                       value="<?php echo htmlentities($course['domain']); ?>" required>
+                                <select class="form-control" name="domain" id="domain">
+                                    <?php
+                                    // Get subjects
+                                    $subjects = $conn->query("SELECT subjects.* FROM subjects")->fetchAll(PDO::FETCH_ASSOC);
+
+                                    foreach ($subjects as $subject) {
+                                        $id = $subject["id"];
+                                        $name = $subject["name"];
+                                        $selected = ( $id == $course['domain']) ? "selected" : "";
+                                        echo "<option value='$id' $selected>$name</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
 
@@ -84,7 +109,7 @@ if ($success) {
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetText"><?php echo getTranslation("editcourse:edit:description", "Description:");?></label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="3" name="text" id="targetText"
+                                <textarea class="form-control" rows="3" name="description" id="description"
                                           placeholder="Enter course description"><?php echo htmlentities($course['description']); ?></textarea>
                             </div>
                         </div>
@@ -103,9 +128,13 @@ if ($success) {
                                         <span class="pull-right">
                                         <span class="glyphicon glyphicon-calendar margin-right"></span>
                                                     <?php echo $course_unit["start_date"] ?>
-                                        <a href="/src/views/editcourseunit.php?id=<?php echo $course_id; ?>&lang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-warning">
-                                            <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
-                                        </a>
+                                            <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-success">
+                                                Edit
+                                            </a>
+                                            <a href="/src/views/editcourseunit.php?cid=<?php echo $course_id; ?>&ulang=<?php echo $course_unit["lang"] ?>"
+                                               class="margin-left btn btn-xs btn-warning">
+                                                <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
+                                            </a>
                                         </span>
                                     </li>
                                     <div id="<?php echo $unit_id ?>" class="collapse">
@@ -123,9 +152,7 @@ if ($success) {
                             </div>
                         </div>
 
-                        <?php if (count($course_units) < 5): ?>
                         <a href="/src/views/addcourseunit.php?courseid=<?php echo $course_id; ?>&lang=<?php echo $course_lang; ?>" class="btn btn-success">+ <?php echo getTranslation("editcourseunit:edit:addunit", "Add Course Unit");?></a>
-                        <?php endif; ?>
 
                         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Save">
                             <?php echo getTranslation("general:button:save", "Save");?>

@@ -1,6 +1,6 @@
 <?php
 
-$conn = require_once "../php/db_connect.php";
+$conn = require "../php/db_connect.php";
 $stmt = $conn->prepare("SELECT * FROM subjects");
 $success = $stmt->execute();
 
@@ -12,6 +12,40 @@ if ($success) {
     $subjects = $stmt->fetchAll();
 }
 
+// Get course units start dates
+$statement = $conn->prepare("SELECT start_date
+                        FROM course_units
+                        JOIN course_to_unit
+                        ON course_units.id = course_to_unit.unit_id
+                        AND course_units.lang = course_to_unit.unit_lang
+                        WHERE course_to_unit.course_id = :course_id
+                        AND course_to_unit.course_lang = :course_lang
+                        ");
+
+$statement->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$statement->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+
+$success = $statement->execute();
+if ($success) {
+    $course_unit_dates = $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//if a course has already some units, find the last course unit start date
+if(sizeof($course_unit_dates)>0){
+    $date_picker_date = $course_unit_dates[0]['start_date'];
+    foreach($course_unit_dates as $unit_start_date){
+        if(strtotime($date_picker_date)<strtotime($unit_start_date['start_date'])){
+            $date_picker_date = $unit_start_date['start_date'];
+        }
+    }
+//if course hasn't any unit, set date to current date
+}else{
+    $date_picker_date = date('Y-m-d');
+}
+
+//set suggested start date for the new course unit to 1 week after start date of last unit or after 1 week from current date
+$date_picker_date = date('Y-m-d',strtotime('+1 week',strtotime($date_picker_date)));
+
 ?>
 <div id='courses'>
     <section class='container'>
@@ -22,14 +56,15 @@ if ($success) {
 
                     <!--- CREATE COURSE INPUT FORM -->
                     <form role="form" class="form-horizontal"
-                          action="../php/upload_script_courseunit.php" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../api/api.php/courses/<?php echo $course_id . "/" . $course_lang . "/units"?>" method="post" enctype="multipart/form-data" id="UploadForm">
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="name">
                                 <?php echo getTranslation("addcourseunit:content:name", "Course unit name:");?>
                             </label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" id="name"
-                                       placeholder="<?php echo getTranslation('addcourseunit:placeholder:name', 'Enter your course unit name');?>" required>
+                                       placeholder="<?php echo getTranslation('addcourseunit:placeholder:name',
+                                           'Enter your course unit name'); ?>" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -43,8 +78,7 @@ if ($success) {
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="startdate"><?php echo getTranslation("addcourseunit:content:startdate", "Start Date:");?></label>
                             <div class="col-sm-10">
-                                <input type="date" class="form-control" name="startdate" id="startdate"
-                                       placeholder="<?php echo getTranslation('addcourseunit:placeholder:startdate', 'Start Date:');?>" required>
+                                <input type="date" class="form-control" name="startdate" id="startdate" value = "<?php echo htmlentities($date_picker_date);?>"required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -62,6 +96,7 @@ if ($success) {
                                 value="Save"><?php echo getTranslation("general:button:save", "Save");?></button>
                     </form>
                     <div id="output"></div>
+
                     <br>
                 </div>
             </div>

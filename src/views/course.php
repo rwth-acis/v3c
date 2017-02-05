@@ -10,8 +10,11 @@
 <?php include("menu.php"); ?>
 
 <?php
-$conn = require '../php/db_connect.php';
+$conn = require_once '../php/db_connect.php';
 include '../php/tools.php';
+include '../php/access_control.php';
+$accessControl = new AccessControl();
+
 
 // The course unit id from URL parameter
 $course_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
@@ -20,6 +23,9 @@ $course_lang = "en";  // default value
 if (isset($_GET["lang"])) {
     $course_lang = filter_input(INPUT_GET, "lang");
 }
+
+$isLecturer = $accessControl->canUpdateCourse($course_id, $course_lang);
+
 
 // Gets course details with it's creator information
 $stmt = $conn->prepare("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
@@ -41,7 +47,8 @@ if (!$success) {
 }
 
 // Get course subject
-$course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id= $course_id")->fetch(PDO::FETCH_ASSOC);
+$course_domain = $course_details["domain"];
+$course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id= $course_domain")->fetch(PDO::FETCH_ASSOC);
 
 
 // Get course units
@@ -169,6 +176,8 @@ function replaceLinks($text)
                         <p class="col-sm-7 output-element"><?php echo $course_details["description"]; ?></p>
                         <div class="col-sm-1"></div>
                     </div>
+                    <?php if ($isLecturer) {
+                        ?>
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class=" col-sm-5">
@@ -182,6 +191,7 @@ function replaceLinks($text)
                         </div>
                         <div class="col-md-1"></div>
                     </div>
+                    <?php } ?>
                 </div>
                 <div class="col-md-2"></div>
             </div>

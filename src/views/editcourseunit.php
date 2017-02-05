@@ -47,7 +47,15 @@
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
-                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/slides-mockup.jpg'>
+                <div class="virtus-pw-sliderviewer-content">
+                        <ul>
+                            <li type="square"><br><div class="slides-question-text"> dolor</div></li>
+                            <li type="square"><div class="slides-question-text ">Lorem ipsum dolor sit amet</div></li>
+                            <li type="square"><div class="slides-question-text">Lorem ipor sit amet</div></li>
+                            <li type="square"><div class="slides-question-text">Lorem ipor sit amet</div></li>
+                        </ul>
+                </div>
+
             </div>
             <div class="col-sm-12 virtus-pw-content">
                 <div class="row">
@@ -62,6 +70,29 @@
                         <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon" aria-hidden="true"></span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="virtus-pw-prototype virtus-pw-hide pw-hangouts" id="prototypeHangouts">
+    <div class="row virtus-pw-prototype-topbar">
+        <div class="virtus-pw-name col-sm-12">
+            Hangouts Widget
+        </div>
+        <div class="virtus-pw-prototype-top-toolbar">
+            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                  aria-hidden="true"></span>
+        </div>
+    </div>
+    <div class="virtus-pw-content-container">
+        <div class="row virtus-pw-content-wrapper">
+            <div class="col-sm-12 virtus-pw-slide-img-wrapper-full">
+                <img class="virtus-pw-hangouts-img" src='../images/widgetsPrototypes/hangouts-mockup.png'>
             </div>
         </div>
     </div>
@@ -424,7 +455,7 @@
                         </div>
                         <div class="row sidebar-widget-counter-container">
                             <div class="col-sm-12 sidebar-widget-counter-text">total Widgets used:</div>
-                            <div class="col-sm-12 sidebar-widget-counter-number">0/3</div>
+                            <div class="col-sm-12 sidebar-widget-counter-number">0/6</div>
                         </div>
                         <div class="trash">
                         </div>
@@ -472,7 +503,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     initWidgets = [
         {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal'},
         {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal'},
-        {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal'}
+        {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal'},
+        {name: 'hangouts', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal'}
     ];
 
 
@@ -589,8 +621,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 }
                 cntr++;
             });
-            $('.sidebar-widget-counter-number').text(cntr + "/3");
-            if (cntr >= 3) {
+            $('.sidebar-widget-counter-number').text(cntr + "/6");
+            if (cntr >= 6) {
                 $('.gridstack-sidebar').addClass('disable-item locked-sidebar');
                 $('.sidebar-widget-counter-container').addClass('locked-color-style');
                 $('.lock-sidebar-icon-container').removeClass('virtus-pw-hide');

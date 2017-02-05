@@ -121,6 +121,11 @@
     height: 100%;
     width: 100%;
 }
+.virtus-pw-hangouts-img {
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+}
 .virtus-pw-content-toolbox-wrapper{
     margin-top: 5px;
     padding-right: 5px !important;
@@ -133,6 +138,10 @@
 
 .virtus-pw-slide-img-wrapper {
     height: 80%;
+}
+
+.virtus-pw-slide-img-wrapper-full{
+    height: 100%;
 }
 
 .virtus-pw-hide {
@@ -175,7 +184,19 @@
     color: #333;
     font-size: 1em;
 }
+.slides-question-text {
+    padding-top: 10px;
+    height: 20%;
+    font-family: "redacted_scriptregular";
+    color: #333;
+    font-size: 1em;
+    text-align: left;
+}
 
+.virtus-pw-sliderviewer-content{
+    background-color: cornflowerblue;
+    height: 100%;
+}
 .quizzes-answers-container {
     height: 30%;
 }

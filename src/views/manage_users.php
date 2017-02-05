@@ -13,16 +13,6 @@
 
 include("menu.php");
 
-
-// FIXME: debug
-
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-
-//unset($_SESSION);
-
-
 // Get all entries from the user table in the database
 
 include '../php/db_connect.php';
@@ -30,8 +20,8 @@ include '../php/tools.php';
 include '../php/access_control.php';
 
 $accessControl = new AccessControl();
-$isAdmin = true;
-//$isAdmin = $accessControl->isAdmin();
+$isAdmin = $accessControl->isAdmin();
+
 if ($isAdmin) {
     include 'manage_users_content.php';
 } else {

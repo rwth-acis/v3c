@@ -26,6 +26,15 @@ require_once 'authentication.php';
 class AccessControl
 {
 
+    // Roles as represented in the database
+    const ADMIN_ROLE = 1;
+    const TEACHER_ROLE = 2;
+    const LEARNER_ROLE = 3;
+    const OPERATOR_ROLE = 4;
+
+    // Currently, a guest is considered a learner
+    // const GUEST_ROLE = 0;
+
     /**
      * @var USER_STATUS The last status describing the users access control rights
      */
@@ -60,12 +69,12 @@ class AccessControl
     /**
      * Evaluates the status of a authenticated user further (is it a tutor or not?)
      * @param Object $user A user object from our database
-     * @return USER_STATUS The status of the authenticated user
+     * @return int The status of the authenticated user
      */
     private function getUserStatus($user)
     {
         if (!$user) {
-            // User has no databaseentry
+            // User has no database entry
             $status = USER_STATUS::USER_IS_LEARNER;
         } else {
             if ($user->role == 3) {
@@ -128,7 +137,9 @@ class AccessControl
 
     public function isAdmin()
     {
-        return (($this->getSessionUser()->role) == 1);
+        $user = $this->getSessionUser();
+
+        return (isset($user) && ($user->role == AccessControl::ADMIN_ROLE));
 
     }
 

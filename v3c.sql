@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email`            VARCHAR(255) NOT NULL UNIQUE,
   `given_name`       VARCHAR(255) NOT NULL,
   `family_name`      VARCHAR(255) NOT NULL,
-  `role`             INT          NOT NULL,
+  `role`             INT          NOT NULL COMMENT 'admin == 1, teacher == 2, learner == 3, operator == 4, default == 0',
   `affiliation`       INT   NOT NULL DEFAULT 0,
   `openIdConnectSub` VARCHAR(255)              DEFAULT NULL UNIQUE,
   `date_created`     TIMESTAMP    NOT NULL     DEFAULT CURRENT_TIMESTAMP,

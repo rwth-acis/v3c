@@ -24,8 +24,10 @@
 <?php
 include '../php/access_control.php';
 $accessControl = new AccessControl();
-$courseid = filter_input(INPUT_GET, 'id');
-$canCreateCourse = $accessControl->canUpdateCourse($courseid);
+$course_id = filter_input(INPUT_GET, 'cid', FILTER_VALIDATE_INT);
+$course_lang = filter_input(INPUT_GET, 'ulang');
+
+$canCreateCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
 
 if ($canCreateCourse) {
     ?>

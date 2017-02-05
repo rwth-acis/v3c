@@ -168,13 +168,10 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 <tr>
                                     <td>
                                         <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $current_course_lang; ?>"><?php echo $current_course_name; ?></a>
-                                        <?php $i=0; foreach ($name_array as $c_name) {
-                                            ?>
-                                            <p hidden><?php echo $c_name; ?></p>
-                                            <?php
-                                            $i++;
-                                        }
-                                        ?>
+
+                                        <?php $i=0; foreach ($name_array as $c_name) { ?>
+                                            <p class="hidden"><?php echo $c_name; ?></p>
+                                        <?php $i++; } ?>
                                     </td>
                                     <td><?php echo $courses[$initCntr]["orga"]; ?></td>
                                     <td><?php foreach ($course_dates_array as $start_date) {

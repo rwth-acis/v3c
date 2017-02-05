@@ -19,12 +19,13 @@ $accessControl = new AccessControl();
 // The course unit id from URL parameter
 $course_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
-$isLecturer = $accessControl->canUpdateCourse($course_id);
-
 $course_lang = "en";  // default value
 if (isset($_GET["lang"])) {
     $course_lang = filter_input(INPUT_GET, "lang");
 }
+
+$isLecturer = $accessControl->canUpdateCourse($course_id, $course_lang);
+
 
 // Gets course details with it's creator information
 $stmt = $conn->prepare("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 

@@ -109,26 +109,35 @@ class AccessControl
      * @param String $course_id ID of the course whose owner the user has to be
      * @return boolean true, if user is a lecturer and the owner of the course
      */
-    private function isLecturerAndCourseOwner($course_id)
+    private function isLecturerAndCourseOwner($course_id, $course_lang)
     {
         $ret = false;
         if (!$this->getAuthentication()->isAuthenticated()) {
             $this->lastStatus = USER_STATUS::NO_SESSION;
-        } else {
-            $user = $this->getSessionUser();
-            if ($this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
-                
-                $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
-                $creator = getSingleDatabaseEntryByValue('organizations', 'email', $course['creator']);
-                if ($user->affiliation == $creator['id']) {
-                    $ret = true;
-                } else {
-                    $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
-                    $ret = false;
-                }
+            return false;
+        }
+
+        $user = $this->getSessionUser();
+        if ($user->role == AccessControl::ADMIN_ROLE) {
+            return true;
+        }
+
+        if ($user->role == AccessControl::TEACHER_ROLE || $this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
+
+            $course = getSingleDatabaseEntryByValues('courses', array(
+                'id' => $course_id,
+                'lang' => $course_lang
+            ));
+
+            $creator = getSingleDatabaseEntryByValue('organizations', 'email', $course['creator']);
+
+            if ($user->affiliation == $creator['id']) {
+                return true;
+            } else {
+                $this->lastStatus = USER_STATUS::USER_NOT_CREATOR_COURSE;
+                return false;
             }
         }
-        return $ret;
     }
 
     /**
@@ -157,9 +166,9 @@ class AccessControl
      * @return boolean true, if user is allowed to update the course whose ID is
      * given
      */
-    public function canUpdateCourse($course_id)
+    public function canUpdateCourse($course_id, $course_lang)
     {
-        return $this->isLecturerAndCourseOwner($course_id);
+        return $this->isLecturerAndCourseOwner($course_id, $course_lang);
     }
 
     /**
@@ -167,9 +176,9 @@ class AccessControl
      * @return boolean true, if user is allowed to delete the course whose ID is
      * given
      */
-    public function canDeleteCourse($course_id)
+    public function canDeleteCourse($course_id, $course_lang)
     {
-        return $this->isLecturerAndCourseOwner($course_id);
+        return $this->isLecturerAndCourseOwner($course_id, $course_lang);
     }
 
     /**

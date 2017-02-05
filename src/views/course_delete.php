@@ -33,10 +33,11 @@
 
 include '../php/tools.php';
 
-$course_id = filter_input(INPUT_GET, 'id');
+$course_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$course_lang = filter_input(INPUT_GET, 'lang');
 
 try {
-    $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);
+    $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);  // TODO: Delete by id + lang (primary key)
 } catch (Exception $e) {
     error_log($e->getMessage());
 }
@@ -62,7 +63,7 @@ try {
 require '../php/access_control.php';
 
 $accessControl = new AccessControl();
-$canDeleteCourse = $accessControl->canDeleteCourse($course_id);
+$canDeleteCourse = $accessControl->canDeleteCourse($course_id, $course_lang);
 
 if ($canDeleteCourse) {
     ?>

@@ -30,7 +30,9 @@ require '../php/access_control.php';
 $accessControl = new AccessControl();
 
 $course_id = filter_input(INPUT_GET, 'cid');
-$canEditCourse = $accessControl->canUpdateCourse($course_id);
+$course_lang = filter_input(INPUT_GET, 'ulang');
+
+$canEditCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
 
 if ($canEditCourse) {
     include 'editcourseunit_content.php';

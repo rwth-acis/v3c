@@ -265,7 +265,7 @@
                                        name="quizzes-title"
                                        placeholder="Title" aria-describedby="basic-addon1">
                             </div>
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 qa-block-container">
                                 <h4 class="">Questions</h4>
                                 <hr>
                                 <div class="panel panel-default">
@@ -527,15 +527,12 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.
         $('.grid-stack').on('change', function (event, items) {
 
-            console.log("CHANGE EVENT FIRED");
             var cntr = 0;
             $.each(items, function (index, item) {
                 var $item = (item.el).find('.grid-stack-sidebar-item');
                 if ($item.hasClass('grid-stack-sidebar-item')) {
-                    console.log('found an item with class grid-stack-sidebar-item');
                     //This one needs to be added
                     var itemIndex = $item.data('index');
-                    //console.log(ItemIndex);
                     createSidebarElement(initWidgets[itemIndex].name, itemIndex)
                     $item.removeClass('grid-stack-sidebar-item');
 
@@ -562,11 +559,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
                     $('.modal-add-button').click(function () {
                         var $qb = $('#questionBlock').html();
-                        var count = $(this).parent().parent().find('.panel-default').parent().find(".question-title-counter")
+                        var count = $(this).parents(".modal-content").find(".qa-block-container").find(".question-title-counter")
                         var aNum = count.length +1 ;
 
-                        $(this).parent().parent().find('.panel-default').parent().append($qb);
-                        var $elem = $(this).parent().parent().find('.panel-default').last();
+                        $(this).parents(".modal-content").find(".qa-block-container").append($qb);
+                        var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
                         $elem.find(".question-title-counter").text("Question "+ aNum);
                         quizzesButtonFunc($elem);
                     });
@@ -618,7 +615,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     appendTo: 'body',
                 }));
         } else {
-            //$('[data-index="'+(parseInt(index)-1)+'"]').parent().after($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="'+index+'">'+name+'</div></div>')
             $('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '"><div class="grid-stack-sidebar-item-topbar"></div>' + name + '</div></div>')
             //.find('.grid-stack-sidebar-item').append($('.virtus-pw-prototype'))
                 .insertAfter($parentEl.find($('[data-index="' + (parseInt(index) - 1) + '"]')).parent())
@@ -640,7 +636,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             //For unknown reason, replacing attr() with data() does not work
             $widget.parent().parent().attr("data-" + $(this).attr("name"), $(this).val());
         });
-        console.log($inputObj)
     }
     function quizzesButtonFunc($elem){
         $elem.find(".btn-add-answer").click(function () {
@@ -648,11 +643,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             template = $(template).insertBefore($(this).parent());
             //qa-div
             $(template).find('.remove-answer').click(function () {
-                //console.log($(this))
-                //console.log(this)
                 qaparent = $(this).parent().parent().parent().parent();
                 $(this).parent().parent().parent().remove();
-                console.log($(qaparent));
                 removeButtons = $(qaparent).find(".remove-answer")
                 if (removeButtons.length <= 2) {
                     removeButtons.each(function () {

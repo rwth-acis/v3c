@@ -91,13 +91,7 @@ require_once '../config/config.php';
 
             <select class="form-control" name="" id="select-lang">
                 <?php
-                $languages = array(
-                    "en" => "English",
-                    "de" => "Deutsch",
-                    "es" => "Español",
-                    "it" => "Italiano",
-                    "gr" => "ελληνικά"
-                );
+                $languages = getSelectableLanguages();
                 foreach ($languages as $code => $language) {
                     echo $_SESSION["lang"];
                     $selected = ($_SESSION["lang"] == $code) ? "selected" : "";

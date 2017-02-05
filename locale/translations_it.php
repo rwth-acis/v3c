@@ -18,6 +18,10 @@ function getLanguage()
         "general:button:yes" => "Sì",
         "general:button:no" => "No",
         "general:button:description" => "Descrizione",
+        "general:button:help" => "Aiuto",
+
+        "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
+        "general:footer:reach" => "Per raggiungerci a: ",
 
         "main:welcome:headline" => "Benvenuti al Progetto V3C!",
         "main:welcome:v3cgoal" => "Il “Virtual Vocational Education and Training – VIRTUS” progetto svilupperà un innovativo, perfettamente funzionante professionale centro di istruzione e di formazione virtuale, che fornirà opportunamente progettato corsi certificati modulari componibili occupabili Skills (MES), corrispondente ad una vasta gamma di circostanze come potenziale regionale di crescita e / o ristrutturazione aziendale e l'obiettivo di aumentare il tasso di partecipazione dei discenti adulti in materia di istruzione e formazione professionale.",
@@ -47,9 +51,13 @@ function getLanguage()
         "course:content:description" => "Descrizione:",
 
         "coursedel:head:name" => "Eliminare corso {COURSENAME}",
+        "coursedel:head:name_tmp" => "Eliminare corso ",
         "coursedel:head:confirm" => "Vuoi davvero eliminare corso {COURSENAME}?",
+        "coursedel:head:confirm_tmp1" => "Vuoi davvero eliminare corso ",
+        "coursedel:head:confirm_tmp2" => "?",
 
         "courselist:head:subcourses" => "{SUBJECT} corsi",
+        "courselist:head:subcourses_tmp" => " corsi",
         "courselist:head:add" => "Aggiungere nuovo corso",
         "courselist:choose:choose" => "Scegli corso",
         "courselist:choose:name" => "Nome del corso",

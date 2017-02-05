@@ -18,6 +18,10 @@ function getLanguage()
         "general:button:yes" => "Yes",
         "general:button:no" => "No",
         "general:button:description" => "Description",
+        "general:button:help" => "Help",
+
+        "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
+        "general:footer:reach" => "Reach us at: ",
 
         "main:welcome:headline" => "Welcome to the V3C Project!",
         "main:welcome:v3cgoal" => "The “Virtual Vocational Education and Training – VIRTUS” project will develop an innovative, fully functional virtual vocational education and training centre, which will provide appropriately designed modular certified courses in Modular Employable Skills (MES), corresponding to a wide range of circumstances such as regional growth potential and/or company restructuring and aiming at increasing the participation rate of adult learners in vocational education and training.",
@@ -47,9 +51,13 @@ function getLanguage()
         "course:content:description" => "Description:",
 
         "coursedel:head:name" => "Delete course {COURSENAME}",
+        "coursedel:head:name_tmp" => "Delete course ",
         "coursedel:head:confirm" => "Do you really want to delete course {COURSENAME}?",
+        "coursedel:head:confirm_tmp1" => "Do you really want to delete course ",
+        "coursedel:head:confirm_tmp2" => "?",
 
         "courselist:head:subcourses" => "{SUBJECT} courses",
+        "courselist:head:subcourses_tmp" => " courses",
         "courselist:head:add" => "Add new course",
         "courselist:choose:choose" => "Choose course",
         "courselist:choose:name" => "Course name",

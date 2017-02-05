@@ -18,6 +18,10 @@ function getLanguage()
         "general:button:yes" => "Ναί",
         "general:button:no" => "Οχι",
         "general:button:description" => "Περιγραφή",
+        "general:button:help" => "Βοήθεια",
+
+        "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
+        "general:footer:reach" => "Προσεγγίστε μας στο: ",
 
         "main:welcome:headline" => "Καλώς ήλθατε στο Έργο V3C!",
         "main:welcome:v3cgoal" => "Η \"Εικονική Επαγγελματική Εκπαίδευση και Κατάρτιση - VIRTUS\" έργο θα αναπτύξει ένα καινοτόμο, πλήρως λειτουργικό εικονικό κέντρο επαγγελματικής εκπαίδευσης και κατάρτισης, τα οποία θα παρέχουν κατάλληλα σχεδιασμένες σπονδυλωτή πιστοποιημένα μαθήματα Modular Χρησιμοποιούμενη Δεξιότητες (MES), που αντιστοιχεί σε ένα ευρύ φάσμα των συνθηκών, όπως περιφερειακό αναπτυξιακό δυναμικό ή / και την αναδιάρθρωση της εταιρείας και με στόχο την αύξηση του ποσοστού συμμετοχής των ενηλίκων εκπαιδευομένων στην επαγγελματική εκπαίδευση και κατάρτιση.",
@@ -47,9 +51,13 @@ function getLanguage()
         "course:content:description" => "Περιγραφή:",
 
         "coursedel:head:name" => "Διαγραφή φυσικά {COURSENAME}",
-        "coursedel:head:confirm" => "Θέλετε πραγματικά να διαγράψετε φυσικά {COURSENAME};",
+        "coursedel:head:name_tmp" => "Διαγραφή φυσικά ",
+        "coursedel:head:confirm" => "Θέλετε πραγματικά να διαγράψετε φυσικά {COURSENAME}?",
+        "coursedel:head:confirm_tmp1" => "Θέλετε πραγματικά να διαγράψετε φυσικά ",
+        "coursedel:head:confirm_tmp2" => "?",
 
         "courselist:head:subcourses" => "{SUBJECT} μαθήματα",
+        "courselist:head:subcourses_tmp" => " μαθήματα",
         "courselist:head:add" => "Προσθέστε νέα πορεία",
         "courselist:choose:choose" => "Επιλέξτε μάθημα",
         "courselist:choose:name" => "Το όνομά του μαθήματος",

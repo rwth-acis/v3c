@@ -1,6 +1,6 @@
 <?php
 
-$conn = require_once "../php/db_connect.php";
+$conn = require "../php/db_connect.php";
 
 $course_id = filter_input(INPUT_GET, 'cid', FILTER_VALIDATE_INT);
 $unit_id = filter_input(INPUT_GET, 'uid', FILTER_VALIDATE_INT);

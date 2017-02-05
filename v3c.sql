@@ -4,7 +4,7 @@
 --
 
 -- TODO: Where/when to use ON UPDATE CASCADE and ON DELETE CASCADE?
-
+USE v3c_database;
 
 CREATE TABLE IF NOT EXISTS `subjects` (
   `id`         INT         NOT NULL     AUTO_INCREMENT,
@@ -45,12 +45,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email`            VARCHAR(255) NOT NULL UNIQUE,
   `given_name`       VARCHAR(255) NOT NULL,
   `family_name`      VARCHAR(255) NOT NULL,
-  `role`             INT          NOT NULL,
+  `role`             INT          NOT NULL COMMENT 'admin == 1, teacher == 2, learner == 3, operator == 4, default == 0',
+  `affiliation`       INT   NOT NULL DEFAULT 0,
   `openIdConnectSub` VARCHAR(255)              DEFAULT NULL UNIQUE,
   `date_created`     TIMESTAMP    NOT NULL     DEFAULT CURRENT_TIMESTAMP,
   `date_updated`     TIMESTAMP    NOT NULL     DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  FOREIGN KEY (role) REFERENCES roles (id)
+  FOREIGN KEY (role) REFERENCES roles (id),
+  FOREIGN KEY (affiliation) REFERENCES organizations(id)
 )
   ENGINE = InnoDB COLLATE utf8_general_ci;
 

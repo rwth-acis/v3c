@@ -71,7 +71,12 @@ function getLanguage()
         "editcourse:edit:description" => "Description:",
         "editcourse:edit:design" => "Design learning environment",
 
-        "overview:head:gallery" => "Gallery"
+        "overview:head:gallery" => "Gallery",
 
+        "usermanagement:choose:family_name" => "Family Name",
+        "usermanagement:choose:given_name" => "Given Name",
+        "usermanagement:choose:role" => "Role",
+        "usermanagment:choose:affiliation" => "Affiliation",
+        "usermanagement:button:update" => "Update User"
     );
 }

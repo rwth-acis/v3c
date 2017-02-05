@@ -17,6 +17,10 @@ include("menu.php");
 // on the subject id given in the website URL
 include '../php/db_connect.php';
 include '../php/tools.php';
+include '../php/access_control.php';
+
+$accessControl = new AccessControl();
+$isLecturer = $accessControl->canCreateCourse();
 
 $subject_id = filter_input(INPUT_GET, "id");
 
@@ -53,7 +57,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                 <div class='col-sm-4'>
                     <div class='featured-box'>
                         <img src="<?php echo "$subject->img_url" ?>">
-                        <?php if (!(filter_input(INPUT_GET, "widget") == "true")) { ?>
+                        <?php if (!(filter_input(INPUT_GET, "widget") == "true") && $isLecturer) { ?>
                             <a href="addcourse.php?id=<?php echo $subject->id; ?>">
                                 <button class='btn btn-success btn-lg btn-block margin-top' type='button'>
                                     <?php echo getTranslation("courselist:head:add", "Add new course");?>
@@ -111,9 +115,11 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                 <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                 <th></th>
+                                <?php if ($isLecturer) { ?>
                                 <th></th>
                                 <th></th>
                                 <th></th>
+                                <?php } ?>
                             </tr>
                             </thead>
                             <tbody data-link="row" class="rowlink">
@@ -162,13 +168,10 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                 <tr>
                                     <td>
                                         <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $current_course_lang; ?>"><?php echo $current_course_name; ?></a>
-                                        <?php $i=0; foreach ($name_array as $c_name) {
-                                            ?>
-                                            <p hidden><?php echo $c_name; ?></p>
-                                            <?php
-                                            $i++;
-                                        }
-                                        ?>
+
+                                        <?php $i=0; foreach ($name_array as $c_name) { ?>
+                                            <p class="hidden"><?php echo $c_name; ?></p>
+                                        <?php $i++; } ?>
                                     </td>
                                     <td><?php echo $courses[$initCntr]["orga"]; ?></td>
                                     <td><?php foreach ($course_dates_array as $start_date) {
@@ -187,6 +190,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                         }
                                         ?>
                                     </td>
+                                    <?php if ($isLecturer) { ?>
                                     <td class="rowlink-skip">
                                         <?php
                                         $languages_count = 5;
@@ -235,6 +239,7 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                                     class="btn btn-delete btn-sm btn-warning btn-block"
                                                                     value="Delete"></td>
+                                    <?php } ?>
                                 </tr>
                                 <tr>
                                     <!-- Collapse div for course description -->

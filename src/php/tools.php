@@ -202,6 +202,32 @@ function getSingleDatabaseEntryByValue($table, $key, $value)
 }
 
 /**
+ * Function throws exceptions.
+ * @param string $table Table from which to retrieve value
+ * @param string $key
+ * @param string $value
+ * @return array {key1=>value1, key2=>value2, ...} or NULL if $key-$value is not found in $table
+ */
+function getSingleDatabaseEntryByValues($table, $arrayOfKeysAndValues)
+{
+    $db = require '../php/db_connect.php';
+
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+    $sqlSelect = "SELECT * FROM " . $table . " WHERE ";
+    foreach($arrayOfKeysAndValues as $key => $value) {
+        $sqlSelect .= $key . "='" . $value . "' AND ";
+    }
+    $sqlSelect .= " TRUE"; // end last AND block
+
+    $sth = $db->prepare($sqlSelect);
+    $sth->execute();
+    $entry = $sth->fetch();
+
+    return $entry;
+}
+
+/**
  * @return [bErr:bool, bIsConfirmed:bool, sMsg:string]
  */
 function checkUserConfirmed($sub)

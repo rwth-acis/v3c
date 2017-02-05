@@ -28,10 +28,7 @@ class Authentication
     public function isAuthenticated()
     {
 
-        // FIXME: debug
-//      return true
-
-        if ($_SESSION == null) {
+        if (!$_SESSION) {
 
             session_start();
         }

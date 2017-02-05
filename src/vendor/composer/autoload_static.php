@@ -11,6 +11,10 @@ class ComposerStaticInitb1230119bc292b396f123e3550a61dc5
     );
 
     public static $prefixLengthsPsr4 = array (
+        'p' => 
+        array (
+            'phpseclib\\' => 10,
+        ),
         'S' => 
         array (
             'Slim\\Views\\' => 11,
@@ -36,6 +40,10 @@ class ComposerStaticInitb1230119bc292b396f123e3550a61dc5
     );
 
     public static $prefixDirsPsr4 = array (
+        'phpseclib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+        ),
         'Slim\\Views\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/php-view/src',
@@ -76,18 +84,12 @@ class ComposerStaticInitb1230119bc292b396f123e3550a61dc5
         ),
     );
 
-    public static $classMap = array (
-        'JsonApiMiddleware' => __DIR__ . '/..' . '/entomb/slim-json-api/jsonAPI/JsonApiMiddleware.php',
-        'JsonApiView' => __DIR__ . '/..' . '/entomb/slim-json-api/jsonAPI/JsonApiView.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb1230119bc292b396f123e3550a61dc5::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb1230119bc292b396f123e3550a61dc5::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitb1230119bc292b396f123e3550a61dc5::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitb1230119bc292b396f123e3550a61dc5::$classMap;
 
         }, null, ClassLoader::class);
     }

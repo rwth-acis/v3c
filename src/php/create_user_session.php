@@ -1,37 +1,18 @@
 <?php
 
-/* 
- * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *  http://www.apache.org/licenses/LICENSE-2.0
- * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- * 
- *  @file create_user_session.php
- *  Reads user data. Saves user data in session variables. If the user is not 
- *  yet known in our database or not up-to-date, the database entry is 
- *  created/updated.
- */
 include 'user_management.php';
 require_once 'authentication.php';
 
-$confirmed = 0;
+//3 is learner role and therefore standard role for user profile creation.
+$role = 3;
 $access_token = filter_input(INPUT_POST, 'access_token');
+
 
 // Session data should only be updated, if the user got a new access token
 if (isset($access_token) && $access_token != 'null') {
 
-    // Setup session and cache access_token as login-validation, also for other pages      
+    // Setup session and cache access_token as login-validation, also for other pages
     session_start();
-
     // Store which type of login service is used for authentication
     // Currently only the 'LearningLayers' service is supported
     $_SESSION['service_type'] = filter_input(INPUT_POST, 'service_type');
@@ -58,13 +39,18 @@ if (isset($access_token) && $access_token != 'null') {
     // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
     // THIS IS DONE BY CHECKING WHETHER THE UNIQUE OPEN ID CONNECT SUB EXISTS IN OUR DATABASE
     $user = $userManagement->readUser($userProfile->sub);
-
+    //set user ROLE and affiliation;
+    $_SESSION['role'] = $user->role;
+    $_SESSION['affiliation'] = $user->affiliation;
     // If $user is empty, the user is not known
     if (!$user) {
         // CREATE A NEW USER DATABASE ENTRY IF USER WAS NOT KNOWN TO THE SYSTEM
-        $userManagement->createUser($userProfile);
+        $userManagement->createUser($userProfile, $role);
     } else {
-        // TODO: update in database: user-email, name, first name, etc.
+        // VERIFY, THAT LOCAL DATABASE ENTRY HOLDS THE SAME INFORMATION AS REMOTE ENTRY IN OIDC DATABASE
+        if ($user['email'] != $_SESSION['email'] || $user['given_name'] != $_SESSION['given_name'] || $user['family_name'] != $_SESSION['family_name']) {
+            $success = $userManagement->updateUser($user, $user->role);
+        }
     }
 }
 

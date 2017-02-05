@@ -134,7 +134,7 @@ if ($canCreateCourse) {
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
-                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/video-mockup.jpg'>
+                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/video-mockup.png'>
             </div>
             <div class="col-sm-12 virtus-pw-content">
                 <div class="row">
@@ -186,7 +186,7 @@ if ($canCreateCourse) {
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
-                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.jpg'>
+                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.png'>
             </div>
             <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor ?

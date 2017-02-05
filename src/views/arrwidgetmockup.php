@@ -36,8 +36,8 @@
 
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
-            <div class="col-sm-12 virtus-pw-slide-img-wrapper"><img class="virtus-pw-sliderviewer-img"
-                                                                    src='../images/widgetsPrototypes/slides-mockup.jpg'>
+            <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/slides-mockup.jpg'>
             </div>
             <div class="col-sm-12 virtus-pw-content">
                 <div class="row">

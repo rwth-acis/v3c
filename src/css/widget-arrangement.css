@@ -1,3 +1,7 @@
+.padding-bottom-1em{
+    padding-bottom: 1em;
+}
+
 .grid-stack-main {
     background-color: lightgoldenrodyellow;
     min-height: 20rem;
@@ -110,12 +114,34 @@
 }
 
 .virtus-pw-sliderviewer-img {
+    z-index: 1;
+    position: absolute;
+    left: 0px;
+    top: 0px;
     height: 100%;
     width: 100%;
+}
+.virtus-pw-hangouts-img {
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+}
+.virtus-pw-content-toolbox-wrapper{
+    margin-top: 5px;
+    padding-right: 5px !important;
+    z-index: 2;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    //background-color: rgba(256, 256, 256,0.85);
 }
 
 .virtus-pw-slide-img-wrapper {
     height: 80%;
+}
+
+.virtus-pw-slide-img-wrapper-full{
+    height: 100%;
 }
 
 .virtus-pw-hide {
@@ -158,7 +184,19 @@
     color: #333;
     font-size: 1em;
 }
+.slides-question-text {
+    padding-top: 10px;
+    height: 20%;
+    font-family: "redacted_scriptregular";
+    color: #333;
+    font-size: 1em;
+    text-align: left;
+}
 
+.virtus-pw-sliderviewer-content{
+    background-color: cornflowerblue;
+    height: 100%;
+}
 .quizzes-answers-container {
     height: 30%;
 }
@@ -217,4 +255,10 @@
 .virtus-pw-padding-sides-02rem{
     padding-left: 0.2rem;
     padding-right: 0.2rem;
+}
+.pw-alert-color{
+    color: #ff3822;
+}
+.pw-right-alignement{
+    text-align: right;
 }

@@ -1,12 +1,15 @@
 <?php
-
+/*
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+*/
 include 'user_management.php';
 require_once 'authentication.php';
 
 //3 is learner role and therefore standard role for user profile creation.
 $role = 3;
 $access_token = filter_input(INPUT_POST, 'access_token');
-
 
 // Session data should only be updated, if the user got a new access token
 if (isset($access_token) && $access_token != 'null') {
@@ -31,24 +34,25 @@ if (isset($access_token) && $access_token != 'null') {
     $_SESSION['email'] = $userProfile->email;
     $_SESSION['given_name'] = $userProfile->given_name;
     $_SESSION['family_name'] = $userProfile->family_name;
-    // fake_end		
+    // fake_end
 
-    ////// Search database for user and create new entry if it doesn't have      
+    ////// Search database for user and create new entry if it doesn't have
     require '../php/db_connect.php';
     $userManagement = new UserManagement();
+
     // FIRST OF ALL, CHECK WHETHER THE USER IS KNOWN TO THE SYSTEM
     // THIS IS DONE BY CHECKING WHETHER THE UNIQUE OPEN ID CONNECT SUB EXISTS IN OUR DATABASE
     $user = $userManagement->readUser($userProfile->sub);
     //set user ROLE and affiliation;
     $_SESSION['role'] = $user->role;
-    $_SESSION['affiliation'] = $user->affiliation;
+    $_SESSION['affiliation'] = $user->affiliation; // TODO does not exist...
     // If $user is empty, the user is not known
     if (!$user) {
         // CREATE A NEW USER DATABASE ENTRY IF USER WAS NOT KNOWN TO THE SYSTEM
         $userManagement->createUser($userProfile, $role);
     } else {
         // VERIFY, THAT LOCAL DATABASE ENTRY HOLDS THE SAME INFORMATION AS REMOTE ENTRY IN OIDC DATABASE
-        if ($user['email'] != $_SESSION['email'] || $user['given_name'] != $_SESSION['given_name'] || $user['family_name'] != $_SESSION['family_name']) {
+        if ($user->email != $_SESSION['email'] || $user->given_name != $_SESSION['given_name'] || $user->family_name != $_SESSION['family_name']) {
             $success = $userManagement->updateUser($user, $user->role);
         }
     }

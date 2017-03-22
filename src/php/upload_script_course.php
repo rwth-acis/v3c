@@ -20,11 +20,13 @@ $profession = filter_input(INPUT_POST, 'profession');
 $domain = filter_input(INPUT_POST, 'domain');
 $description = filter_input(INPUT_POST, 'description');
 
-// TODO: Add organization (creator) to form
-$creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
+// get affiliation from current user
+//$creator = $_SESSION['affiliation'];
+$creator = getSingleDatabaseEntryByValue('organizations', 'id', $_SESSION['affiliation']);
+// $creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
 
 // Create database-entry
-$statement = $conn->prepare("INSERT INTO courses (id,lang, name, description, domain, profession, creator) 
+$statement = $conn->prepare("INSERT INTO courses (id,lang, name, description, domain, profession, creator)
                              VALUES (:id,:language, :name, :description, :domain, :profession, :creator)");
 $statement->bindParam(":id", $id, PDO::PARAM_INT);
 $statement->bindParam(":language", $language, PDO::PARAM_STR);
@@ -32,7 +34,7 @@ $statement->bindParam(":name", $name, PDO::PARAM_STR);
 $statement->bindParam(":description", $description, PDO::PARAM_STR);
 $statement->bindParam(":domain", $domain, PDO::PARAM_STR);
 $statement->bindParam(":profession", $profession, PDO::PARAM_STR);
-$statement->bindParam(":creator", $creator, PDO::PARAM_INT);
+$statement->bindParam(":creator", $creator['email'], PDO::PARAM_STR);
 
 $success = $statement->execute();
 if (!$success) {
@@ -48,16 +50,16 @@ $course_lang = $language;
 if (isset($_GET['tid'])) {
     //Get the units for the course to be translated
     /*$course_units = $conn->query("SELECT *
-                            FROM course_to_unit 
-                            JOIN course_units 
+                            FROM course_to_unit
+                            JOIN course_units
                             ON course_to_unit.unit_id = course_units.id
                             AND course_to_unit.unit_lang = course_units.lang
                             WHERE course_id = $id
                             AND course_lang ='en'")->fetchAll();
 */
-    $statement = $conn->prepare("SELECT * 
-                            FROM course_to_unit 
-                            JOIN course_units 
+    $statement = $conn->prepare("SELECT *
+                            FROM course_to_unit
+                            JOIN course_units
                             ON course_to_unit.unit_id = course_units.id
                             AND course_to_unit.unit_lang = course_units.lang
                             WHERE course_id = :tid
@@ -74,7 +76,7 @@ if (isset($_GET['tid'])) {
         $utitle = "ADD TRANSLATION FOR : " . $course_unit['title'];
         $udescription = "ADD TRANSLATION FOR : " . $course_unit['description'];
 
-        $units_stmt = $conn->prepare("INSERT INTO course_units (id,lang,title, description, start_date, points) 
+        $units_stmt = $conn->prepare("INSERT INTO course_units (id,lang,title, description, start_date, points)
                              VALUES (:uid,:ulanguage,:utitle,:udescription,:ustart_date,:upoints)");
         $units_stmt->bindParam(":uid", $course_unit['id'], PDO::PARAM_INT);
         $units_stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
@@ -91,7 +93,7 @@ if (isset($_GET['tid'])) {
         }
 
         //assign the copied course units to the translated course
-        $c2u_stmt = $conn->prepare("INSERT INTO course_to_unit (course_id,course_lang,unit_id, unit_lang) 
+        $c2u_stmt = $conn->prepare("INSERT INTO course_to_unit (course_id,course_lang,unit_id, unit_lang)
                              VALUES (:cid,:ulanguage,:uid,:ulanguage)");
 
         $c2u_stmt->bindParam(":cid", $id, PDO::PARAM_INT);

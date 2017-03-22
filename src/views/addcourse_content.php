@@ -44,7 +44,7 @@ $upload_script_url = "../php/upload_script_course.php{$string}";
 
                     <!--- CREATE COURSE INPUT FORM -->
                     <form role="form" class="form-horizontal"
-                          action="../api/api.php/courses" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="<?php echo $upload_script_url; ?>" method="post" enctype="multipart/form-data" id="UploadForm"> <!-- ../api/api.php/courses -->
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="targetName">
                                 <?php echo getTranslation("addcourse:content:name", "Course name:");?>

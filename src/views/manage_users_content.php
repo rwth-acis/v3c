@@ -7,9 +7,9 @@
  */
 
 $user_list = $db->query("SELECT * FROM users
-                                  JOIN organizations
+                                  LEFT JOIN organizations
                                   ON users.affiliation = organizations.id
-                                  ORDER BY family_name")->fetchAll();
+                                  ORDER BY family_name")->fetchAll(); // TODO not set if no affiliation exists...
 
 require '../php/db_connect.php';
 //prepare role array for select boxes
@@ -95,6 +95,7 @@ $user_update_notice = "";
                                 echo "</td>";
                                 echo "<td>";
                                 echo "<select name='orga'>";
+                                echo "<option value='NULL'>-</option>";
                                 foreach ($orgas as $orga_id => $orga) {
                                     $selected = ($user['affiliation'] == $orga_id) ? "selected" : "";
                                     echo "<option value='$orga_id' $selected>$orga</option>";

@@ -7,12 +7,12 @@ $course_lang = filter_input(INPUT_GET, 'lang');
 
 // Get course units
 $stmt = $conn->prepare("SELECT course_units.*
-                        FROM courses 
-                        JOIN course_to_unit 
-                        ON courses.id = course_to_unit.course_id 
+                        FROM courses
+                        JOIN course_to_unit
+                        ON courses.id = course_to_unit.course_id
                           AND courses.lang = course_to_unit.course_lang
-                        JOIN course_units 
-                        ON course_to_unit.unit_id = course_units.id 
+                        JOIN course_units
+                        ON course_to_unit.unit_id = course_units.id
                           AND course_to_unit.unit_lang = course_units.lang
                         WHERE courses.id = :course_id
                           AND course_units.lang = :course_lang");
@@ -27,7 +27,7 @@ if ($success) {
 
 // Get course info
 $stmt2 = $conn->prepare("SELECT courses.*
-                        FROM courses 
+                        FROM courses
                         WHERE courses.id = :course_id
                           AND courses.lang = :course_lang
                         LIMIT 1");
@@ -61,7 +61,7 @@ if ($success) {
                 <div class='col-md-10 col-md-offset-1'>
 
                     <form role="form"
-                          action="../api/api.php/courses/<?php echo $course_id . "/" . $course_lang ?>" method="post" enctype="multipart/form-data" id="UploadForm">
+                          action="../php/edit_script_course.php?courseid=<?php echo $course_id . "&courselang=" . $course_lang ?>" method="post" enctype="multipart/form-data" id="UploadForm"> <!-- ../api/api.php/courses/<?php echo $course_id . "/" . $course_lang ?> -->
                         <input type="hidden" name="_METHOD" value="PUT"/>
                         <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
                         <input type="hidden" name="courselang" value="<?php echo $course_lang; ?>">

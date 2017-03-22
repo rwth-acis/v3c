@@ -26,7 +26,7 @@ $accessControl = new AccessControl(); ?>
                         <p class="text-right">
                             <?php echo getTranslation("general:footer:virtus", "VIRTUS Virtual Vocational Training Centre");?>
                         </p>
-                        <p class="text-right"><?php echo getTranslation("general:footer:reach", "Reach us at: ");?><a href="mailto:henm1617g3@dbis.rwth-aachen.de">henm1617g3@dbis.rwth-aachen.de</a>
+                        <p class="text-right"><!-- <?php echo getTranslation("general:footer:reach", "Reach us at: ");?><a href=""></a> -->
                         </p>
                     </div>
                 </div>

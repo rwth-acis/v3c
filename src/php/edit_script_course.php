@@ -13,16 +13,12 @@ $profession = filter_input(INPUT_POST, 'profession');
 $domain = filter_input(INPUT_POST, 'domain');
 $description = filter_input(INPUT_POST, 'description');
 
-// TODO: Add organization (creator) to form
-$creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
-
 // Create database-entry
-$statement = $conn->prepare("UPDATE courses 
-                              SET name = :name, 
-                                description = :description, 
-                                domain = :domain, 
-                                profession = :profession, 
-                                creator = :creator 
+$statement = $conn->prepare("UPDATE courses
+                              SET name = :name,
+                                description = :description,
+                                domain = :domain,
+                                profession = :profession
                              WHERE courses.id = :course_id
                               AND courses.lang = :course_lang");
 
@@ -32,7 +28,6 @@ $statement->bindParam(":name", $name, PDO::PARAM_STR);
 $statement->bindParam(":description", $description, PDO::PARAM_STR);
 $statement->bindParam(":domain", $domain, PDO::PARAM_STR);
 $statement->bindParam(":profession", $profession, PDO::PARAM_STR);
-$statement->bindParam(":creator", $creator, PDO::PARAM_INT);
 
 $success = $statement->execute();
 if (!$success) {

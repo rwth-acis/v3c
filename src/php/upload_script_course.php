@@ -71,8 +71,7 @@ if (isset($_GET['tid'])) {
 
     //create course units for the translated courses
     foreach($course_units as $course_unit){
-
-        // TODO consistency ?
+      // TODO LOCALIZATION: extend ...
 
         //ADD TRANSLATION FOR is to indicate that course units for translated course are not translated yet
         $utitle = "ADD TRANSLATION FOR : " . $course_unit['title'];

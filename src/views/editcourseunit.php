@@ -239,8 +239,8 @@ if ($canCreateCourse) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>-->
                     <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
                 </div>
                 <div class="modal-body">
@@ -263,8 +263,8 @@ if ($canCreateCourse) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
                 </div>
             </div>
         </div>
@@ -275,8 +275,8 @@ if ($canCreateCourse) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>-->
                     <h4 class="modal-title" id="myModalLabel">Video Widget</h4>
                 </div>
                 <div class="modal-body">
@@ -298,8 +298,8 @@ if ($canCreateCourse) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
                 </div>
             </div>
         </div>
@@ -310,8 +310,8 @@ if ($canCreateCourse) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>-->
                     <h4 class="modal-title" id="myModalLabel">Quizzes Widget</h4>
                 </div>
                 <div class="modal-body">
@@ -387,9 +387,9 @@ if ($canCreateCourse) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                     <button type="button" class="btn btn-success modal-add-button">Add Question +</button>
-                    <button type="button" class="btn btn-success modal-save-button">Save changes</button>
+                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
                 </div>
             </div>
         </div>
@@ -472,6 +472,15 @@ if ($canCreateCourse) {
     <!-- ################################################################################### -->
 
     <div id='courses'>
+        <div class='container virtus-margin-top-15' style="background: #ff8060; padding: 1em; margin:1em auto;">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default btn-block btn-save-courseunit">
+                Save changes
+            </button>
+          </div>
+
+          Changes to widget arrangements and widget contents are only applied after clicking this button!
+        </div>
         <section class='container'>
             <div class='container'>
                 <div class='row'>
@@ -545,10 +554,10 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     initWidgets = [
-        {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal'},
-        {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal'},
-        {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal'},
-        {name: 'hangouts', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal'}
+        {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal', widgetType: 'slides'},
+        {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
+        {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
+        {name: 'hangouts', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'}
     ];
 
 
@@ -620,6 +629,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     $prototypeClone.removeClass('virtus-pw-hide');
                     $prototypeClone.attr("id", initWidgets[itemIndex].prototypeName + "-" + totalWidgets);
                     $prototypeClone.find(".modal-toggler-button").attr("data-target", "#" + initWidgets[itemIndex].modalname + "-" + totalWidgets);
+                    (item.el).attr("data-widget-type", initWidgets[itemIndex].widgetType);
                     $item.html("");
                     $item.append($prototypeClone);
 
@@ -632,7 +642,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                     var prototypeWidgetModalId = initWidgets[itemIndex].modalname + "-" + totalWidgets;//call by value7
                     $prototypeModalClone.find(".modal-save-button").click(function () {
                         appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
-                        //$(this).modal('toggle');
+                    });
+
+                    $prototypeModalClone.on('hidden.bs.modal', function (e) {
+                        // TODO does not work -> fix or disable auto hide
+                        appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
                     });
 
                     $('.modal-add-button').click(function () {
@@ -735,6 +749,74 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         });
 
     }
+
+    function spaceToJson() {
+      var widgetSerializer = {
+        slides: function(el) {
+          return {
+            type: "slide",
+            title: el.attr("data-slides-title"),
+            link: el.attr("data-slides-link")
+          };
+        },
+        video: function(el) {
+          return {
+            type: "video",
+            title: el.attr("data-video-title"),
+            link: el.attr("data-video-link")
+          };
+        },
+        quiz: function(el) {
+          // TODO data attributes for quiz not set properly ...
+          return {
+            type: "quiz"
+          };
+        },
+        hangout: function(el) {
+          return { type: "hangout" };
+        },
+      }
+
+      // TODO element ids?
+      // TODO how to merge localizations ?!?? especially quiz?
+      var result = [];
+      $("#grid1").find(".grid-stack-item").each(function(idx,el) {
+        result.push({
+          "elementId": $(el).attr("data-element-id"),
+          "widget": widgetSerializer[$(el).attr("data-widget-type")]($(el)),
+          "x": $(el).attr("data-gs-x"),
+          "y": $(el).attr("data-gs-y"),
+          "width": $(el).attr("data-gs-width"),
+          "height": $(el).attr("data-gs-height")
+        });
+      });
+      // TODO
+      return result;
+    }
+
+    function jsonToSpace(data) {
+      // TODO
+      //$canvas.cellHeight($canvas.height);
+
+       var grid = $('#grid1').data('gridstack');
+
+       // TODO set id + type + contents
+
+       _.each(data, function (el) {
+         alert(el);
+         grid.addWidget($('<div><div class="grid-stack-item-content"></div></div>'), el.x, el.y, el.width, el.height)
+       }, this);
+    }
+
+    $(function() {
+      $(".btn-save-courseunit").click(function() {
+        alert(JSON.stringify(spaceToJson()));
+      });
+    });
+
+    $(function() {
+      jsonToSpace([{"widget":{"type":"slide","title":"fdgdfgdfg","link":"dfgdfg"},"posX":"0","posY":"0","width":"4","height":"4"},{"widget":{"type":"quiz"},"posX":"3","posY":"4","width":"4","height":"4"}]);
+    });
 
 </script>
 </body>

@@ -28,10 +28,10 @@ $isLecturer = $accessControl->canUpdateCourse($course_id, $course_lang);
 
 
 // Gets course details with it's creator information
-$stmt = $conn->prepare("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
-          FROM courses 
-          JOIN organizations 
-            ON courses.creator = organizations.email 
+$stmt = $conn->prepare("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email
+          FROM courses
+          JOIN organizations
+            ON courses.creator = organizations.email
           WHERE courses.id = :course_id
             AND courses.lang = :course_lang
           LIMIT 1");
@@ -53,14 +53,9 @@ $course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id
 
 // Get course units
 $stmt = $conn->prepare("SELECT course_units.*
-                        FROM courses 
-                        JOIN course_to_unit 
-                        ON courses.id = course_to_unit.course_id 
-                          AND courses.lang = course_to_unit.course_lang
-                        JOIN course_units 
-                        ON course_to_unit.unit_id = course_units.id 
-                          AND course_to_unit.unit_lang = course_units.lang
-                        WHERE courses.id = :course_id
+                        FROM course_to_unit, course_units
+                        WHERE course_to_unit.unit_id = course_units.id
+                          AND course_to_unit.course_id = :course_id
                           AND course_units.lang = :course_lang");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
@@ -69,6 +64,9 @@ $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
 $success = $stmt->execute();
 if ($success) {
     $course_units = $stmt->fetchAll();
+}
+else {
+  print_r( $stmt->errorInfo() );
 }
 /**
  * Replaces all URLs in the given text by <a> tags

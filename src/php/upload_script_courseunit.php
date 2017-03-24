@@ -7,15 +7,15 @@ if (session_status() == PHP_SESSION_NONE) {
 $conn = require '../php/db_connect.php';
 
 // Get input data from form
-$course_id = filter_input(INPUT_POST, "courseid", FILTER_VALIDATE_INT);
-$course_lang = filter_input(INPUT_POST, "courselang");
+$course_id = filter_input(INPUT_GET, "course_id", FILTER_VALIDATE_INT);
+$course_lang = filter_input(INPUT_GET, "course_lang");
 $name = filter_input(INPUT_POST, 'name');
 $points = filter_input(INPUT_POST, 'points');
 $startdate = filter_input(INPUT_POST, 'startdate');
 $description = filter_input(INPUT_POST, 'description');
 
 // Create database-entry
-$stmt = $conn->prepare("INSERT INTO course_units (title, lang, points, start_date, description) 
+$stmt = $conn->prepare("INSERT INTO course_units (title, lang, points, start_date, description)
                              VALUES (:name, :lang, :points, :startdate, :description)");
 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
 $stmt->bindParam(":lang", $course_lang, PDO::PARAM_STR);  // course unit inherits course language
@@ -34,11 +34,11 @@ echo "course id: " . $course_id;
 echo "course lang: " . $course_lang;
 echo "cuid: " . $course_unit_id;
 
-$stmt2 = $conn->prepare("INSERT INTO course_to_unit (course_id, course_lang, unit_id, unit_lang) VALUES (:course_id, :course_lang, :cu_id, :cu_lang)");
+$stmt2 = $conn->prepare("INSERT INTO course_to_unit (course_id, unit_id) VALUES (:course_id, :cu_id)");
 $stmt2->bindParam(":course_id", $course_id);
-$stmt2->bindParam(":course_lang", $course_lang);
 $stmt2->bindParam(":cu_id", $course_unit_id);
-$stmt2->bindParam(":cu_lang", $course_lang);
+
+// TODO add for other translations ?!?
 
 $success = $stmt2->execute();
 if (!$success) {

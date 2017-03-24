@@ -72,6 +72,8 @@ if (isset($_GET['tid'])) {
     //create course units for the translated courses
     foreach($course_units as $course_unit){
 
+        // TODO consistency ?
+
         //ADD TRANSLATION FOR is to indicate that course units for translated course are not translated yet
         $utitle = "ADD TRANSLATION FOR : " . $course_unit['title'];
         $udescription = "ADD TRANSLATION FOR : " . $course_unit['description'];
@@ -90,21 +92,6 @@ if (isset($_GET['tid'])) {
         if (!$success) {
             print_r($statement->errorInfo());
             die("Error saving course units for translated course.");
-        }
-
-        //assign the copied course units to the translated course
-        $c2u_stmt = $conn->prepare("INSERT INTO course_to_unit (course_id,course_lang,unit_id, unit_lang)
-                             VALUES (:cid,:ulanguage,:uid,:ulanguage)");
-
-        $c2u_stmt->bindParam(":cid", $id, PDO::PARAM_INT);
-        $c2u_stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
-        $c2u_stmt->bindParam(":uid", $course_unit['id'], PDO::PARAM_INT);
-
-        $success = $c2u_stmt->execute();
-
-        if (!$success) {
-            print_r($statement->errorInfo());
-            die("Error adding course units to translated course.");
         }
     }
 }

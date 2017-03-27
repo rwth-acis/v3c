@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widget arrangement mockup </title>
+    <title>Widget arrangement </title>
 
     <link rel="stylesheet" href="../external/redacted/fonts/stylesheet.css"/>
     <link rel="stylesheet" href="../external/jasny-bootstrap/dist/css/jasny-bootstrap.min.css"/>

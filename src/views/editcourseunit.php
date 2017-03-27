@@ -25,6 +25,7 @@
 include '../php/access_control.php';
 $accessControl = new AccessControl();
 $course_id = filter_input(INPUT_GET, 'cid', FILTER_VALIDATE_INT);
+$unit_id = filter_input(INPUT_GET, 'uid', FILTER_VALIDATE_INT);
 $course_lang = filter_input(INPUT_GET, 'ulang');
 
 $canCreateCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
@@ -553,12 +554,15 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <script src="../js/course-list.js"></script>
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
-    initWidgets = [
+    widgetConfiguration = [
         {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal', widgetType: 'slides'},
         {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
         {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
         {name: 'hangouts', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'}
     ];
+
+    var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.
+
 
 
     $(function () {
@@ -582,7 +586,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         };
         $canvas.gridstack(options);
 
-        initWidgets.forEach(function (value, i) {
+        widgetConfiguration.forEach(function (value, i) {
             createSidebarElement(value.name, i);
         });
 
@@ -611,77 +615,81 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             scroll: false,
             appendTo: 'body',
         });
-        var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.
         $('.grid-stack').on('change', function (event, items) {
 
-            var cntr = 0;
             $.each(items, function (index, item) {
                 var $item = (item.el).find('.grid-stack-sidebar-item');
                 if ($item.hasClass('grid-stack-sidebar-item')) {
                     //This one needs to be added
                     var itemIndex = $item.data('index');
-                    createSidebarElement(initWidgets[itemIndex].name, itemIndex)
+                    createSidebarElement(widgetConfiguration[itemIndex].name, itemIndex)
                     $item.removeClass('grid-stack-sidebar-item');
-
-
-                    var $prototypeWidget = $('#' + initWidgets[itemIndex].prototypeName);
-                    $prototypeClone = $prototypeWidget.clone();
-                    $prototypeClone.removeClass('virtus-pw-hide');
-                    $prototypeClone.attr("id", initWidgets[itemIndex].prototypeName + "-" + totalWidgets);
-                    $prototypeClone.find(".modal-toggler-button").attr("data-target", "#" + initWidgets[itemIndex].modalname + "-" + totalWidgets);
-                    (item.el).attr("data-widget-type", initWidgets[itemIndex].widgetType);
                     $item.html("");
-                    $item.append($prototypeClone);
 
-                    var $prototypeModal = $('#' + initWidgets[itemIndex].modalname);
-                    $prototypeModalClone = $prototypeModal.clone();
-                    $prototypeModalClone.attr("id", initWidgets[itemIndex].modalname + "-" + totalWidgets);
-                    $("body").append($prototypeModalClone);
-
-                    var prototypeWidgetId = initWidgets[itemIndex].prototypeName + "-" + totalWidgets; //call by value
-                    var prototypeWidgetModalId = initWidgets[itemIndex].modalname + "-" + totalWidgets;//call by value7
-                    $prototypeModalClone.find(".modal-save-button").click(function () {
-                        appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
-                    });
-
-                    $prototypeModalClone.on('hidden.bs.modal', function (e) {
-                        // TODO does not work -> fix or disable auto hide
-                        appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
-                    });
-
-                    $('.modal-add-button').click(function () {
-                        var $qb = $('#questionBlock').html();
-                        var count = $(this).parents(".modal-content").find(".qa-block-container").find(".question-title-counter")
-                        var aNum = count.length + 1;
-
-                        $(this).parents(".modal-content").find(".qa-block-container").append($qb);
-                        var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
-                        $elem.find(".question-title-counter").text("Question " + aNum);
-                        quizzesButtonFunc($elem);
-                    });
-
-                    //add function to the template quizzies form
-                    $('.remove-answer').click(function () {
-                        qaparent = $(this).parent(".qa-div");
-                        $(this).parents(".single-answer-block").remove();
-                        removeButtons = $(qaparent).find(".remove-answer");
-                        if (removeButtons.length <= 2) {
-                            removeButtons.each(function () {
-                                $(this).prop('disabled', true);
-                            })
-                        }
-                    });
-
-
-                    quizzesButtonFunc($prototypeModalClone);
-
-                    totalWidgets++;
+                    transformToWidget(item.el, itemIndex);
 
                 }
-                cntr++;
             });
         });
     });
+
+    function transformToWidget(item, itemIndex) {
+// TODO item...
+
+      var $item = (item).find('.grid-stack-item-content');
+
+      var $prototypeWidget = $('#' + widgetConfiguration[itemIndex].prototypeName);
+      $prototypeClone = $prototypeWidget.clone();
+      $prototypeClone.removeClass('virtus-pw-hide');
+      $prototypeClone.attr("id", widgetConfiguration[itemIndex].prototypeName + "-" + totalWidgets);
+      $prototypeClone.find(".modal-toggler-button").attr("data-target", "#" + widgetConfiguration[itemIndex].modalname + "-" + totalWidgets);
+      (item).attr("data-widget-type", widgetConfiguration[itemIndex].widgetType);
+      $item.append($prototypeClone);
+
+      var $prototypeModal = $('#' + widgetConfiguration[itemIndex].modalname);
+      $prototypeModalClone = $prototypeModal.clone();
+      $prototypeModalClone.attr("id", widgetConfiguration[itemIndex].modalname + "-" + totalWidgets);
+      $("body").append($prototypeModalClone);
+
+      var prototypeWidgetId = widgetConfiguration[itemIndex].prototypeName + "-" + totalWidgets;
+      var prototypeWidgetModalId = widgetConfiguration[itemIndex].modalname + "-" + totalWidgets;
+      $prototypeModalClone.find(".modal-save-button").click(function () {
+          appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
+      });
+
+      $prototypeModalClone.on('hidden.bs.modal', function (e) {
+          // TODO does not work -> fix or disable auto hide
+          appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
+      });
+
+      $('.modal-add-button').click(function () {
+          var $qb = $('#questionBlock').html();
+          var count = $(this).parents(".modal-content").find(".qa-block-container").find(".question-title-counter")
+          var aNum = count.length + 1;
+
+          $(this).parents(".modal-content").find(".qa-block-container").append($qb);
+          var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
+          $elem.find(".question-title-counter").text("Question " + aNum);
+          quizzesButtonFunc($elem);
+      });
+
+      //add function to the template quizzies form
+      $('.remove-answer').click(function () {
+          qaparent = $(this).parent(".qa-div");
+          $(this).parents(".single-answer-block").remove();
+          removeButtons = $(qaparent).find(".remove-answer");
+          if (removeButtons.length <= 2) {
+              removeButtons.each(function () {
+                  $(this).prop('disabled', true);
+              })
+          }
+      });
+
+
+      quizzesButtonFunc($prototypeModalClone);
+
+      totalWidgets++;
+    }
 
     function createSidebarElement(name, index) {
         $parentEl = $('.gridstack-sidebar');
@@ -715,6 +723,19 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             //For unknown reason, replacing attr() with data() does not work
             $widget.parent().parent().attr("data-" + $(this).attr("name"), $(this).val());
         });
+    }
+
+    function setStateFromDataAttributes(widgetId, modalId) {
+        $widget = $("#" + widgetId);
+        $modal = $("#" + modalId);
+
+        $inputObj = $modal.find(".modal-body").find(".protocontent");
+        $inputObj.each(function (index) {
+            //For unknown reason, replacing attr() with data() does not work
+            $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
+        });
+
+        // TODO quiz...
     }
 
     function removeQuestion($elem) {
@@ -754,7 +775,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
       var widgetSerializer = {
         slides: function(el) {
           return {
-            type: "slide",
+            type: "slides",
             title: el.attr("data-slides-title"),
             link: el.attr("data-slides-link")
           };
@@ -795,27 +816,75 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     }
 
     function jsonToSpace(data) {
+      var widgetDeserializer = {
+        slides: function(el, data) {
+          el.attr("data-slides-title", data.title);
+          el.attr("data-slides-link", data.link);
+        },
+        video: function(el, data) {
+          el.attr("data-video-title", data.title);
+          el.attr("data-video-link", data.link);
+        },
+        quiz: function(el, data) {
+          // TODO
+        },
+        hangout: function(el, data) {
+        },
+      }
+
       // TODO
       //$canvas.cellHeight($canvas.height);
 
        var grid = $('#grid1').data('gridstack');
 
-       // TODO set id + type + contents
-
        _.each(data, function (el) {
-         alert(el);
-         grid.addWidget($('<div><div class="grid-stack-item-content"></div></div>'), el.x, el.y, el.width, el.height)
+         // get widget config for type
+         for(var itemIndex = 0; itemIndex < widgetConfiguration.length; itemIndex ++) {
+           if (widgetConfiguration[itemIndex].widgetType == el.widget.type)
+            break;
+         }
+
+         // add widget
+         var widget = $('<div><div class="grid-stack-item-content"></div></div>');
+         grid.addWidget(widget, el.x, el.y, el.width, el.height);
+         transformToWidget(widget, itemIndex);
+
+         // set data attributes
+         widget.attr("data-element-id", el.elementId);
+         widget.attr("data-widget-type", el.widget.type);
+         widgetDeserializer[el.widget.type](widget, el.widget);
+
+         // set state
+         var prototypeWidgetId = widgetConfiguration[itemIndex].prototypeName + "-" + (totalWidgets-1);
+         var prototypeWidgetModalId = widgetConfiguration[itemIndex].modalname + "-" + (totalWidgets-1);
+         setStateFromDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
        }, this);
+    }
+
+    function clear() {
+      //totalWidgets = 0;
+      var grid = $('#grid1').data('gridstack');
+      try {
+        grid.removeAll()
+      } catch(e) {}
     }
 
     $(function() {
       $(".btn-save-courseunit").click(function() {
-        alert(JSON.stringify(spaceToJson()));
+        var data = spaceToJson();
+
+        // TODO store + load
+
+        clear();
+        jsonToSpace(data);
+        console.log(data);
       });
     });
 
     $(function() {
-      jsonToSpace([{"widget":{"type":"slide","title":"fdgdfgdfg","link":"dfgdfg"},"posX":"0","posY":"0","width":"4","height":"4"},{"widget":{"type":"quiz"},"posX":"3","posY":"4","width":"4","height":"4"}]);
+      // TODO load
+      clear();
+      jsonToSpace([{"widget":{"type":"slides","title":"rzrzezzre","link":""},"x":"0","y":"4","width":"4","height":"4"},{"widget":{"type":"quiz"},"x":"0","y":"0","width":"8","height":"4"},{"widget":{"type":"video"},"x":"5","y":"4","width":"4","height":"4"}]);
     });
 
 </script>

@@ -3,6 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// https://github.com/rwth-acis/PLEASE-Frontend/blob/7ad5af8d96a0544d57c34799cd892772ceb3cf63/src/app/deploy/space.html
+
 class RoleAPI {
     private $url;
     private $token;

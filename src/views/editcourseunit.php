@@ -871,20 +871,35 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
     $(function() {
       $(".btn-save-courseunit").click(function() {
-        var data = spaceToJson();
-
-        // TODO store + load
-
-        clear();
-        jsonToSpace(data);
-        console.log(data);
+        $(".btn-save-courseunit").prop('disabled', true);
+        $.ajax( {
+          method: "POST",
+          url: "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>&store",
+          data: JSON.stringify(spaceToJson())
+        })
+        .done(function(data) {
+          clear();
+          jsonToSpace(JSON.parse(data));
+          $(".btn-save-courseunit").prop('disabled', false);
+        })
+        .fail(function(data) {
+          alert( "error: " + data );
+        });
       });
     });
 
     $(function() {
-      // TODO load
-      clear();
-      jsonToSpace([{"widget":{"type":"slides","title":"rzrzezzre","link":""},"x":"0","y":"4","width":"4","height":"4"},{"widget":{"type":"quiz"},"x":"0","y":"0","width":"8","height":"4"},{"widget":{"type":"video"},"x":"5","y":"4","width":"4","height":"4"}]);
+      $(".btn-save-courseunit").prop('disabled', true);
+
+      $.ajax( "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>")
+      .done(function(data) {
+        clear();
+        jsonToSpace(JSON.parse(data));
+        $(".btn-save-courseunit").prop('disabled', false);
+      })
+      .fail(function(data) {
+        alert( "error: " + data );
+      });
     });
 
 </script>

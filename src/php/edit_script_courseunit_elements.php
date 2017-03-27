@@ -8,11 +8,20 @@ $conn = require '../php/db_connect.php';
 $course_id = filter_input(INPUT_GET, 'courseid', FILTER_VALIDATE_INT);
 $unit_id = filter_input(INPUT_GET, 'unitid', FILTER_VALIDATE_INT);
 $unit_lang = filter_input(INPUT_GET, 'unitlang');
+$store = isset($_GET['store']);
 
-$inputJSON = file_get_contents('php://input');
-$input = json_decode($inputJSON, TRUE);
+if ($store) {
+  $inputJSON = file_get_contents('php://input');
+  $input = json_decode($inputJSON, TRUE);
 
-// TODO
+  echo $inputJSON;
+}
+else {
+  echo "[]"; // TODO remove
+}
+
+
+// TODO get from db
 
 /*
 // Update database-entry
@@ -38,7 +47,6 @@ if (!$success) {
 }*/
 
 
-// Return back to the edit page, now reflecting the changes
-header("Location: ../views/editcourse.php?id=$course_id&lang=$unit_lang");
+
 
 ?>

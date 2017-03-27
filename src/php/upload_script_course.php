@@ -61,9 +61,8 @@ if (isset($_GET['tid'])) {
                             FROM course_to_unit
                             JOIN course_units
                             ON course_to_unit.unit_id = course_units.id
-                            AND course_to_unit.unit_lang = course_units.lang
                             WHERE course_id = :tid
-                            AND course_lang = :tlang");
+                            AND course_units.lang = :tlang");
     $statement->bindParam(":tid",$id,PDO::PARAM_INT);
     $statement->bindParam(":tlang",$lang,PDO::PARAM_INT);
     $statement->execute();

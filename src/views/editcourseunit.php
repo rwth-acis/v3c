@@ -591,7 +591,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         });
 
 
-        //TODO: Load Canvas Elements like that
+        // Load Canvas Elements like that
         //$canvas.cellHeight($canvas.height);
         /*var items = [
          {x: 4, y: 1, width: 1, height: 2},
@@ -634,8 +634,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     });
 
     function transformToWidget(item, itemIndex) {
-// TODO item...
-
       var $item = (item).find('.grid-stack-item-content');
 
       var $prototypeWidget = $('#' + widgetConfiguration[itemIndex].prototypeName);
@@ -731,7 +729,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
         $inputObj = $modal.find(".modal-body").find(".protocontent");
         $inputObj.each(function (index) {
-            //For unknown reason, replacing attr() with data() does not work
             $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
         });
 

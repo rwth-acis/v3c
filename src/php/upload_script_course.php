@@ -62,8 +62,8 @@ if (isset($_GET['tid'])) {
     }
 
     // widget data slides
-    $stmt = $conn->prepare("INSERT INTO widget_data_slides (element_id,lang,title,url)
-                         SELECT widget_data_slides.element_id, :ulanguage, CONCAT('TRANSLATE ', title), url
+    $stmt = $conn->prepare("INSERT INTO widget_data_slides (element_id,lang,title,link)
+                         SELECT widget_data_slides.element_id, :ulanguage, CONCAT('TRANSLATE ', title), link
                          FROM widget_data_slides, course_to_unit, unit_to_element
                          WHERE course_to_unit.course_id = :tid
                           AND course_to_unit.unit_id = unit_to_element.unit_id
@@ -78,8 +78,8 @@ if (isset($_GET['tid'])) {
     }
 
     // widget data videos
-    $stmt = $conn->prepare("INSERT INTO widget_data_video (element_id,lang,title,url)
-                         SELECT widget_data_video.element_id, :ulanguage, CONCAT('TRANSLATE ', title), url
+    $stmt = $conn->prepare("INSERT INTO widget_data_video (element_id,lang,title,link)
+                         SELECT widget_data_video.element_id, :ulanguage, CONCAT('TRANSLATE ', title), link
                          FROM widget_data_video, course_to_unit, unit_to_element
                          WHERE course_to_unit.course_id = :tid
                           AND course_to_unit.unit_id = unit_to_element.unit_id

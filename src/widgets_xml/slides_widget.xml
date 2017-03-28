@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Slideshow" description=""
+  <ModulePrefs title="Slides" description=""
     author="Team Virtus" author_email="nalbach@dbis.rwth-aachen.de"
     width="300" height="600">
 
@@ -85,12 +85,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   <script>
 
-    function loadSlides(id) {
-      var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_instances_slides.php?id=" + id )
+    function loadSlides(widget_instance_url, lang) {
+      var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_data_slides.php?widget_instance_url=" + encodeURI(widget_instance_url) + "&lang=" + lang )
       .done(function(data) {
         data = JSON.parse(data);
-        $("#main-content").html('<h3>'+data.name+'</h3><object class="expand" data="'+data.url+'" type="application/pdf">'
-          +'<iframe src="https://docs.google.com/viewer?url='+data.url+'&embedded=true"></iframe>'
+        $("#main-content").html('<h3>'+data.title+'</h3><object class="expand" data="'+data.link+'" type="application/pdf">'
+          +'<iframe src="https://docs.google.com/viewer?url='+data.link+'&embedded=true"></iframe>'
           +'</object>');
       })
       .fail(function() {
@@ -98,56 +98,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       });
     }
 
-    loadSlides(1);
+    loadSlides(getWidgetInstanceUrl(), 'en');
 
-    // loadContext(loadSlides, function() {$("#main-content").html("Could not load the slides.");});
+    console.log(getWidgetInstanceUrl());
 
-    function loadContext(successCallback,errorCallback) {
-      function getWidgetInstanceUrl() {
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split('&');
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split('=');
-                if (decodeURIComponent(pair[0]) == variable) {
-                    return decodeURIComponent(pair[1]);
-                }
-            }
-        }
-        return getQueryVariable('url').split('?')[0];
+    function getWidgetInstanceUrl() {
+      function getQueryVariable(variable) {
+          var query = window.location.search.substring(1);
+          var vars = query.split('&');
+          for (var i = 0; i < vars.length; i++) {
+              var pair = vars[i].split('=');
+              if (decodeURIComponent(pair[0]) == variable) {
+                  return decodeURIComponent(pair[1]);
+              }
+          }
       }
-
-      var bla = openapp.param.get(getWidgetInstanceUrl());
-      bla.getSubResources({
-        relation: openapp.ns.role + "contextId",
-        type: "ID",
-        onAll: function(data) {
-            if(data === null || data.length === 0){
-                errorCallback();
-            } else {
-                data[0].getRepresentation("rdfjson",function(representation){
-                    if(!representation){
-                        errorCallback();
-                    } else {
-                        successCallback(representation);
-                    }
-                });
-            }
-        }
-      });
-
+      return getQueryVariable('url').split('?')[0];
     }
-
-    /*
-    bla.create({
-      relation: openapp.ns.role + "contextId",
-      type: "ID",
-      representation: representation,
-      callback: function(){
-          deferred.resolve();
-      }
-    });
-    */
 
   </script>
 

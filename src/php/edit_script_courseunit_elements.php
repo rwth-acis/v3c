@@ -1,9 +1,9 @@
 <?php
-
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+*/
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -32,12 +32,12 @@ function get_languages($conn, $unit_id) {
 
 $storeWidgetData = array(
   'slides' => function($conn, $element_id, $lang, $data, $overwrite) {
-    $query = ($overwrite ? "REPLACE" : "INSERT IGNORE") . " INTO widget_data_slides (element_id,lang,title,url) VALUES (:element_id, :lang, :title, :url)";
+    $query = ($overwrite ? "REPLACE" : "INSERT IGNORE") . " INTO widget_data_slides (element_id,lang,title,link) VALUES (:element_id, :lang, :title, :link)";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
     $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
     $stmt->bindValue(":title", ($overwrite ? "" : "TRANSLATE " ) . (isset($data['title']) ? $data['title'] : ""), PDO::PARAM_STR);
-    $stmt->bindValue(":url", ($overwrite ? "" : "TRANSLATE " )  . (isset($data['url']) ? $data['url'] : ""), PDO::PARAM_STR);
+    $stmt->bindValue(":link", (isset($data['link']) ? $data['link'] : ""), PDO::PARAM_STR);
 
     if (!$stmt->execute()) {
         http_response_code(400);
@@ -46,12 +46,12 @@ $storeWidgetData = array(
     }
   },
   'video' => function($conn, $element_id, $lang, $data, $overwrite) {
-    $query = ($overwrite ? "REPLACE" : "INSERT IGNORE") . " INTO widget_data_video (element_id,lang,title,url) VALUES (:element_id, :lang, :title, :url)";
+    $query = ($overwrite ? "REPLACE" : "INSERT IGNORE") . " INTO widget_data_video (element_id,lang,title,link) VALUES (:element_id, :lang, :title, :link)";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
     $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
     $stmt->bindValue(":title", ($overwrite ? "" : "TRANSLATE " ) . (isset($data['title']) ? $data['title'] : ""), PDO::PARAM_STR);
-    $stmt->bindValue(":url", ($overwrite ? "" : "TRANSLATE " )  . (isset($data['url']) ? $data['url'] : ""), PDO::PARAM_STR);
+    $stmt->bindValue(":link", (isset($data['link']) ? $data['link'] : ""), PDO::PARAM_STR);
 
     if (!$stmt->execute()) {
         http_response_code(400);
@@ -79,7 +79,7 @@ $loadWidgetData = array(
 
     return array(
       "title" => $data["title"],
-      "url" => $data["url"]
+      "link" => $data["link"]
     );
   },
   'video' => function($conn, $element_id, $lang) {
@@ -94,7 +94,7 @@ $loadWidgetData = array(
 
     return array(
       "title" => $data["title"],
-      "url" => $data["url"]
+      "link" => $data["link"]
     );
   },
   'hangout' => function($conn, $element_id, $lang) {
@@ -105,9 +105,6 @@ $loadWidgetData = array(
     return array();
   }
 );
-
-
-// TODO widgets are always recreated ....
 
 
 //Get input data from form

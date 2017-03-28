@@ -798,12 +798,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         },
       }
 
-      // TODO element ids?
       // TODO how to merge localizations ?!?? especially quiz?
       var result = [];
       $("#grid1").find(".grid-stack-item").each(function(idx,el) {
         result.push({
-          "elementId": $(el).attr("data-element-id"),
+          "element_id": $(el).attr("data-element-id"),
           "widget": widgetSerializer[$(el).attr("data-widget-type")]($(el)),
           "x": $(el).attr("data-gs-x"),
           "y": $(el).attr("data-gs-y"),
@@ -811,7 +810,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           "height": $(el).attr("data-gs-height")
         });
       });
-      // TODO
+
       return result;
     }
 
@@ -850,7 +849,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
          transformToWidget(widget, itemIndex);
 
          // set data attributes
-         widget.attr("data-element-id", el.elementId);
+         widget.attr("data-element-id", el.element_id);
          widget.attr("data-widget-type", el.widget.type);
          widgetDeserializer[el.widget.type](widget, el.widget);
 

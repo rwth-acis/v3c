@@ -48,50 +48,53 @@ $course_lang = $language;
 
 //in case of course translation
 if (isset($_GET['tid'])) {
-    //Get the units for the course to be translated
-    /*$course_units = $conn->query("SELECT *
-                            FROM course_to_unit
-                            JOIN course_units
-                            ON course_to_unit.unit_id = course_units.id
-                            AND course_to_unit.unit_lang = course_units.lang
-                            WHERE course_id = $id
-                            AND course_lang ='en'")->fetchAll();
-*/
-    $statement = $conn->prepare("SELECT *
-                            FROM course_to_unit
-                            JOIN course_units
-                            ON course_to_unit.unit_id = course_units.id
-                            WHERE course_id = :tid
-                            AND course_units.lang = :tlang");
-    $statement->bindParam(":tid",$id,PDO::PARAM_INT);
-    $statement->bindParam(":tlang",$lang,PDO::PARAM_INT);
-    $statement->execute();
-    $course_units = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-    //create course units for the translated courses
-    foreach($course_units as $course_unit){
-      // TODO LOCALIZATION: extend ...
-
-        //ADD TRANSLATION FOR is to indicate that course units for translated course are not translated yet
-        $utitle = "ADD TRANSLATION FOR : " . $course_unit['title'];
-        $udescription = "ADD TRANSLATION FOR : " . $course_unit['description'];
-
-        $units_stmt = $conn->prepare("INSERT INTO course_units (id,lang,title, description, start_date, points)
-                             VALUES (:uid,:ulanguage,:utitle,:udescription,:ustart_date,:upoints)");
-        $units_stmt->bindParam(":uid", $course_unit['id'], PDO::PARAM_INT);
-        $units_stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
-        $units_stmt->bindParam(":utitle", $utitle, PDO::PARAM_STR);
-        $units_stmt->bindParam(":udescription", $udescription, PDO::PARAM_STR);
-        $units_stmt->bindParam(":ustart_date", $course_unit['start_date'], PDO::PARAM_STR);
-        $units_stmt->bindParam(":upoints", $course_unit['points'], PDO::PARAM_INT);
-
-        $success = $units_stmt->execute();
-
-        if (!$success) {
-            print_r($statement->errorInfo());
-            die("Error saving course units for translated course.");
-        }
+  // course units
+    $stmt = $conn->prepare("INSERT INTO course_units (id,lang,title, description, start_date, points)
+                         SELECT id, :ulanguage, CONCAT('TRANSLATE ', title), CONCAT('TRANSLATE ', description), start_date, points
+                         FROM course_units, course_to_unit
+                         WHERE course_to_unit.unit_id = course_units.id AND course_id = :tid AND course_units.lang = :tlang");
+    $stmt->bindParam(":tid",$id,PDO::PARAM_INT);
+    $stmt->bindParam(":tlang",$lang,PDO::PARAM_STR);
+    $stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+        print_r($stmt->errorInfo());
+        die("Error adding translations.");
     }
+
+    // widget data slides
+    $stmt = $conn->prepare("INSERT INTO widget_data_slides (element_id,lang,title,url)
+                         SELECT widget_data_slides.element_id, :ulanguage, CONCAT('TRANSLATE ', title), url
+                         FROM widget_data_slides, course_to_unit, unit_to_element
+                         WHERE course_to_unit.course_id = :tid
+                          AND course_to_unit.unit_id = unit_to_element.unit_id
+                          AND unit_to_element.element_id = widget_data_slides.element_id
+                          AND widget_data_slides.lang = :tlang");
+    $stmt->bindParam(":tid",$id,PDO::PARAM_INT);
+    $stmt->bindParam(":tlang",$lang,PDO::PARAM_STR);
+    $stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+        print_r($stmt->errorInfo());
+        die("Error adding translations.");
+    }
+
+    // widget data videos
+    $stmt = $conn->prepare("INSERT INTO widget_data_video (element_id,lang,title,url)
+                         SELECT widget_data_video.element_id, :ulanguage, CONCAT('TRANSLATE ', title), url
+                         FROM widget_data_video, course_to_unit, unit_to_element
+                         WHERE course_to_unit.course_id = :tid
+                          AND course_to_unit.unit_id = unit_to_element.unit_id
+                          AND unit_to_element.element_id = widget_data_video.element_id
+                          AND widget_data_video.lang = :tlang");
+    $stmt->bindParam(":tid",$id,PDO::PARAM_INT);
+    $stmt->bindParam(":tlang",$lang,PDO::PARAM_STR);
+    $stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+        print_r($stmt->errorInfo());
+        die("Error adding translations.");
+    }
+
+
+    // TODO copy other entries as well ...
 }
 
 

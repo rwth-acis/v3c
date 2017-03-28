@@ -1,7 +1,113 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Create database connection
 $conn = require '../php/db_connect.php';
+
+
+
+function get_languages($conn, $unit_id) {
+  $statement = $conn->prepare("SELECT lang FROM course_units WHERE id = :unit_id");
+  $statement->bindParam(":unit_id",$unit_id,PDO::PARAM_INT);
+  if (!$statement->execute()) {
+    print_r($statement->errorInfo());
+    die("Error.");
+  }
+  $langs = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+  $result = array();
+  foreach ($langs as $l) {
+    $result[] = $l['lang'];
+  }
+
+  return $result;
+}
+
+$storeWidgetData = array(
+  'slides' => function($conn, $element_id, $lang, $data, $overwrite) {
+    $query = ($overwrite ? "REPLACE" : "INSERT IGNORE") . " INTO widget_data_slides (element_id,lang,title,url) VALUES (:element_id, :lang, :title, :url)";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    $stmt->bindValue(":title", ($overwrite ? "" : "TRANSLATE " ) . (isset($data['title']) ? $data['title'] : ""), PDO::PARAM_STR);
+    $stmt->bindValue(":url", ($overwrite ? "" : "TRANSLATE " )  . (isset($data['url']) ? $data['url'] : ""), PDO::PARAM_STR);
+
+    if (!$stmt->execute()) {
+        http_response_code(400);
+        print_r($stmt->errorInfo());
+        die("Error saving slides data.");
+    }
+  },
+  'video' => function($conn, $element_id, $lang, $data, $overwrite) {
+    $query = ($overwrite ? "REPLACE" : "INSERT IGNORE") . " INTO widget_data_video (element_id,lang,title,url) VALUES (:element_id, :lang, :title, :url)";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    $stmt->bindValue(":title", ($overwrite ? "" : "TRANSLATE " ) . (isset($data['title']) ? $data['title'] : ""), PDO::PARAM_STR);
+    $stmt->bindValue(":url", ($overwrite ? "" : "TRANSLATE " )  . (isset($data['url']) ? $data['url'] : ""), PDO::PARAM_STR);
+
+    if (!$stmt->execute()) {
+        http_response_code(400);
+        print_r($stmt->errorInfo());
+        die("Error saving slides data.");
+    }
+  },
+  'hangout' => function($conn, $element_id, $lang, $data, $overwrite) {
+  },
+  'quiz' => function($conn, $element_id, $lang, $data, $overwrite) {
+     // TODO
+  }
+);
+
+$loadWidgetData = array(
+  'slides' => function($conn, $element_id, $lang) {
+    $stmt = $conn->prepare("SELECT * FROM widget_data_slides WHERE element_id = :element_id AND lang = :lang LIMIT 1");
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+        echo "Error loading course.";
+    } else {
+        $data = $stmt->fetch();
+    }
+
+    return array(
+      "title" => $data["title"],
+      "url" => $data["url"]
+    );
+  },
+  'video' => function($conn, $element_id, $lang) {
+    $stmt = $conn->prepare("SELECT * FROM widget_data_video WHERE element_id = :element_id AND lang = :lang LIMIT 1");
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+        echo "Error loading course.";
+    } else {
+        $data = $stmt->fetch();
+    }
+
+    return array(
+      "title" => $data["title"],
+      "url" => $data["url"]
+    );
+  },
+  'hangout' => function($conn, $element_id, $lang) {
+    return array();
+  },
+  'quiz' => function($conn, $element_id, $lang) {
+    // TODO
+    return array();
+  }
+);
+
+
+// TODO widgets are always recreated ....
 
 
 //Get input data from form
@@ -11,9 +117,6 @@ $unit_lang = filter_input(INPUT_GET, 'unitlang');
 $store = isset($_GET['store']);
 
 
-// [{"widget":{"type":"slides"},"x":"1","y":"8","width":"4","height":"4"},{"widget":{"type":"video"},"x":"6","y":"8","width":"4","height":"4"},{"widget":{"type":"quiz"},"x":"3","y":"4","width":"4","height":"4"},{"widget":{"type":"hangout"},"x":"6","y":"0","width":"4","height":"4"}]
-
-
 if ($store) { // store to db
   $inputJSON = file_get_contents('php://input');
   $input = json_decode($inputJSON, TRUE);
@@ -21,7 +124,8 @@ if ($store) { // store to db
   $current_ids = array();
 
   foreach ($input as $element) {
-    if (!array_key_exists('element_id', $element)) { // create course element
+    $element_id = -1;
+    if (!isset($element['element_id'])) { // create course element
       $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height) VALUES (:type, :x, :y, :width, :height)");
       $stmt->bindParam(":type", $element['widget']['type'], PDO::PARAM_STR);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
@@ -52,13 +156,13 @@ if ($store) { // store to db
       $current_ids[] = $element_id;
     }
     else { // update course element
-      $stmt = $conn->prepare("UPDATE course_elements SET widget_type = :type, x = :x, y = :y, width = :width, height = :height WHERE id = :id");
+      $stmt = $conn->prepare("UPDATE course_elements SET x = :x, y = :y, width = :width, height = :height WHERE id = :id");
       $stmt->bindParam(":id", $element['element_id'], PDO::PARAM_INT);
-      $stmt->bindParam(":type", $element['widget']['type'], PDO::PARAM_STR);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
       $stmt->bindParam(":y", $element['y'], PDO::PARAM_INT);
       $stmt->bindParam(":width", $element['width'], PDO::PARAM_INT);
       $stmt->bindParam(":height", $element['height'], PDO::PARAM_INT);
+      // widget type cannot be changed
 
       $success = $stmt->execute();
       if (!$success) {
@@ -67,13 +171,15 @@ if ($store) { // store to db
           die("Error saving course element.");
       }
 
+      $element_id = $element['element_id'];
+
       $current_ids[] = $element['element_id'];
     }
 
-    // TODO update/create widget with lang
-
-    if (array_key_exists('element_id', $element)) {
-      // TODO other langs ...
+    // store widget data
+    $langs = get_languages($conn, $unit_id);
+    foreach ($langs as $l) {
+      $storeWidgetData[$element['widget']['type']]($conn, $element_id, $l, $element['widget'], $unit_lang == $l);
     }
 
   }
@@ -97,18 +203,21 @@ if ($store) { // store to db
 $elements = $conn->query("SELECT * FROM course_elements, unit_to_element WHERE course_elements.id = unit_to_element.element_id AND unit_to_element.unit_id = $unit_id")->fetchAll();
 $results = array();
 foreach ($elements as $el) {
+  $widget_data = $loadWidgetData[$el['widget_type']]($conn, $el['id'], $unit_lang);
+  $widget_data["type"] = $el['widget_type'];
+
   $results[] = array(
     "element_id" => $el['id'],
     "x" => $el['x'],
     "y" => $el['y'],
     "width" => $el['width'],
     "height" => $el['height'],
-    "widget" => array(
-      "type" => $el['widget_type']
-    )
+    "widget" => $widget_data
   );
 }
 
 echo json_encode($results);
+
+
 
 ?>

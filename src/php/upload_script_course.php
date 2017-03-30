@@ -48,7 +48,7 @@ $course_lang = $language;
 
 //in case of course translation
 if (isset($_GET['tid'])) {
-  // course units
+  // course units // TODO refactor so that copying is not necessary anymore
     $stmt = $conn->prepare("INSERT INTO course_units (id,lang,title, description, start_date, points)
                          SELECT id, :ulanguage, CONCAT('TRANSLATE ', title), CONCAT('TRANSLATE ', description), start_date, points
                          FROM course_units, course_to_unit
@@ -60,41 +60,6 @@ if (isset($_GET['tid'])) {
         print_r($stmt->errorInfo());
         die("Error adding translations.");
     }
-
-    // widget data slides
-    $stmt = $conn->prepare("INSERT INTO widget_data_slides (element_id,lang,title,link)
-                         SELECT widget_data_slides.element_id, :ulanguage, CONCAT('TRANSLATE ', title), link
-                         FROM widget_data_slides, course_to_unit, unit_to_element
-                         WHERE course_to_unit.course_id = :tid
-                          AND course_to_unit.unit_id = unit_to_element.unit_id
-                          AND unit_to_element.element_id = widget_data_slides.element_id
-                          AND widget_data_slides.lang = :tlang");
-    $stmt->bindParam(":tid",$id,PDO::PARAM_INT);
-    $stmt->bindParam(":tlang",$lang,PDO::PARAM_STR);
-    $stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
-    if (!$stmt->execute()) {
-        print_r($stmt->errorInfo());
-        die("Error adding translations.");
-    }
-
-    // widget data videos
-    $stmt = $conn->prepare("INSERT INTO widget_data_video (element_id,lang,title,link)
-                         SELECT widget_data_video.element_id, :ulanguage, CONCAT('TRANSLATE ', title), link
-                         FROM widget_data_video, course_to_unit, unit_to_element
-                         WHERE course_to_unit.course_id = :tid
-                          AND course_to_unit.unit_id = unit_to_element.unit_id
-                          AND unit_to_element.element_id = widget_data_video.element_id
-                          AND widget_data_video.lang = :tlang");
-    $stmt->bindParam(":tid",$id,PDO::PARAM_INT);
-    $stmt->bindParam(":tlang",$lang,PDO::PARAM_STR);
-    $stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
-    if (!$stmt->execute()) {
-        print_r($stmt->errorInfo());
-        die("Error adding translations.");
-    }
-
-
-    // TODO copy other entries as well ...
 }
 
 

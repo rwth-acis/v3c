@@ -25,7 +25,7 @@ $accessControl = new AccessControl();
 $course_id = filter_input(INPUT_GET, 'courseid', FILTER_VALIDATE_INT);
 $course_lang = filter_input(INPUT_GET, 'lang');
 
-$canCreateCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
+$canCreateCourse = $accessControl->canUpdateCourse($course_id);
 
 if ($canCreateCourse) {
     include 'addcourseunit_content.php';

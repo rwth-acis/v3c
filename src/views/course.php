@@ -24,16 +24,16 @@ if (isset($_GET["lang"])) {
     $course_lang = filter_input(INPUT_GET, "lang");
 }
 
-$isLecturer = $accessControl->canUpdateCourse($course_id, $course_lang);
+$isLecturer = $accessControl->canUpdateCourse($course_id);
 
 
 // Gets course details with it's creator information
-$stmt = $conn->prepare("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email
-          FROM courses
-          JOIN organizations
-            ON courses.creator = organizations.email
+$stmt = $conn->prepare("SELECT courses.*, courses_lng.*, organizations.name AS orga, organizations.email AS orga_email
+          FROM courses, organizations, courses_lng
           WHERE courses.id = :course_id
-            AND courses.lang = :course_lang
+            AND courses.creator = organizations.email
+            AND courses_lng.course_id = courses.id
+            AND (courses_lng.lang = :course_lang OR courses_lng.lang = (SELECT default_lang FROM courses WHERE id = :course_id))
           LIMIT 1");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
@@ -43,7 +43,13 @@ $success = $stmt->execute();
 if (!$success) {
     echo "Error loading course.";
 } else {
-    $course_details = $stmt->fetch();
+    $course_details = $stmt->fetchAll();
+    if (sizeof($course_details) == 1 || $course_details[0]['lang'] == $course_lang) {
+      $course_details = $course_details[0];
+    }
+    else {
+      $course_details = $course_details[1];
+    }
 }
 
 // Get course subject
@@ -52,11 +58,16 @@ $course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id
 
 
 // Get course units
-$stmt = $conn->prepare("SELECT course_units.*
-                        FROM course_to_unit, course_units
+$stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
+                        FROM course_to_unit, course_units, course_units_lng
                         WHERE course_to_unit.unit_id = course_units.id
                           AND course_to_unit.course_id = :course_id
-                          AND course_units.lang = :course_lang");
+                          AND course_units.id = course_units_lng.unit_id
+                          AND course_units_lng.lang = (SELECT
+                            IFNULL( (SELECT lang FROM course_units_lng, course_to_unit
+                                WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang AND course_to_unit.course_id = :course_id),
+                            course_units.default_lang ))
+                        "); // TODO fix
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);

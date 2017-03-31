@@ -32,7 +32,7 @@ $course_lang = filter_input(INPUT_GET, 'lang');
 
 $accessControl = new AccessControl();
 
-$canEditCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
+$canEditCourse = $accessControl->canUpdateCourse($course_id);
 
 if ($canEditCourse) {
     include 'editcourse_content.php';

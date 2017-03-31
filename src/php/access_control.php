@@ -1,20 +1,20 @@
 <?php
 
-/* 
+/*
  * Copyright 2015 Adam Brunnmeier, Dominik Studer, Alexandra Wörner, Frederik Zwilling, Ali Demiralp, Dev Sharma, Luca Liehner, Marco Dung, Georgios Toubekis
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- * 
+ *
  *  @file access_control.php
  *  Class which is able to decide whether a user can access a feature or not
  */
@@ -109,7 +109,7 @@ class AccessControl
      * @param String $course_id ID of the course whose owner the user has to be
      * @return boolean true, if user is a lecturer and the owner of the course
      */
-    private function isLecturerAndCourseOwner($course_id, $course_lang)
+    private function isLecturerAndCourseOwner($course_id)
     {
         $ret = false;
         if (!$this->getAuthentication()->isAuthenticated()) {
@@ -125,8 +125,7 @@ class AccessControl
         if ($user->role == AccessControl::TEACHER_ROLE || $this->getUserStatus($user) == USER_STATUS::USER_IS_TUTOR) {
 
             $course = getSingleDatabaseEntryByValues('courses', array(
-                'id' => $course_id,
-                'lang' => $course_lang
+                'id' => $course_id
             ));
 
             $creator = getSingleDatabaseEntryByValue('organizations', 'email', $course['creator']);
@@ -166,9 +165,9 @@ class AccessControl
      * @return boolean true, if user is allowed to update the course whose ID is
      * given
      */
-    public function canUpdateCourse($course_id, $course_lang)
+    public function canUpdateCourse($course_id)
     {
-        return $this->isLecturerAndCourseOwner($course_id, $course_lang);
+        return $this->isLecturerAndCourseOwner($course_id);
     }
 
     /**
@@ -176,9 +175,9 @@ class AccessControl
      * @return boolean true, if user is allowed to delete the course whose ID is
      * given
      */
-    public function canDeleteCourse($course_id, $course_lang)
+    public function canDeleteCourse($course_id)
     {
-        return $this->isLecturerAndCourseOwner($course_id, $course_lang);
+        return $this->isLecturerAndCourseOwner($course_id);
     }
 
     /**

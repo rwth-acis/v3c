@@ -28,7 +28,7 @@ $course_id = filter_input(INPUT_GET, 'cid', FILTER_VALIDATE_INT);
 $unit_id = filter_input(INPUT_GET, 'uid', FILTER_VALIDATE_INT);
 $course_lang = filter_input(INPUT_GET, 'ulang');
 
-$canCreateCourse = $accessControl->canUpdateCourse($course_id, $course_lang);
+$canCreateCourse = $accessControl->canUpdateCourse($course_id);
 
 if ($canCreateCourse) {
     ?>

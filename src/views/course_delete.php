@@ -63,7 +63,7 @@ try {
 require '../php/access_control.php';
 
 $accessControl = new AccessControl();
-$canDeleteCourse = $accessControl->canDeleteCourse($course_id, $course_lang);
+$canDeleteCourse = $accessControl->canDeleteCourse($course_id);
 
 if ($canDeleteCourse) {
     ?>

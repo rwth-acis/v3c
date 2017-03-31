@@ -11,6 +11,8 @@
 <body>
 <?php
 
+// TODO remove translate button
+
 include("menu.php");
 
 // Get all course data and name + email of their creators from our database based
@@ -25,9 +27,10 @@ $isLecturer = $accessControl->canCreateCourse();
 $subject_id = filter_input(INPUT_GET, "id");
 
 $subject = $db->query("SELECT * FROM subjects WHERE id='$subject_id'")->fetchObject();
-$courses = $db->query("SELECT courses.*, organizations.name AS orga, organizations.email AS orga_email 
-                           FROM courses JOIN organizations ON courses.creator=organizations.email 
-                           WHERE courses.domain='$subject_id' ORDER BY id ASC")->fetchAll();
+$courses = $db->query("SELECT courses.*, courses_lng.*, organizations.name AS orga, organizations.email AS orga_email
+                           FROM courses, organizations, courses_lng WHERE courses.creator=organizations.email
+                           AND courses.id = courses_lng.course_id
+                           AND courses.domain='$subject_id' ORDER BY id ASC")->fetchAll();
 
 $course_deletion_notice = "";
 if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
@@ -194,26 +197,33 @@ if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
                                     <td class="rowlink-skip">
                                         <?php
                                         $languages_count = 5;
+                                        $languages = array(
+                                            "en" => "English",
+                                            "de" => "Deutsch",
+                                            "es" => "Español",
+                                            "it" => "Italiano",
+                                            "gr" => "ελληνικά"
+                                        );
                                         //uncomment the line below to set the languages count to the number of available languages
                                         //$languages_count = $db->query("SELECT COUNT(*)as alLanguages FROM languages ")->fetchObject();
-                                        if (count($lang_array) == $languages_count){?>
-                                            <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block">Translate from</a>
-                                        <?php }else{ if (count($lang_array) > 1): ?>
+                                        if (count($lang_array) == $languages_count){ ?>
+                                            <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block">Translate to</a>
+                                        <?php }else{ ?>
                                             <div class="dropdown">
                                                 <button class="btn btn-danger dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Translate from
+                                                    Translate to
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="translate-dropdown">
                                                     <?php
-                                                    foreach($lang_array as $c_lang) {
-                                                        echo "<a class='dropdown-item' href='addcourse.php?tid=$current_course_id&tlang=$c_lang'>$c_lang</a>";
+                                                    foreach($languages as $code => $language) {
+                                                      if (!in_array($code, $lang_array)) {
+                                                        echo "<a class='dropdown-item' href='editcourse.php?id=$current_course_id&lang=$code'>$language</a>";
+                                                      }
                                                     }
                                                     ?>
                                                 </div>
                                             </div>
-                                        <?php else: ?>
-                                            <a href="addcourse.php?tid=<?php echo $current_course_id; ?>&tlang=<?php echo $current_course_lang?>" class="btn btn-translate btn-sm btn-danger btn-block">Translate from</a>
-                                        <?php endif;} ?>
+                                        <?php } ?>
                                     </td>
                                     <td     class="rowlink-skip">
                                         <?php if (count($lang_array) > 1): ?>

@@ -16,19 +16,31 @@ $startdate = filter_input(INPUT_POST, 'startdate');
 $description = filter_input(INPUT_POST, 'description');
 
 // Update database-entry
-$statement = $conn->prepare("UPDATE course_units 
-                              SET title = :title, 
-                                points = :points, 
-                                start_date = :startdate, 
-                                description = :description
-                             WHERE id = :unit_id
-                              AND lang = :unit_lang");
+$statement = $conn->prepare("UPDATE course_units
+                              SET points = :points,
+                                start_date = :startdate
+                             WHERE id = :unit_id");
+
+$statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
+$statement->bindParam(":points", $points, PDO::PARAM_STR);
+$statement->bindParam(":startdate", $startdate, PDO::PARAM_STR);
+
+$success = $statement->execute();
+if (!$success) {
+    print_r($statement->errorInfo());
+    die("Error saving course.");
+}
+
+
+$statement = $conn->prepare("REPLACE INTO course_units_lng
+                              SET title = :title,
+                                description = :description,
+                             unit_id = :unit_id,
+                              lang = :unit_lang");
 
 $statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
 $statement->bindParam(":unit_lang", $unit_lang, PDO::PARAM_STR);
 $statement->bindParam(":title", $title, PDO::PARAM_STR);
-$statement->bindParam(":points", $points, PDO::PARAM_INT);
-$statement->bindParam(":startdate", $startdate, PDO::PARAM_STR);
 $statement->bindParam(":description", $description, PDO::PARAM_STR);
 
 $success = $statement->execute();

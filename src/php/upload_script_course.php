@@ -8,11 +8,6 @@ if (session_status() == PHP_SESSION_NONE) {
 $conn = require '../php/db_connect.php';
 require_once '../php/tools.php';
 
-//Get course id in case of course translatation
-
-$id = filter_input(INPUT_GET, 'tid');
-$lang = filter_input(INPUT_GET, 'tlang');
-
 //Get input data from form
 $name = filter_input(INPUT_POST, 'name');
 $language = filter_input(INPUT_POST, 'language');
@@ -21,19 +16,13 @@ $domain = filter_input(INPUT_POST, 'domain');
 $description = filter_input(INPUT_POST, 'description');
 
 // get affiliation from current user
-//$creator = $_SESSION['affiliation'];
 $creator = getSingleDatabaseEntryByValue('organizations', 'id', $_SESSION['affiliation']);
-// $creator = 'kpapavramidis@mastgroup.gr';  // EUROTraining
 
 // Create database-entry
-$statement = $conn->prepare("INSERT INTO courses (id,lang, name, description, domain, profession, creator)
-                             VALUES (:id,:language, :name, :description, :domain, :profession, :creator)");
-$statement->bindParam(":id", $id, PDO::PARAM_INT);
-$statement->bindParam(":language", $language, PDO::PARAM_STR);
-$statement->bindParam(":name", $name, PDO::PARAM_STR);
-$statement->bindParam(":description", $description, PDO::PARAM_STR);
+$statement = $conn->prepare("INSERT INTO courses (domain, creator, default_lang)
+                             VALUES (:domain, :creator, :default_lang)");
+$statement->bindParam(":default_lang", $language, PDO::PARAM_STR);
 $statement->bindParam(":domain", $domain, PDO::PARAM_STR);
-$statement->bindParam(":profession", $profession, PDO::PARAM_STR);
 $statement->bindParam(":creator", $creator['email'], PDO::PARAM_STR);
 
 $success = $statement->execute();
@@ -46,20 +35,19 @@ if (!$success) {
 $course_id = $conn->lastInsertId();
 $course_lang = $language;
 
-//in case of course translation
-if (isset($_GET['tid'])) {
-  // course units // TODO refactor so that copying is not necessary anymore
-    $stmt = $conn->prepare("INSERT INTO course_units (id,lang,title, description, start_date, points)
-                         SELECT id, :ulanguage, CONCAT('TRANSLATE ', title), CONCAT('TRANSLATE ', description), start_date, points
-                         FROM course_units, course_to_unit
-                         WHERE course_to_unit.unit_id = course_units.id AND course_id = :tid AND course_units.lang = :tlang");
-    $stmt->bindParam(":tid",$id,PDO::PARAM_INT);
-    $stmt->bindParam(":tlang",$lang,PDO::PARAM_STR);
-    $stmt->bindParam(":ulanguage", $language, PDO::PARAM_STR);
-    if (!$stmt->execute()) {
-        print_r($stmt->errorInfo());
-        die("Error adding translations.");
-    }
+
+$statement = $conn->prepare("INSERT INTO courses_lng (course_id, lang, name, description, profession)
+                             VALUES (:id, :language, :name, :description, :profession)");
+$statement->bindParam(":id", $course_id, PDO::PARAM_INT);
+$statement->bindParam(":language", $language, PDO::PARAM_STR);
+$statement->bindParam(":name", $name, PDO::PARAM_STR);
+$statement->bindParam(":description", $description, PDO::PARAM_STR);
+$statement->bindParam(":profession", $profession, PDO::PARAM_STR);
+
+$success = $statement->execute();
+if (!$success) {
+    print_r($statement->errorInfo());
+    die("Error saving course.");
 }
 
 

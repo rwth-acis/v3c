@@ -6,11 +6,16 @@ $course_id = filter_input(INPUT_GET, 'id');
 $course_lang = filter_input(INPUT_GET, 'lang');
 
 // Get course units
-$stmt = $conn->prepare("SELECT course_units.*
-                        FROM course_to_unit, course_units
+$stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
+                        FROM course_to_unit, course_units, course_units_lng
                         WHERE course_to_unit.unit_id = course_units.id
                           AND course_to_unit.course_id = :course_id
-                          AND course_units.lang = :course_lang");
+                          AND course_units.id = course_units_lng.unit_id
+                          AND course_units_lng.lang = (SELECT
+                            IFNULL( (SELECT lang FROM course_units_lng, course_to_unit
+                                WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang AND course_to_unit.course_id = :course_id),
+                            course_units.default_lang ))
+                        ");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
@@ -24,18 +29,27 @@ else {
 }
 
 // Get course info
-$stmt2 = $conn->prepare("SELECT courses.*
-                        FROM courses
-                        WHERE courses.id = :course_id
-                          AND courses.lang = :course_lang
-                        LIMIT 1");
+$stmt = $conn->prepare("SELECT courses.*, courses_lng.*
+          FROM courses, courses_lng
+          WHERE courses.id = :course_id
+            AND courses_lng.course_id = courses.id
+            AND (courses_lng.lang = :course_lang OR courses_lng.lang = (SELECT default_lang FROM courses WHERE id = :course_id))
+          LIMIT 1");
 
-$stmt2->bindParam(":course_id", $course_id, PDO::PARAM_INT);
-$stmt2->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
+$stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+$stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
 
-$success = $stmt2->execute();
-if ($success) {
-    $course = $stmt2->fetch();
+$success = $stmt->execute();
+if (!$success) {
+    echo "Error loading course.";
+} else {
+    $course = $stmt->fetchAll();
+    if (sizeof($course) == 1 || $course[0]['lang'] == $course_lang) {
+      $course = $course[0];
+    }
+    else {
+      $course = $course[1];
+    }
 }
 
 

@@ -8,9 +8,12 @@ $unit_lang = filter_input(INPUT_GET, 'ulang');
 
 // Get course info
 $statement = $conn->prepare("SELECT *
-                        FROM course_units 
-                        WHERE id = :unit_id
-                        AND lang = :unit_lang
+                        FROM course_units, course_units_lng
+                        WHERE course_units.id = :unit_id
+                        AND course_units.id = course_units_lng.unit_id
+                        AND course_units_lng.lang = (SELECT
+                          IFNULL( (SELECT lang FROM course_units_lng WHERE lang = :unit_lang AND unit_id = :unit_id),
+                          course_units.default_lang ))
                         LIMIT 1");
 
 $statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
@@ -19,6 +22,10 @@ $statement->bindParam(":unit_lang", $unit_lang, PDO::PARAM_STR);
 $success = $statement->execute();
 if ($success) {
     $course_unit = $statement->fetch();
+}
+else {
+  print_r($statement->errorInfo());
+  die("error");
 }
 
 ?>

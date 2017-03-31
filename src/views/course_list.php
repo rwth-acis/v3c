@@ -11,8 +11,6 @@
 <body>
 <?php
 
-// TODO remove translate button
-
 include("menu.php");
 
 // Get all course data and name + email of their creators from our database based

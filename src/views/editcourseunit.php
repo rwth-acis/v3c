@@ -403,7 +403,10 @@ if ($canCreateCourse) {
             </button>
           </div>
 
-          Changes to widget arrangements and widget contents are only applied after clicking this button!
+          <span class="message-inprogress">Please wait...</span>
+          <span class="message-stored">Saved successfully!</span>
+          <span class="message-error">An error ocurred. Please refresh.</span>
+          <span class="message-advice">Changes to widget arrangements and widget contents are only applied after clicking this button!</span>
         </div>
         <section class='container'>
             <div class='container'>
@@ -583,7 +586,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
       });
 
-      // TODO add question + 2 answers
+      // TODO add question + 2 answers // NOT POSSIBLE ???
 
       $('.modal-add-button').click(function () {
           var $qb = $('#questionBlock').html();
@@ -675,6 +678,19 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         $widget = $("#" + widgetId);
         $modal = $("#" + modalId);
 
+        // clean attributes
+        var toRemove = [];
+        $.each($widget.parent().parent().get(0).attributes, function() {
+          if(this.specified &&
+              ( this.name.startsWith("data-video") || this.name.startsWith("data-quizzes") || this.name.startsWith("data-slides") ) ) {
+            toRemove.push(this.name);
+          }
+        });
+        toRemove.forEach(function(val) {
+          $widget.parent().parent().removeAttr( val );
+        })
+
+        // set attributes
         $inputObj = $modal.find(".modal-body").find(".protocontent");
         $inputObj.each(function (index) {
             //For unknown reason, replacing attr() with data() does not work
@@ -691,13 +707,26 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         $widget = $("#" + widgetId);
         $modal = $("#" + modalId);
 
+        // add questions and answers for quiz
+        if ($widget.parent().parent().attr("data-widget-type") == "quiz") {
+          for (var i = 0; i < parseInt($widget.parent().parent().attr("data-tmp-question-count")); i++) {
+            $modal.find(".modal-add-button").click();
+            var $question = $modal.find(".panel-default").last();
+            for (var j = 0; j < parseInt($widget.parent().parent().attr("data-tmp-answer-count_" + i)); j++) {
+              $question.find(".btn-add-answer").click();
+            }
+          }
+        }
+
         $inputObj = $modal.find(".modal-body").find(".protocontent");
         $inputObj.each(function (index) {
+          if ($(this).is(':checkbox')) {
+            $(this).prop('checked', $widget.parent().parent().attr("data-" + $(this).attr("name")) != "");
+          }
+          else {
             $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
+          }
         });
-
-        // TODO quiz... simulate clicks on buttons
-
     }
 
     function spaceToJson() {
@@ -782,7 +811,30 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           el.attr("data-video-link", data.link);
         },
         quiz: function(el, data) {
-          // TODO deserialize quiz
+          el.attr("data-quizzes-title", data.title);
+
+          if (data.questions == undefined) return;
+
+          el.attr("data-tmp-question-count", Object.keys(data.questions).length);
+
+          for (var qid in data.questions) {
+            if (!data.questions.hasOwnProperty(qid)) continue;
+            var question = data.questions[qid];
+
+            el.attr("data-quizzes-question_" + qid, question.title);
+            el.attr("data-quizzes-question-id_" + qid, question.id);
+
+            el.attr("data-tmp-answer-count_" + qid, Object.keys(question.answers).length);
+
+            for (var aid in question.answers) {
+              if (!question.answers.hasOwnProperty(aid)) continue;
+              var answer = question.answers[aid];
+
+              el.attr("data-quizzes-answer_" + qid + "_" + aid, answer.title);
+              el.attr("data-quizzes-answer-id_" + qid + "_" + aid, answer.id);
+              el.attr("data-quizzes-answer-correct_" + qid + "_" + aid, answer.correct);
+            }
+          }
         },
         hangout: function(el, data) {
         },
@@ -827,7 +879,9 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
     $(function() {
       $(".btn-save-courseunit").click(function() {
+        console.log(JSON.stringify(spaceToJson()));
         $(".btn-save-courseunit").prop('disabled', true);
+        showProgress();
         $.ajax( {
           method: "POST",
           url: "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>&store",
@@ -837,8 +891,10 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           clear();
           jsonToSpace(JSON.parse(data));
           $(".btn-save-courseunit").prop('disabled', false);
+          showSuccess();
         })
         .fail(function(data) {
+          showError();
           alert( "error: " + data );
         });
       });
@@ -846,17 +902,59 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
     $(function() {
       $(".btn-save-courseunit").prop('disabled', true);
+      showProgress();
 
       $.ajax( "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>")
       .done(function(data) {
         clear();
         jsonToSpace(JSON.parse(data));
         $(".btn-save-courseunit").prop('disabled', false);
-      })
+        showAdvice();
+W      })
       .fail(function(data) {
+        showError();
         alert( "error: " + data );
       });
     });
+
+    $(function() {
+      $(".message-inprogress").hide();
+      $(".message-stored").hide();
+      $(".message-error").hide();
+      $(".message-advice").show();
+    });
+
+    function showProgress() {
+      $(".message-inprogress").show();
+      $(".message-stored").hide();
+      $(".message-error").hide();
+      $(".message-advice").hide();
+    }
+
+    function showAdvice() {
+      $(".message-inprogress").hide();
+      $(".message-stored").hide();
+      $(".message-error").hide();
+      $(".message-advice").show();
+    }
+
+    function showError() {
+      $(".message-inprogress").hide();
+      $(".message-stored").show();
+      $(".message-error").hide();
+      $(".message-advice").hide();
+    }
+
+    function showSuccess() {
+      $(".message-inprogress").hide();
+      $(".message-stored").show();
+      $(".message-error").hide();
+      $(".message-advice").hide();
+
+      setTimeout(showAdvice, 1000);
+    }
+
+
 
 </script>
 </body>

@@ -249,13 +249,13 @@ if ($canCreateCourse) {
                         <div class="row">
                             <div class="col-sm-12">
                                 <label for="slides-title">Sildes Title</label>
-                                <input type="text" class="form-control protocontent" id=-slides-title"
+                                <input type="text" class="form-control protocontent"
                                        name="slides-title"
                                        placeholder="Title" aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
                                 <label for="slides-link">Slides Link</label><br>
-                                <input type="text" class="form-control protocontent" id=-slides-title"
+                                <input type="text" class="form-control protocontent"
                                        name="slides-link"
                                        placeholder="http://..." aria-describedby="basic-addon1">
 
@@ -307,7 +307,7 @@ if ($canCreateCourse) {
     </div>
 
     <div class="modal fade pw-modal-quizzes" tabindex="-1" role="dialog" aria-labelledby="modal"
-         id="prototypeQuizzesViewerModal">
+         id="prototypeQuizzesViewerModal" data-question-ctr="0">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -321,67 +321,13 @@ if ($canCreateCourse) {
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label for="video-title">Quizzes Title</label>
-                                    <input type="text" class="form-control protocontent" id=-quizzes-title"
+                                    <input type="text" class="form-control protocontent"
                                            name="quizzes-title"
                                            placeholder="Title" aria-describedby="basic-addon1">
                                 </div>
                                 <div class="col-sm-12 qa-block-container">
                                     <h4 class="">Questions</h4>
                                     <hr>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h3 class="question-title-counter">Question 1</h3>
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="row qa-div">
-                                                <div class="col-sm-12">
-
-                                                    <label for="quizzes-question-0">Question:</label>
-                                                    <input type="text" class="form-control protocontent"
-                                                           id=-quizzes-question-0" name="quizzes-question-0"
-                                                           placeholder="Question" aria-describedby="basic-addon1">
-                                                </div>
-                                                <label class="col-sm-12">Answers:</label>
-                                                <div class="checkbox">
-                                                    <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                                                        <div class="input-group">
-                                                            <input type="checkbox" name="checkbox1"
-                                                                   value="correct" checked>
-                                                            <input type="text" class="form-control protocontent"
-                                                                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                                   placeholder="Answer" aria-describedby="basic-addon1"
-                                                                   placeholder="Add Answer">
-                                                            <span class="input-group-btn">
-                                                        <button class="btn btn-secondary remove-answer" type="button"
-                                                                disabled>-</button>
-                                                    </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                                                        <div class="input-group">
-                                                            <input type="checkbox" name="checkbox1"
-                                                                   value="correct">
-                                                            <input type="text" class="form-control protocontent"
-                                                                   id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                                                   placeholder="Answer" aria-describedby="basic-addon1"
-                                                                   placeholder="Add Answer">
-                                                            <span class="input-group-btn">
-                                                        <button class="btn btn-secondary remove-answer" type="button"
-                                                                disabled>-</button>
-                                                    </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-6 padding-bottom-1em">
-                                                        <button type="button"
-                                                                class="btn btn-default btn-block btn-add-answer">
-                                                            Add Answer
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
                                 </div>
                             </div>
                         </div>
@@ -401,15 +347,17 @@ if ($canCreateCourse) {
     <!-- Plugin JavaScript -->
     <script type="text/template" id="answerBlock">
         <div class="col-sm-6 padding-bottom-1em single-answer-block">
+            <input type="hidden" name="quizzes-answer-id_0_0" class="protocontent" value="">
             <div class="input-group">
-                <input type="checkbox" name="checkbox2" id="checkbox2" value="correct">
-                <input type="text" class="form-control protocontent"
-                       id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                       placeholder="Answer" aria-describedby="basic-addon1"
-                       placeholder="Add Answer">
-                <span class="input-group-btn">
+              <span class="input-group-addon">
+                <input type="checkbox" name="quizzes-answer-correct_0_0" class="protocontent" value="correct">
+              </span>
+              <input type="text" class="form-control protocontent"
+                       name="quizzes-answer_0_0" class="protocontent"
+                       placeholder="Answer" aria-describedby="basic-addon1">
+              <span class="input-group-btn">
                 <button class="btn btn-secondary remove-answer" type="button">-</button>
-            </span>
+              </span>
             </div>
         </div>
     </script>
@@ -417,51 +365,26 @@ if ($canCreateCourse) {
 
     <!-- Plugin JavaScript -->
     <script type="text/template" id="questionBlock">
-        <div class="panel panel-default">
+        <div class="panel panel-default" data-answer-ctr="0">
             <div class="panel-heading">
                 <h3 class="question-title-counter">Question 1</h3>
             </div>
             <div class="panel-body">
                 <div class="row qa-div">
-                    <div class="col-sm-12"><br><button class="btn btn-danger remove-answer" type="button" onClick = "removeQuestion($(this))">Remove</button><br>
-                        <label for="quizzes-question-0">Question:</label>
+                    <div class="col-sm-12"><br><button class="btn btn-danger btn-remove-question" type="button">Remove</button><br>
+                        <label for="quizzes-question_0">Question:</label>
                         <input type="text" class="form-control protocontent"
-                               id=-quizzes-question-0" name="quizzes-question-0"
+                               name="quizzes-question_0"
                                placeholder="Question" aria-describedby="basic-addon1">
+                        <input type="hidden" name="quizzes-question-id_0" class="protocontent" value="">
                     </div>
                     <label class="col-sm-12">Answers:</label>
                     <div class="checkbox">
-                        <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                            <div class="input-group">
-                                <input type="checkbox" name="checkbox2" value="correct" checked>
-                                <input type="text" class="form-control protocontent"
-                                       id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                       placeholder="Answer" aria-describedby="basic-addon1"
-                                       placeholder="Add Answer">
-                                <span class="input-group-btn">
-                            <button class="btn btn-secondary remove-answer" type="button"
-                                    disabled>-</button>
-                        </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 padding-bottom-1em single-answer-block">
-                            <div class="input-group">
-                                <input type="checkbox" name="checkbox2"value="correct">
-                                <input type="text" class="form-control protocontent"
-                                       id=-quizzes-answer-0-0" name="quizzes-answer-0-0"
-                                       placeholder="Answer" aria-describedby="basic-addon1"
-                                       placeholder="Add Answer">
-                                <span class="input-group-btn">
-                            <button class="btn btn-secondary remove-answer" type="button"
-                                    disabled>-</button>
-                        </span>
-                            </div>
-                        </div>
-                    <div class="col-sm-6 padding-bottom-1em">
-                        <button type="button" class="btn btn-default btn-block btn-add-answer">
-                            Add Answer
-                        </button>
-                    </div>
+                      <div class="col-sm-6 padding-bottom-1em">
+                          <button type="button" class="btn btn-default btn-block btn-add-answer">
+                              Add Answer
+                          </button>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -660,6 +583,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
       });
 
+      // TODO add question + 2 answers
+
       $('.modal-add-button').click(function () {
           var $qb = $('#questionBlock').html();
           var count = $(this).parents(".modal-content").find(".qa-block-container").find(".question-title-counter")
@@ -668,25 +593,59 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           $(this).parents(".modal-content").find(".qa-block-container").append($qb);
           var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
           $elem.find(".question-title-counter").text("Question " + aNum);
+
+          var qorder = parseInt( $elem.parents(".modal").attr("data-question-ctr") );
+          $elem.parents(".modal").attr("data-question-ctr", qorder+1);
+
+          $elem.find("[name=quizzes-question_0]").attr("name", "quizzes-question_" + qorder);
+          $elem.find("[name=quizzes-question-id_0]").attr("name", "quizzes-question-id_" + qorder);
+          $elem.attr("data-question-id", qorder);
+
           quizzesButtonFunc($elem);
       });
 
-      //add function to the template quizzies form
-      $('.remove-answer').click(function () {
-          qaparent = $(this).parent(".qa-div");
-          $(this).parents(".single-answer-block").remove();
-          removeButtons = $(qaparent).find(".remove-answer");
-          if (removeButtons.length <= 2) {
-              removeButtons.each(function () {
-                  $(this).prop('disabled', true);
-              })
-          }
-      });
-
-
-      quizzesButtonFunc($prototypeModalClone);
-
       totalWidgets++;
+    }
+
+    function quizzesButtonFunc($elem) {
+        $elem.find(".btn-remove-question").click(function() {
+          var container = $(this).parents(".qa-block-container");
+          $(this).parents(".panel-default").remove();
+          container.find(".question-title-counter").each(function (index) {
+              $(this).html("Question "+ (index +1));
+          });
+        });
+
+        $elem.find(".btn-add-answer").click(function () {
+            var template = $("#answerBlock").html();
+            template = $(template).insertBefore($(this).parent());
+
+            var qorder = parseInt( $(template).parents(".panel").attr("data-question-id") );
+            var aorder = parseInt( $(template).parents(".panel").attr("data-answer-ctr") );
+            $(template).parents(".panel").attr("data-answer-ctr", aorder+1);
+
+            $(template).find("[name=quizzes-answer_0_0]").attr("name", "quizzes-answer_" + qorder + "_" + aorder);
+            $(template).find("[name=quizzes-answer-id_0_0]").attr("name", "quizzes-answer-id_" + qorder + "_" + aorder);
+            $(template).find("[name=quizzes-answer-correct_0_0]").attr("name", "quizzes-answer-correct_" + qorder + "_" + aorder);
+
+            //qa-div
+            $(template).find('.remove-answer').click(function () {
+                qaparent = $(this).parent(".qa-div");
+                $(this).parents(".single-answer-block").remove();
+                removeButtons = $(qaparent).find(".remove-answer")
+                if (removeButtons.length <= 2) {
+                    removeButtons.each(function () {
+                        $(this).prop('disabled', true);
+                    })
+                }
+            });
+            removeButtons = $(this).parent().parent().find(".remove-answer");
+            removeButtons.each(function () {
+                $(this).prop('disabled', false);
+            });
+
+        });
+
     }
 
     function createSidebarElement(name, index) {
@@ -719,7 +678,12 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         $inputObj = $modal.find(".modal-body").find(".protocontent");
         $inputObj.each(function (index) {
             //For unknown reason, replacing attr() with data() does not work
-            $widget.parent().parent().attr("data-" + $(this).attr("name"), $(this).val());
+            var value = $(this).val();
+            if ($(this).is(':checkbox') && !$(this).prop('checked')) {
+              value="";
+            }
+
+            $widget.parent().parent().attr("data-" + $(this).attr("name"), value);
         });
     }
 
@@ -732,39 +696,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
         });
 
-        // TODO quiz...
-    }
-
-    function removeQuestion($elem) {
-        $parentEl = $elem.parents(".qa-block-container");
-        $elem.parents(".panel-default").remove();
-        $parentEl.find(".question-title-counter").each(function (index) {
-            $(this).html("Question "+ (index +1));
-        });
-    }
-    function quizzesButtonFunc($elem) {
-        $elem.find(".btn-add-answer").click(function () {
-            var template = $("#answerBlock").html();
-            template = $(template).insertBefore($(this).parent());
-            cntrPanels = template.parents(".qa-block-container").find(".panel-default").length;
-            console.log(cntrPanels)
-            //qa-div
-            $(template).find('.remove-answer').click(function () {
-                qaparent = $(this).parent(".qa-div");
-                $(this).parents(".single-answer-block").remove();
-                removeButtons = $(qaparent).find(".remove-answer")
-                if (removeButtons.length <= 2) {
-                    removeButtons.each(function () {
-                        $(this).prop('disabled', true);
-                    })
-                }
-            });
-            removeButtons = $(this).parent().parent().find(".remove-answer");
-            removeButtons.each(function () {
-                $(this).prop('disabled', false);
-            });
-
-        });
+        // TODO quiz... simulate clicks on buttons
 
     }
 
@@ -785,9 +717,38 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           };
         },
         quiz: function(el) {
-          // TODO data attributes for quiz not set properly ...
+          var questions = {};
+
+          $.each(el.get(0).attributes, function() {
+            if(this.specified) {
+              var nameSplit = this.name.split("_");
+              if (nameSplit[0] == "data-quizzes-question") {
+                questions[nameSplit[1]] = {
+                  id: el.attr("data-quizzes-question-id_" + nameSplit[1]),
+                  title: el.attr("data-quizzes-question_" + nameSplit[1]),
+                  answers: {}
+                }
+              }
+            }
+          });
+
+          $.each(el.get(0).attributes, function() {
+            if(this.specified) {
+              var nameSplit = this.name.split("_");
+              if (nameSplit[0] == "data-quizzes-answer") {
+                questions[nameSplit[1]].answers[nameSplit[2]] =  {
+                  id: el.attr("data-quizzes-answer-id_" + nameSplit[1]+ "_" + nameSplit[2]),
+                  title: el.attr("data-quizzes-answer_" + nameSplit[1]+ "_" + nameSplit[2]),
+                  correct: el.attr("data-quizzes-answer-correct_" + nameSplit[1]+ "_" + nameSplit[2])
+                }
+              }
+            }
+          });
+
           return {
-            type: "quiz"
+            type: "quiz",
+            title: el.attr("data-quizzes-title"),
+            questions: questions
           };
         },
         hangout: function(el) {
@@ -795,7 +756,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         },
       }
 
-      // TODO how to merge localizations ?!?? especially quiz?
       var result = [];
       $("#grid1").find(".grid-stack-item").each(function(idx,el) {
         result.push({
@@ -822,7 +782,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           el.attr("data-video-link", data.link);
         },
         quiz: function(el, data) {
-          // TODO
+          // TODO deserialize quiz
         },
         hangout: function(el, data) {
         },

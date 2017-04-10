@@ -5,11 +5,13 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 */
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 
 // Create database connection
 $conn = require '../php/db_connect.php';
+require '../php/tools.php';
+require '../php/role_api.php';
 
 
 
@@ -40,9 +42,9 @@ $storeWidgetData = array(
     $stmt->bindValue(":link", (isset($data['link']) ? $data['link'] : ""), PDO::PARAM_STR);
 
     if (!$stmt->execute()) {
-        http_response_code(400);
-        print_r($stmt->errorInfo());
-        die("Error saving slides data.");
+      http_response_code(400);
+      print_r($stmt->errorInfo());
+      die("Error saving slides data.");
     }
   },
   'video' => function($conn, $element_id, $lang, $data) {
@@ -54,9 +56,9 @@ $storeWidgetData = array(
     $stmt->bindValue(":link", (isset($data['link']) ? $data['link'] : ""), PDO::PARAM_STR);
 
     if (!$stmt->execute()) {
-        http_response_code(400);
-        print_r($stmt->errorInfo());
-        die("Error saving slides data.");
+      http_response_code(400);
+      print_r($stmt->errorInfo());
+      die("Error saving slides data.");
     }
   },
   'hangout' => function($conn, $element_id, $lang, $data) {
@@ -64,7 +66,7 @@ $storeWidgetData = array(
   'quiz' => function($conn, $element_id, $lang, $data) {
      // TODO
   }
-);
+  );
 
 $loadWidgetData = array(
   'slides' => function($conn, $element_id, $lang) {
@@ -72,16 +74,16 @@ $loadWidgetData = array(
     $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
     $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
     if (!$stmt->execute()) {
-        echo "Error loading course.";
+      echo "Error loading course.";
     } else {
-        $data = $stmt->fetch();
+      $data = $stmt->fetch();
     }
 
     if (is_array($data))  {
       return array(
         "title" => $data["title"],
         "link" => $data["link"]
-      );
+        );
     }
     else {
       return false;
@@ -92,16 +94,16 @@ $loadWidgetData = array(
     $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
     $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
     if (!$stmt->execute()) {
-        echo "Error loading course.";
+      echo "Error loading course.";
     } else {
-        $data = $stmt->fetch();
+      $data = $stmt->fetch();
     }
 
     if (is_array($data))  {
       return array(
         "title" => $data["title"],
         "link" => $data["link"]
-      );
+        );
     }
     else {
       return false;
@@ -114,12 +116,14 @@ $loadWidgetData = array(
     // TODO
     return array();
   }
-);
+  );
 
 
 //Get input data from form
 $course_id = filter_input(INPUT_GET, 'courseid', FILTER_VALIDATE_INT);
+$course = getSingleDatabaseEntryByValue('courses','id',$course_id);
 $unit_id = filter_input(INPUT_GET, 'unitid', FILTER_VALIDATE_INT);
+$unit = getSingleDatabaseEntryByValue('course_units','id',$unit_id);
 $unit_lang = filter_input(INPUT_GET, 'unitlang');
 $store = isset($_GET['store']);
 
@@ -133,19 +137,27 @@ if ($store) { // store to db
   foreach ($input as $element) {
     $element_id = -1;
     if (!isset($element['element_id'])) { // create course element
-      $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang) VALUES (:type, :x, :y, :width, :height, :lang)");
+
+      // Add widget to activity in role space
+      // creating activity
+      $api = new RoleAPI("http://virtus-vet.eu:8081/", $_SESSION['access_token']);
+      $widgetXML = getWidgetXML($element['widget']['type']);
+      $widget_role_url = $api->addWidgetToSpace($course['space_url'], $unit['activity_url'],$widgetXML);
+
+      $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang, widget_role_url) VALUES (:type, :x, :y, :width, :height, :lang, :widget_role_url)");
       $stmt->bindParam(":type", $element['widget']['type'], PDO::PARAM_STR);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
       $stmt->bindParam(":y", $element['y'], PDO::PARAM_INT);
       $stmt->bindParam(":width", $element['width'], PDO::PARAM_INT);
       $stmt->bindParam(":height", $element['height'], PDO::PARAM_INT);
       $stmt->bindParam(":lang", $unit_lang, PDO::PARAM_INT);
+      $stmt->bindParam(":widget_role_url", $widget_role_url, PDO::PARAM_STR);
 
       $success = $stmt->execute();
       if (!$success) {
-          http_response_code(400);
-          print_r($stmt->errorInfo());
-          die("Error saving course element.");
+        http_response_code(400);
+        print_r($stmt->errorInfo());
+        die("Error saving course element.");
       }
 
       $element_id = $conn->lastInsertId();
@@ -156,9 +168,9 @@ if ($store) { // store to db
 
       $success = $stmt2->execute();
       if (!$success) {
-          http_response_code(400);
-          print_r($stmt2->errorInfo());
-          die("Error connecting course element to unit.");
+        http_response_code(400);
+        print_r($stmt2->errorInfo());
+        die("Error connecting course element to unit.");
       }
 
       $current_ids[] = $element_id;
@@ -174,9 +186,9 @@ if ($store) { // store to db
 
       $success = $stmt->execute();
       if (!$success) {
-          http_response_code(400);
-          print_r($stmt->errorInfo());
-          die("Error saving course element.");
+        http_response_code(400);
+        print_r($stmt->errorInfo());
+        die("Error saving course element.");
       }
 
       $element_id = $element['element_id'];
@@ -197,9 +209,9 @@ if ($store) { // store to db
   $stmt = $conn->prepare("DELETE FROM course_elements WHERE id IN (SELECT id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
   $success = $stmt->execute();
   if (!$success) {
-      http_response_code(400);
-      print_r($stmt->errorInfo());
-      die("Error deleting course elements.");
+    http_response_code(400);
+    print_r($stmt->errorInfo());
+    die("Error deleting course elements.");
   }
 }
 
@@ -222,7 +234,7 @@ foreach ($elements as $el) {
     "width" => $el['width'],
     "height" => $el['height'],
     "widget" => $widget_data
-  );
+    );
 }
 
 echo json_encode($results);

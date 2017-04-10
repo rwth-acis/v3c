@@ -59,9 +59,9 @@ function getCourseStructure($entry)
 
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course.php?id=$entry[id]" . $html . "' id='a_img$entry[id]'>
-            <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
-            <p style='font-weight: bold;'>$entry[name]</p>
-            </a></li>";
+    <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
+    <p style='font-weight: bold;'>$entry[name]</p>
+</a></li>";
 }
 
 /**
@@ -79,9 +79,9 @@ function getSubjectStructure($entry)
 
     // id used to derive course id (from database) connected to clicked link
     return "<li><a href='course_list.php?id=$entry[id]" . $html . "' id='a_img$entry[id]'>
-            <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
-            <p style='font-weight: bold;'>$entry[name]</p>
-            </a></li>";
+    <img src=$entry[img_url] alt=$entry[name] class='img-responsive img-fit'>
+    <p style='font-weight: bold;'>$entry[name]</p>
+</a></li>";
 }
 
 /**
@@ -112,19 +112,19 @@ function httpRequest($method, $url, $data = false)
 
     switch ($method) {
         case "POST":
-            curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POST, 1);
 
-            if ($data) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            }
-            break;
+        if ($data) {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        break;
         case "PUT":
-            curl_setopt($curl, CURLOPT_PUT, 1);
-            break;
+        curl_setopt($curl, CURLOPT_PUT, 1);
+        break;
         default:
-            if ($data) {
-                $url = sprintf("%s?%s", $url, http_build_query($data));
-            }
+        if ($data) {
+            $url = sprintf("%s?%s", $url, http_build_query($data));
+        }
     }
 
     // Optional Authentication:
@@ -293,4 +293,30 @@ function sortCourseUnits($courseid)
     $course_units = $course_units_sql->fetchAll();
 
     return $course_units;
+}
+
+
+/**
+ * This function returns the xml file for the specific widget.
+ * @param $widget
+ */
+
+function getWidgetXML($widget)
+{
+    // TODO make it dynamic? 
+    switch ($widget) {
+        case 'hangout':
+        return "http://virtus-vet.eu/src/widgets_xml/hangoutWidget.xml";
+        break;
+        case 'quiz':
+        return "http://virtus-vet.eu/src/widgets_xml/qa.xml";
+        break;
+        case 'slides':
+        return "http://virtus-vet.eu/src/widgets_xml/slides_widget.xml";
+        break;
+        case 'video':
+        return "http://virtus-vet.eu/src/widgets_xml/hangoutWidget.xml";
+        break;
+    }
+    return "";
 }

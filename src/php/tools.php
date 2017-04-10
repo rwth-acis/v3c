@@ -303,7 +303,7 @@ function sortCourseUnits($courseid)
 
 function getWidgetXML($widget)
 {
-    // TODO make it dynamic? 
+    // TODO make it dynamic?
     switch ($widget) {
         case 'hangout':
         return "http://virtus-vet.eu/src/widgets_xml/hangoutWidget.xml";
@@ -315,7 +315,7 @@ function getWidgetXML($widget)
         return "http://virtus-vet.eu/src/widgets_xml/slides_widget.xml";
         break;
         case 'video':
-        return "http://virtus-vet.eu/src/widgets_xml/hangoutWidget.xml";
+        return "http://virtus-vet.eu/src/widgets_xml/video_widget/widget.xml";
         break;
     }
     return "";

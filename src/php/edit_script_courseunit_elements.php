@@ -84,9 +84,10 @@ $storeWidgetData = array(
      foreach ($data['questions'] as $question) {
        $question_id = -1;
        if (!isset($question['id']) || $question['id'] == "") {
-         $stmt = $conn->prepare("INSERT INTO widget_data_quiz_questions (element_id, `order`) VALUES (:element_id, :order)");
+         $stmt = $conn->prepare("INSERT INTO widget_data_quiz_questions (element_id, `order`, default_lang) VALUES (:element_id, :order, :lang)");
          $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
          $stmt->bindParam(":order", $question_order, PDO::PARAM_INT);
+         $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
 
          if (!$stmt->execute()) {
            http_response_code(400);
@@ -131,10 +132,11 @@ $storeWidgetData = array(
        foreach ($question['answers'] as $answer) {
          $answer_id = -1;
          if (!isset($answer['id']) || $answer['id'] == "") {
-           $stmt = $conn->prepare("INSERT INTO widget_data_quiz_answers (question_id, `order`, correct) VALUES (:question_id, :order, :correct)");
+           $stmt = $conn->prepare("INSERT INTO widget_data_quiz_answers (question_id, `order`, correct, default_lang) VALUES (:question_id, :order, :correct, :lang)");
            $stmt->bindParam(":question_id", $question_id, PDO::PARAM_INT);
            $stmt->bindParam(":order", $answer_order, PDO::PARAM_INT);
            $stmt->bindValue(":correct", $answer['correct'] == "correct", PDO::PARAM_INT);
+           $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
 
            if (!$stmt->execute()) {
              http_response_code(400);
@@ -264,7 +266,9 @@ $loadWidgetData = array(
     if (is_array($data))  { // TODO select fallback language ....
       $questions = array();
       $stmt = $conn->prepare("SELECT * FROM widget_data_quiz_questions, widget_data_quiz_questions_lng
-                                WHERE element_id = :element_id AND widget_data_quiz_questions.id = widget_data_quiz_questions_lng.question_id AND lang = :lang ORDER BY `order`");
+                                WHERE element_id = :element_id AND widget_data_quiz_questions.id = widget_data_quiz_questions_lng.question_id
+                                AND lang = (SELECT IFNULL( (SELECT lang FROM widget_data_quiz_questions_lng WHERE lang = :lang AND element_id = :element_id), widget_data_quiz_questions.default_lang ))
+                                ORDER BY `order`");
       $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
       $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
       if (!$stmt->execute()) {
@@ -276,7 +280,9 @@ $loadWidgetData = array(
       foreach ($data2 as $q) {
         $answers = array();
         $stmt = $conn->prepare("SELECT * FROM widget_data_quiz_answers, widget_data_quiz_answers_lng
-                                  WHERE question_id = :question_id AND widget_data_quiz_answers.id = widget_data_quiz_answers_lng.answer_id AND lang = :lang ORDER BY `order`");
+                                  WHERE question_id = :question_id AND widget_data_quiz_answers.id = widget_data_quiz_answers_lng.answer_id
+                                  AND lang = (SELECT IFNULL( (SELECT lang FROM widget_data_quiz_answers_lng WHERE lang = :lang AND element_id = :element_id), widget_data_quiz_answers.default_lang ))
+                                  ORDER BY `order`");
         $stmt->bindParam(":question_id", $q["id"], PDO::PARAM_INT);
         $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
         if (!$stmt->execute()) {

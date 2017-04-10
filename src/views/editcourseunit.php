@@ -684,19 +684,19 @@ function createSidebarElement(name, index) {
           if(this.specified &&
               ( this.name.startsWith("data-video") || this.name.startsWith("data-quizzes") || this.name.startsWith("data-slides") ) ) {
             toRemove.push(this.name);
-    }
-});
+          }
+        });
         toRemove.forEach(function(val) {
           $widget.parent().parent().removeAttr( val );
-      })
+        })
 
         // set attributes
         $inputObj = $modal.find(".modal-body").find(".protocontent");
         $inputObj.each(function (index) {
-            //For unknown reason, replacing attr() with data() does not work
-            var value = $(this).val();
-            if ($(this).is(':checkbox') && !$(this).prop('checked')) {
-              value="";
+          //For unknown reason, replacing attr() with data() does not work
+          var value = $(this).val();
+          if ($(this).is(':checkbox') && !$(this).prop('checked')) {
+            value="";
           }
 
           $widget.parent().parent().attr("data-" + $(this).attr("name"), value);
@@ -714,20 +714,20 @@ function createSidebarElement(name, index) {
             var $question = $modal.find(".panel-default").last();
             for (var j = 0; j < parseInt($widget.parent().parent().attr("data-tmp-answer-count_" + i)); j++) {
               $question.find(".btn-add-answer").click();
+            }
           }
-      }
-  }
+        }
 
-  $inputObj = $modal.find(".modal-body").find(".protocontent");
-  $inputObj.each(function (index) {
-      if ($(this).is(':checkbox')) {
-        $(this).prop('checked', $widget.parent().parent().attr("data-" + $(this).attr("name")) != "");
-    }
-    else {
-        $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
-    }
-});
-}
+        $inputObj = $modal.find(".modal-body").find(".protocontent");
+        $inputObj.each(function (index) {
+          if ($(this).is(':checkbox')) {
+            $(this).prop('checked', $widget.parent().parent().attr("data-" + $(this).attr("name")) != "");
+          }
+          else {
+            $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
+          }
+        });
+      }
 
 function spaceToJson() {
   var widgetSerializer = {

@@ -7,17 +7,17 @@
 </head>
 
 <body>
-<?php include("menu.php"); ?>
+    <?php include("menu.php"); ?>
 
-<?php
-$conn = require_once '../php/db_connect.php';
-include '../php/tools.php';
-include '../php/access_control.php';
-$accessControl = new AccessControl();
+    <?php
+    $conn = require_once '../php/db_connect.php';
+    include '../php/tools.php';
+    include '../php/access_control.php';
+    $accessControl = new AccessControl();
 
 
 // The course unit id from URL parameter
-$course_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+    $course_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
 $course_lang = "en";  // default value
 if (isset($_GET["lang"])) {
@@ -29,12 +29,12 @@ $isLecturer = $accessControl->canUpdateCourse($course_id);
 
 // Gets course details with it's creator information
 $stmt = $conn->prepare("SELECT courses.*, courses_lng.*, organizations.name AS orga, organizations.email AS orga_email
-          FROM courses, organizations, courses_lng
-          WHERE courses.id = :course_id
-            AND courses.creator = organizations.email
-            AND courses_lng.course_id = courses.id
-            AND (courses_lng.lang = :course_lang OR courses_lng.lang = (SELECT default_lang FROM courses WHERE id = :course_id))
-          LIMIT 1");
+  FROM courses, organizations, courses_lng
+  WHERE courses.id = :course_id
+  AND courses.creator = organizations.email
+  AND courses_lng.course_id = courses.id
+  AND (courses_lng.lang = :course_lang OR courses_lng.lang = (SELECT default_lang FROM courses WHERE id = :course_id))
+  LIMIT 1");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
@@ -46,10 +46,10 @@ if (!$success) {
     $course_details = $stmt->fetchAll();
     if (sizeof($course_details) == 1 || $course_details[0]['lang'] == $course_lang) {
       $course_details = $course_details[0];
-    }
-    else {
+  }
+  else {
       $course_details = $course_details[1];
-    }
+  }
 }
 
 // Get course subject
@@ -59,14 +59,14 @@ $course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id
 
 // Get course units
 $stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
-                        FROM course_to_unit, course_units, course_units_lng
-                        WHERE course_to_unit.unit_id = course_units.id
-                          AND course_to_unit.course_id = :course_id
-                          AND course_units.id = course_units_lng.unit_id
-                          AND course_units_lng.lang = (SELECT
-                            IFNULL( (SELECT lang FROM course_units_lng, course_to_unit
-                                WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang AND course_to_unit.course_id = :course_id),
-                            course_units.default_lang ))
+    FROM course_to_unit, course_units, course_units_lng
+    WHERE course_to_unit.unit_id = course_units.id
+    AND course_to_unit.course_id = :course_id
+    AND course_units.id = course_units_lng.unit_id
+    AND course_units_lng.lang = (SELECT
+    IFNULL( (SELECT lang FROM course_units_lng, course_to_unit
+    WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang AND course_to_unit.course_id = :course_id GROUP BY course_to_unit.course_id) ,
+    course_units.default_lang))
                         "); // TODO fix
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
@@ -131,13 +131,13 @@ function replaceLinks($text)
                                         <span class="glyphicon glyphicon-book margin-right"></span>
                                         <?php echo $course_unit["title"] ?>
                                         <span class="pull-right">
-                                    <span class="glyphicon glyphicon-calendar margin-right"></span>
+                                            <span class="glyphicon glyphicon-calendar margin-right"></span>
                                             <?php echo $course_unit["start_date"] ?>
                                             <!-- TODO: href to course room-->
-                                    <a href="http://role-sandbox.eu/spaces/v3c_demo" target="_blank" class="margin-left btn btn-xs btn-warning">
-                                        <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
-                                    </a>
-                                </span>
+                                            <a href="http://virtus-vet.eu:8081/spaces/<?php echo $course_details['space_url']; ?>" target="_blank" class="margin-left btn btn-xs btn-warning">
+                                                <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
+                                            </a>
+                                        </span>
                                     </li>
                                     <div id="<?php echo $course_unit["id"] ?>" class="collapse">
                                         <div class="margin-top margin-left">
@@ -164,59 +164,59 @@ function replaceLinks($text)
                         <label class="col-sm-3 output-element"><?php echo getTranslation("course:content:createdby", "Created by:");?></label>
                         <div class="col-sm-7"><?php echo $course_details["orga"]; ?>
                             (<a href="mailto:<?php echo $course_details["orga_email"]; ?>"><?php echo $course_details["orga_email"]; ?></a>)</div>
-                        <div class="col-sm-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <label class="col-sm-3"><?php echo getTranslation("course:content:domain", "Domain:");?></label>
-                        <p class="col-sm-7 output-element"><?php echo $course_subject_details["name"]; ?></p>
-                        <div class="col-sm-1"></div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <label class="col-sm-3"><?php echo getTranslation("course:content:profession", "Profession:");?></label>
-                        <p class="col-sm-7 output-element"><?php echo $course_details["profession"]; ?></p>
-                        <div class="col-sm-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <label class="col-sm-3"><?php echo getTranslation("course:content:description", "Description:");?></label>
-                        <p class="col-sm-7 output-element"><?php echo $course_details["description"]; ?></p>
-                        <div class="col-sm-1"></div>
-                    </div>
-                    <?php if ($isLecturer) {
-                        ?>
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class=" col-sm-5">
-                            <?php printLinkBtn("editcourse.php?id=$course_id&lang=$course_lang",
-                                "btn btn-success btn-block btn-lg", getTranslation("general:button:edit", "Edit")) ?>
+                            <div class="col-sm-1"></div>
                         </div>
-                        <div class="col-sm-5">
-                            <button class="btn btn-warning col-sm-5 btn-block btn-lg " type='button'
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <label class="col-sm-3"><?php echo getTranslation("course:content:domain", "Domain:");?></label>
+                            <p class="col-sm-7 output-element"><?php echo $course_subject_details["name"]; ?></p>
+                            <div class="col-sm-1"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <label class="col-sm-3"><?php echo getTranslation("course:content:profession", "Profession:");?></label>
+                            <p class="col-sm-7 output-element"><?php echo $course_details["profession"]; ?></p>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <label class="col-sm-3"><?php echo getTranslation("course:content:description", "Description:");?></label>
+                            <p class="col-sm-7 output-element"><?php echo $course_details["description"]; ?></p>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        <?php if ($isLecturer) {
+                            ?>
+                            <div class="row">
+                                <div class="col-sm-1"></div>
+                                <div class=" col-sm-5">
+                                    <?php printLinkBtn("editcourse.php?id=$course_id&lang=$course_lang",
+                                    "btn btn-success btn-block btn-lg", getTranslation("general:button:edit", "Edit")) ?>
+                                </div>
+                                <div class="col-sm-5">
+                                    <button class="btn btn-warning col-sm-5 btn-block btn-lg " type='button'
                                     id="btn-delete"><?php echo getTranslation("general:button:delete", "Delete");?>
-                            </button>
+                                </button>
+                            </div>
+                            <div class="col-md-1"></div>
                         </div>
-                        <div class="col-md-1"></div>
+                        <?php } ?>
                     </div>
-                    <?php } ?>
+                    <div class="col-md-2"></div>
                 </div>
-                <div class="col-md-2"></div>
+                <!-- row -->
             </div>
-            <!-- row -->
-        </div>
+            <!-- container -->
+        </section>
         <!-- container -->
-    </section>
-    <!-- container -->
-</div>
-<!-- #courses -->
+    </div>
+    <!-- #courses -->
 
-<?php include("footer.php"); ?>
+    <?php include("footer.php"); ?>
 
-<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-<script type="text/javascript" src="../js/tools.js"></script>
-<script type="text/javascript" src="../js/course.js"></script>
+    <!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="../js/tools.js"></script>
+    <script type="text/javascript" src="../js/course.js"></script>
 
 </body>
 </html>

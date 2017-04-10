@@ -34,7 +34,7 @@ $stmt = $conn->prepare("SELECT courses.*, courses_lng.*, organizations.name AS o
   AND courses.creator = organizations.email
   AND courses_lng.course_id = courses.id
   AND (courses_lng.lang = :course_lang OR courses_lng.lang = (SELECT default_lang FROM courses WHERE id = :course_id))
-  LIMIT 1");
+  ");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);

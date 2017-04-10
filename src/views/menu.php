@@ -111,6 +111,15 @@
 </div>
 
 <script type="text/javascript">
+    function updateQueryStringParameter(uri, key, value) {
+        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+        }
+        return uri;
+    }
+
     (function () {
         var po = document.createElement('script');
         po.type = 'text/javascript';
@@ -127,11 +136,12 @@
         $("#select-lang").change(function () {
             var selectedLanguage = $(this).val();
             var url = baseUrl + "/src/php/set_language.php?setlang=" + selectedLanguage;
-
             $.ajax({
                 url: url
             }).done(function () {
-                location.reload();
+                var uri = updateQueryStringParameter(document.URL,"lang",selectedLanguage);
+                uri = updateQueryStringParameter(uri,"ulang",selectedLanguage);
+                window.location.href = uri;
             });
         });
     });

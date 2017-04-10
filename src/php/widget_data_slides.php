@@ -9,18 +9,18 @@ if (session_status() == PHP_SESSION_NONE) {
 
 $conn = require '../php/db_connect.php';
 
-$widget_instance_url = filter_input(INPUT_GET, 'widget_instance_url');
+$widget_role_url = filter_input(INPUT_GET, 'widget_role_url');
 $lang = filter_input(INPUT_GET, 'lang');
 
 $stmt = $conn->prepare("SELECT widget_data_slides.element_id, title, link, lang
                         FROM widget_data_slides, course_elements
                         WHERE widget_data_slides.element_id = course_elements.id
-                          AND (lang = :lang OR lang = (SELECT default_lang FROM course_elements WHERE widget_instance_url = :widget_instance_url ))
-                          AND widget_instance_url = :widget_instance_url
+                          AND (lang = :lang OR lang = (SELECT default_lang FROM course_elements WHERE widget_role_url = :widget_role_url ))
+                          AND widget_role_url = :widget_role_url
                         LIMIT 1");
 
 $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
-$stmt->bindParam(":widget_instance_url", $widget_instance_url, PDO::PARAM_STR);
+$stmt->bindParam(":widget_role_url", $widget_role_url, PDO::PARAM_STR);
 
 if ($stmt->execute() !== FALSE) {
     $res = $stmt->fetchAll();

@@ -85,8 +85,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   <script>
 
-    function loadSlides(widget_instance_url, lang) {
-      var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_data_slides.php?widget_instance_url=" + encodeURI(widget_instance_url) + "&lang=" + lang )
+    function loadSlides(widget_role_url, lang) {
+      var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_data_slides.php?widget_role_url=" + encodeURI(widget_role_url) + "&lang=" + lang )
       .done(function(data) {
         data = JSON.parse(data);
         $("#main-content").html('<h3>'+data.title+'</h3><object class="expand" data="'+data.link+'" type="application/pdf">'

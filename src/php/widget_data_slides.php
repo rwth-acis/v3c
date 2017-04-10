@@ -16,14 +16,14 @@ $stmt = $conn->prepare("SELECT widget_data_slides.element_id, title, link, lang
                         FROM widget_data_slides, course_elements
                         WHERE widget_data_slides.element_id = course_elements.id
                           AND (lang = :lang OR lang = (SELECT default_lang FROM course_elements WHERE widget_role_url = :widget_role_url ))
-                          AND widget_role_url = :widget_role_url
-                        LIMIT 1");
+                          AND widget_role_url = :widget_role_url");
 
 $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
 $stmt->bindParam(":widget_role_url", $widget_role_url, PDO::PARAM_STR);
 
 if ($stmt->execute() !== FALSE) {
     $res = $stmt->fetchAll();
+    
     if (count($res) == 1) {
       $res = $res[0];
     }

@@ -75,8 +75,6 @@ $storeWidgetData = array(
        die("Error saving slides data.");
      }
 
-    // [{"widget":{"type":"quiz","title":"dfgdfgdfgdfg","questions":{"0":{"id":"","title":"dfgdfg","answers":{"0":{"id":"","title":"dfgdfgdfg","correct":"correct"},"1":{"id":"","title":"dfgdfgdfg","correct":""}}}}},"x":"2","y":"0","width":"4","height":"4"}]:""
-
     // STORE QUESTIONS
 
      $current_question_ids = array();
@@ -263,11 +261,11 @@ $loadWidgetData = array(
       $data = $stmt->fetch();
     }
 
-    if (is_array($data))  { // TODO select fallback language ....
+    if (is_array($data))  {
       $questions = array();
       $stmt = $conn->prepare("SELECT * FROM widget_data_quiz_questions, widget_data_quiz_questions_lng
                                 WHERE element_id = :element_id AND widget_data_quiz_questions.id = widget_data_quiz_questions_lng.question_id
-                                AND lang = (SELECT IFNULL( (SELECT lang FROM widget_data_quiz_questions_lng WHERE lang = :lang AND element_id = :element_id), widget_data_quiz_questions.default_lang ))
+                                AND lang = (SELECT IFNULL( (SELECT lang FROM widget_data_quiz_questions_lng WHERE lang = :lang AND question_id = widget_data_quiz_questions.id), widget_data_quiz_questions.default_lang ))
                                 ORDER BY `order`");
       $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
       $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
@@ -281,7 +279,7 @@ $loadWidgetData = array(
         $answers = array();
         $stmt = $conn->prepare("SELECT * FROM widget_data_quiz_answers, widget_data_quiz_answers_lng
                                   WHERE question_id = :question_id AND widget_data_quiz_answers.id = widget_data_quiz_answers_lng.answer_id
-                                  AND lang = (SELECT IFNULL( (SELECT lang FROM widget_data_quiz_answers_lng WHERE lang = :lang AND element_id = :element_id), widget_data_quiz_answers.default_lang ))
+                                  AND lang = (SELECT IFNULL( (SELECT lang FROM widget_data_quiz_answers_lng WHERE lang = :lang AND answer_id = widget_data_quiz_answers.id), widget_data_quiz_answers.default_lang ))
                                   ORDER BY `order`");
         $stmt->bindParam(":question_id", $q["id"], PDO::PARAM_INT);
         $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
@@ -421,7 +419,6 @@ foreach ($elements as $el) {
   $widget_data = $loadWidgetData[$el['widget_type']]($conn, $el['id'], $unit_lang);
   if ($widget_data == false) {
     $widget_data = $loadWidgetData[$el['widget_type']]($conn, $el['id'], $el['default_lang']);
-    // TODO mark as untranslated?!?
   }
 
   $widget_data["type"] = $el['widget_type'];

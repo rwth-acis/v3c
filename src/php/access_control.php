@@ -126,7 +126,7 @@ class AccessControl
 
             $course = getSingleDatabaseEntryByValues('courses', array(
                 'id' => $course_id
-            ));
+                ));
 
             $creator = getSingleDatabaseEntryByValue('organizations', 'email', $course['creator']);
 
@@ -145,6 +145,10 @@ class AccessControl
 
     public function isAdmin()
     {
+        if (!$this->getAuthentication()->isAuthenticated()) {
+            $this->lastStatus = USER_STATUS::NO_SESSION;
+            return false;
+        }
         $user = $this->getSessionUser();
 
         return (isset($user) && ($user->role == AccessControl::ADMIN_ROLE));

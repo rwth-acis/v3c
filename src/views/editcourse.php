@@ -1,5 +1,6 @@
 <?php
-
+$course_id = filter_input(INPUT_GET, 'id');
+$course_lang = filter_input(INPUT_GET, 'lang');
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,12 +15,45 @@
 </head>
 
 <body>
-<?php include "menu.php"; ?>
+    <?php include "menu.php"; ?>
+
+    <script>
+        function updateQueryStringParameter(uri, key, value) {
+          var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+          var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+          if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+        }
+        else {
+            return uri + separator + key + "=" + value;
+        }
+    }
+
+    $( document ).ready(function() {
+        var sel = document.getElementById('change-lang');
+        sel.onchange = function() {
+          var show = document.getElementById('change-lang');
+          window.location.href = updateQueryStringParameter(document.URL,"lang",show.value);
+      }
+  });
+
+</script>
 
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-            <h1><?php echo getTranslation("editcourse:head:edit", "Edit Your Course");?></h1>
+            <h1><?php echo getTranslation("editcourse:head:edit", "Edit Your Course");?>
+                <select class="form-control" name="change-lang" id="change-lang" style="width: 150px; float: right" >
+                    <?php
+                    $languages = getSelectableLanguages();
+                    foreach ($languages as $code => $language) {
+                        $selected = ($course_lang == $code) ? "selected" : "";
+
+                        echo "<option class='flag flag-$code' value='$code' $selected>$language</option>";
+                    }
+                    ?>
+                </select>
+            </h1>
         </div>
     </div>
 </header>
@@ -27,8 +61,6 @@
 // Check whether the currently logged in user is allowed to edit courses
 require '../php/access_control.php';
 
-$course_id = filter_input(INPUT_GET, 'id');
-$course_lang = filter_input(INPUT_GET, 'lang');
 
 $accessControl = new AccessControl();
 

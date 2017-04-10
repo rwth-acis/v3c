@@ -13,49 +13,49 @@
 </head>
 
 <body>
-<?php include("menu.php"); ?>
-<header id='head' class='secondary'>
-    <div class='container'>
-        <div class='row'>
-            <h1>Edit Course Unit</h1>
-        </div>
-    </div>
-</header>
-<?php
-include '../php/access_control.php';
-$accessControl = new AccessControl();
-$course_id = filter_input(INPUT_GET, 'cid', FILTER_VALIDATE_INT);
-$unit_id = filter_input(INPUT_GET, 'uid', FILTER_VALIDATE_INT);
-$course_lang = filter_input(INPUT_GET, 'ulang');
-
-$canCreateCourse = $accessControl->canUpdateCourse($course_id);
-
-if ($canCreateCourse) {
-    ?>
-    <!--Prototype Templates -->
-    <!-- ################################################################################### -->
-    <div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer" id="prototypeSlideViewer">
-        <div class="row virtus-pw-prototype-topbar">
-            <div class="virtus-pw-name col-sm-12">
-                Slides Widget
-            </div>
-            <div class="virtus-pw-prototype-top-toolbar">
-            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
-                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
-                <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
+    <?php include("menu.php"); ?>
+    <header id='head' class='secondary'>
+        <div class='container'>
+            <div class='row'>
+                <h1>Edit Course Unit</h1>
             </div>
         </div>
-        <div class="virtus-pw-content-container">
-            <div class="row virtus-pw-content-wrapper">
-                <div class="col-sm-12 virtus-pw-slide-img-wrapper">
-                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
-                        <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
-                                aria-label="Left Align"
-                                data-toggle="modal"
-                                data-target=".pw-modal-slideviewer">
+    </header>
+    <?php
+    include '../php/access_control.php';
+    $accessControl = new AccessControl();
+    $course_id = filter_input(INPUT_GET, 'cid', FILTER_VALIDATE_INT);
+    $unit_id = filter_input(INPUT_GET, 'uid', FILTER_VALIDATE_INT);
+    $course_lang = filter_input(INPUT_GET, 'ulang');
+
+    $canCreateCourse = $accessControl->canUpdateCourse($course_id);
+
+    if ($canCreateCourse) {
+        ?>
+        <!--Prototype Templates -->
+        <!-- ################################################################################### -->
+        <div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer" id="prototypeSlideViewer">
+            <div class="row virtus-pw-prototype-topbar">
+                <div class="virtus-pw-name col-sm-12">
+                    Slides Widget
+                </div>
+                <div class="virtus-pw-prototype-top-toolbar">
+                    <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                    aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+                    aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                    aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="virtus-pw-content-container">
+                <div class="row virtus-pw-content-wrapper">
+                    <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                        <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                            <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                            aria-label="Left Align"
+                            data-toggle="modal"
+                            data-target=".pw-modal-slideviewer">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
                         </button>
                         <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
@@ -81,15 +81,15 @@ if ($canCreateCourse) {
                 <div class="col-sm-12 virtus-pw-content">
                     <div class="row">
                         <div class="col-sm-4">
-                        <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon"
-                              aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon"
+                            aria-hidden="true"></span>
                         </div>
                         <div class="col-sm-4">
                             <span class="slide-viewer-slideindex-style">1/20</span>
                         </div>
                         <div class="col-sm-4">
                             <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon"
-                                  aria-hidden="true"></span>
+                            aria-hidden="true"></span>
                         </div>
                     </div>
                 </div>
@@ -104,12 +104,12 @@ if ($canCreateCourse) {
                 Hangouts Widget
             </div>
             <div class="virtus-pw-prototype-top-toolbar">
-            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
                 <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
+                aria-hidden="true"></span>
                 <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
+                aria-hidden="true"></span>
             </div>
         </div>
         <div class="virtus-pw-content-container">
@@ -128,12 +128,12 @@ if ($canCreateCourse) {
                 Video Widget
             </div>
             <div class="virtus-pw-prototype-top-toolbar">
-            <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
                 <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
+                aria-hidden="true"></span>
                 <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
+                aria-hidden="true"></span>
             </div>
         </div>
         <div class="virtus-pw-content-container">
@@ -142,106 +142,106 @@ if ($canCreateCourse) {
                     <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
                         <!--<span class="pw-alert-color"></span>-->
                         <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
-                                aria-label="Left Align"
-                                data-toggle="modal"
-                                data-target=".pw-modal-videoviewer">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
-                        </button>
-                        <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
-                    </div>
-                    <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/video-mockup.png'>
+                        aria-label="Left Align"
+                        data-toggle="modal"
+                        data-target=".pw-modal-videoviewer">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                    </button>
+                    <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
-                <div class="col-sm-12 virtus-pw-content">
-                    <div class="row">
-                        <div class="col-sm-3">
-                        </div>
-                        <div class="col-sm-6">
+                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/video-mockup.png'>
+            </div>
+            <div class="col-sm-12 virtus-pw-content">
+                <div class="row">
+                    <div class="col-sm-3">
+                    </div>
+                    <div class="col-sm-6">
                         <span
-                                class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-backward slideviewer-nav-icon videoviewer-icons-side-padding"
-                                aria-hidden="true"></span>
-                            <span
-                                    class="glyphicon glyphicon glyphicon glyphicon-play slideviewer-nav-icon videoviewer-icons-side-padding"
-                                    aria-hidden="true"></span>
-                            <span
-                                    class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-forward slideviewer-nav-icon videoviewer-icons-side-padding"
-                                    aria-hidden="true"></span><br>
-                            <span class="videoviewer-time-style">00:30:43/01:15:00</span>
-                        </div>
-                        <div class="col-sm-3">
+                        class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-backward slideviewer-nav-icon videoviewer-icons-side-padding"
+                        aria-hidden="true"></span>
+                        <span
+                        class="glyphicon glyphicon glyphicon glyphicon-play slideviewer-nav-icon videoviewer-icons-side-padding"
+                        aria-hidden="true"></span>
+                        <span
+                        class="glyphicon glyphicon glyphicon glyphicon glyphicon-fast-forward slideviewer-nav-icon videoviewer-icons-side-padding"
+                        aria-hidden="true"></span><br>
+                        <span class="videoviewer-time-style">00:30:43/01:15:00</span>
+                    </div>
+                    <div class="col-sm-3">
                         <span class="glyphicon glyphicon glyphicon-fullscreen slideviewer-nav-icon"
-                              aria-hidden="true"></span>
-                        </div>
+                        aria-hidden="true"></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="virtus-pw-prototype virtus-pw-hide pw-quizzes-viewer" id="prototypeQuizzesViewer">
-        <div class="row virtus-pw-prototype-topbar">
-            <div class="virtus-pw-name col-sm-12">
-                Quizzes Widget
-            </div>
-            <div class="virtus-pw-prototype-top-toolbar">
+<div class="virtus-pw-prototype virtus-pw-hide pw-quizzes-viewer" id="prototypeQuizzesViewer">
+    <div class="row virtus-pw-prototype-topbar">
+        <div class="virtus-pw-name col-sm-12">
+            Quizzes Widget
+        </div>
+        <div class="virtus-pw-prototype-top-toolbar">
             <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
-                  aria-hidden="true"></span>
-                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
-                <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
-                      aria-hidden="true"></span>
-            </div>
+            aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+            aria-hidden="true"></span>
+            <span class="glyphicon glyphicon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+            aria-hidden="true"></span>
         </div>
-        <div class="virtus-pw-content-container">
-            <div class="row virtus-pw-content-wrapper">
-                <div class="col-sm-12 virtus-pw-quizzes-img-wrapper">
-                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
-                        <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
-                                aria-label="Left Align"
-                                data-toggle="modal"
-                                data-target=".pw-modal-quizzes">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
-                        </button>
-                        <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
-                    </div>
-                    <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.png'>
-                </div>
-                <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                    sed
-                    diam nonumy eirmod tempor ?
-                </div>
-                <div class="col-sm-12">
+    </div>
+    <div class="virtus-pw-content-container">
+        <div class="row virtus-pw-content-wrapper">
+            <div class="col-sm-12 virtus-pw-quizzes-img-wrapper">
+                <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                    <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                    aria-label="Left Align"
+                    data-toggle="modal"
+                    data-target=".pw-modal-quizzes">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                </button>
+                <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
+            </div>
+            <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.png'>
+        </div>
+        <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+            sed
+            diam nonumy eirmod tempor ?
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 quizzes-answers-container">
                     <div class="row">
-                        <div class="col-sm-12 quizzes-answers-container">
-                            <div class="row">
-                                <div class="col-sm-6 quizzes-answer-box-container">
-                                    <div class="quizzes-answer-box">some answer</div>
-                                </div>
-                                <div class="col-sm-6 quizzes-answer-box-container">
-                                    <div class="quizzes-answer-box">The answer is b</div>
-                                </div>
-                                <div class="col-sm-6 quizzes-answer-box-container">
-                                    <div class="quizzes-answer-box">No that is the</div>
-                                </div>
-                                <div class="col-sm-6 quizzes-answer-box-container">
-                                    <div class="quizzes-answer-box">ture that</div>
-                                </div>
-                            </div>
+                        <div class="col-sm-6 quizzes-answer-box-container">
+                            <div class="quizzes-answer-box">some answer</div>
+                        </div>
+                        <div class="col-sm-6 quizzes-answer-box-container">
+                            <div class="quizzes-answer-box">The answer is b</div>
+                        </div>
+                        <div class="col-sm-6 quizzes-answer-box-container">
+                            <div class="quizzes-answer-box">No that is the</div>
+                        </div>
+                        <div class="col-sm-6 quizzes-answer-box-container">
+                            <div class="quizzes-answer-box">ture that</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
 
-    <!--Prototype Modal Templates -->
-    <!-- ################################################################################### -->
-    <div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
-         id="prototypeSlideViewerModal">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
+<!--Prototype Modal Templates -->
+<!-- ################################################################################### -->
+<div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
+id="prototypeSlideViewerModal">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>-->
+                    aria-hidden="true">&times;</span></button>-->
                     <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
                 </div>
                 <div class="modal-body">
@@ -250,14 +250,14 @@ if ($canCreateCourse) {
                             <div class="col-sm-12">
                                 <label for="slides-title">Sildes Title</label>
                                 <input type="text" class="form-control protocontent"
-                                       name="slides-title"
-                                       placeholder="Title" aria-describedby="basic-addon1">
+                                name="slides-title"
+                                placeholder="Title" aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
                                 <label for="slides-link">Slides Link</label><br>
                                 <input type="text" class="form-control protocontent"
-                                       name="slides-link"
-                                       placeholder="http://..." aria-describedby="basic-addon1">
+                                name="slides-link"
+                                placeholder="http://..." aria-describedby="basic-addon1">
 
                             </div>
                         </div>
@@ -272,12 +272,12 @@ if ($canCreateCourse) {
     </div>
 
     <div class="modal fade pw-modal-video" tabindex="-1" role="dialog" aria-labelledby="modal"
-         id="prototypeVideoViewerModal">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
+    id="prototypeVideoViewerModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>-->
+                    aria-hidden="true">&times;</span></button>-->
                     <h4 class="modal-title" id="myModalLabel">Video Widget</h4>
                 </div>
                 <div class="modal-body">
@@ -286,33 +286,33 @@ if ($canCreateCourse) {
                             <div class="col-sm-12">
                                 <label for="video-title">Video Title</label>
                                 <input type="text" class="form-control protocontent" id="video-title" name="video-title"
-                                       placeholder="Title" aria-describedby="basic-addon1">
+                                placeholder="Title" aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
                                 <label for="video-link">Video Link</label><br>
                                 <input type="text" class="form-control protocontent" id="video-link" name="video-link"
-                                       placeholder="http://..." aria-describedby="basic-addon1">
+                                placeholder="http://..." aria-describedby="basic-addon1">
 
-                                </label>
-                            </div>
+                            </label>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade pw-modal-quizzes" tabindex="-1" role="dialog" aria-labelledby="modal"
-         id="prototypeQuizzesViewerModal" data-question-ctr="0">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
+<div class="modal fade pw-modal-quizzes" tabindex="-1" role="dialog" aria-labelledby="modal"
+id="prototypeQuizzesViewerModal" data-question-ctr="0">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>-->
+                    aria-hidden="true">&times;</span></button>-->
                     <h4 class="modal-title" id="myModalLabel">Quizzes Widget</h4>
                 </div>
                 <div class="modal-body">
@@ -322,8 +322,8 @@ if ($canCreateCourse) {
                                 <div class="col-sm-6">
                                     <label for="video-title">Quizzes Title</label>
                                     <input type="text" class="form-control protocontent"
-                                           name="quizzes-title"
-                                           placeholder="Title" aria-describedby="basic-addon1">
+                                    name="quizzes-title"
+                                    placeholder="Title" aria-describedby="basic-addon1">
                                 </div>
                                 <div class="col-sm-12 qa-block-container">
                                     <h4 class="">Questions</h4>
@@ -351,84 +351,84 @@ if ($canCreateCourse) {
             <div class="input-group">
               <span class="input-group-addon">
                 <input type="checkbox" name="quizzes-answer-correct_0_0" class="protocontent" value="correct">
-              </span>
-              <input type="text" class="form-control protocontent"
-                       name="quizzes-answer_0_0" class="protocontent"
-                       placeholder="Answer" aria-describedby="basic-addon1">
-              <span class="input-group-btn">
+            </span>
+            <input type="text" class="form-control protocontent"
+            name="quizzes-answer_0_0" class="protocontent"
+            placeholder="Answer" aria-describedby="basic-addon1">
+            <span class="input-group-btn">
                 <button class="btn btn-secondary remove-answer" type="button">-</button>
-              </span>
-            </div>
+            </span>
         </div>
-    </script>
+    </div>
+</script>
 
 
-    <!-- Plugin JavaScript -->
-    <script type="text/template" id="questionBlock">
-        <div class="panel panel-default" data-answer-ctr="0">
-            <div class="panel-heading">
-                <h3 class="question-title-counter">Question 1</h3>
-            </div>
-            <div class="panel-body">
-                <div class="row qa-div">
-                    <div class="col-sm-12"><br><button class="btn btn-danger btn-remove-question" type="button">Remove</button><br>
-                        <label for="quizzes-question_0">Question:</label>
-                        <input type="text" class="form-control protocontent"
-                               name="quizzes-question_0"
-                               placeholder="Question" aria-describedby="basic-addon1">
-                        <input type="hidden" name="quizzes-question-id_0" class="protocontent" value="">
-                    </div>
-                    <label class="col-sm-12">Answers:</label>
-                    <div class="checkbox">
-                      <div class="col-sm-6 padding-bottom-1em">
-                          <button type="button" class="btn btn-default btn-block btn-add-answer">
-                              Add Answer
-                          </button>
-                      </div>
-                    </div>
+<!-- Plugin JavaScript -->
+<script type="text/template" id="questionBlock">
+    <div class="panel panel-default" data-answer-ctr="0">
+        <div class="panel-heading">
+            <h3 class="question-title-counter">Question 1</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row qa-div">
+                <div class="col-sm-12"><br><button class="btn btn-danger btn-remove-question" type="button">Remove</button><br>
+                    <label for="quizzes-question_0">Question:</label>
+                    <input type="text" class="form-control protocontent"
+                    name="quizzes-question_0"
+                    placeholder="Question" aria-describedby="basic-addon1">
+                    <input type="hidden" name="quizzes-question-id_0" class="protocontent" value="">
                 </div>
-            </div>
-        </div>
-    </script>
-
-
-    <!--Course edit site -->
-    <!-- ################################################################################### -->
-
-    <div id='courses'>
-        <div class='container virtus-margin-top-15' style="background: #ff8060; padding: 1em; margin:1em auto;">
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default btn-block btn-save-courseunit">
-                Save changes
-            </button>
+                <label class="col-sm-12">Answers:</label>
+                <div class="checkbox">
+                  <div class="col-sm-6 padding-bottom-1em">
+                      <button type="button" class="btn btn-default btn-block btn-add-answer">
+                          Add Answer
+                      </button>
+                  </div>
+              </div>
           </div>
+      </div>
+  </div>
+</script>
 
-          <span class="message-inprogress">Please wait...</span>
-          <span class="message-stored">Saved successfully!</span>
-          <span class="message-error">An error ocurred. Please refresh.</span>
-          <span class="message-advice">Changes to widget arrangements and widget contents are only applied after clicking this button!</span>
-        </div>
-        <section class='container'>
-            <div class='container'>
-                <div class='row'>
-                    <!-- Info box with data about subject -->
-                    <div class='col-sm-2 virtus-margin-top-15'>
-                        <div class='featured-box sidebar-container'>
-                            <div class="row">
-                                <div class="col-sm-2 lock-sidebar-icon-container virtus-pw-hide">
-                                <span class="glyphicon glyphicon glyphicon-lock locked-color-style sidbeback-lock-icon"
-                                      aria-hidden="true"
-                                      data-toggle="tooltip"
-                                      data-placement="bottom"
-                                      title="The sidebar is locked, because you already filled the rolespace with the maximum amount of Widgets. Remove Widgets to be able to add new Widgets again."></span>
-                                </div>
-                                <div class="col-sm-8">
-                                    <div class="sidebar-title">Toolbox:</div>
-                                </div>
-                            </div>
-                            <div class="gridstack-sidebar">
 
-                            </div>
+<!--Course edit site -->
+<!-- ################################################################################### -->
+
+<div id='courses'>
+    <div class='container virtus-margin-top-15' style="background: #ff8060; padding: 1em; margin:1em auto;">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default btn-block btn-save-courseunit">
+            Save changes
+        </button>
+    </div>
+
+    <span class="message-inprogress">Please wait...</span>
+    <span class="message-stored">Saved successfully!</span>
+    <span class="message-error">An error ocurred. Please refresh.</span>
+    <span class="message-advice">Changes to widget arrangements and widget contents are only applied after clicking this button!</span>
+</div>
+<section class='container'>
+    <div class='container'>
+        <div class='row'>
+            <!-- Info box with data about subject -->
+            <div class='col-sm-2 virtus-margin-top-15'>
+                <div class='featured-box sidebar-container'>
+                    <div class="row">
+                        <div class="col-sm-2 lock-sidebar-icon-container virtus-pw-hide">
+                            <span class="glyphicon glyphicon glyphicon-lock locked-color-style sidbeback-lock-icon"
+                            aria-hidden="true"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="The sidebar is locked, because you already filled the rolespace with the maximum amount of Widgets. Remove Widgets to be able to add new Widgets again."></span>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="sidebar-title">Toolbox:</div>
+                        </div>
+                    </div>
+                    <div class="gridstack-sidebar">
+
+                    </div>
                             <!--<div class="row sidebar-widget-counter-container">
                                 <div class="col-sm-12 sidebar-widget-counter-text">total Widgets used:</div>
                                 <div class="col-sm-12 sidebar-widget-counter-number">0</div>
@@ -481,10 +481,10 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     widgetConfiguration = [
-        {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal', widgetType: 'slides'},
-        {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
-        {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
-        {name: 'hangouts', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'}
+    {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal', widgetType: 'slides'},
+    {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
+    {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
+    {name: 'hangouts', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'}
     ];
 
     var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.
@@ -533,19 +533,19 @@ if (filter_input(INPUT_GET, "widget") == "true") {
          grid.addWidget($('<div><div class="grid-stack-item-content" /><div/>'),
          node.x, node.y, node.width, node.height)
          }, this);
-         });*/
+     });*/
 
-        $prevItems.draggable({
-            revert: 'invalid',
-            handle: '.grid-stack-item-content',
-            scroll: false,
-            appendTo: 'body',
-        });
-        $('.grid-stack').on('change', function (event, items) {
+     $prevItems.draggable({
+        revert: 'invalid',
+        handle: '.grid-stack-item-content',
+        scroll: false,
+        appendTo: 'body',
+    });
+     $('.grid-stack').on('change', function (event, items) {
 
-            $.each(items, function (index, item) {
-                var $item = (item.el).find('.grid-stack-sidebar-item');
-                if ($item.hasClass('grid-stack-sidebar-item')) {
+        $.each(items, function (index, item) {
+            var $item = (item.el).find('.grid-stack-sidebar-item');
+            if ($item.hasClass('grid-stack-sidebar-item')) {
                     //This one needs to be added
                     var itemIndex = $item.data('index');
                     createSidebarElement(widgetConfiguration[itemIndex].name, itemIndex)
@@ -556,8 +556,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
                 }
             });
-        });
     });
+ });
 
     function transformToWidget(item, itemIndex) {
       var $item = (item).find('.grid-stack-item-content');
@@ -608,28 +608,28 @@ if (filter_input(INPUT_GET, "widget") == "true") {
       });
 
       totalWidgets++;
-    }
+  }
 
-    function quizzesButtonFunc($elem) {
-        $elem.find(".btn-remove-question").click(function() {
-          var container = $(this).parents(".qa-block-container");
-          $(this).parents(".panel-default").remove();
-          container.find(".question-title-counter").each(function (index) {
-              $(this).html("Question "+ (index +1));
-          });
-        });
+  function quizzesButtonFunc($elem) {
+    $elem.find(".btn-remove-question").click(function() {
+      var container = $(this).parents(".qa-block-container");
+      $(this).parents(".panel-default").remove();
+      container.find(".question-title-counter").each(function (index) {
+          $(this).html("Question "+ (index +1));
+      });
+  });
 
-        $elem.find(".btn-add-answer").click(function () {
-            var template = $("#answerBlock").html();
-            template = $(template).insertBefore($(this).parent());
+    $elem.find(".btn-add-answer").click(function () {
+        var template = $("#answerBlock").html();
+        template = $(template).insertBefore($(this).parent());
 
-            var qorder = parseInt( $(template).parents(".panel").attr("data-question-id") );
-            var aorder = parseInt( $(template).parents(".panel").attr("data-answer-ctr") );
-            $(template).parents(".panel").attr("data-answer-ctr", aorder+1);
+        var qorder = parseInt( $(template).parents(".panel").attr("data-question-id") );
+        var aorder = parseInt( $(template).parents(".panel").attr("data-answer-ctr") );
+        $(template).parents(".panel").attr("data-answer-ctr", aorder+1);
 
-            $(template).find("[name=quizzes-answer_0_0]").attr("name", "quizzes-answer_" + qorder + "_" + aorder);
-            $(template).find("[name=quizzes-answer-id_0_0]").attr("name", "quizzes-answer-id_" + qorder + "_" + aorder);
-            $(template).find("[name=quizzes-answer-correct_0_0]").attr("name", "quizzes-answer-correct_" + qorder + "_" + aorder);
+        $(template).find("[name=quizzes-answer_0_0]").attr("name", "quizzes-answer_" + qorder + "_" + aorder);
+        $(template).find("[name=quizzes-answer-id_0_0]").attr("name", "quizzes-answer-id_" + qorder + "_" + aorder);
+        $(template).find("[name=quizzes-answer-correct_0_0]").attr("name", "quizzes-answer-correct_" + qorder + "_" + aorder);
 
             //qa-div
             $(template).find('.remove-answer').click(function () {
@@ -649,28 +649,28 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
         });
 
-    }
+}
 
-    function createSidebarElement(name, index) {
-        $parentEl = $('.gridstack-sidebar');
-        if (index == 0) {
-            $parentEl.prepend($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '"><div class="grid-stack-sidebar-item-topbar"></div>' + name + '</div></div>')
-                .draggable({
-                    revert: 'invalid',
-                    handle: '.grid-stack-item-content',
-                    scroll: false,
-                    appendTo: 'body',
-                }));
-        } else {
-            $('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '"><div class="grid-stack-sidebar-item-topbar"></div>' + name + '</div></div>')
+function createSidebarElement(name, index) {
+    $parentEl = $('.gridstack-sidebar');
+    if (index == 0) {
+        $parentEl.prepend($('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '"><div class="grid-stack-sidebar-item-topbar"></div>' + name + '</div></div>')
+            .draggable({
+                revert: 'invalid',
+                handle: '.grid-stack-item-content',
+                scroll: false,
+                appendTo: 'body',
+            }));
+    } else {
+        $('<div class="grid-stack-item "><div class="grid-stack-item-content grid-stack-sidebar-item" data-index="' + index + '"><div class="grid-stack-sidebar-item-topbar"></div>' + name + '</div></div>')
             //.find('.grid-stack-sidebar-item').append($('.virtus-pw-prototype'))
-                .insertAfter($parentEl.find($('[data-index="' + (parseInt(index) - 1) + '"]')).parent())
-                .draggable({
-                    revert: 'invalid',
-                    handle: '.grid-stack-item-content',
-                    scroll: false,
-                    appendTo: 'body',
-                });
+            .insertAfter($parentEl.find($('[data-index="' + (parseInt(index) - 1) + '"]')).parent())
+            .draggable({
+                revert: 'invalid',
+                handle: '.grid-stack-item-content',
+                scroll: false,
+                appendTo: 'body',
+            });
         }
 
     }
@@ -684,11 +684,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           if(this.specified &&
               ( this.name.startsWith("data-video") || this.name.startsWith("data-quizzes") || this.name.startsWith("data-slides") ) ) {
             toRemove.push(this.name);
-          }
-        });
+    }
+});
         toRemove.forEach(function(val) {
           $widget.parent().parent().removeAttr( val );
-        })
+      })
 
         // set attributes
         $inputObj = $modal.find(".modal-body").find(".protocontent");
@@ -697,10 +697,10 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             var value = $(this).val();
             if ($(this).is(':checkbox') && !$(this).prop('checked')) {
               value="";
-            }
+          }
 
-            $widget.parent().parent().attr("data-" + $(this).attr("name"), value);
-        });
+          $widget.parent().parent().attr("data-" + $(this).attr("name"), value);
+      });
     }
 
     function setStateFromDataAttributes(widgetId, modalId) {
@@ -714,143 +714,143 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             var $question = $modal.find(".panel-default").last();
             for (var j = 0; j < parseInt($widget.parent().parent().attr("data-tmp-answer-count_" + i)); j++) {
               $question.find(".btn-add-answer").click();
-            }
           }
-        }
-
-        $inputObj = $modal.find(".modal-body").find(".protocontent");
-        $inputObj.each(function (index) {
-          if ($(this).is(':checkbox')) {
-            $(this).prop('checked', $widget.parent().parent().attr("data-" + $(this).attr("name")) != "");
-          }
-          else {
-            $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
-          }
-        });
-    }
-
-    function spaceToJson() {
-      var widgetSerializer = {
-        slides: function(el) {
-          return {
-            type: "slides",
-            title: el.attr("data-slides-title"),
-            link: el.attr("data-slides-link")
-          };
-        },
-        video: function(el) {
-          return {
-            type: "video",
-            title: el.attr("data-video-title"),
-            link: el.attr("data-video-link")
-          };
-        },
-        quiz: function(el) {
-          var questions = {};
-
-          $.each(el.get(0).attributes, function() {
-            if(this.specified) {
-              var nameSplit = this.name.split("_");
-              if (nameSplit[0] == "data-quizzes-question") {
-                questions[nameSplit[1]] = {
-                  id: el.attr("data-quizzes-question-id_" + nameSplit[1]),
-                  title: el.attr("data-quizzes-question_" + nameSplit[1]),
-                  answers: {}
-                }
-              }
-            }
-          });
-
-          $.each(el.get(0).attributes, function() {
-            if(this.specified) {
-              var nameSplit = this.name.split("_");
-              if (nameSplit[0] == "data-quizzes-answer") {
-                questions[nameSplit[1]].answers[nameSplit[2]] =  {
-                  id: el.attr("data-quizzes-answer-id_" + nameSplit[1]+ "_" + nameSplit[2]),
-                  title: el.attr("data-quizzes-answer_" + nameSplit[1]+ "_" + nameSplit[2]),
-                  correct: el.attr("data-quizzes-answer-correct_" + nameSplit[1]+ "_" + nameSplit[2])
-                }
-              }
-            }
-          });
-
-          return {
-            type: "quiz",
-            title: el.attr("data-quizzes-title"),
-            questions: questions
-          };
-        },
-        hangout: function(el) {
-          return { type: "hangout" };
-        },
       }
+  }
 
-      var result = [];
-      $("#grid1").find(".grid-stack-item").each(function(idx,el) {
-        result.push({
-          "element_id": $(el).attr("data-element-id"),
-          "widget": widgetSerializer[$(el).attr("data-widget-type")]($(el)),
-          "x": $(el).attr("data-gs-x"),
-          "y": $(el).attr("data-gs-y"),
-          "width": $(el).attr("data-gs-width"),
-          "height": $(el).attr("data-gs-height")
-        });
-      });
-
-      return result;
+  $inputObj = $modal.find(".modal-body").find(".protocontent");
+  $inputObj.each(function (index) {
+      if ($(this).is(':checkbox')) {
+        $(this).prop('checked', $widget.parent().parent().attr("data-" + $(this).attr("name")) != "");
     }
+    else {
+        $(this).val($widget.parent().parent().attr("data-" + $(this).attr("name")));
+    }
+});
+}
 
-    function jsonToSpace(data) {
-      var widgetDeserializer = {
-        slides: function(el, data) {
-          el.attr("data-slides-title", data.title);
-          el.attr("data-slides-link", data.link);
-        },
-        video: function(el, data) {
-          el.attr("data-video-title", data.title);
-          el.attr("data-video-link", data.link);
-        },
-        quiz: function(el, data) {
-          el.attr("data-quizzes-title", data.title);
+function spaceToJson() {
+  var widgetSerializer = {
+    slides: function(el) {
+      return {
+        type: "slides",
+        title: el.attr("data-slides-title"),
+        link: el.attr("data-slides-link")
+    };
+},
+video: function(el) {
+  return {
+    type: "video",
+    title: el.attr("data-video-title"),
+    link: el.attr("data-video-link")
+};
+},
+quiz: function(el) {
+  var questions = {};
 
-          if (data.questions == undefined) return;
-
-          el.attr("data-tmp-question-count", Object.keys(data.questions).length);
-
-          for (var qid in data.questions) {
-            if (!data.questions.hasOwnProperty(qid)) continue;
-            var question = data.questions[qid];
-
-            el.attr("data-quizzes-question_" + qid, question.title);
-            el.attr("data-quizzes-question-id_" + qid, question.id);
-
-            el.attr("data-tmp-answer-count_" + qid, Object.keys(question.answers).length);
-
-            for (var aid in question.answers) {
-              if (!question.answers.hasOwnProperty(aid)) continue;
-              var answer = question.answers[aid];
-
-              el.attr("data-quizzes-answer_" + qid + "_" + aid, answer.title);
-              el.attr("data-quizzes-answer-id_" + qid + "_" + aid, answer.id);
-              el.attr("data-quizzes-answer-correct_" + qid + "_" + aid, answer.correct);
-            }
-          }
-        },
-        hangout: function(el, data) {
-        },
+  $.each(el.get(0).attributes, function() {
+    if(this.specified) {
+      var nameSplit = this.name.split("_");
+      if (nameSplit[0] == "data-quizzes-question") {
+        questions[nameSplit[1]] = {
+          id: el.attr("data-quizzes-question-id_" + nameSplit[1]),
+          title: el.attr("data-quizzes-question_" + nameSplit[1]),
+          answers: {}
       }
+  }
+}
+});
+
+  $.each(el.get(0).attributes, function() {
+    if(this.specified) {
+      var nameSplit = this.name.split("_");
+      if (nameSplit[0] == "data-quizzes-answer") {
+        questions[nameSplit[1]].answers[nameSplit[2]] =  {
+          id: el.attr("data-quizzes-answer-id_" + nameSplit[1]+ "_" + nameSplit[2]),
+          title: el.attr("data-quizzes-answer_" + nameSplit[1]+ "_" + nameSplit[2]),
+          correct: el.attr("data-quizzes-answer-correct_" + nameSplit[1]+ "_" + nameSplit[2])
+      }
+  }
+}
+});
+
+  return {
+    type: "quiz",
+    title: el.attr("data-quizzes-title"),
+    questions: questions
+};
+},
+hangout: function(el) {
+  return { type: "hangout" };
+},
+}
+
+var result = [];
+$("#grid1").find(".grid-stack-item").each(function(idx,el) {
+    result.push({
+      "element_id": $(el).attr("data-element-id"),
+      "widget": widgetSerializer[$(el).attr("data-widget-type")]($(el)),
+      "x": $(el).attr("data-gs-x"),
+      "y": $(el).attr("data-gs-y"),
+      "width": $(el).attr("data-gs-width"),
+      "height": $(el).attr("data-gs-height")
+  });
+});
+
+return result;
+}
+
+function jsonToSpace(data) {
+  var widgetDeserializer = {
+    slides: function(el, data) {
+      el.attr("data-slides-title", data.title);
+      el.attr("data-slides-link", data.link);
+  },
+  video: function(el, data) {
+      el.attr("data-video-title", data.title);
+      el.attr("data-video-link", data.link);
+  },
+  quiz: function(el, data) {
+      el.attr("data-quizzes-title", data.title);
+
+      if (data.questions == undefined) return;
+
+      el.attr("data-tmp-question-count", Object.keys(data.questions).length);
+
+      for (var qid in data.questions) {
+        if (!data.questions.hasOwnProperty(qid)) continue;
+        var question = data.questions[qid];
+
+        el.attr("data-quizzes-question_" + qid, question.title);
+        el.attr("data-quizzes-question-id_" + qid, question.id);
+
+        el.attr("data-tmp-answer-count_" + qid, Object.keys(question.answers).length);
+
+        for (var aid in question.answers) {
+          if (!question.answers.hasOwnProperty(aid)) continue;
+          var answer = question.answers[aid];
+
+          el.attr("data-quizzes-answer_" + qid + "_" + aid, answer.title);
+          el.attr("data-quizzes-answer-id_" + qid + "_" + aid, answer.id);
+          el.attr("data-quizzes-answer-correct_" + qid + "_" + aid, answer.correct);
+      }
+  }
+},
+hangout: function(el, data) {
+},
+}
 
       // TODO
       //$canvas.cellHeight($canvas.height);
 
-       var grid = $('#grid1').data('gridstack');
+      var grid = $('#grid1').data('gridstack');
 
-       _.each(data, function (el) {
+      _.each(data, function (el) {
          // get widget config for type
          for(var itemIndex = 0; itemIndex < widgetConfiguration.length; itemIndex ++) {
-           if (widgetConfiguration[itemIndex].widgetType == el.widget.type)
-            break;
-         }
+             if (widgetConfiguration[itemIndex].widgetType == el.widget.type)
+                break;
+        }
 
          // add widget
          var widget = $('<div><div class="grid-stack-item-content"></div></div>');
@@ -866,93 +866,93 @@ if (filter_input(INPUT_GET, "widget") == "true") {
          var prototypeWidgetId = widgetConfiguration[itemIndex].prototypeName + "-" + (totalWidgets-1);
          var prototypeWidgetModalId = widgetConfiguration[itemIndex].modalname + "-" + (totalWidgets-1);
          setStateFromDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
-       }, this);
-    }
+     }, this);
+  }
 
-    function clear() {
+  function clear() {
       //totalWidgets = 0;
       var grid = $('#grid1').data('gridstack');
       try {
         grid.removeAll()
-      } catch(e) {}
-    }
+    } catch(e) {}
+}
 
-    $(function() {
-      $(".btn-save-courseunit").click(function() {
-        console.log(JSON.stringify(spaceToJson()));
-        $(".btn-save-courseunit").prop('disabled', true);
-        showProgress();
-        $.ajax( {
-          method: "POST",
-          url: "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>&store",
-          data: JSON.stringify(spaceToJson())
-        })
-        .done(function(data) {
-          clear();
-          jsonToSpace(JSON.parse(data));
-          $(".btn-save-courseunit").prop('disabled', false);
-          showSuccess();
-        })
-        .fail(function(data) {
-          showError();
-          alert( "error: " + data );
-        });
-      });
-    });
+$(function() {
+  $(".btn-save-courseunit").click(function() {
+    console.log(JSON.stringify(spaceToJson()));
+    $(".btn-save-courseunit").prop('disabled', true);
+    showProgress();
+    $.ajax( {
+      method: "POST",
+      url: "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>&store",
+      data: JSON.stringify(spaceToJson())
+  })
+    .done(function(data) {
+      clear();
+      jsonToSpace(JSON.parse(data));
+      $(".btn-save-courseunit").prop('disabled', false);
+      showSuccess();
+  })
+    .fail(function(data) {
+      showError();
+      alert( "error: " + data );
+  });
+});
+});
 
-    $(function() {
-      $(".btn-save-courseunit").prop('disabled', true);
-      showProgress();
+$(function() {
+  $(".btn-save-courseunit").prop('disabled', true);
+  showProgress();
 
-      $.ajax( "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>")
-      .done(function(data) {
-        clear();
-        jsonToSpace(JSON.parse(data));
-        $(".btn-save-courseunit").prop('disabled', false);
-        showAdvice();
-W      })
-      .fail(function(data) {
-        showError();
-        alert( "error: " + data );
-      });
-    });
+  $.ajax( "../php/edit_script_courseunit_elements.php?courseid=<?php echo $course_id; ?>&unitid=<?php echo $unit_id; ?>&unitlang=<?php echo $course_lang; ?>")
+  .done(function(data) {
+    clear();
+    jsonToSpace(JSON.parse(data));
+    $(".btn-save-courseunit").prop('disabled', false);
+    showAdvice();
+})
+  .fail(function(data) {
+    showError();
+    alert( "error: " + data );
+});
+});
 
-    $(function() {
-      $(".message-inprogress").hide();
-      $(".message-stored").hide();
-      $(".message-error").hide();
-      $(".message-advice").show();
-    });
+$(function() {
+  $(".message-inprogress").hide();
+  $(".message-stored").hide();
+  $(".message-error").hide();
+  $(".message-advice").show();
+});
 
-    function showProgress() {
-      $(".message-inprogress").show();
-      $(".message-stored").hide();
-      $(".message-error").hide();
-      $(".message-advice").hide();
-    }
+function showProgress() {
+  $(".message-inprogress").show();
+  $(".message-stored").hide();
+  $(".message-error").hide();
+  $(".message-advice").hide();
+}
 
-    function showAdvice() {
-      $(".message-inprogress").hide();
-      $(".message-stored").hide();
-      $(".message-error").hide();
-      $(".message-advice").show();
-    }
+function showAdvice() {
+  $(".message-inprogress").hide();
+  $(".message-stored").hide();
+  $(".message-error").hide();
+  $(".message-advice").show();
+}
 
-    function showError() {
-      $(".message-inprogress").hide();
-      $(".message-stored").show();
-      $(".message-error").hide();
-      $(".message-advice").hide();
-    }
+function showError() {
+  $(".message-inprogress").hide();
+  $(".message-stored").show();
+  $(".message-error").hide();
+  $(".message-advice").hide();
+}
 
-    function showSuccess() {
-      $(".message-inprogress").hide();
-      $(".message-stored").show();
-      $(".message-error").hide();
-      $(".message-advice").hide();
+function showSuccess() {
+  $(".message-inprogress").hide();
+  $(".message-stored").show();
+  $(".message-error").hide();
+  $(".message-advice").hide();
 
-      setTimeout(showAdvice, 1000);
-    }
+  setTimeout(showAdvice, 1000);
+}
 
 
 

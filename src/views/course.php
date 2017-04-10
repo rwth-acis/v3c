@@ -67,7 +67,7 @@ $stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
     IFNULL( (SELECT lang FROM course_units_lng, course_to_unit
     WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang AND course_to_unit.course_id = :course_id GROUP BY course_to_unit.course_id) ,
     course_units.default_lang))
-                        "); // TODO fix
+                        ");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);

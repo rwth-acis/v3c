@@ -33,8 +33,7 @@ $stmt = $conn->prepare("SELECT courses.*, courses_lng.*
   FROM courses, courses_lng
   WHERE courses.id = :course_id
   AND courses_lng.course_id = courses.id
-  AND (courses_lng.lang = :course_lang OR courses_lng.lang = (SELECT default_lang FROM courses WHERE id = :course_id))
-  LIMIT 1");
+  AND (courses_lng.lang = :course_lang OR courses_lng.lang = (SELECT default_lang FROM courses WHERE id = :course_id))");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 $stmt->bindParam(":course_lang", $course_lang, PDO::PARAM_STR);
@@ -140,10 +139,10 @@ if ($success) {
                                     <span class="pull-right">
                                         <span class="glyphicon glyphicon-calendar margin-right"></span>
                                         <?php echo $course_unit["start_date"] ?>
-                                        <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_unit["lang"] ?>" class="margin-left btn btn-xs btn-success">
+                                        <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_lang; ?>" class="margin-left btn btn-xs btn-success">
                                             Edit
                                         </a>
-                                        <a href="/src/views/editcourseunit.php?cid=<?php echo $course_id; ?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_unit["lang"] ?>"
+                                        <a href="/src/views/editcourseunit.php?cid=<?php echo $course_id; ?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_lang; ?>"
                                          class="margin-left btn btn-xs btn-warning">
                                          <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
                                      </a>

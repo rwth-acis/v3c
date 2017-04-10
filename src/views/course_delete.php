@@ -29,15 +29,15 @@
 
 </head>
 <body>
-<?php
+    <?php
 
-include '../php/tools.php';
+    include '../php/tools.php';
 
-$course_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$course_lang = filter_input(INPUT_GET, 'lang');
+    $course_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $course_lang = filter_input(INPUT_GET, 'lang');
 
-try {
-    $course = getSingleDatabaseEntryByValue('courses', 'id', $course_id);  // TODO: Delete by id + lang (primary key)
+    try {
+    $course = getSingleDatabaseEntryByValues('courses_lng', ["course_id"=>$course_id, "lang"=>$course_lang]);  // TODO: Delete by id + lang (primary key)
 } catch (Exception $e) {
     error_log($e->getMessage());
 }
@@ -51,45 +51,45 @@ try {
 <header id='head' class='secondary'>
     <div class='container'>
         <div class='row'>
-           <h1><?php echo getTranslation("coursedel:head:name_tmp", "Delete course ") . $course['name'];
+         <h1><?php echo getTranslation("coursedel:head:name_tmp", "Delete course ") . $course['name'];
                //echo template_substitution(getTranslation("coursedel:head:name", "Delete course {COURSENAME}"), array("{COURSENAME}" => $course['name']));
-               ?></h1>
-        </div>
-    </div>
-</header>
+             ?></h1>
+         </div>
+     </div>
+ </header>
 
-<?php
+ <?php
 // Check whether the currently logged in user is allowed to delete courses
-require '../php/access_control.php';
+ require '../php/access_control.php';
 
-$accessControl = new AccessControl();
-$canDeleteCourse = $accessControl->canDeleteCourse($course_id);
+ $accessControl = new AccessControl();
+ $canDeleteCourse = $accessControl->canDeleteCourse($course_id);
 
-if ($canDeleteCourse) {
+ if ($canDeleteCourse) {
     ?>
     <!-- Confirmation check UI elements to ask user whether or not to delete the selected course -->
     <div class="center-block container">
         <div class="featured-box container delete-confirm-div">
             <p><strong><?php
-                    echo getTranslation("coursedel:head:confirm_tmp1", "Do you really want to delete course ") . $course['name'] .
-                    getTranslation("coursedel:head:confirm_tmp2", "?");
+                echo getTranslation("coursedel:head:confirm_tmp1", "Do you really want to delete course ") . $course['name'] .
+                getTranslation("coursedel:head:confirm_tmp2", "?");
                     //echo template_substitution(getTranslation("coursedel:head:confirm", "Do you really want to delete course {COURSENAME}?"), array("{COURSENAME}" => $course['name']));
-                    ?></strong></p>
-            <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no"
-                   value="<?php echo getTranslation('general:button:yes', 'Yes');?>"/>
-            <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no"
-                   value="<?php echo getTranslation('general:button:no', 'No');?>"/>
+                ?></strong></p>
+                <input type="button" id="btn-yes" class="btn btn-warning col-sm-5 btn-yes-no"
+                value="<?php echo getTranslation('general:button:yes', 'Yes');?>"/>
+                <input type="button" id="btn-no" class="btn btn-success col-sm-5 btn-yes-no"
+                value="<?php echo getTranslation('general:button:no', 'No');?>"/>
+            </div>
         </div>
-    </div>
 
-    <script type="text/javascript" src="../js/course-delete.js"></script>
-    <?php
-} else {
-    include 'not_authorized.php';
-}
+        <script type="text/javascript" src="../js/course-delete.js"></script>
+        <?php
+    } else {
+        include 'not_authorized.php';
+    }
 
-include("footer.php");
-?>
+    include("footer.php");
+    ?>
 
 </body>
 

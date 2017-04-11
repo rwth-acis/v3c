@@ -3,6 +3,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+function cmpWidget($a, $b)
+{
+  if ($a['y'] == $b['y']) {
+    if ($a['x'] == $b['x']) {
+      return 0;
+    }
+    return ($a['x'] < $b['x']) ? -1 : 1;
+  }
+  return ($a['y'] < $b['y']) ? -1 : 1;
+}
+
 class RoleAPI {
   private $url;
   private $token;
@@ -248,5 +259,79 @@ class RoleAPI {
       curl_close($ch);
 
     }
+
+    public function setWidgetMetaData($widgetUrl, $title, $description){
+      if(!$this->login()) return 403;
+
+      $ch = curl_init();
+
+        //http_post_data($this->url . "/spaces", $data, array('headers' => array('Content-Type' => 'application/x-www-form-urlencoded')), $info);
+      //open connection
+      
+
+      //set the url, number of POST vars, POST data
+      curl_setopt($ch,CURLOPT_URL, $widgetUrl."/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata");
+      curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+
+
+      curl_setopt($ch,CURLOPT_CUSTOMREQUEST, "PUT");
+      $post = '{"'.$widgetUrl.'":{"http://purl.org/dc/terms/title":[{"type":"literal","value":"'.$title.'"}],"http://purl.org/dc/terms/description":[{"type":"literal","value":"'.$description.'"}]}}';
+      curl_setopt($ch,CURLOPT_POSTFIELDS, $post);
+      curl_setopt($ch,CURLOPT_HTTPHEADER, array("Cookie: layouts=%7B%7D; ".$this->cookie,"Content-Type:application/json","Accept:application/json"));
+      curl_setopt($ch,CURLOPT_HEADER, true);
+
+      $result = curl_exec($ch);
+      curl_close($ch);
+    }
+
+
+    public function moveWidgets($space, $activity, $widgets){
+      if(!$this->login()) return 403;
+
+      $ch = curl_init();
+
+      curl_setopt($ch,CURLOPT_URL, $this->url . "spaces/".$space."/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Finfo");
+      curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+
+      curl_setopt($ch,CURLOPT_HTTPHEADER, array("Cookie: layouts=%7B%7D; ".$this->cookie,"Accept: text/x-turtle"));
+
+      $result = curl_exec($ch);
+
+      $title = $this->get_string_between($result, '<'.$this->url.'spaces/'.$space.'/'.$activity.'> a role:Activity ;',' .');
+      $title = $this->get_string_between($title, 'dcterms:title "','"');
+
+      usort($widgets, "cmpWidget");
+
+      $i = 1;
+
+      $post = '{"'.$this->url.'spaces/'.$space.'/'.$activity.'":{"http://purl.org/role/terms/layout":[{"type":"literal","value":"{';
+
+      foreach ($widgets as $widget) {
+        $widgetID = $this->get_string_between($result, '<'.$widget['xml'].'> widget:moduleId "','"^^<http://www.w3.org/2001/XMLSchema#long>');
+        $post .= "\\\"".$widgetID."\\\":{\\\"o\\\":\\\"".$i."\\\",\\\"w\\\":\\\"".(intval($widget['width'])*125)."\\\",\\\"h\\\":\\\"".(intval($widget['height'])*125)."\\\"},";
+        $i++;
+      }
+      $post = substr($post, 0, -1);
+      $post .= '}"}],"http://purl.org/dc/terms/title":[{"type":"literal","value":"'.$title.'"}]}}';
+
+        //http_post_data($this->url . "/spaces", $data, array('headers' => array('Content-Type' => 'application/x-www-form-urlencoded')), $info);
+      //open connection
+
+      
+      //set the url, number of POST vars, POST data
+      curl_setopt($ch,CURLOPT_URL, $this->url.'spaces/'.$space.'/'.$activity.'/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata');
+      curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+
+
+      curl_setopt($ch,CURLOPT_CUSTOMREQUEST, "PUT");
+      curl_setopt($ch,CURLOPT_POSTFIELDS, $post);
+      curl_setopt($ch,CURLOPT_HTTPHEADER, array("Cookie: layouts=%7B%7D; ".$this->cookie,"Content-Type:application/json","Accept:application/json"));
+      curl_setopt($ch,CURLOPT_HEADER, true);
+
+      $result = curl_exec($ch);
+      
+      curl_close($ch);
+    }
+
   }
   ?>

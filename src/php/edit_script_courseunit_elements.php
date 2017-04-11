@@ -331,14 +331,17 @@ if ($store) { // store to db
 
   $current_ids = array();
 
+  // role api
+  $api = new RoleAPI("http://virtus-vet.eu:8081/", $_SESSION['access_token']);#
+  $widgets = array();
   foreach ($input as $element) {
     $element_id = -1;
     if (!isset($element['element_id'])) { // create course element
 
       // Add widget to activity in role space
       // creating activity
-      $api = new RoleAPI("http://virtus-vet.eu:8081/", $_SESSION['access_token']);
       $widgetXML = getWidgetXML($element['widget']['type']);
+
       $widget_role_url = $api->addWidgetToSpace($course['space_url'], $unit['activity_url'],$widgetXML);
 
       $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang, widget_role_url) VALUES (:type, :x, :y, :width, :height, :lang, :widget_role_url)");
@@ -369,10 +372,14 @@ if ($store) { // store to db
         print_r($stmt2->errorInfo());
         die("Error connecting course element to unit.");
       }
+      $element['xml'] = $widget_role_url;
+      array_push($widgets, $element);
 
       $current_ids[] = $element_id;
     }
     else { // update course element
+      $widget = getSingleDatabaseEntryByValue('course_elements','id',$element['element_id']);
+
       $stmt = $conn->prepare("UPDATE course_elements SET x = :x, y = :y, width = :width, height = :height WHERE id = :id");
       $stmt->bindParam(":id", $element['element_id'], PDO::PARAM_INT);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
@@ -380,6 +387,8 @@ if ($store) { // store to db
       $stmt->bindParam(":width", $element['width'], PDO::PARAM_INT);
       $stmt->bindParam(":height", $element['height'], PDO::PARAM_INT);
       // widget type cannot be changed
+      $element['xml'] = $widget['widget_role_url'];
+      array_push($widgets, $element);
 
       $success = $stmt->execute();
       if (!$success) {
@@ -396,6 +405,8 @@ if ($store) { // store to db
     // store widget data
     $storeWidgetData[$element['widget']['type']]($conn, $element_id, $unit_lang, $element['widget']);
   }
+
+  $api->moveWidgets($course['space_url'],$unit['activity_url'], $widgets);
 
   // delete course elements
   $query_str = "";

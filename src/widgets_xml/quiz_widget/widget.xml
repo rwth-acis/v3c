@@ -103,6 +103,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       background:#222;
       color:white;
     }
+
+    .container {
+      height:100%;
+      overflow:auto;
+    }
   </style>
 
   <!-- container for actual page content -->

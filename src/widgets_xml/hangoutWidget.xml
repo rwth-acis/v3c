@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Google Hangout Button" description=""
+  <ModulePrefs title="Video Chat" description=""
     author="Team Virtus" author_email="maximilian.karl.haenel@rwth-aachen.de"
     width="150" height="60">
 
@@ -24,7 +24,7 @@
   <Content type="html">
   <![CDATA[
 <!--
-Copyright (c) 2015 Advanced Community Information Systems (ACIS) Group, 
+Copyright (c) 2015 Advanced Community Information Systems (ACIS) Group,
 Chair of Computer Science 5 (Databases & Information Systems), RWTH Aachen University, Germany
 All rights reserved.
 
@@ -59,7 +59,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Google Hangout BUtton</title>
+  <title>Video Chat</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -67,31 +68,79 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
- <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-
-  <script type="text/javascript">
-gapi.hangout.render('placeholder-div', {
-    'topic': 'hats',
-    'render': 'createhangout',
-    'initial_apps': [
-      { app_id : 'youtube' }
-    ]
-  });
-</script>
-
+  <!--
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  -->
 </head>
 
 <body>
-
-  <!-- container for actual page content -->
+  <!--
   <div class="container" id="main-content">
-
-<div class="g-hangout" data-render="createhangout"></div>
-
- 
- 
+    <div class="g-hangout" data-render="createhangout"></div>
   </div>
+  <script type="text/javascript">
+    gapi.hangout.render('placeholder-div', {
+      'topic': 'hats',
+      'render': 'createhangout',
+      'initial_apps': [
+        { app_id : 'youtube' }
+      ]
+    });
+  </script>
+  -->
+
+  <style>
+    .container {
+      text-align:center;
+    }
+
+    a.btn {
+      display:inline-block;
+      border-radius: 2px;
+      box-shadow: 0px 1px 1px #11ad00;
+      color: #ffffff !important;
+      font-weight:bold;
+      font-size: 0.8em;
+      background: #10a100;
+      padding: 0.6em 1.2em;
+      text-decoration: none;
+    }
+
+    a.btn:hover {
+      background: #11ad00;
+      text-decoration: none;
+    }
+  </style>
+
+  <div class="container" id="main-content">
+    <a class="btn" href="#" target="_blank">Join Room</a>
+  </div>
+
+  <script>
+    function init() {
+      $('.btn').attr('href', 'https://appear.in/' + btoa(getWidgetInstanceUrl()));
+    }
+
+    init();
+
+    function getWidgetInstanceUrl() {
+      function getQueryVariable(variable) {
+          var query = window.location.search.substring(1);
+          var vars = query.split('&');
+          for (var i = 0; i < vars.length; i++) {
+              var pair = vars[i].split('=');
+              if (decodeURIComponent(pair[0]) == variable) {
+                  return decodeURIComponent(pair[1]);
+              }
+          }
+      }
+      return getQueryVariable('url').split('?')[0];
+    }
+
+    function getUserLanguage() {
+      return navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
+    }
+  </script>
 
 </body>
 </html>

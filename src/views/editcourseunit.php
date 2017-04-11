@@ -236,7 +236,7 @@
 <!--Prototype Modal Templates -->
 <!-- ################################################################################### -->
 <div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
-id="prototypeSlideViewerModal">
+id="prototypeSlideViewerModal" data-backdrop="static" data-keyboard="false">
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -265,14 +265,14 @@ id="prototypeSlideViewerModal">
                 </div>
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
+                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="modal fade pw-modal-video" tabindex="-1" role="dialog" aria-labelledby="modal"
-    id="prototypeVideoViewerModal">
+    id="prototypeVideoViewerModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -300,14 +300,14 @@ id="prototypeSlideViewerModal">
             </div>
             <div class="modal-footer">
                 <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade pw-modal-quizzes" tabindex="-1" role="dialog" aria-labelledby="modal"
-id="prototypeQuizzesViewerModal" data-question-ctr="0">
+id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" data-keyboard="false">
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -336,7 +336,7 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0">
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                     <button type="button" class="btn btn-success modal-add-button">Add Question +</button>
-                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Save changes</button>
+                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
                 </div>
             </div>
         </div>
@@ -581,12 +581,12 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
       });
 
+/*
       $prototypeModalClone.on('hidden.bs.modal', function (e) {
-          // TODO does not work -> fix or disable auto hide
+          // does not work -> backdrock set to static and dismiss buttons removed
           appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
       });
-
-      // TODO add question + 2 answers // NOT POSSIBLE ???
+*/
 
       $('.modal-add-button').click(function () {
           var $qb = $('#questionBlock').html();

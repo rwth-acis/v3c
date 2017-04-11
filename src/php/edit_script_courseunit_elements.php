@@ -165,7 +165,7 @@ $storeWidgetData = array(
          $stmt = $conn->prepare($query);
          $stmt->bindParam(":answer_id", $answer_id, PDO::PARAM_INT);
          $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
-         $stmt->bindValue(":answer", (isset($data['title']) ? $data['title'] : ""), PDO::PARAM_STR);
+         $stmt->bindValue(":answer", (isset($answer['title']) ? $answer['title'] : ""), PDO::PARAM_STR);
 
          if (!$stmt->execute()) {
            http_response_code(400);

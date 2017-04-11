@@ -403,7 +403,7 @@ if ($store) { // store to db
     $query_str .= " AND id != " . $id;
   }
 
-  $stmt = $conn->prepare("DELETE FROM course_elements WHERE id IN (SELECT id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
+  $stmt = $conn->prepare("DELETE FROM course_elements WHERE id IN (SELECT element_id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
   $success = $stmt->execute();
   if (!$success) {
     http_response_code(400);

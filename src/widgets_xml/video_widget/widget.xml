@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Video Player" description="Video Player Widget based on JWPlayer"
+  <ModulePrefs title="Video" description="Video Player Widget based on JWPlayer"
     author="Peter de Lange" author_email="lange@dbis.rwth-aachen.de"
     width="800" height="600">
 
@@ -58,7 +58,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Video Player</title>
+  <title>Video</title>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -114,6 +114,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      });
     }
 
+    function playbackVideo(videoUrl){
+      // updateds "player" html element
+      jwplayer("player").setup({
+        width: 700,
+        height: 500,
+        file: videoUrl
+      });
+    }
+
+    loadVideo(getWidgetInstanceUrl(), getUserLanguage());
+
     function getWidgetInstanceUrl() {
      function getQueryVariable(variable) {
          var query = window.location.search.substring(1);
@@ -128,19 +139,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      return getQueryVariable('url').split('?')[0];
     }
 
-    // playbackVideo
-    var playbackVideo = function(videoUrl){
-      // updateds "player" html element
-      jwplayer("player").setup({
-        width: 700,
-        height: 500,
-        file: videoUrl
-      });
+    function getUserLanguage() {
+      return navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
     }
-
-    $(function() {
-      loadVideo(getWidgetInstanceUrl(), 'en');
-    });
   </script>
 
 </body>

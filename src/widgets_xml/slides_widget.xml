@@ -98,9 +98,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       });
     }
 
-    loadSlides(getWidgetInstanceUrl(), 'en');
-
-    console.log(getWidgetInstanceUrl());
+    loadSlides(getWidgetInstanceUrl(), getUserLanguage());
 
     function getWidgetInstanceUrl() {
       function getQueryVariable(variable) {
@@ -114,6 +112,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           }
       }
       return getQueryVariable('url').split('?')[0];
+    }
+
+    function getUserLanguage() {
+      return navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
     }
 
   </script>

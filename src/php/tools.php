@@ -309,7 +309,7 @@ function getWidgetXML($widget)
         return "http://virtus-vet.eu/src/widgets_xml/hangoutWidget.xml";
         break;
         case 'quiz':
-        return "http://virtus-vet.eu/src/widgets_xml/qa.xml";
+        return "http://virtus-vet.eu/src/widgets_xml/quiz_widget/widget.xml";
         break;
         case 'slides':
         return "http://virtus-vet.eu/src/widgets_xml/slides_widget.xml";

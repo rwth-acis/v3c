@@ -82,13 +82,34 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       background:#222;
       color:white;
     }
+
+    h4 {
+      margin: 0;
+      font-size:0.8em;
+      padding: 1em;
+      background:#444;
+      color:white;
+    }
+
+    div.answer {
+      font-size:0.8em;
+      padding: 1em;
+    }
+
+    div.submit {
+      margin: 0;
+      font-size:0.8em;
+      padding: 1em;
+      background:#222;
+      color:white;
+    }
   </style>
 
   <!-- container for actual page content -->
   <div class="container" id="main-content">
     <h3 class='title'></h3>
     <div class="questions"></div>
-
+    <div class="submit"><button>Submit</button></div>
   </div>
 
   <script>
@@ -97,15 +118,27 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      .done(function(data) {
        data = JSON.parse(data);
        $('.title').html(data.title);
-       displayQuiz(data.questions);
+       $('.questions').html(renderQuestions(data.questions));
      })
      .fail(function() {
          $("#main-content").html("Could not load the quiz.");
      });
     }
 
-    function displayQuiz(data) {
-    // TODO
+    function renderQuestions(questions) {
+      var result = ""
+
+      questions.forEach(function(q) {
+        result += "<h4>" + q.title + "</h4>"
+        q.answers.forEach(function(a) {
+          result += '<div class="answer">'
+          result += '<input type="checkbox" id="answer-'+q.id+'-'+a.id+'" name="answer-'+q.id+'-'+a.id+'" value="checked">'
+          result += '<label for="answer-'+q.id+'-'+a.id+'">' + a.title + '</label>'
+          result += '</div>'
+        })
+      })
+
+      return result
     }
 
     loadQuiz(getWidgetInstanceUrl(), getUserLanguage());

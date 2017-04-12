@@ -320,3 +320,43 @@ function getWidgetXML($widget)
     }
     return "";
 }
+
+function get_string_between($string, $start, $end){
+    $string = ' ' . $string;
+    $ini = strpos($string, $start);
+    if ($ini == 0) return '';
+    $ini += strlen($start);
+    $len = strpos($string, $end, $ini) - $ini;
+    return substr($string, $ini, $len);
+}
+
+function getAdminToken(){
+    require_once "../config/config.php";
+
+    $ch = curl_init();
+
+
+    curl_setopt($ch,CURLOPT_URL, "https://api.learning-layers.eu/o/oauth2/j_spring_security_check");
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch,CURLOPT_HEADER, 1);
+    curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
+    curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie.txt");
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                                            'Content-Type: application/x-www-form-urlencoded',
+                                            'Connection: Keep-Alive'
+                                            ));
+    curl_setopt($ch,CURLOPT_POST, 1);
+    curl_setopt($ch,CURLOPT_POSTFIELDS, 'j_username='.$roleAdmin.'&j_password='.$roleAdminPassword.'&submit=Login');
+    curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 1);
+
+    $result = curl_exec($ch);
+
+    curl_setopt($ch,CURLOPT_URL, "https://api.learning-layers.eu/o/oauth2/authorize?response_type=id_token%20token&client_id=".$oidcClientId."&scope=openid%20phone%20email%20address%20profile");
+    curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 0);
+    $result = curl_exec($ch);
+    $location = trim(get_string_between($result."\n","Location: ","\n"));
+    $access_token = substr($location, strrpos($location,"access_token=")+strlen("access_token="));
+
+    return $access_token ;
+}

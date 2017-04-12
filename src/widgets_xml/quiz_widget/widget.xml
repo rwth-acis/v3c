@@ -108,25 +108,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       height:100%;
       overflow:auto;
     }
+
+    .wrong {
+      font-weight:bold;
+      color:darkred;
+    }
   </style>
 
   <!-- container for actual page content -->
   <div class="container" id="main-content">
     <h3 class='title'></h3>
     <div class="questions"></div>
-    <div class="submit"><button>Submit</button></div>
+    <div class="submit"><button onclick="postSubmission()">Submit</button></div>
   </div>
 
   <script>
     function loadQuiz(widget_role_url, lang) {
      var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_data_quiz.php?widget_role_url=" + encodeURI(widget_role_url) + "&lang=" + lang )
      .done(function(data) {
-       data = JSON.parse(data);
-       $('.title').html(data.title);
-       $('.questions').html(renderQuestions(data.questions));
+       data = JSON.parse(data)
+       $('.title').html(data.title)
+       $('.questions').html(renderQuestions(data.questions))
+       loadSubmission(widget_role_url)
      })
      .fail(function() {
-         $("#main-content").html("Could not load the quiz.");
+         $("#main-content").html("Could not load quiz.")
      });
     }
 
@@ -144,6 +150,65 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       })
 
       return result
+    }
+
+    function loadSubmission(widget_role_url) { // TODO authenticate
+     var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?widget_role_url=" + encodeURI(widget_role_url) )
+     .done(function(data) {
+       data = JSON.parse(data)
+       renderSubmission(data)
+     })
+     .fail(function() {
+         $("#main-content").html("Could not load submission.")
+     });
+    }
+
+    function postSubmission() { // TODO authenticate
+      $(".submit button").prop('disabled', true);
+      var widget_role_url = getWidgetInstanceUrl();
+      $.ajax( {
+        method: "POST",
+        url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?store&widget_role_url=" + encodeURI(widget_role_url),
+        data: JSON.stringify(extractSubmission())
+      })
+      .done(function(data) {
+        data = JSON.parse(data)
+        renderSubmission(data)
+      })
+      .fail(function() {
+        $("#main-content").html("Could not store submission.")
+      });
+    }
+
+    function renderSubmission(data) {
+      if (data.submitted) {
+        data = data.answers
+        Object.keys(data).forEach(function(qid) {
+          Object.keys(data[qid]).forEach(function(aid) {
+            $('input[name="answer-'+qid+'-'+aid+'"]').prop("checked", data[qid][aid].checked);
+            if (data[qid][aid].checked != data[qid][aid].correct) {
+              var html = $('label[for="answer-'+qid+'-'+aid+'"]').html();
+              html = '<span class="wrong">☹</span> ' + html;
+              $('label[for="answer-'+qid+'-'+aid+'"]').html(html);
+            }
+          });
+        });
+        $("input").prop('disabled', true);
+        $(".submit button").prop('disabled', true);
+      }
+    }
+
+    function extractSubmission() {
+      var data = {}
+      $('input[type=checkbox]').each(function() {
+        var split = $(this).attr('name').split('-')
+        if (data[split[1]] == undefined) {
+          data[split[1]] = {}
+        }
+        data[split[1]][split[2]] = {"checked": $(this).prop('checked')}
+      })
+
+      return {"answers": data}
     }
 
     loadQuiz(getWidgetInstanceUrl(), getUserLanguage());

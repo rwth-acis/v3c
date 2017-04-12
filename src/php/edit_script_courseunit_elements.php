@@ -406,7 +406,6 @@ if ($store) { // store to db
     $storeWidgetData[$element['widget']['type']]($conn, $element_id, $unit_lang, $element['widget']);
   }
 
-  $api->moveWidgets($course['space_url'],$unit['activity_url'], $widgets);
 
   // delete course elements
   $query_str = "";
@@ -414,7 +413,23 @@ if ($store) { // store to db
     $query_str .= " AND id != " . $id;
   }
 
+  $stmt = $conn->prepare("SELECT * FROM course_elements WHERE id IN (SELECT element_id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
+  if (!$stmt->execute()) {
+    echo "Error.";
+  } else {
+    $data = $stmt->fetchAll();
+  }
+  foreach ($data as $w) {
+    $api->removeWidgetFromSpace($w['widget_role_url']);
+  }
+
+  
+  $api->moveWidgets($course['space_url'],$unit['activity_url'], $widgets);
+
+
+
   $stmt = $conn->prepare("DELETE FROM course_elements WHERE id IN (SELECT element_id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
+  
   $success = $stmt->execute();
   if (!$success) {
     http_response_code(400);

@@ -58,7 +58,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Video</title>
+  <title>Quiz</title>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -113,6 +113,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       font-weight:bold;
       color:darkred;
     }
+
+    .right {
+      font-weight:bold;
+      color:darkgreen;
+    }
   </style>
 
   <!-- container for actual page content -->
@@ -152,23 +157,38 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       return result
     }
 
-    function loadSubmission(widget_role_url) { // TODO authenticate
-     var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?widget_role_url=" + encodeURI(widget_role_url) )
+    function loadSubmission(widget_role_url) {
+     var jqxhr = $.ajax( {
+      url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?widget_role_url=" + encodeURI(widget_role_url),
+      crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      }
+     } )
      .done(function(data) {
        data = JSON.parse(data)
        renderSubmission(data)
      })
-     .fail(function() {
-         $("#main-content").html("Could not load submission.")
+     .fail(function(xhr) {
+        if (jqXHR.status == 403) {
+          $("#main-content").html('Please sign in at <a href="http://virtus-vet.eu">virtus-vet.eu</a> and reload this page!')
+        }
+        else {
+          $("#main-content").html("Could not load submission.")
+        }
      });
     }
 
-    function postSubmission() { // TODO authenticate
+    function postSubmission() {
       $(".submit button").prop('disabled', true);
       var widget_role_url = getWidgetInstanceUrl();
       $.ajax( {
         method: "POST",
         url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?store&widget_role_url=" + encodeURI(widget_role_url),
+        crossDomain: true,
+        xhrFields: {
+          withCredentials: true
+        },
         data: JSON.stringify(extractSubmission())
       })
       .done(function(data) {
@@ -186,11 +206,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         Object.keys(data).forEach(function(qid) {
           Object.keys(data[qid]).forEach(function(aid) {
             $('input[name="answer-'+qid+'-'+aid+'"]').prop("checked", data[qid][aid].checked);
+            var html = $('label[for="answer-'+qid+'-'+aid+'"]').html();
             if (data[qid][aid].checked != data[qid][aid].correct) {
-              var html = $('label[for="answer-'+qid+'-'+aid+'"]').html();
               html = '<span class="wrong">☹</span> ' + html;
-              $('label[for="answer-'+qid+'-'+aid+'"]').html(html);
             }
+            else {
+              html = '<span class="right">☺</span> ' + html;
+            }
+            $('label[for="answer-'+qid+'-'+aid+'"]').html(html);
           });
         });
         $("input").prop('disabled', true);

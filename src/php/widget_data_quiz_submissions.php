@@ -3,26 +3,24 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// TODO sign in...
-/*
-ob_start();
-include "create_user_session.php"
-ob_end_clean();
-*/
-
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+  header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+}
 
 $conn = require '../php/db_connect.php';
 
 $widget_role_url = filter_input(INPUT_GET, 'widget_role_url');
 
-
 // user id
-/*
-$stmt = $conn->prepare("SELECT id FROM user WHERE openIdConnectSub = :sub");
+if (!isset($_SESSION['sub'])) {
+  http_response_code(403);
+  die("User not found");
+}
+$stmt = $conn->prepare("SELECT id FROM users WHERE openIdConnectSub = :sub");
 $stmt->bindParam(":sub", $_SESSION['sub'], PDO::PARAM_STR);
 if (!$stmt->execute()) {
   http_response_code(500);
@@ -30,12 +28,10 @@ if (!$stmt->execute()) {
 }
 $data = $stmt->fetch();
 if (!is_array($data)) {
-  http_response_code(404);
+  http_response_code(403);
   die("User not found");
 }
-$user_id = $data["id"];*/
-
-$user_id = 6;
+$user_id = $data["id"];
 
 // element id
 $stmt = $conn->prepare("SELECT id FROM course_elements WHERE widget_role_url = :widget_role_url");

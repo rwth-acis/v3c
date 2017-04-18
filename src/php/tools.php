@@ -333,8 +333,11 @@ function get_string_between($string, $start, $end){
     return substr($string, $ini, $len);
 }
 
+
+
 function getAdminToken(){
-    require_once "../config/config.php";
+
+  include "../config/config.php";
 
     $ch = curl_init();
 

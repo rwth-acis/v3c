@@ -584,7 +584,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
     {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
     {name: 'video chat', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'},
-    {name: 'image viewer', prototypeName: 'prototypeImageViwer', modalname: 'prototypeImageViewerModal', widgetType: 'image'}
+    {name: 'image viewer', prototypeName: 'prototypeImageViewer', modalname: 'prototypeImageViewerModal', widgetType: 'image'}
     ];
 
     var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.

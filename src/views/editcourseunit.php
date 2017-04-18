@@ -101,7 +101,7 @@
     <div class="virtus-pw-prototype virtus-pw-hide pw-hangouts" id="prototypeHangouts">
         <div class="row virtus-pw-prototype-topbar">
             <div class="virtus-pw-name col-sm-12">
-                Hangouts Widget
+                Video Chat Widget
             </div>
             <div class="virtus-pw-prototype-top-toolbar">
                 <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"

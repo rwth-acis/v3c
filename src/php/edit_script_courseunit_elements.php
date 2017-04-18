@@ -46,6 +46,20 @@ $storeWidgetData = array(
       die("Error saving slides data.");
     }
   },
+  'image' => function($conn, $element_id, $lang, $data) {
+    $query = "REPLACE INTO widget_data_image_lng (element_id,lang,title,link) VALUES (:element_id, :lang, :title, :link)";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    $stmt->bindValue(":title", (isset($data['title']) ? $data['title'] : ""), PDO::PARAM_STR);
+    $stmt->bindValue(":link", (isset($data['link']) ? $data['link'] : ""), PDO::PARAM_STR);
+
+    if (!$stmt->execute()) {
+      http_response_code(400);
+      print_r($stmt->errorInfo());
+      die("Error saving image data.");
+    }
+  },
   'video' => function($conn, $element_id, $lang, $data) {
     $query = "REPLACE INTO widget_data_video (element_id,lang,title,link) VALUES (:element_id, :lang, :title, :link)";
     $stmt = $conn->prepare($query);
@@ -210,6 +224,26 @@ $storeWidgetData = array(
 $loadWidgetData = array(
   'slides' => function($conn, $element_id, $lang) {
     $stmt = $conn->prepare("SELECT * FROM widget_data_slides WHERE element_id = :element_id AND lang = :lang LIMIT 1");
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+      echo "Error loading course.";
+    } else {
+      $data = $stmt->fetch();
+    }
+
+    if (is_array($data))  {
+      return array(
+        "title" => $data["title"],
+        "link" => $data["link"]
+        );
+    }
+    else {
+      return false;
+    }
+  },
+  'image' => function($conn, $element_id, $lang) {
+    $stmt = $conn->prepare("SELECT * FROM widget_data_image_lng WHERE element_id = :element_id AND lang = :lang LIMIT 1");
     $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
     $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
     if (!$stmt->execute()) {
@@ -423,13 +457,13 @@ if ($store) { // store to db
     $api->removeWidgetFromSpace($w['widget_role_url']);
   }
 
-  
+
   $api->moveWidgets($course['space_url'],$unit['activity_url'], $widgets);
 
 
 
   $stmt = $conn->prepare("DELETE FROM course_elements WHERE id IN (SELECT element_id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
-  
+
   $success = $stmt->execute();
   if (!$success) {
     http_response_code(400);

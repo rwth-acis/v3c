@@ -98,6 +98,69 @@
     </div>
 
 
+    <div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer pw-image-viewer" id="prototypeImageViewer">
+        <div class="row virtus-pw-prototype-topbar">
+            <div class="virtus-pw-name col-sm-12">
+                Image Widget
+            </div>
+            <div class="virtus-pw-prototype-top-toolbar">
+                <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
+                <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
+            </div>
+        </div>
+        <div class="virtus-pw-content-container">
+            <div class="row virtus-pw-content-wrapper">
+                <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                        <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                        aria-label="Left Align"
+                        data-toggle="modal"
+                        data-target=".pw-modal-slideviewer">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                    </button>
+                    <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
+                </div>
+                <div class="virtus-pw-sliderviewer-content">
+                    <ul>
+                        <li type="square"><br>
+                            <div class="slides-question-text"> dolor</div>
+                        </li>
+                        <li type="square">
+                            <div class="slides-question-text ">Lorem ipsum dolor sit amet</div>
+                        </li>
+                        <li type="square">
+                            <div class="slides-question-text">Lorem ipor sit amet</div>
+                        </li>
+                        <li type="square">
+                            <div class="slides-question-text">Lorem ipor sit amet</div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="col-sm-12 virtus-pw-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon"
+                        aria-hidden="true"></span>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="slide-viewer-slideindex-style">1/20</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon"
+                        aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
     <div class="virtus-pw-prototype virtus-pw-hide pw-hangouts" id="prototypeHangouts">
         <div class="row virtus-pw-prototype-topbar">
             <div class="virtus-pw-name col-sm-12">
@@ -235,11 +298,11 @@
 
 <!--Prototype Modal Templates -->
 <!-- ################################################################################### -->
-<div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
-id="prototypeSlideViewerModal" data-backdrop="static" data-keyboard="false">
-<div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
+      <div class="modal fade pw-modal-slideviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
+      id="prototypeSlideViewerModal" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                     aria-hidden="true">&times;</span></button>-->
                     <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
@@ -270,6 +333,42 @@ id="prototypeSlideViewerModal" data-backdrop="static" data-keyboard="false">
             </div>
         </div>
     </div>
+
+    <div class="modal fade pw-modal-imageviewer" tabindex="-1" role="dialog" aria-labelledby="modal"
+    id="prototypeImageViewerModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                  <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>-->
+                  <h4 class="modal-title" id="myModalLabel">Image Widget</h4>
+              </div>
+              <div class="modal-body">
+                  <div class="input-group">
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <label for="image-title">Image Title</label>
+                              <input type="text" class="form-control protocontent"
+                              name="image-title"
+                              placeholder="Title" aria-describedby="basic-addon1">
+                          </div>
+                          <div class="col-sm-12">
+                              <label for="image-link">Image Link</label><br>
+                              <input type="text" class="form-control protocontent"
+                              name="image-link"
+                              placeholder="http://..." aria-describedby="basic-addon1">
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                  <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
+              </div>
+          </div>
+      </div>
+  </div>
 
     <div class="modal fade pw-modal-video" tabindex="-1" role="dialog" aria-labelledby="modal"
     id="prototypeVideoViewerModal" data-backdrop="static" data-keyboard="false">
@@ -484,7 +583,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal', widgetType: 'slides'},
     {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
     {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
-    {name: 'hangouts', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'}
+    {name: 'video chat', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'},
+    {name: 'image viewer', prototypeName: 'prototypeImageViwer', modalname: 'prototypeImageViewerModal', widgetType: 'image'}
     ];
 
     var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.
@@ -732,58 +832,65 @@ function createSidebarElement(name, index) {
 function spaceToJson() {
   var widgetSerializer = {
     slides: function(el) {
+        return {
+          type: "slides",
+          title: el.attr("data-slides-title"),
+          link: el.attr("data-slides-link")
+      };
+    },
+    image: function(el) {
+        return {
+          type: "image",
+          title: el.attr("data-image-title"),
+          link: el.attr("data-image-link")
+      };
+    },
+    video: function(el) {
       return {
-        type: "slides",
-        title: el.attr("data-slides-title"),
-        link: el.attr("data-slides-link")
-    };
-},
-video: function(el) {
-  return {
-    type: "video",
-    title: el.attr("data-video-title"),
-    link: el.attr("data-video-link")
-};
-},
-quiz: function(el) {
-  var questions = {};
+        type: "video",
+        title: el.attr("data-video-title"),
+        link: el.attr("data-video-link")
+      };
+    },
+    quiz: function(el) {
+      var questions = {};
 
-  $.each(el.get(0).attributes, function() {
-    if(this.specified) {
-      var nameSplit = this.name.split("_");
-      if (nameSplit[0] == "data-quizzes-question") {
-        questions[nameSplit[1]] = {
-          id: el.attr("data-quizzes-question-id_" + nameSplit[1]),
-          title: el.attr("data-quizzes-question_" + nameSplit[1]),
-          answers: {}
+      $.each(el.get(0).attributes, function() {
+        if(this.specified) {
+          var nameSplit = this.name.split("_");
+          if (nameSplit[0] == "data-quizzes-question") {
+            questions[nameSplit[1]] = {
+              id: el.attr("data-quizzes-question-id_" + nameSplit[1]),
+              title: el.attr("data-quizzes-question_" + nameSplit[1]),
+              answers: {}
+            }
+          }
+        }
+      });
+
+      $.each(el.get(0).attributes, function() {
+        if(this.specified) {
+          var nameSplit = this.name.split("_");
+          if (nameSplit[0] == "data-quizzes-answer") {
+            questions[nameSplit[1]].answers[nameSplit[2]] =  {
+              id: el.attr("data-quizzes-answer-id_" + nameSplit[1]+ "_" + nameSplit[2]),
+              title: el.attr("data-quizzes-answer_" + nameSplit[1]+ "_" + nameSplit[2]),
+              correct: el.attr("data-quizzes-answer-correct_" + nameSplit[1]+ "_" + nameSplit[2])
+          }
+        }
       }
-  }
-}
-});
+      });
 
-  $.each(el.get(0).attributes, function() {
-    if(this.specified) {
-      var nameSplit = this.name.split("_");
-      if (nameSplit[0] == "data-quizzes-answer") {
-        questions[nameSplit[1]].answers[nameSplit[2]] =  {
-          id: el.attr("data-quizzes-answer-id_" + nameSplit[1]+ "_" + nameSplit[2]),
-          title: el.attr("data-quizzes-answer_" + nameSplit[1]+ "_" + nameSplit[2]),
-          correct: el.attr("data-quizzes-answer-correct_" + nameSplit[1]+ "_" + nameSplit[2])
-      }
+      return {
+        type: "quiz",
+        title: el.attr("data-quizzes-title"),
+        questions: questions
+      };
+    },
+    hangout: function(el) {
+      return { type: "hangout" };
+    },
   }
-}
-});
-
-  return {
-    type: "quiz",
-    title: el.attr("data-quizzes-title"),
-    questions: questions
-};
-},
-hangout: function(el) {
-  return { type: "hangout" };
-},
-}
 
 var result = [];
 $("#grid1").find(".grid-stack-item").each(function(idx,el) {
@@ -805,6 +912,10 @@ function jsonToSpace(data) {
     slides: function(el, data) {
       el.attr("data-slides-title", data.title);
       el.attr("data-slides-link", data.link);
+  },
+  image: function(el, data) {
+    el.attr("data-image-title", data.title);
+    el.attr("data-image-link", data.link);
   },
   video: function(el, data) {
       el.attr("data-video-title", data.title);
@@ -834,10 +945,10 @@ function jsonToSpace(data) {
           el.attr("data-quizzes-answer-id_" + qid + "_" + aid, answer.id);
           el.attr("data-quizzes-answer-correct_" + qid + "_" + aid, answer.correct);
       }
-  }
-},
-hangout: function(el, data) {
-},
+    }
+  },
+  hangout: function(el, data) {
+  },
 }
 
       // TODO

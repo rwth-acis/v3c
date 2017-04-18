@@ -314,6 +314,9 @@ function getWidgetXML($widget)
         case 'slides':
         return "http://virtus-vet.eu/src/widgets_xml/slides_widget.xml";
         break;
+        case 'slides':
+        return "http://virtus-vet.eu/src/widgets_xml/image_widget/widget.xml";
+        break;
         case 'video':
         return "http://virtus-vet.eu/src/widgets_xml/video_widget/widget.xml";
         break;

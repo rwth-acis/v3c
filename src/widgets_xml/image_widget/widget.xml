@@ -58,7 +58,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Video</title>
+  <title>Image</title>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -110,7 +110,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      .done(function(data) {
        data = JSON.parse(data);
        $('.title').html(data.title);
-       $('#player').html('<img src="'+data.link+'" />');
+       $('#viewer').html('<img src="'+data.link+'" />');
      })
      .fail(function() {
          $("#main-content").html("Could not load image.");

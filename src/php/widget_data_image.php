@@ -12,7 +12,7 @@ $conn = require '../php/db_connect.php';
 $widget_role_url = filter_input(INPUT_GET, 'widget_role_url');
 $lang = filter_input(INPUT_GET, 'lang');
 
-$stmt = $conn->prepare("SELECT widget_data_video.element_id, title, link, lang
+$stmt = $conn->prepare("SELECT widget_data_image_lng.element_id, title, link, lang
                         FROM widget_data_image_lng, course_elements
                         WHERE widget_data_image_lng.element_id = course_elements.id
                           AND (lang = :lang OR lang = (SELECT default_lang FROM course_elements WHERE widget_role_url = :widget_role_url ))

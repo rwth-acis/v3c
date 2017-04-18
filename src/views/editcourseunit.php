@@ -388,7 +388,7 @@
                                 placeholder="Title" aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
-                                <label for="video-link">Video Link</label><br>
+                                <label for="video-link">Video (or Audio) Link</label><br>
                                 <input type="text" class="form-control protocontent" id="video-link" name="video-link"
                                 placeholder="http://..." aria-describedby="basic-addon1">
 

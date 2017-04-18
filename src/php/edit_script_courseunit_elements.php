@@ -366,7 +366,7 @@ if ($store) { // store to db
   $current_ids = array();
 
   // role api
-  $api = new RoleAPI("http://virtus-vet.eu:8081/", $_SESSION['access_token']);#
+  $api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
   $widgets = array();
   foreach ($input as $element) {
     $element_id = -1;

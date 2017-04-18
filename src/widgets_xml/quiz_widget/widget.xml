@@ -72,187 +72,41 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <!-- OpenApp import -->
   <script type="text/javascript" src="http://open-app.googlecode.com/files/openapp.js"></script>
 
+  <script src="http://virtus-vet.eu/src/widgets_xml/widgets_common.js"></script>
+  <script src="http://virtus-vet.eu/src/widgets_xml/quiz_widget/widget.js"></script>
+  <link rel="stylesheet" href="http://virtus-vet.eu/src/widgets_xml/quiz_widget/widget.css">
+
 </head>
 <body>
-
-  <style>
-    h3 {
-      margin: 0;
-      padding: 1em;
-      background:#222;
-      color:white;
-    }
-
-    h4 {
-      margin: 0;
-      font-size:0.8em;
-      padding: 1em;
-      background:#444;
-      color:white;
-    }
-
-    div.answer {
-      font-size:0.8em;
-      padding: 1em;
-    }
-
-    div.submit {
-      margin: 0;
-      font-size:0.8em;
-      padding: 1em;
-      background:#222;
-      color:white;
-    }
-
-    .container {
-      height:100%;
-      overflow:auto;
-    }
-
-    .wrong {
-      font-weight:bold;
-      color:darkred;
-    }
-
-    .right {
-      font-weight:bold;
-      color:darkgreen;
-    }
-  </style>
-
   <!-- container for actual page content -->
   <div class="container" id="main-content">
-    <h3 class='title'></h3>
+    <h3 class="quiz-title"></h3>
     <div class="questions"></div>
-    <div class="submit"><button onclick="postSubmission()">Submit</button></div>
   </div>
 
+  <script id="question-template" type="text/x-custom-template">
+    <div class="question" hidden>
+      <h4 class="question-title"></h4>
+      <div class="answers"></div>
+      <div class="buttons">
+        <button class="btn-prev">&lt;</button>
+        <button class="btn-submit">Submit</button>
+        <button class="btn-next">&gt;</button>
+      </div>
+    </div>
+  </script>
+
+  <script id="answer-template" type="text/x-custom-template">
+    <div class="answer">
+      <input type="checkbox" value="checked" class="checkbox">
+      <span class="wrong" hidden>☹</span>
+      <span class="right" hidden>☺</span>
+      <label class="answer-title"></label>
+    </div>
+  </script>
+
   <script>
-    function loadQuiz(widget_role_url, lang) {
-     var jqxhr = $.ajax( "http://virtus-vet.eu/src/php/widget_data_quiz.php?widget_role_url=" + encodeURI(widget_role_url) + "&lang=" + lang )
-     .done(function(data) {
-       data = JSON.parse(data)
-       $('.title').html(data.title)
-       $('.questions').html(renderQuestions(data.questions))
-       loadSubmission(widget_role_url)
-     })
-     .fail(function() {
-         $("#main-content").html("Could not load quiz.")
-     });
-    }
-
-    function renderQuestions(questions) {
-      var result = ""
-
-      questions.forEach(function(q) {
-        result += "<h4>" + q.title + "</h4>"
-        q.answers.forEach(function(a) {
-          result += '<div class="answer">'
-          result += '<input type="checkbox" id="answer-'+q.id+'-'+a.id+'" name="answer-'+q.id+'-'+a.id+'" value="checked">'
-          result += '<label for="answer-'+q.id+'-'+a.id+'">' + a.title + '</label>'
-          result += '</div>'
-        })
-      })
-
-      return result
-    }
-
-    function loadSubmission(widget_role_url) {
-     var jqxhr = $.ajax( {
-      url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?widget_role_url=" + encodeURI(widget_role_url),
-      crossDomain: true,
-      xhrFields: {
-        withCredentials: true
-      }
-     } )
-     .done(function(data) {
-       data = JSON.parse(data)
-       renderSubmission(data)
-     })
-     .fail(function(xhr) {
-        if (jqXHR.status == 403) {
-          $("#main-content").html('Please sign in at <a href="http://virtus-vet.eu">virtus-vet.eu</a> and reload this page!')
-        }
-        else {
-          $("#main-content").html("Could not load submission.")
-        }
-     });
-    }
-
-    function postSubmission() {
-      $(".submit button").prop('disabled', true);
-      var widget_role_url = getWidgetInstanceUrl();
-      $.ajax( {
-        method: "POST",
-        url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?store&widget_role_url=" + encodeURI(widget_role_url),
-        crossDomain: true,
-        xhrFields: {
-          withCredentials: true
-        },
-        data: JSON.stringify(extractSubmission())
-      })
-      .done(function(data) {
-        data = JSON.parse(data)
-        renderSubmission(data)
-      })
-      .fail(function() {
-        $("#main-content").html("Could not store submission.")
-      });
-    }
-
-    function renderSubmission(data) {
-      if (data.submitted) {
-        data = data.answers
-        Object.keys(data).forEach(function(qid) {
-          Object.keys(data[qid]).forEach(function(aid) {
-            $('input[name="answer-'+qid+'-'+aid+'"]').prop("checked", data[qid][aid].checked);
-            var html = $('label[for="answer-'+qid+'-'+aid+'"]').html();
-            if (data[qid][aid].checked != data[qid][aid].correct) {
-              html = '<span class="wrong">☹</span> ' + html;
-            }
-            else {
-              html = '<span class="right">☺</span> ' + html;
-            }
-            $('label[for="answer-'+qid+'-'+aid+'"]').html(html);
-          });
-        });
-        $("input").prop('disabled', true);
-        $(".submit button").prop('disabled', true);
-      }
-    }
-
-    function extractSubmission() {
-      var data = {}
-      $('input[type=checkbox]').each(function() {
-        var split = $(this).attr('name').split('-')
-        if (data[split[1]] == undefined) {
-          data[split[1]] = {}
-        }
-        data[split[1]][split[2]] = {"checked": $(this).prop('checked')}
-      })
-
-      return {"answers": data}
-    }
-
     loadQuiz(getWidgetInstanceUrl(), getUserLanguage());
-
-    function getWidgetInstanceUrl() {
-     function getQueryVariable(variable) {
-         var query = window.location.search.substring(1);
-         var vars = query.split('&');
-         for (var i = 0; i < vars.length; i++) {
-             var pair = vars[i].split('=');
-             if (decodeURIComponent(pair[0]) == variable) {
-                 return decodeURIComponent(pair[1]);
-             }
-         }
-     }
-     return getQueryVariable('url').split('?')[0];
-    }
-
-    function getUserLanguage() {
-      return navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
-    }
   </script>
 
 </body>

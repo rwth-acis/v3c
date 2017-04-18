@@ -1,0 +1,46 @@
+h3 {
+  margin: 0;
+  padding: 1em;
+  background:#222;
+  color:white;
+}
+
+.question {
+
+}
+
+.question h4 {
+  margin: 0;
+  font-size:0.8em;
+  padding: 1em;
+  background:#444;
+  color:white;
+}
+
+.question .buttons {
+  margin: 0;
+  font-size:0.8em;
+  padding: 1em;
+  background:#222;
+  color:white;
+}
+
+.answer {
+  font-size:0.8em;
+  padding: 1em;
+}
+
+.answer .wrong {
+  font-weight:bold;
+  color:darkred;
+}
+
+.answer .right {
+  font-weight:bold;
+  color:darkgreen;
+}
+
+.container {
+  height:100%;
+  overflow:auto;
+}

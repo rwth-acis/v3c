@@ -362,7 +362,7 @@ function getAdminToken(){
     curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 0);
     $result = curl_exec($ch);
     $location = trim(get_string_between($result."\n","Location: ","\n"));
-    $access_token = substr($location, strrpos($location,"access_token=")+strlen("access_token="));
-
+    //$access_token = substr($location, strrpos($location,"access_token=")+strlen("access_token="));
+    $access_token = get_string_between($location."&", "access_token=", "&");
     return $access_token ;
 }

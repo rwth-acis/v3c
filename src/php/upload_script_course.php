@@ -39,11 +39,11 @@ $course_lang = $language;
 
 
 // create role space
-$api = new RoleAPI("http://virtus-vet.eu:8081/", getadminToken());
+$api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
 $api->createSpace($course_id.strtolower(urlencode(str_replace(' ', '',$name))));
 $role_url = $course_id.strtolower(urlencode(str_replace(' ', '',$name)));
 
-$statement = $conn->prepare("UPDATE courses SET space_url= :role_url 
+$statement = $conn->prepare("UPDATE courses SET space_url= :role_url
                              WHERE id=:id");
 $statement->bindParam(":role_url", $role_url, PDO::PARAM_STR);
 $statement->bindParam(":id", $course_id, PDO::PARAM_INT);

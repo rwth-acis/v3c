@@ -44,10 +44,10 @@ if ($success) {
 }
 
 // creating activity
-$api = new RoleAPI("http://virtus-vet.eu:8081/", getadminToken());
+$api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
 $activity = $api->addActivityToSpace($space_url[0]['space_url'], $name);
 
-$statement = $conn->prepare("UPDATE course_units SET activity_url= :activity_url 
+$statement = $conn->prepare("UPDATE course_units SET activity_url= :activity_url
                              WHERE id=:id");
 $statement->bindParam(":activity_url", $activity, PDO::PARAM_STR);
 $statement->bindParam(":id", $course_unit_id, PDO::PARAM_INT);

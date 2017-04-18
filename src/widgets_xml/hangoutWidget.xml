@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Video Chat" description=""
     author="Team Virtus" author_email="maximilian.karl.haenel@rwth-aachen.de"
-    width="150" height="60">
+    width="800" height="600">
 
     <Require feature="opensocial-0.8"></Require>
     <Require feature="openapp"></Require>
@@ -68,26 +68,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-  <!--
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  -->
 </head>
 
 <body>
-  <!--
-  <div class="container" id="main-content">
-    <div class="g-hangout" data-render="createhangout"></div>
-  </div>
-  <script type="text/javascript">
-    gapi.hangout.render('placeholder-div', {
-      'topic': 'hats',
-      'render': 'createhangout',
-      'initial_apps': [
-        { app_id : 'youtube' }
-      ]
-    });
-  </script>
-  -->
 
   <style>
     .container {
@@ -113,12 +96,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </style>
 
   <div class="container" id="main-content">
-    <a class="btn" href="#" target="_blank">Join Room</a>
+    <a class="btn" href="#">Join Room</a>
   </div>
 
   <script>
     function init() {
-      $('.btn').attr('href', 'https://appear.in/' + btoa(getWidgetInstanceUrl()));
+      $('.btn').attr('href', 'https://meet.jit.si/' + btoa(getWidgetInstanceUrl()));
     }
 
     init();

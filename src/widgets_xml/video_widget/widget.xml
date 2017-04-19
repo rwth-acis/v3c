@@ -119,13 +119,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     function playbackVideo(videoUrl){
       // updateds "player" html element
       jwplayer("player").setup({
-        width: 700,
+        width: 800,
         height: 500,
         file: videoUrl
       });
     }
 
-    loadVideo(getWidgetInstanceUrl(), getUserLanguage());
+    getUserLanguage(function(lang) {
+      loadVideo(getWidgetInstanceUrl(), lang);
+    })
   </script>
 
 </body>

@@ -106,7 +106,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </script>
 
   <script>
-    loadQuiz(getWidgetInstanceUrl(), getUserLanguage());
+    getUserLanguage(function(lang) {
+      loadQuiz(getWidgetInstanceUrl(), lang);
+    })
   </script>
 
 </body>

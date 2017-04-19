@@ -118,7 +118,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      });
     }
 
-    loadImage(getWidgetInstanceUrl(), getUserLanguage());
+    getUserLanguage(function(lang) {
+      loadImage(getWidgetInstanceUrl(), lang);
+    })
   </script>
 
 </body>

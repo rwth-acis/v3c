@@ -1,8 +1,9 @@
 <?php
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+*/
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
@@ -378,7 +379,7 @@ if ($store) { // store to db
 
       $widget_role_url = $api->addWidgetToSpace($course['space_url'], $unit['activity_url'],$widgetXML);
 
-      $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang, widget_role_url) VALUES (:type, :x, :y, :width, :height, :lang, :widget_role_url)");
+      $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang, widget_role_url, unit_id) VALUES (:type, :x, :y, :width, :height, :lang, :widget_role_url, :unit_id)");
       $stmt->bindParam(":type", $element['widget']['type'], PDO::PARAM_STR);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
       $stmt->bindParam(":y", $element['y'], PDO::PARAM_INT);
@@ -386,6 +387,7 @@ if ($store) { // store to db
       $stmt->bindParam(":height", $element['height'], PDO::PARAM_INT);
       $stmt->bindParam(":lang", $unit_lang, PDO::PARAM_INT);
       $stmt->bindParam(":widget_role_url", $widget_role_url, PDO::PARAM_STR);
+      $stmt->bindParam(":unit_id", $unit_id);
 
       $success = $stmt->execute();
       if (!$success) {
@@ -396,16 +398,6 @@ if ($store) { // store to db
 
       $element_id = $conn->lastInsertId();
 
-      $stmt2 = $conn->prepare("INSERT INTO unit_to_element (unit_id, element_id) VALUES (:unit_id, :element_id)");
-      $stmt2->bindParam(":unit_id", $unit_id);
-      $stmt2->bindParam(":element_id", $element_id);
-
-      $success = $stmt2->execute();
-      if (!$success) {
-        http_response_code(400);
-        print_r($stmt2->errorInfo());
-        die("Error connecting course element to unit.");
-      }
       $element['xml'] = $widget_role_url;
       array_push($widgets, $element);
 
@@ -421,6 +413,7 @@ if ($store) { // store to db
       $stmt->bindParam(":width", $element['width'], PDO::PARAM_INT);
       $stmt->bindParam(":height", $element['height'], PDO::PARAM_INT);
       // widget type cannot be changed
+
       $element['xml'] = $widget['widget_role_url'];
       array_push($widgets, $element);
 
@@ -447,7 +440,7 @@ if ($store) { // store to db
     $query_str .= " AND id != " . $id;
   }
 
-  $stmt = $conn->prepare("SELECT * FROM course_elements WHERE id IN (SELECT element_id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
+  $stmt = $conn->prepare("SELECT * FROM course_elements WHERE unit_id = $unit_id " . $query_str);
   if (!$stmt->execute()) {
     echo "Error.";
   } else {
@@ -462,7 +455,7 @@ if ($store) { // store to db
 
 
 
-  $stmt = $conn->prepare("DELETE FROM course_elements WHERE id IN (SELECT element_id FROM unit_to_element WHERE unit_id = $unit_id) " . $query_str);
+  $stmt = $conn->prepare("DELETE FROM course_elements WHERE unit_id = $unit_id " . $query_str);
 
   $success = $stmt->execute();
   if (!$success) {
@@ -473,7 +466,7 @@ if ($store) { // store to db
 }
 
 // load from db
-$elements = $conn->query("SELECT * FROM course_elements, unit_to_element WHERE course_elements.id = unit_to_element.element_id AND unit_to_element.unit_id = $unit_id")->fetchAll();
+$elements = $conn->query("SELECT * FROM course_elements WHERE course_elements.unit_id = $unit_id")->fetchAll();
 $results = array();
 foreach ($elements as $el) {
   $widget_data = $loadWidgetData[$el['widget_type']]($conn, $el['id'], $unit_lang);

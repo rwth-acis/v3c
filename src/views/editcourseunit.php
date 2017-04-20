@@ -30,7 +30,7 @@
     $course_lang = filter_input(INPUT_GET, 'ulang');
 
     $canCreateCourse = $accessControl->canUpdateCourse($course_id);
-    $canCreateCourse = true; 
+    $canCreateCourse = true;
     if ($canCreateCourse) {
         ?>
         <!--Prototype Templates -->
@@ -623,6 +623,9 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             removable: '.trash',
             removeTimeout: 100,
             acceptWidgets: '.grid-stack-item',
+            resizable: {
+              handles: 'e'
+            }
             /*height: 8,*/
 
         };
@@ -1082,21 +1085,21 @@ function showSuccess() {
 }
 
 function uploadData(handler,type,label){
-    var file_data = handler.files[0];   
-    var form_data = new FormData();                  
-    form_data.append('file', file_data);             
-    form_data.append('type', type);  
+    var file_data = handler.files[0];
+    var form_data = new FormData();
+    form_data.append('file', file_data);
+    form_data.append('type', type);
     $.ajax({
-                url: '../php/upload.php', // point to server-side PHP script 
+                url: '../php/upload.php', // point to server-side PHP script
                 dataType: 'text',  // what to expect back from the PHP script, if anything
                 cache: false,
                 contentType: false,
                 processData: false,
-                data: form_data,                         
+                data: form_data,
                 type: 'post',
                 success: function(php_script_response){
                     var x = handler.closest('.modal-body');
-                    x.querySelector(label).setAttribute("value",php_script_response); 
+                    x.querySelector(label).setAttribute("value",php_script_response);
                 }
      });
 }

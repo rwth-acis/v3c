@@ -624,7 +624,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
             removeTimeout: 100,
             acceptWidgets: '.grid-stack-item',
             resizable: {
-              handles: 'e', 'w'
+              handles: 'e, w'
             }
             /*height: 8,*/
 

@@ -14,10 +14,9 @@ if ($success) {
 
 // Get course units start dates
 $statement = $conn->prepare("SELECT start_date
-    FROM course_units, course_to_unit, course_units_lng
-    WHERE course_units.id = course_to_unit.unit_id
-    AND course_units.id = course_units_lng.unit_id
-    AND course_to_unit.course_id = :course_id
+    FROM course_units, course_units_lng
+    WHERE course_units.id = course_units_lng.unit_id
+    AND course_units.course_id = :course_id
     AND course_units_lng.lang = :course_lang
     ");
 

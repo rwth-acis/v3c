@@ -7,13 +7,12 @@ $course_lang = filter_input(INPUT_GET, 'lang');
 
 // Get course units
 $stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
-    FROM course_to_unit, course_units, course_units_lng
-    WHERE course_to_unit.unit_id = course_units.id
-    AND course_to_unit.course_id = :course_id
+    FROM course_units, course_units_lng
+    WHERE course_units.course_id = :course_id
     AND course_units.id = course_units_lng.unit_id
     AND course_units_lng.lang = (SELECT
     IFNULL( (SELECT lang FROM course_units_lng
-    WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang),
+    WHERE course_units_lng.unit_id = course_units.id AND course_units_lng.lang = :course_lang),
     course_units.default_lang ))
     ");
 

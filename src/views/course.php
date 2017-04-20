@@ -59,13 +59,12 @@ $course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id
 
 // Get course units
 $stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
-    FROM course_to_unit, course_units, course_units_lng
-    WHERE course_to_unit.unit_id = course_units.id
-    AND course_to_unit.course_id = :course_id
+    FROM course_units, course_units_lng
+    WHERE course_units.course_id = :course_id
     AND course_units.id = course_units_lng.unit_id
     AND course_units_lng.lang = (SELECT
-    IFNULL( (SELECT lang FROM course_units_lng, course_to_unit
-    WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang AND course_to_unit.course_id = :course_id GROUP BY course_to_unit.course_id) ,
+    IFNULL( (SELECT lang FROM course_units_lng
+    WHERE course_units_lng.unit_id = course_units.id AND course_units_lng.lang = :course_lang) ,
     course_units.default_lang))
                         ");
 

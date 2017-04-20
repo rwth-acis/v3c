@@ -54,49 +54,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     <div class="row">
         <!-- main content -->
         <section class="col-sm-8 maincontent">
-            <?php
-            // Explanation and links to ROLE environment are not shown if already inside ROLE environment
-            if (!(filter_input(INPUT_GET, "widget") == "true")) {
-                ?>
-                <h3>Set Up Viewing Environment</h3>
-                <p>
-                    <img src="../images/role-full.jpg" alt="" class="img-rounded pull-right" width="300">
-                <p>The V3C is
-                    provided in widgets for
-                    the <a href="http://virtus-vet.eu/spaces">Responsive
-                        Open Learning Environments
-                        (ROLE)</a>. Here you can create a
-                    workspace, setup a learning environment
-                    and invite other people to join
-                    you. ROLE allows you to combine the
-                    V3C with many
-                    other widgets for collaborative
-                    learning. </p>
-
-                <p>Setting up the environment for
-                    collaborative viewing is really easy. If
-                    you do it for the first time, you can
-                    follow these steps:</p>
-
-                <ol>
-                    <li>Create a ROLE space <a href="http://virtus-vet.eu/spaces">here</a></li>
-                    <li>Log in (Use a Learning Layers account)</li>
-                    <li>On the "Edit Your Course" page next to the "Course room" entry two URLs are given. Do the
-                        following steps for each of them once:
-                    </li>
-                    <ol>
-                        <li>In the sidebar on the left by clicking the "+" symbol next to "Widgets". A popup window will
-                            appear.
-                        </li>
-                        <li>Copy the URL into the textbox in the popup window and click "OK".</li>
-                    </ol>
-                    <li>Enter the ROLE Space URL (e.g. http://virtus-vet.eu/spaces/spacename) on the "Edit Your
-                        Course" page.
-                    </li>
-                    <li>Invite others by providing the link to the space</li>
-                </ol>
-            <?php } ?>
-
+              <h3>Nothing to see here</h3>
         </section>
         <!-- /main -->
 

@@ -141,6 +141,9 @@ if ($success) {
                                         <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_lang; ?>" class="margin-left btn btn-xs btn-success">
                                             Edit
                                         </a>
+                                        <a href="/src/php/delete_courseunit.php?course_id=<?php echo $course_id?>&unit_id=<?php echo $course_unit["id"]; ?>&course_lang=<?php echo $course_lang; ?>" class="margin-left btn btn-xs btn-warning">
+                                            Delete
+                                        </a>
                                         <a href="/src/views/editcourseunit.php?cid=<?php echo $course_id; ?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_lang; ?>"
                                          class="margin-left btn btn-xs btn-warning">
                                          <?php echo getTranslation("course:content:editunit", "Design learning environment");?>

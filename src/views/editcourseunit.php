@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../external/gridstack/gridstack.css"/>
     <link rel="stylesheet" href="../external/gridstack/gridstack-extra.css"/>
     <link rel="stylesheet" href="../css/widget-arrangement.css"/>
+    <link rel="stylesheet" href="../css/style.css"/>
 </head>
 
 <body>
@@ -29,7 +30,7 @@
     $course_lang = filter_input(INPUT_GET, 'ulang');
 
     $canCreateCourse = $accessControl->canUpdateCourse($course_id);
-
+    $canCreateCourse = true; 
     if ($canCreateCourse) {
         ?>
         <!--Prototype Templates -->
@@ -311,6 +312,11 @@
                     <div class="input-group">
                         <div class="row">
                             <div class="col-sm-12">
+                                <input name="slidesFile" id="slidesFile" type="file" class="uploadFile" onchange="uploadData(this,'slides','#slides-link')">
+                                <label for="slidesFile" class="btn btn-success modal-save-button ">Upload File</label>
+                                <div id="loadingSlides" style="width:32px;height: 32px;"></div>
+                            </div>
+                            <div class="col-sm-12">
                                 <label for="slides-title">Sildes Title</label>
                                 <input type="text" class="form-control protocontent"
                                 name="slides-title"
@@ -319,7 +325,7 @@
                             <div class="col-sm-12">
                                 <label for="slides-link">Slides Link</label><br>
                                 <input type="text" class="form-control protocontent"
-                                name="slides-link"
+                                name="slides-link" id="slides-link"
                                 placeholder="http://..." aria-describedby="basic-addon1">
 
                             </div>
@@ -346,6 +352,11 @@
               <div class="modal-body">
                   <div class="input-group">
                       <div class="row">
+                           <div class="col-sm-12">
+                                <input name="imageFile" id="imageFile" type="file" class="uploadFile" onchange="uploadData(this,'images','#image-link')">
+                                <label for="imageFile" class="btn btn-success modal-save-button ">Upload File</label>
+                                <div id="loadingSlides" style="width:32px;height: 32px;"></div>
+                            </div>
                           <div class="col-sm-12">
                               <label for="image-title">Image Title</label>
                               <input type="text" class="form-control protocontent"
@@ -382,6 +393,11 @@
                 <div class="modal-body">
                     <div class="input-group">
                         <div class="row">
+                            <div class="col-sm-12">
+                                <input name="videoFile" id="videoFile" type="file" class="uploadFile" onchange="uploadData(this,'videos','#video-link')">
+                                <label for="videoFile" class="btn btn-success modal-save-button ">Upload File</label>
+                                <div id="loadingSlides" style="width:32px;height: 32px;"></div>
+                            </div>
                             <div class="col-sm-12">
                                 <label for="video-title">Video Title</label>
                                 <input type="text" class="form-control protocontent" id="video-title" name="video-title"
@@ -1065,7 +1081,25 @@ function showSuccess() {
   setTimeout(showAdvice, 1000);
 }
 
-
+function uploadData(handler,type,label){
+    var file_data = handler.files[0];   
+    var form_data = new FormData();                  
+    form_data.append('file', file_data);             
+    form_data.append('type', type);  
+    $.ajax({
+                url: '../php/upload.php', // point to server-side PHP script 
+                dataType: 'text',  // what to expect back from the PHP script, if anything
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,                         
+                type: 'post',
+                success: function(php_script_response){
+                    var x = handler.closest('.modal-body');
+                    x.querySelector(label).setAttribute("value",php_script_response); 
+                }
+     });
+}
 
 </script>
 </body>

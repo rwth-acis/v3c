@@ -30,7 +30,7 @@ class AccessControl
     const ADMIN_ROLE = 1;
     const TEACHER_ROLE = 2;
     const LEARNER_ROLE = 3;
-    const OPERATOR_ROLE = 4;
+    // const OPERATOR_ROLE = 4;
 
     // Currently, a guest is considered a learner
     // const GUEST_ROLE = 0;

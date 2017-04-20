@@ -12,6 +12,22 @@ function getWidgetInstanceUrl() {
  return getQueryVariable('url').split('?')[0];
 }
 
-function getUserLanguage() {
+function getBrowserLanguage() {
   return navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
+}
+
+function getUserLanguage(callback) {
+  $.ajax({
+   url: "http://virtus-vet.eu/src/php/lang.php",
+   crossDomain: true,
+   xhrFields: {
+     withCredentials: true
+   }
+  })
+  .done(function(data) {
+    callback(data)
+  })
+  .fail(function() {
+    callback(getBrowserLanguage())
+  })
 }

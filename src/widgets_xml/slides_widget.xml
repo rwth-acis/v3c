@@ -99,7 +99,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       });
     }
 
-    loadSlides(getWidgetInstanceUrl(), getUserLanguage());
+    getUserLanguage(function(lang) {
+      loadSlides(getWidgetInstanceUrl(), lang);
+    })
+
   </script>
 
 </body>

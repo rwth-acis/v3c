@@ -16,11 +16,12 @@ $startdate = filter_input(INPUT_POST, 'startdate');
 $description = filter_input(INPUT_POST, 'description');
 
 // Create database-entry
-$stmt = $conn->prepare("INSERT INTO course_units (points, start_date, default_lang)
-                             VALUES (:points, :startdate, :lang)");
+$stmt = $conn->prepare("INSERT INTO course_units (points, start_date, default_lang, course_id)
+                             VALUES (:points, :startdate, :lang, :course_id)");
 $stmt->bindParam(":points", $points, PDO::PARAM_INT);
 $stmt->bindParam(":startdate", $startdate, PDO::PARAM_STR);
 $stmt->bindParam(":lang", $course_lang, PDO::PARAM_STR);
+$stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 
 $success = $stmt->execute();
 if (!$success) {
@@ -70,19 +71,6 @@ if (!$success) {
     print_r($stmt->errorInfo());
     die("Error saving course unit.");
 }
-
-
-
-$stmt2 = $conn->prepare("INSERT INTO course_to_unit (course_id, unit_id) VALUES (:course_id, :cu_id)");
-$stmt2->bindParam(":course_id", $course_id);
-$stmt2->bindParam(":cu_id", $course_unit_id);
-
-$success = $stmt2->execute();
-if (!$success) {
-    print_r($stmt2->errorInfo());
-    die("Error connecting course unit to course.");
-}
-
 
 // After creating a course, the user is redirected to the edit page. The reason
 // for this is, that it is not possible to add models on addcourse.php. But the user

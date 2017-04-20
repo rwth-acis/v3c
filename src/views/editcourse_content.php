@@ -7,13 +7,12 @@ $course_lang = filter_input(INPUT_GET, 'lang');
 
 // Get course units
 $stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
-    FROM course_to_unit, course_units, course_units_lng
-    WHERE course_to_unit.unit_id = course_units.id
-    AND course_to_unit.course_id = :course_id
+    FROM course_units, course_units_lng
+    WHERE course_units.course_id = :course_id
     AND course_units.id = course_units_lng.unit_id
     AND course_units_lng.lang = (SELECT
     IFNULL( (SELECT lang FROM course_units_lng
-    WHERE course_units_lng.unit_id = course_to_unit.unit_id AND course_units_lng.lang = :course_lang),
+    WHERE course_units_lng.unit_id = course_units.id AND course_units_lng.lang = :course_lang),
     course_units.default_lang ))
     ");
 
@@ -89,7 +88,7 @@ if ($success) {
 
                     <!-- COURSE DOMAIN-->
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("addcourse:content:domain", "Course Domain:");?></label>
+                        <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
                         <div class="col-sm-10">
                             <select class="form-control" name="domain" id="domain">
                                 <?php
@@ -140,11 +139,14 @@ if ($success) {
                                         <span class="glyphicon glyphicon-calendar margin-right"></span>
                                         <?php echo $course_unit["start_date"] ?>
                                         <a href="/src/views/editcourseunit_info.php?cid=<?php echo $course_id?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_lang; ?>" class="margin-left btn btn-xs btn-success">
-                                            Edit
+                                            <?php echo getTranslation("general:button:edit", "Edit");?>
+                                        </a>
+                                        <a href="/src/php/delete_courseunit.php?course_id=<?php echo $course_id?>&unit_id=<?php echo $course_unit["id"]; ?>&course_lang=<?php echo $course_lang; ?>" class="margin-left btn btn-xs btn-warning">
+                                            <?php echo getTranslation("general:button:delete", "Delete");?>
                                         </a>
                                         <a href="/src/views/editcourseunit.php?cid=<?php echo $course_id; ?>&uid=<?php echo $course_unit["id"]; ?>&ulang=<?php echo $course_lang; ?>"
                                          class="margin-left btn btn-xs btn-warning">
-                                         <?php echo getTranslation("course:content:editunit", "Design learning environment");?>
+                                         <?php echo getTranslation("editcourse:edit:design", "Design learning environment");?>
                                      </a>
                                  </span>
                              </li>
@@ -163,7 +165,7 @@ if ($success) {
             </div>
         </div>
 
-        <a href="/src/views/addcourseunit.php?courseid=<?php echo $course_id; ?>&lang=<?php echo $course_lang; ?>" class="btn btn-success">+ <?php echo getTranslation("editcourseunit:edit:addunit", "Add Course Unit");?></a>
+        <a href="/src/views/addcourseunit.php?courseid=<?php echo $course_id; ?>&lang=<?php echo $course_lang; ?>" class="btn btn-success">+ <?php echo getTranslation("editcourse:units:add", "Add Course Unit");?></a>
 
         <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton" value="Save">
             <?php echo getTranslation("general:button:save", "Save");?>

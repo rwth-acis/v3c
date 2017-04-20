@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Image Widget" description="Image Widget"
+  <ModulePrefs title="Image" description="Image Widget"
     author="Jasper Nalbach" author_email="nalbach@dbis.rwth-aachen.de"
     width="800" height="600">
 
@@ -97,6 +97,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       width:100%;
       height:auto;
     }
+
+    .container {
+      margin: 0;
+      padding: 0;
+      width:100%;
+      height:100%;
+    }
   </style>
 
   <!-- container for actual page content -->
@@ -118,7 +125,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      });
     }
 
-    loadImage(getWidgetInstanceUrl(), getUserLanguage());
+    getUserLanguage(function(lang) {
+      loadImage(getWidgetInstanceUrl(), lang);
+    })
   </script>
 
 </body>

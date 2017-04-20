@@ -11,8 +11,6 @@
 <body>
     <?php
 
-// TODO remove translate button
-
     include("menu.php");
 
 // Get all course data and name + email of their creators from our database based
@@ -209,11 +207,11 @@
                                         //uncomment the line below to set the languages count to the number of available languages
                                         //$languages_count = $db->query("SELECT COUNT(*)as alLanguages FROM languages ")->fetchObject();
                                                         if (count($lang_array) == $languages_count){ ?>
-                                                        <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block">Translate to</a>
+                                                        <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block"><?php echo getTranslation("courselist:admin:translate", "Translate to");?></a>
                                                         <?php }else{ ?>
                                                         <div class="dropdown">
                                                             <button class="btn btn-danger dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                Translate to
+                                                                <?php echo getTranslation("courselist:admin:translate", "Translate to");?>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="translate-dropdown">
                                                                 <?php
@@ -231,7 +229,7 @@
                                                     <?php if (count($lang_array) > 1): ?>
                                                         <div class="dropdown">
                                                             <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="edit-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                Edit
+                                                                <?php echo getTranslation("courselist:admin:edit", "Edit");?>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="edit-dropdown">
                                                                 <?php
@@ -242,7 +240,7 @@
                                                             </div>
                                                         </div>
                                                     <?php else: ?>
-                                                        <a href="editcourse.php?id=<?php echo $current_course_id; ?>&lang=<?php echo $current_course_lang; ?>" class="btn btn-edit btn-sm btn-success btn-block">Edit</a>
+                                                        <a href="editcourse.php?id=<?php echo $current_course_id; ?>&lang=<?php echo $current_course_lang; ?>" class="btn btn-edit btn-sm btn-success btn-block"><?php echo getTranslation("courselist:admin:edit", "Edit");?></a>
                                                     <?php endif; ?>
                                                 </td>
 
@@ -253,14 +251,14 @@
                                                     value="Delete"></td>
                                                     <td class="rowlink-skip"><a href="http://virtus-vet.eu:8081/spaces/<?php echo $current_course_url; ?>" target="_blank" class="margin-left btn btn-sm btn-warning">
                                                         <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
-                                                    </a></td>                                
+                                                    </a></td>
                                                     <?php } ?>
                                                 </tr>
                                                 <tr>
                                                     <!-- Collapse div for course description -->
                                                     <td colspan="8">
                                                         <button type="button" class="btn btn-info" data-toggle="collapse"
-                                                        data-target="#description-<?php echo $index; ?>">Description
+                                                        data-target="#description-<?php echo $index; ?>"><?php echo getTranslation("courselist:choose:description", "Description");?>
                                                     </button>
                                                     <div id="description-<?php echo $index; ?>" class="collapse">
                                                         <?php echo $current_course_description; ?>

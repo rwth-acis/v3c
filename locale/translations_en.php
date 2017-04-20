@@ -14,6 +14,7 @@ function getLanguage()
         "general:button:signin" => "Sign in",
         "general:button:save" => "Save",
         "general:button:delete" => "Delete",
+        "general:button:remove" => "Remove",
         "general:button:edit" => "Edit",
         "general:button:yes" => "Yes",
         "general:button:no" => "No",
@@ -63,6 +64,10 @@ function getLanguage()
         "courselist:choose:name" => "Course name",
         "courselist:choose:creator" => "Created by",
         "courselist:choose:start" => "Start Dates",
+        "courselist:choose:description" => "Description",
+
+        "courselist:admin:translate" => "Translate to",
+        "courselist:admin:edit" => "Edit",
 
         "editcourse:head:edit" => "Edit Your Course",
         "editcourse:edit:name" => "Course name:",
@@ -70,6 +75,12 @@ function getLanguage()
         "editcourse:edit:profession" => "Course Profession:",
         "editcourse:edit:description" => "Description:",
         "editcourse:edit:design" => "Design learning environment",
+        "editcourse:units:add" => "Add Course Unit",
+
+        "editcourseunit:edit:name" => "Course unit name:",
+        "editcourseunit:edit:points" => "ECVET Points:",
+        "editcourseunit:edit:startdate" => "Start Date:",
+        "editcourseunit:edit:description" => "Description:",
 
         "overview:head:gallery" => "Gallery",
 
@@ -77,6 +88,33 @@ function getLanguage()
         "usermanagement:choose:given_name" => "Given Name",
         "usermanagement:choose:role" => "Role",
         "usermanagment:choose:affiliation" => "Affiliation",
-        "usermanagement:button:update" => "Update User"
+        "usermanagement:button:update" => "Update User",
+
+        "designunit:head:title" => "Edit Course Unit",
+        "designunit:content:addcontent" => "Add Content",
+        "designunit:content:uploadfile" => "Upload File",
+        "designunit:content:apply" => "Apply",
+        "designunit:content:slideswidget" => "Slides Widget",
+        "designunit:content:videowidget" => "Video Widget",
+        "designunit:content:imagewidget" => "Image Widget",
+        "designunit:content:hangoutwidget" => "Video Conference Widget",
+        "designunit:content:quizwidget" => "Quizzes Widget",
+        "designunit:content:title" => "Title",
+        "designunit:content:link" => "Link",
+        "designunit:content:videolink" => "Video or Audio",
+        "designunit:content:questions" => "Questions",
+        "designunit:content:addquestion" => "Add Question",
+        "designunit:content:question" => "Question",
+        "designunit:content:answers" => "Answers",
+        "designunit:content:addanswer" => "Add Answer",
+        "designunit:content:save" => "Save Changes",
+        "designunit:content:toolbox" => "Toolbox",
+        "designunit:content:rolespace" => "ROLE Space",
+
+        "designunit:message:inprogress" => "Please wait...",
+        "designunit:message:stored" => "Saved successfully!",
+        "designunit:message:error" => "An error ocurred. Please refresh.",
+        "designunit:message:advice" => "Changes to widget arrangements and widget contents are only applied after clicking this button!",
+
     );
 }

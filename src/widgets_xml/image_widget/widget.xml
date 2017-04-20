@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Image Widget" description="Image Widget"
+  <ModulePrefs title="Image" description="Image Widget"
     author="Jasper Nalbach" author_email="nalbach@dbis.rwth-aachen.de"
     width="800" height="600">
 

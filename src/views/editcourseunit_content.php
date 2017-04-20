@@ -47,7 +47,7 @@ else {
                     <!--Course unit name-->
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="name">
-                            <?php echo "Course unit name:";/*getTranslation("editcourseunit:edit:name", "Course unit name:");*/?>
+                            <?php echo getTranslation("editcourseunit:edit:name", "Course unit name:"); ?>
                         </label>
 
                         <div class="col-sm-10">
@@ -60,7 +60,7 @@ else {
                     <!--Course unit points-->
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="points">
-                            <?php echo "ECVET Ponits";/*getTranslation("editcourseunit:edit:points", "ECVET Points:");*/?>
+                            <?php echo getTranslation("editcourseunit:edit:points", "ECVET Points:");?>
                         </label>
                         <div class="col-sm-10">
                             <input type="number" name="points" id="points" min="0" max="20"
@@ -71,7 +71,7 @@ else {
                     <!--Course unit startdate-->
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="startdate">
-                            <?php echo "Start Date:";/*getTranslation("editcourseunit:edit:startdate", "Start Date:");*/?>
+                            <?php echo getTranslation("editcourseunit:edit:startdate", "Start Date:");?>
                         </label>
                         <div class="col-sm-10">
                             <input type="date" class="form-control" name="startdate" id="startdate"
@@ -82,7 +82,7 @@ else {
                     <!--Course unit description-->
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="description">
-                            <?php echo "Description";/*getTranslation("editcourseunit:edit:description", "Description:");*/?>
+                            <?php echo getTranslation("editcourseunit:edit:description", "Description:");?>
                         </label>
                         <div class="col-sm-10">
                             <textarea class="form-control" rows="3" name="description" id="description" placeholder="<?php echo "Enter course unit description";/*getTranslation('editcourseunit:placeholder:description', 'Enter course description');*/?>"><?php echo htmlentities($course_unit['description']);?></textarea>
@@ -91,7 +91,7 @@ else {
 
 
                     <button type="submit" class="btn btn-success btn-lg btn-block" id="SubmitButton"
-                    value="Save"><?php echo "Save";/*getTranslation("general:button:save", "Save");*/?></button>
+                    value="Save"><?php echo getTranslation("general:button:save", "Save");?></button>
                 </form>
                 <div id="output"></div>
                 <br>

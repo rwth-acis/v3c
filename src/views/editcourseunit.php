@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widget arrangement </title>
+    <title>Widget arrangement</title>
 
     <link rel="stylesheet" href="../external/redacted/fonts/stylesheet.css"/>
     <link rel="stylesheet" href="../external/jasny-bootstrap/dist/css/jasny-bootstrap.min.css"/>
@@ -18,7 +18,7 @@
     <header id='head' class='secondary'>
         <div class='container'>
             <div class='row'>
-                <h1>Edit Course Unit</h1>
+                <h1><?php echo getTranslation("designunit:head:title", "Edit Course Unit");?></h1>
             </div>
         </div>
     </header>
@@ -38,7 +38,7 @@
         <div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer" id="prototypeSlideViewer">
             <div class="row virtus-pw-prototype-topbar">
                 <div class="virtus-pw-name col-sm-12">
-                    Slides Widget
+                    <?php echo getTranslation("designunit:content:slideswidget", "Slides Widget");?>
                 </div>
                 <div class="virtus-pw-prototype-top-toolbar">
                     <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
@@ -57,7 +57,7 @@
                             aria-label="Left Align"
                             data-toggle="modal"
                             data-target=".pw-modal-slideviewer">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                         </button>
                         <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                     </div>
@@ -102,7 +102,7 @@
     <div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer pw-image-viewer" id="prototypeImageViewer">
         <div class="row virtus-pw-prototype-topbar">
             <div class="virtus-pw-name col-sm-12">
-                Image Widget
+                <?php echo getTranslation("designunit:content:imagewidget", "Image Widget");?>
             </div>
             <div class="virtus-pw-prototype-top-toolbar">
                 <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
@@ -121,7 +121,7 @@
                         aria-label="Left Align"
                         data-toggle="modal"
                         data-target=".pw-modal-slideviewer">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
@@ -165,7 +165,7 @@
     <div class="virtus-pw-prototype virtus-pw-hide pw-hangouts" id="prototypeHangouts">
         <div class="row virtus-pw-prototype-topbar">
             <div class="virtus-pw-name col-sm-12">
-                Video Chat Widget
+                <?php echo getTranslation("designunit:content:hangoutwidget", "Video Conference Widget");?>
             </div>
             <div class="virtus-pw-prototype-top-toolbar">
                 <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
@@ -189,7 +189,7 @@
     <div class="virtus-pw-prototype virtus-pw-hide pw-video-viewer" id="prototypeVideoViewer">
         <div class="row virtus-pw-prototype-topbar">
             <div class="virtus-pw-name col-sm-12">
-                Video Widget
+                <?php echo getTranslation("designunit:content:videowidget", "Video Widget");?>
             </div>
             <div class="virtus-pw-prototype-top-toolbar">
                 <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
@@ -209,7 +209,7 @@
                         aria-label="Left Align"
                         data-toggle="modal"
                         data-target=".pw-modal-videoviewer">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
@@ -244,7 +244,7 @@
 <div class="virtus-pw-prototype virtus-pw-hide pw-quizzes-viewer" id="prototypeQuizzesViewer">
     <div class="row virtus-pw-prototype-topbar">
         <div class="virtus-pw-name col-sm-12">
-            Quizzes Widget
+            <?php echo getTranslation("designunit:content:quizwidget", "Quizzes Widget");?>
         </div>
         <div class="virtus-pw-prototype-top-toolbar">
             <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
@@ -263,7 +263,7 @@
                     aria-label="Left Align"
                     data-toggle="modal"
                     data-target=".pw-modal-quizzes">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Content
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                 </button>
                 <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
             </div>
@@ -306,24 +306,24 @@
               <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                     aria-hidden="true">&times;</span></button>-->
-                    <h4 class="modal-title" id="myModalLabel">Slides Widget</h4>
+                    <h4 class="modal-title" id="myModalLabel"><?php echo getTranslation("designunit:content:slideswidget", "Slides Widget");?></h4>
                 </div>
                 <div class="modal-body">
                     <div class="input-group">
                         <div class="row">
                             <div class="col-sm-12">
                                 <input name="slidesFile" id="slidesFile" type="file" class="uploadFile" onchange="uploadData(this,'slides','#slides-link')">
-                                <label for="slidesFile" class="btn btn-success modal-save-button ">Upload File</label>
+                                <label for="slidesFile" class="btn btn-success modal-save-button "><?php echo getTranslation("designunit:content:uploadfile", "Upload File");?></label>
                                 <div id="loadingSlides" style="width:32px;height: 32px;"></div>
                             </div>
                             <div class="col-sm-12">
-                                <label for="slides-title">Sildes Title</label>
+                                <label for="slides-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                                 <input type="text" class="form-control protocontent"
                                 name="slides-title"
                                 placeholder="Title" aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
-                                <label for="slides-link">Slides Link</label><br>
+                                <label for="slides-link"><?php echo getTranslation("designunit:content:link", "Link");?></label><br>
                                 <input type="text" class="form-control protocontent"
                                 name="slides-link" id="slides-link"
                                 placeholder="http://..." aria-describedby="basic-addon1">
@@ -334,7 +334,7 @@
                 </div>
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
+                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
                 </div>
             </div>
         </div>
@@ -347,24 +347,24 @@
             <div class="modal-header">
                   <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                   aria-hidden="true">&times;</span></button>-->
-                  <h4 class="modal-title" id="myModalLabel">Image Widget</h4>
+                  <h4 class="modal-title" id="myModalLabel"><?php echo getTranslation("designunit:content:imagewidget", "Image Widget");?></h4>
               </div>
               <div class="modal-body">
                   <div class="input-group">
                       <div class="row">
                            <div class="col-sm-12">
                                 <input name="imageFile" id="imageFile" type="file" class="uploadFile" onchange="uploadData(this,'images','#image-link')">
-                                <label for="imageFile" class="btn btn-success modal-save-button ">Upload File</label>
+                                <label for="imageFile" class="btn btn-success modal-save-button "><?php echo getTranslation("designunit:content:uploadfile", "Upload File");?></label>
                                 <div id="loadingSlides" style="width:32px;height: 32px;"></div>
                             </div>
                           <div class="col-sm-12">
-                              <label for="image-title">Image Title</label>
+                              <label for="image-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                               <input type="text" class="form-control protocontent"
                               name="image-title"
                               placeholder="Title" aria-describedby="basic-addon1">
                           </div>
                           <div class="col-sm-12">
-                              <label for="image-link">Image Link</label><br>
+                              <label for="image-link"><?php echo getTranslation("designunit:content:link", "Link");?></label><br>
                               <input type="text" class="form-control protocontent"
                               name="image-link"
                               placeholder="http://..." aria-describedby="basic-addon1">
@@ -375,7 +375,7 @@
               </div>
               <div class="modal-footer">
                   <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                  <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
+                  <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
               </div>
           </div>
       </div>
@@ -388,23 +388,23 @@
             <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                     aria-hidden="true">&times;</span></button>-->
-                    <h4 class="modal-title" id="myModalLabel">Video Widget</h4>
+                    <h4 class="modal-title" id="myModalLabel"><?php echo getTranslation("designunit:content:videowidget", "Video Widget");?></h4>
                 </div>
                 <div class="modal-body">
                     <div class="input-group">
                         <div class="row">
                             <div class="col-sm-12">
                                 <input name="videoFile" id="videoFile" type="file" class="uploadFile" onchange="uploadData(this,'videos','#video-link')">
-                                <label for="videoFile" class="btn btn-success modal-save-button ">Upload File</label>
+                                <label for="videoFile" class="btn btn-success modal-save-button "><?php echo getTranslation("designunit:content:uploadfile", "Upload File");?></label>
                                 <div id="loadingSlides" style="width:32px;height: 32px;"></div>
                             </div>
                             <div class="col-sm-12">
-                                <label for="video-title">Video Title</label>
+                                <label for="video-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                                 <input type="text" class="form-control protocontent" id="video-title" name="video-title"
                                 placeholder="Title" aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
-                                <label for="video-link">Video (or Audio) Link</label><br>
+                                <label for="video-link"><?php echo getTranslation("designunit:content:title", "Link");?> (<?php echo getTranslation("designunit:content:videolink", "Video or Audio");?>)</label><br>
                                 <input type="text" class="form-control protocontent" id="video-link" name="video-link"
                                 placeholder="http://..." aria-describedby="basic-addon1">
 
@@ -415,7 +415,7 @@
             </div>
             <div class="modal-footer">
                 <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
+                <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
             </div>
         </div>
     </div>
@@ -428,20 +428,20 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
         <div class="modal-header">
                     <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                     aria-hidden="true">&times;</span></button>-->
-                    <h4 class="modal-title" id="myModalLabel">Quizzes Widget</h4>
+                    <h4 class="modal-title" id="myModalLabel"><?php echo getTranslation("designunit:content:quizwidget", "Quizzes Widget");?></h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <label for="video-title">Quizzes Title</label>
+                                    <label for="video-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                                     <input type="text" class="form-control protocontent"
                                     name="quizzes-title"
                                     placeholder="Title" aria-describedby="basic-addon1">
                                 </div>
                                 <div class="col-sm-12 qa-block-container">
-                                    <h4 class="">Questions</h4>
+                                    <h4 class=""><?php echo getTranslation("designunit:content:questions", "Questions");?></h4>
                                     <hr>
                                 </div>
                             </div>
@@ -450,8 +450,8 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
                 </div>
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                    <button type="button" class="btn btn-success modal-add-button">Add Question +</button>
-                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal">Apply</button>
+                    <button type="button" class="btn btn-success modal-add-button"><?php echo getTranslation("designunit:content:addquestion", "Add Question");?> +</button>
+                    <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
                 </div>
             </div>
         </div>
@@ -482,22 +482,22 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
 <script type="text/template" id="questionBlock">
     <div class="panel panel-default" data-answer-ctr="0">
         <div class="panel-heading">
-            <h3 class="question-title-counter">Question 1</h3>
+            <h3 class="question-title-counter"><?php echo getTranslation("designunit:content:question", "Question");?> 1</h3>
         </div>
         <div class="panel-body">
             <div class="row qa-div">
-                <div class="col-sm-12"><br><button class="btn btn-danger btn-remove-question" type="button">Remove</button><br>
-                    <label for="quizzes-question_0">Question:</label>
+                <div class="col-sm-12"><br><button class="btn btn-danger btn-remove-question" type="button"><?php echo getTranslation("general:button:remove", "Remove");?></button><br>
+                    <label for="quizzes-question_0"><?php echo getTranslation("designunit:content:question", "Question");?>:</label>
                     <input type="text" class="form-control protocontent"
                     name="quizzes-question_0"
                     placeholder="Question" aria-describedby="basic-addon1">
                     <input type="hidden" name="quizzes-question-id_0" class="protocontent" value="">
                 </div>
-                <label class="col-sm-12">Answers:</label>
+                <label class="col-sm-12"><?php echo getTranslation("designunit:content:answers", "Answers");?>:</label>
                 <div class="checkbox">
                   <div class="col-sm-6 padding-bottom-1em">
                       <button type="button" class="btn btn-default btn-block btn-add-answer">
-                          Add Answer
+                          <?php echo getTranslation("designunit:content:addanswer", "Add Answer");?>
                       </button>
                   </div>
               </div>
@@ -514,14 +514,14 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
     <div class='container virtus-margin-top-15' style="background: #ff8060; padding: 1em; margin:1em auto;">
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-default btn-block btn-save-courseunit">
-            Save changes
+            <?php echo getTranslation("designunit:content:save", "Save Changes");?>
         </button>
     </div>
 
-    <span class="message-inprogress">Please wait...</span>
-    <span class="message-stored">Saved successfully!</span>
-    <span class="message-error">An error ocurred. Please refresh.</span>
-    <span class="message-advice">Changes to widget arrangements and widget contents are only applied after clicking this button!</span>
+    <span class="message-inprogress"><?php echo getTranslation("designunit:message:inprogress", "Please wait...");?></span>
+    <span class="message-stored"><?php echo getTranslation("designunit:message:stored", "Saved successfully!");?></span>
+    <span class="message-error"><?php echo getTranslation("designunit:message:error", "An error ocurred. Please refresh.");?></span>
+    <span class="message-advice"><?php echo getTranslation("designunit:message:advice", "Changes to widget arrangements and widget contents are only applied after clicking this button!");?></span>
 </div>
 <section class='container'>
     <div class='container'>
@@ -538,7 +538,7 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
                             title="The sidebar is locked, because you already filled the rolespace with the maximum amount of Widgets. Remove Widgets to be able to add new Widgets again."></span>
                         </div>
                         <div class="col-sm-8">
-                            <div class="sidebar-title">Toolbox:</div>
+                            <div class="sidebar-title"><?php echo getTranslation("designunit:content:toolbox", "Toolbox");?>:</div>
                         </div>
                     </div>
                     <div class="gridstack-sidebar">
@@ -556,7 +556,7 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
                     <!-- List of all courses -->
                     <div class='col-sm-10 virtus-margin-top-15'>
                         <div class="gridstack-canvas-container">
-                            <div class="canvas-title">Rolespace</div>
+                            <div class="canvas-title"><?php echo getTranslation("designunit:content:rolespace", "ROLE Space");?></div>
                             <div class="grid-stack grid-stack-10 grid-stack-main" id="grid1">
                                 <!--<div class="grid-stack-item test" data-gs-x="10" data-gs-y="0" data-gs-width="2" data-gs-height="8" data-gs-no-resize="" data-gs-no-move="" data-gs-locked=""></div>-->
                             </div>
@@ -596,11 +596,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!--<script src="../js/widget-arrangement.js"><script/>-->
 <script>
     widgetConfiguration = [
-    {name: 'slide viewer', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal', widgetType: 'slides'},
-    {name: 'video viewer', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
-    {name: 'quiz', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
-    {name: 'video chat', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'},
-    {name: 'image viewer', prototypeName: 'prototypeImageViewer', modalname: 'prototypeImageViewerModal', widgetType: 'image'}
+    {name: '<?php echo getTranslation("designunit:content:slideswidget", "Slides Widget");?>', prototypeName: 'prototypeSlideViewer', modalname: 'prototypeSlideViewerModal', widgetType: 'slides'},
+    {name: '<?php echo getTranslation("designunit:content:videowidget", "Video Widget");?>', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
+    {name: '<?php echo getTranslation("designunit:content:quizwidget", "Quizzes Widget");?>', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
+    {name: '<?php echo getTranslation("designunit:content:hangoutwidget", "Video Conference Widget");?>', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'},
+    {name: '<?php echo getTranslation("designunit:content:imagewidget", "Image Widget");?>', prototypeName: 'prototypeImageViewer', modalname: 'prototypeImageViewerModal', widgetType: 'image'}
     ];
 
     var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.

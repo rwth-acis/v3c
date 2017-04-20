@@ -80,9 +80,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   <script src="http://virtus-vet.eu/src/widgets_xml/widgets_common.js"></script>
 
-</head>
-<body>
-
   <style>
     h3 {
       margin: 0;
@@ -95,7 +92,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       width:100%;
       height:90%;
     }
+
+    .container {
+      margin: 0;
+      padding: 0;
+      width:100%;
+      height:100%;
+    }
   </style>
+
+</head>
+<body>
+
+
 
   <!-- container for actual page content -->
   <div class="container" id="main-content">
@@ -119,8 +128,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     function playbackVideo(videoUrl){
       // updateds "player" html element
       jwplayer("player").setup({
-        width: 800,
-        height: 500,
+        width: "100%",
+        aspectratio: "16:9",
         file: videoUrl
       });
     }

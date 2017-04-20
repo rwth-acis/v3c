@@ -97,6 +97,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       width:100%;
       height:auto;
     }
+
+    .container {
+      margin: 0;
+      padding: 0;
+      width:100%;
+      height:100%;
+    }
   </style>
 
   <!-- container for actual page content -->

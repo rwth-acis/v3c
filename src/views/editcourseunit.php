@@ -30,7 +30,6 @@
     $course_lang = filter_input(INPUT_GET, 'ulang');
 
     $canCreateCourse = $accessControl->canUpdateCourse($course_id);
-    $canCreateCourse = true;
     if ($canCreateCourse) {
         ?>
         <!--Prototype Templates -->

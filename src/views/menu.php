@@ -27,7 +27,7 @@
   require_once '../php/role_api.php';
   if(isset($_SESSION['access_token'])){
     $api = new RoleAPI("http://virtus-vet.eu:8081/", $_SESSION['access_token']);
-    // Automated Role login if you are logged in at virtus. 
+    // Automated Role login if you are logged in at virtus.
     $api->login();
 }
 ?>
@@ -89,10 +89,30 @@
                             data-logo="https://raw.githubusercontent.com/learning-layers/LayersToolTemplate/master/extras/logo.png"
                             data-server="https://api.learning-layers.eu/o/oauth2"
                             data-clientid="<?php echo($oidcClientId); ?>"
-                            data-scope="openid phone email address profile">
+                            data-scope="openid phone email address profile"></span>
                         </span>
-                    </span>
-                </li>
+                    </li>
+                    <li>
+                      <a href="#" onclick="fakeLogin(); return false;" id="fakelogin">FAKE LOGIN</a>
+                      <script>
+                        if (window.localStorage["access_token"] !== undefined) {
+                          $('#fakelogin').html("FAKE LOGGED IN");
+                        }
+
+                        function fakeLogin() {
+                           var sub = window.prompt("Enter your OIDC sub","0");
+                           oidc_userinfo = {
+                             sub: sub,
+                             email: "fakeMail",
+                             given_name: "Fake",
+                             family_name: "Name"
+                           };
+                           window.localStorage["access_token"] = "fakeAccessToken";
+                           personality_signinCallback("success");
+                           $('#fakelogin').html("FAKE LOGGED IN");
+                        }
+                      </script>
+                    </li>
             </ul>
 
             <select class="form-control" name="" id="select-lang">

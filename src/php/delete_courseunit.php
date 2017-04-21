@@ -9,14 +9,14 @@ require '../php/tools.php';
 require '../php/role_api.php';
 
 //Get input data from form
-$unit_id = filter_input(INPUT_POST, 'unit_id');
-$course_id = filter_input(INPUT_POST, 'course_id');
-$course_lang = filter_input(INPUT_POST, 'course_lang');
+$unit_id = filter_input(INPUT_GET, 'unit_id');
+$course_id = filter_input(INPUT_GET, 'course_id');
+$course_lang = filter_input(INPUT_GET, 'course_lang');
 
 // TODO: Check whether user is creator of this course, only the creator can delete the unit
 
 // get activity url
-$stmt = $conn->prepare("SELECT activity_url FROM course_units WHERE course_units.id = :$unit_id");
+$stmt = $conn->prepare("SELECT activity_url FROM course_units WHERE course_units.id = :unit_id");
 $stmt->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
 
 $success = $stmt->execute();
@@ -30,7 +30,7 @@ $api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
 $api->removeActivityFromSpace($activity_url);
 
 // delete from db
-$stmt = $conn->prepare("DELETE FROM course_units WHERE course_units.id = :$unit_id");
+$stmt = $conn->prepare("DELETE FROM course_units WHERE course_units.id = :unit_id");
 $stmt->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
 $success = $stmt->execute();
 if (!$success) {

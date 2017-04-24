@@ -56,13 +56,13 @@ function renderQuiz(data) {
       answerTpl.find('label').attr('for', 'cb-answer-'+a.id)
     })
   })
+
+  loadTranslations()
 }
 
 function renderSubmissions(data) {
-  // TODO
   var submitted = 0
   var correct = 0
-
 
   for (var i = 0; i < data.length; i++) {
     if (data[i].submitted) {

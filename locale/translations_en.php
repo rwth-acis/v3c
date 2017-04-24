@@ -116,5 +116,11 @@ function getLanguage()
         "designunit:message:error" => "An error ocurred. Please refresh.",
         "designunit:message:advice" => "Changes to widget arrangements and widget contents are only applied after clicking this button!",
 
+        "widget:quiz:overview" => "Overview",
+        "widget:quiz:submittedanswers" => "Submitted answers",
+        "widget:quiz:correctanswers" => "Correct answers",
+        "widget:quiz:start" => "Start",
+        "widget:quiz:submit" => "Submit",
+        "widget:chat:join" => "Join Room",
     );
 }

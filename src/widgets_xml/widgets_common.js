@@ -31,3 +31,23 @@ function getUserLanguage(callback) {
     callback(getBrowserLanguage())
   })
 }
+
+function loadTranslations() {
+  $('[data-lang-key]').each(function() {
+    var self = this
+    $.ajax({
+     url: "http://virtus-vet.eu/src/php/langstring.php?key=" + $(this).attr("data-lang-key") + "&default=DEFAULT",
+     crossDomain: true,
+     xhrFields: {
+       withCredentials: true
+     }
+    })
+    .done(function(data) {
+      if (data !== "DEFAULT") {
+        $(self).html(data)
+      }
+    })
+  })
+
+
+}

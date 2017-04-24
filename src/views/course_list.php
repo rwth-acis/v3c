@@ -119,8 +119,6 @@
                                             <?php if ($isLecturer) { ?>
                                             <th></th>
                                             <th></th>
-                                            <th></th>
-                                            <th></th>
                                             <?php } ?>
                                         </tr>
                                     </thead>
@@ -210,7 +208,7 @@
                                                         <a href="#" disabled class="btn btn-translate btn-sm btn-danger btn-block"><?php echo getTranslation("courselist:admin:translate", "Translate to");?></a>
                                                         <?php }else{ ?>
                                                         <div class="dropdown">
-                                                            <button class="btn btn-danger dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <button class="btn btn-danger btn-sm dropdown-toggle" type="button" id="translate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <?php echo getTranslation("courselist:admin:translate", "Translate to");?>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="translate-dropdown">
@@ -224,8 +222,6 @@
                                                         </div>
                                                     </div>
                                                     <?php } ?>
-                                                </td>
-                                                <td     class="rowlink-skip">
                                                     <?php if (count($lang_array) > 1): ?>
                                                         <div class="dropdown">
                                                             <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="edit-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -242,9 +238,8 @@
                                                     <?php else: ?>
                                                         <a href="editcourse.php?id=<?php echo $current_course_id; ?>&lang=<?php echo $current_course_lang; ?>" class="btn btn-edit btn-sm btn-success btn-block"><?php echo getTranslation("courselist:admin:edit", "Edit");?></a>
                                                     <?php endif; ?>
-                                                </td>
-
-                                                <td class="rowlink-skip"><input type="button"
+                                                    
+                                                <input type="button"
                                                     data-id="<?php echo $current_course_id; ?>"
                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                     class="btn btn-delete btn-sm btn-warning btn-block"

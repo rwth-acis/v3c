@@ -92,27 +92,6 @@
                             data-scope="openid phone email address profile"></span>
                         </span>
                     </li>
-                    <li>
-                      <a href="#" onclick="fakeLogin(); return false;" id="fakelogin">FAKE LOGIN</a>
-                      <script>
-                        if (window.localStorage["access_token"] !== undefined) {
-                          $('#fakelogin').html("FAKE LOGGED IN");
-                        }
-
-                        function fakeLogin() {
-                           var sub = window.prompt("Enter your OIDC sub","0");
-                           oidc_userinfo = {
-                             sub: sub,
-                             email: "fakeMail",
-                             given_name: "Fake",
-                             family_name: "Name"
-                           };
-                           window.localStorage["access_token"] = "fakeAccessToken";
-                           personality_signinCallback("success");
-                           $('#fakelogin').html("FAKE LOGGED IN");
-                        }
-                      </script>
-                    </li>
             </ul>
 
             <select class="form-control" name="" id="select-lang">

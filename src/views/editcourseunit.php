@@ -19,6 +19,7 @@
         <div class='container'>
             <div class='row'>
                 <h1><?php echo getTranslation("designunit:head:title", "Edit Course Unit");?></h1>
+                <a href="editcourse.php?id=<?php echo $_GET['cid'] ?>&lang=<?php echo $_GET['ulang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a> 
             </div>
         </div>
     </header>

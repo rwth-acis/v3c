@@ -103,6 +103,7 @@ function replaceLinks($text)
     <div class='container'>
         <div class='row'>
             <h1><?php echo $course_details["name"]; ?></h1>
+            <a href="course_list.php?id=<?php echo $course_details["domain"] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>
         </div>
     </div>
 </header>

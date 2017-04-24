@@ -77,6 +77,7 @@ foreach ($data2 as $q) {
 }
 
 $res = array(
+  "id" => $data["element_id"],
   "title" => $data["title"],
   "questions" => $questions
 );

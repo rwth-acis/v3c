@@ -3,8 +3,8 @@ function loadQuiz(widget_role_url, lang) {
  .done(function(data) {
    data = JSON.parse(data)
    renderQuiz(data)
-
-   showQuestion(0)
+   loadSubmissions(data["id"])
+   showQuestion(-1)
  })
  .fail(function() {
      $("#main-content").html("Could not load quiz.")
@@ -15,6 +15,12 @@ var questionCount = 0;
 
 function renderQuiz(data) {
   $('.quiz-title').html(data.title)
+
+  $('.btn-next').click(function() {
+    showQuestion(0)
+  })
+
+  $('.total-count').html(data.questions.length)
 
   data.questions.forEach(function(q) {
     var questionTpl = $($('#question-template').html())
@@ -27,13 +33,16 @@ function renderQuiz(data) {
     questionTpl.attr('data-idx', qIdx)
 
     questionTpl.find('.btn-submit').click(function() {
-      postSubmission(q.id)
+      postSubmission(data.id, q.id)
     })
     questionTpl.find('.btn-prev').click(function() {
       showQuestion(qIdx-1)
     })
     questionTpl.find('.btn-next').click(function() {
       showQuestion(qIdx+1)
+    })
+    questionTpl.find('.btn-overview').click(function() {
+      showQuestion(-1)
     })
 
     q.answers.forEach(function(a) {
@@ -49,32 +58,56 @@ function renderQuiz(data) {
   })
 }
 
-function renderSubmission(data) {
-  if (data.submitted) {
-    var questionTpl = $('#question-' + data.question)
+function renderSubmissions(data) {
+  // TODO
+  var submitted = 0
+  var correct = 0
 
-    Object.keys(data.answers).forEach(function(aid) {
-      questionTpl.find('input[name="answer-'+aid+'"]').prop('checked', data.answers[aid].checked)
-      if (data.answers[aid].checked != data.answers[aid].correct) {
-        questionTpl.find('#answer-'+aid).find('.wrong').show()
+
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].submitted) {
+      submitted++
+
+      var q_correct = true;
+
+      var questionTpl = $('#question-' + data[i].question)
+
+      Object.keys(data[i].answers).forEach(function(aid) {
+        questionTpl.find('input[name="answer-'+aid+'"]').prop('checked', data[i].answers[aid].checked)
+        if (data[i].answers[aid].checked != data[i].answers[aid].correct) {
+          questionTpl.find('#answer-'+aid).find('.wrong').show()
+          q_correct = false;
+        }
+        else {
+          questionTpl.find('#answer-'+aid).find('.right').show()
+        }
+      });
+      questionTpl.find('input').prop('disabled', true)
+      questionTpl.find('.btn-submit').prop('disabled', true)
+
+      if (q_correct) {
+        correct++
       }
-      else {
-        questionTpl.find('#answer-'+aid).find('.right').show()
-      }
-    });
-    questionTpl.find('input').prop('disabled', true)
-    questionTpl.find('.btn-submit').prop('disabled', true)
+    }
   }
+
+  $('.submitted-count').html(submitted)
+  $('.correct-count').html(correct)
 }
 
 function showQuestion(idx) {
-  if (idx < 0) idx = questionCount - 1
-  else if (idx >= questionCount) idx = 0
-  $('.question').hide()
-  $('.question[data-idx='+idx+']').show()
+  if (idx < 0) idx = -1
+  else if (idx >= questionCount) idx = -1
 
-  var question_id = $('.question[data-idx='+idx+']').attr('id').split('-')[1]
-  loadSubmission(question_id)
+  if (idx != -1) {
+    $('.question').hide()
+    $('.overview').hide()
+    $('.question[data-idx='+idx+']').show()
+  }
+  else {
+    $('.question').hide()
+    $('.overview').show()
+  }
 }
 
 function extractSubmission(question_id) {
@@ -87,9 +120,9 @@ function extractSubmission(question_id) {
   return {"answers": data, "question": question_id}
 }
 
-function loadSubmission(question_id) {
+function loadSubmissions(quiz_id) {
  $.ajax( {
-  url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?question_id=" + question_id,
+  url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?quiz_id=" + quiz_id,
   crossDomain: true,
   xhrFields: {
     withCredentials: true
@@ -97,7 +130,7 @@ function loadSubmission(question_id) {
  } )
  .done(function(data) {
    data = JSON.parse(data)
-   renderSubmission(data)
+   renderSubmissions(data)
  })
  .fail(function(xhr) {
     if (xhr.status == 403) {
@@ -109,11 +142,11 @@ function loadSubmission(question_id) {
  });
 }
 
-function postSubmission(question_id) {
+function postSubmission(quiz_id, question_id) {
   $('question-' + question_id + ' .btn-submit').prop('disabled', true);
   $.ajax( {
     method: "POST",
-    url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?store&question_id=" + question_id,
+    url: "http://virtus-vet.eu/src/php/widget_data_quiz_submissions.php?store&quiz_id=" + quiz_id,
     crossDomain: true,
     xhrFields: {
       withCredentials: true
@@ -122,7 +155,7 @@ function postSubmission(question_id) {
   })
   .done(function(data) {
     data = JSON.parse(data)
-    renderSubmission(data)
+    renderSubmissions(data)
   })
   .fail(function() {
     $("#main-content").html("Could not store submission.")

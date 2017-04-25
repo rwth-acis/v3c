@@ -171,7 +171,7 @@ function replaceLinks($text)
                                         <span class="pull-right">
                                             <?php if($isAuthenticated): ?>
                                               <span class="glyphicon glyphicon-question-sign margin-right margin-left"></span>
-                                              <?php echo $quiz_progress[$course_unit['id']]['total_questions'] == 0 ? 100 : round( 100 * ($quiz_progress[$course_unit['id']]['submissions']/ $quiz_progress[$course_unit['id']]['total_questions'])) ?>%
+                                              <?php echo $quiz_progress[$course_unit['id']]['total_questions'] == 0 ? "--" : round( 100 * ($quiz_progress[$course_unit['id']]['submissions']/ $quiz_progress[$course_unit['id']]['total_questions']))."%" ?>
                                             <?php endif; ?>
                                             <span class="glyphicon glyphicon-calendar margin-right margin-left"></span>
                                             <?php echo $course_unit["start_date"] ?>

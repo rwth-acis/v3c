@@ -13,7 +13,6 @@ if ($tab == "") {
 ?>
 
 <section class='container'>
-
   <ul class="nav nav-tabs">
     <li<?php echo $tab=='progress' ? ' class="active"' : '' ?>><a href="?id=<?php echo $course_id ?>&lang=<?php echo $course_lang ?>&tab=progress">Progress</a></li>
     <li<?php echo $tab=='activity' ? ' class="active"' : '' ?>><a href="?id=<?php echo $course_id ?>&lang=<?php echo $course_lang ?>&tab=activity">Activity</a></li>

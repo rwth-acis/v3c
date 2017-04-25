@@ -9,6 +9,7 @@ $course_lang = filter_input(INPUT_GET, 'lang');
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Course Analytics</title>
 
+  <link rel="stylesheet" href="../css/courseanalytics.css">
 
 </head>
 

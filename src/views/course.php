@@ -229,17 +229,19 @@ function replaceLinks($text)
                         <?php if ($isLecturer) {
                             ?>
                             <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class=" col-sm-5">
+                                <div class=" col-sm-3">
+                                    <?php printLinkBtn("courseanalytics.php?id=$course_id&lang=$course_lang",
+                                    "btn btn-success btn-block btn-lg", getTranslation("general:button:analytics", "Analytics")) ?>
+                                </div>
+                                <div class=" col-sm-3">
                                     <?php printLinkBtn("editcourse.php?id=$course_id&lang=$course_lang",
                                     "btn btn-success btn-block btn-lg", getTranslation("general:button:edit", "Edit")) ?>
                                 </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-3">
                                     <button class="btn btn-warning col-sm-5 btn-block btn-lg " type='button'
                                     id="btn-delete"><?php echo getTranslation("general:button:delete", "Delete");?>
                                 </button>
                             </div>
-                            <div class="col-md-1"></div>
                         </div>
                         <?php } ?>
                     </div>

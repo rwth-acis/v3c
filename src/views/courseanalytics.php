@@ -7,10 +7,8 @@ $course_lang = filter_input(INPUT_GET, 'lang');
 <head>
   <meta http-equiv='X-UA-Compatible' content='IE=edge' charset='utf8'/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edit Your Course</title>
+  <title>Course Analytics</title>
 
-  <!-- Additional styles -->
-  <link rel="stylesheet" href="../css/editcourse.css">
 
 </head>
 
@@ -20,8 +18,8 @@ $course_lang = filter_input(INPUT_GET, 'lang');
   <header id='head' class='secondary'>
     <div class='container'>
       <div class='row'>
-        <h1><?php echo getTranslation("editcourse:head:edit", "Edit Your Course");?></h1>
-        <a href="course.php?id=<?php echo $_GET['id'] ?>&lang=<?php echo $_GET['lang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>        
+        <h1><?php echo getTranslation("courseanalytics:head:title", "Course Analytics");?></h1>
+        <a href="course.php?id=<?php echo $_GET['id'] ?>&lang=<?php echo $_GET['lang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>
     </div>
 </div>
 </header>
@@ -35,7 +33,7 @@ $accessControl = new AccessControl();
 $canEditCourse = $accessControl->canUpdateCourse($course_id);
 
 if ($canEditCourse) {
-    include 'editcourse_content.php';
+    include 'courseanalytics_content.php';
 } else {
     include 'not_authorized.php';
 }

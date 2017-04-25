@@ -122,5 +122,6 @@ function getLanguage()
         "widget:quiz:start" => "Start",
         "widget:quiz:submit" => "Submit",
         "widget:chat:join" => "Join Room",
+        "widget:chat:chromeonly" => "Works in Chrome only.",
     );
 }

@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Video Chat" description=""
     author="Team Virtus" author_email="maximilian.karl.haenel@rwth-aachen.de"
-    width="800" height="600">
+    width="200" height="100">
 
     <Require feature="opensocial-0.8"></Require>
     <Require feature="openapp"></Require>
@@ -98,7 +98,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </style>
 
   <div class="container" id="main-content">
-    <a class="btn" href="#" data-lang-key="widget:chat:join">Join Room</a>
+    <a class="btn" href="#" data-lang-key="widget:chat:join" target="popup" onClick="javascript:open('', 'popup', 'height=800,width=800,resizable=yes')">Join Room</a>
+    <p data-lang-key="widget:chat:chromeonly">Works in Chrome only.</p>
   </div>
 
   <script>

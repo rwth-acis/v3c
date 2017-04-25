@@ -5,11 +5,11 @@ h3 {
   color:white;
 }
 
-.question {
+.question, .overview {
 
 }
 
-.question h4 {
+.question h4, .overview h4 {
   margin: 0;
   font-size:0.8em;
   padding: 1em;
@@ -17,7 +17,7 @@ h3 {
   color:white;
 }
 
-.question .buttons {
+.question .buttons, .overview .buttons {
   margin: 0;
   font-size:0.8em;
   padding: 1em;
@@ -25,7 +25,7 @@ h3 {
   color:white;
 }
 
-.answer {
+.answer, .item {
   font-size:0.8em;
   padding: 1em;
 }

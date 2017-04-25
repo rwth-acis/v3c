@@ -103,6 +103,7 @@ function replaceLinks($text)
     <div class='container'>
         <div class='row'>
             <h1><?php echo $course_details["name"]; ?></h1>
+            <a href="course_list.php?id=<?php echo $course_details["domain"] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>
         </div>
     </div>
 </header>
@@ -133,7 +134,7 @@ function replaceLinks($text)
                                             <span class="glyphicon glyphicon-calendar margin-right"></span>
                                             <?php echo $course_unit["start_date"] ?>
                                             <!-- TODO: href to course room-->
-                                            <a href="http://virtus-vet.eu:8081/spaces/<?php echo $course_details['space_url']; ?>#activity=<?php echo $course_unit["activity_url"]; ?>" target="_blank" class="margin-left btn btn-xs btn-warning">
+                                            <a href="../php/role_redirect.php?space=<?php echo $course_details['space_url']; ?>&activity=<?php echo $course_unit["activity_url"]; ?>" target="_blank" class="margin-left btn btn-xs btn-warning">
                                                 <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
                                             </a>
                                         </span>

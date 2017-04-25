@@ -10,14 +10,14 @@ $db = require_once 'db_connect.php';
 
 //filter data from POST
 $role = filter_input(INPUT_POST, 'role', FILTER_VALIDATE_INT);
-$orga = filter_input(INPUT_POST, 'orga', FILTER_VALIDATE_INT);
+$orga = filter_input(INPUT_POST, 'orga');
 $sub = filter_input(INPUT_POST, 'sub');
 
 //update database entry
 $sql = "UPDATE users SET role = :role, affiliation = :orga WHERE openIdConnectSub = :sub";
 $statement = $db->prepare($sql);
 $statement->bindParam(":role", $role, PDO::PARAM_INT);
-if ($orga != 'NULL') {
+if ($orga !== 'NULL') {
   $statement->bindParam(":orga", $orga, PDO::PARAM_INT);
 }
 else {
@@ -30,10 +30,12 @@ $success = $statement->execute();
 if (!$success) {
     print_r($statement->errorInfo());
     $user_update_notice = $statement->errorInfo();
-    die("Error updating user.");
+    die($user_update_notice);
 } else {
     $user_update_notice = "User successfully updated!";
 }
+
+echo $user_update_notice;
 
 
 //Return to User management page

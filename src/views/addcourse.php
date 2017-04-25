@@ -33,6 +33,7 @@
     <div class='container'>
         <div class='row'>
             <h1><?php echo getTranslation("addcourse:add:create", "Create a new course");?></h1>
+            <a href="course_list.php?id=<?php echo $_GET['id'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>
         </div>
     </div>
 </header>

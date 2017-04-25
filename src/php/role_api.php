@@ -3,6 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
+
 function cmpWidget($a, $b)
 {
   if ($a['y'] == $b['y']) {
@@ -13,6 +15,7 @@ function cmpWidget($a, $b)
   }
   return ($a['y'] < $b['y']) ? -1 : 1;
 }
+
 
 class RoleAPI {
   private $url;
@@ -45,7 +48,7 @@ class RoleAPI {
           if(sizeof($matches[1])>0){
             $this->cookie = $matches[1][0];
             $c = explode("=",$matches[1][0]);
-            setcookie('conserve_session',$c[1],time()+60, '/');
+            setcookie('conserve_session',$c[1],time()+60*10, '/');
             header("Cookie: ".$matches[1][0]);
             return true;
           }
@@ -68,11 +71,11 @@ class RoleAPI {
       return substr($string, $ini, $len);
     }
 
-    public function createSpace($name) {
+    public function createSpace($name){
       if(!$this->login()) return 403;
 
       $ch = curl_init();
-      // TODO append auth token
+
       $array = array('openapp.ns.rdf=http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         'openapp.ns.rdfs=http://www.w3.org/2000/01/rdf-schema#',
         'openapp.ns.dcterms=http://purl.org/dc/terms/',
@@ -80,10 +83,6 @@ class RoleAPI {
         'openapp.rdf.type=http://purl.org/role/terms/Space',
         'openapp.rdfs.label=' . $name);
       $data = join('&', $array);
-
-        //http_post_data($this->url . "/spaces", $data, array('headers' => array('Content-Type' => 'application/x-www-form-urlencoded')), $info);
-      //open connection
-      
 
       //set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $this->url."spaces");
@@ -95,7 +94,6 @@ class RoleAPI {
       curl_setopt($ch,CURLOPT_HTTPHEADER, array("Cookie: ".$this->cookie));
 
       $result = curl_exec($ch);
-      //print "curl response is:" . $response;
       if (!curl_errno($ch)) {
         switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
           case 200 || 500:  # OK
@@ -107,16 +105,53 @@ class RoleAPI {
           return -1;
         }
       }
-        //return ($info['response_code'] == 200);
+      curl_close($ch);
+      return -1;
+    }
 
+    public function joinSpace($name) {
+      if(!$this->login()) return 403;
+
+      $ch = curl_init();
+
+      curl_setopt($ch,CURLOPT_URL, $this->url . "user/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Finfo");
+      curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+
+      curl_setopt($ch,CURLOPT_HTTPHEADER, array("Cookie: layouts=%7B%7D; ".$this->cookie,"Accept: text/x-turtle"));
+
+      $result = curl_exec($ch);
+
+      $user = $this->get_string_between($result, 'rdfs:seeAlso <','/:representation>');
+      
+  		//set the url, number of POST vars, POST data
+      curl_setopt($ch,CURLOPT_URL, $this->url."spaces/".$name."/:;http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23type=http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FPerson;http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23seeAlso=".urlencode($user).";predicate=http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2Fmember");
+      curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+
+
+      curl_setopt($ch,CURLOPT_POST, 1);
+      curl_setopt($ch,CURLOPT_HTTPHEADER, array("Cookie: ".$this->cookie));
+
+      $result = curl_exec($ch);
+  		//print "curl response is:" . $response;
+      if (!curl_errno($ch)) {
+        switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+  		    case 200 || 500:  # OK
+          curl_close($ch);
+          return 1;
+          break;
+          default:
+          curl_close($ch);
+          return -1;
+        }
+      }
+      curl_close($ch);
+      return -1;
     }
 
     public function addActivityToSpace($space, $name) {
       if(!$this->login()) return 403;
 
       $ch = curl_init();
-
-        //http_post_data($this->url . "/spaces", $data, array('headers' => array('Content-Type' => 'application/x-www-form-urlencoded')), $info);
       //open connection
       
 
@@ -131,7 +166,6 @@ class RoleAPI {
 
       $result = curl_exec($ch);
       $location = trim($this->get_string_between($result."\n","Location: ","\n"));
-      //print "curl response is:" . $response;
       if (!curl_errno($ch)) {
         switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
           case 201:  # OK
@@ -142,7 +176,6 @@ class RoleAPI {
           return "";
         }
       }
-        //return ($info['response_code'] == 200);
       curl_close($ch);
     }
 
@@ -297,14 +330,14 @@ class RoleAPI {
 
       $result = curl_exec($ch);
 
-      $title = $this->get_string_between($result, '<'.$this->url.'spaces/'.$space.'/'.$activity.'> a role:Activity ;',' .');
+      $title = $this->get_string_between($result, '<'.$activity.'> a role:Activity ;',' .');
       $title = $this->get_string_between($title, 'dcterms:title "','"');
 
       usort($widgets, "cmpWidget");
 
       $i = 1;
 
-      $post = '{"'.$this->url.'spaces/'.$space.'/'.$activity.'":{"http://purl.org/role/terms/layout":[{"type":"literal","value":"{';
+      $post = '{"'.$activity.'":{"http://purl.org/role/terms/layout":[{"type":"literal","value":"{';
 
       foreach ($widgets as $widget) {
         $widgetID = $this->get_string_between($result, '<'.$widget['xml'].'> widget:moduleId "','"^^<http://www.w3.org/2001/XMLSchema#long>');
@@ -319,7 +352,7 @@ class RoleAPI {
 
       
       //set the url, number of POST vars, POST data
-      curl_setopt($ch,CURLOPT_URL, $this->url.'spaces/'.$space.'/'.$activity.'/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata');
+      curl_setopt($ch,CURLOPT_URL, $activity.'/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata');
       curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
 
 

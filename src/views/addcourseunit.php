@@ -13,6 +13,7 @@
     <div class='container'>
         <div class='row'>
             <h1><?php echo getTranslation("addcourseunit:add:create", "Create a new course unit");?></h1>
+            <a href="editcourse.php?id=<?php echo $_GET['courseid'] ?>&lang=<?php echo $_GET['lang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>
         </div>
     </div>
 </header>

@@ -13,7 +13,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 
 $conn = require '../php/db_connect.php';
 
-$question_id = filter_input(INPUT_GET, 'question_id');
+$quiz_id = filter_input(INPUT_GET, 'quiz_id');
 
 // user id
 if (!isset($_SESSION['sub'])) {
@@ -39,6 +39,8 @@ if ($store) {
   $inputJSON = file_get_contents('php://input');
   $input = json_decode($inputJSON, TRUE);
 
+  $question_id = $input["question"];
+
   $stmt = $conn->prepare("INSERT INTO widget_data_quiz_submissions (user_id, question_id) VALUES (:user_id, :question_id)");
   $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
   $stmt->bindParam(":question_id", $question_id, PDO::PARAM_INT);
@@ -59,53 +61,69 @@ if ($store) {
   }
 }
 
-// read submission
-$stmt = $conn->prepare("SELECT date, question_id
-                        FROM widget_data_quiz_submissions
-                        WHERE user_id = :user_id
-                          AND question_id = :question_id");
-$stmt->bindParam(":question_id", $question_id, PDO::PARAM_STR);
-$stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+// read submissions
+$result = array();
+
+$stmt = $conn->prepare("SELECT id FROM widget_data_quiz_questions WHERE element_id = :element_id");
+$stmt->bindParam(":element_id", $quiz_id, PDO::PARAM_INT);
 if (!$stmt->execute()) {
-  http_response_code(500);
+  http_response_code(404);
   die("Error.");
 }
-$submission_data = $stmt->fetch();
-if (!is_array($submission_data)) {
-  echo '{"submitted": false}';
-}
-else {
-  $answers = array();
 
-  $stmt = $conn->prepare("SELECT question_id, answer_id, checked, correct FROM widget_data_quiz_submissions_answers, widget_data_quiz_answers
-                            WHERE widget_data_quiz_answers.question_id = :question_id
-                            AND widget_data_quiz_submissions_answers.user_id = :user_id
-                            AND widget_data_quiz_answers.id = widget_data_quiz_submissions_answers.answer_id
-                            ");
-  $stmt->bindParam(":question_id", $question_id, PDO::PARAM_INT);
-  $stmt->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+$question_data = $stmt->fetchAll();
+foreach ($question_data as $question) {
+  $stmt = $conn->prepare("SELECT date, question_id
+                          FROM widget_data_quiz_submissions
+                          WHERE user_id = :user_id
+                            AND question_id = :question_id");
+  $stmt->bindParam(":question_id", $question["id"], PDO::PARAM_STR);
+  $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
   if (!$stmt->execute()) {
     http_response_code(500);
     die("Error.");
   }
-
-  $data2 = $stmt->fetchAll();
-  foreach ($data2 as $a) {
-    $answers[$a['answer_id']] = array(
-      "checked" => $a['checked'] == "0" ? false : true,
-      "correct" => $a['correct'] == "0" ? false : true
+  $submission_data = $stmt->fetch();
+  if (!is_array($submission_data)) {
+    $result[] = array (
+        "submitted" => false,
+        "question" => $question["id"]
     );
   }
+  else {
+    $answers = array();
 
-  echo json_encode(array(
-    "submitted" => true,
-    "date" => $submission_data['date'],
-    "answers" => $answers,
-    "question" => $question_id
-  ));
+    $stmt = $conn->prepare("SELECT question_id, answer_id, checked, correct FROM widget_data_quiz_submissions_answers, widget_data_quiz_answers
+                              WHERE widget_data_quiz_answers.question_id = :question_id
+                              AND widget_data_quiz_submissions_answers.user_id = :user_id
+                              AND widget_data_quiz_answers.id = widget_data_quiz_submissions_answers.answer_id
+                              ");
+    $stmt->bindParam(":question_id", $question["id"], PDO::PARAM_INT);
+    $stmt->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+      http_response_code(500);
+      die("Error.");
+    }
+
+    $data2 = $stmt->fetchAll();
+    foreach ($data2 as $a) {
+      $answers[$a['answer_id']] = array(
+        "checked" => $a['checked'] == "0" ? false : true,
+        "correct" => $a['correct'] == "0" ? false : true
+      );
+    }
+
+    $result[] = array(
+      "submitted" => true,
+      "date" => $submission_data['date'],
+      "answers" => $answers,
+      "question" => $question["id"]
+    );
+  }
 }
 
-// TODO return result for whole quiz... ?!??
-// TODO specify submitted question(s) in body
+echo json_encode($result);
+
+// TODO specify submitted question(s) in body ???
 
 ?>

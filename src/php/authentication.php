@@ -39,6 +39,25 @@ class Authentication
             // there is no way to find out whether the access token is still valid
             // so we always return true if there is an access token at all
             if (isset($_SESSION['access_token'])) {
+                $ch = curl_init();
+                curl_setopt($ch,CURLOPT_URL, "https://api.learning-layers.eu/o/oauth2/userinfo");
+                curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch,CURLOPT_HTTPHEADER, array("Authorization: Bearer ".$_SESSION['access_token']));
+                curl_setopt($ch,CURLOPT_HEADER, 1);
+                $result = curl_exec($ch);
+                if (!curl_errno($ch)) {
+                  switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+                      case 200:  # OK
+                        return true;
+                      break;
+                      default:
+                      session_destroy();
+                      return false;
+                    }
+                    session_destroy();
+                    return false;
+                  }
+                  curl_close($ch);
                 return true;
             } else {
                 return false;
@@ -80,7 +99,7 @@ class Authentication
             // if($res->bOk === false) {
             //   die('Cannot retrieve User-information!');
             // }
-            //	
+            //  
             //$userProfile = json_decode($res->sMsg);
 
             return $userProfile;

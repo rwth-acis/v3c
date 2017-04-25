@@ -85,7 +85,7 @@ else {
                             <?php echo getTranslation("editcourseunit:edit:description", "Description:");?>
                         </label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" rows="3" name="description" id="description" placeholder="<?php echo "Enter course unit description";/*getTranslation('editcourseunit:placeholder:description', 'Enter course description');*/?>"><?php echo htmlentities($course_unit['description']);?></textarea>
+                            <textarea class="form-control" rows="3" name="description" id="description" placeholder="<?php echo getTranslation('editcourseunit:placeholder:description', 'Enter course description');?>"><?php echo htmlentities($course_unit['description']);?></textarea>
                         </div>
                     </div>
 

@@ -81,7 +81,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <!-- container for actual page content -->
   <div class="container" id="main-content">
     <h3 class="quiz-title"></h3>
-    <div class="questions"></div>
+    <div class="questions">
+      <div class="overview">
+        <h4 data-lang-key="widget:quiz:overview">Overview</h4>
+        <div class="item"><span data-lang-key="widget:quiz:submittedanswers">Submitted answers</span>: <span class="submitted-count"></span>/<span class="total-count"></span></div>
+        <div class="item"><span data-lang-key="widget:quiz:correctanswers">Correct answers</span>: <span class="correct-count"></span>/<span class="total-count"></span></div>
+        <div class="buttons">
+          <button class="btn-next" data-lang-key="widget:quiz:start">Start</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script id="question-template" type="text/x-custom-template">
@@ -90,7 +99,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <div class="answers"></div>
       <div class="buttons">
         <button class="btn-prev">&lt;</button>
-        <button class="btn-submit">Submit</button>
+        <button class="btn-submit" data-lang-key="widget:quiz:submit">Submit</button>
+        <button class="btn-overview" data-lang-key="widget:quiz:overview">Overview</button>
         <button class="btn-next">&gt;</button>
       </div>
     </div>

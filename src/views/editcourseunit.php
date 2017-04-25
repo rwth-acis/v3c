@@ -19,6 +19,7 @@
         <div class='container'>
             <div class='row'>
                 <h1><?php echo getTranslation("designunit:head:title", "Edit Course Unit");?></h1>
+                <a href="editcourse.php?id=<?php echo $_GET['cid'] ?>&lang=<?php echo $_GET['ulang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a> 
             </div>
         </div>
     </header>
@@ -30,7 +31,6 @@
     $course_lang = filter_input(INPUT_GET, 'ulang');
 
     $canCreateCourse = $accessControl->canUpdateCourse($course_id);
-    $canCreateCourse = true;
     if ($canCreateCourse) {
         ?>
         <!--Prototype Templates -->
@@ -311,11 +311,7 @@
                 <div class="modal-body">
                     <div class="input-group">
                         <div class="row">
-                            <div class="col-sm-12">
-                                <input name="slidesFile" id="slidesFile" type="file" class="uploadFile" onchange="uploadData(this,'slides','#slides-link')">
-                                <label for="slidesFile" class="btn btn-success modal-save-button "><?php echo getTranslation("designunit:content:uploadfile", "Upload File");?></label>
-                                <div id="loadingSlides" style="width:32px;height: 32px;"></div>
-                            </div>
+
                             <div class="col-sm-12">
                                 <label for="slides-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                                 <input type="text" class="form-control protocontent"
@@ -324,10 +320,12 @@
                             </div>
                             <div class="col-sm-12">
                                 <label for="slides-link"><?php echo getTranslation("designunit:content:link", "Link");?></label><br>
-                                <input type="text" class="form-control protocontent"
-                                name="slides-link" id="slides-link"
+                                <input type="text" class="form-control protocontent upload-target"
+                                name="slides-link"
                                 placeholder="http://..." aria-describedby="basic-addon1">
-
+                            </div>
+                            <div class="col-sm-12">
+                                <input name="slides-file" class="upload-file " type="file">
                             </div>
                         </div>
                     </div>
@@ -352,11 +350,6 @@
               <div class="modal-body">
                   <div class="input-group">
                       <div class="row">
-                           <div class="col-sm-12">
-                                <input name="imageFile" id="imageFile" type="file" class="uploadFile" onchange="uploadData(this,'images','#image-link')">
-                                <label for="imageFile" class="btn btn-success modal-save-button "><?php echo getTranslation("designunit:content:uploadfile", "Upload File");?></label>
-                                <div id="loadingSlides" style="width:32px;height: 32px;"></div>
-                            </div>
                           <div class="col-sm-12">
                               <label for="image-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                               <input type="text" class="form-control protocontent"
@@ -365,10 +358,12 @@
                           </div>
                           <div class="col-sm-12">
                               <label for="image-link"><?php echo getTranslation("designunit:content:link", "Link");?></label><br>
-                              <input type="text" class="form-control protocontent"
+                              <input type="text" class="form-control protocontent upload-target"
                               name="image-link"
                               placeholder="http://..." aria-describedby="basic-addon1">
-
+                          </div>
+                          <div class="col-sm-12">
+                              <input name="image-file" class="upload-file " type="file">
                           </div>
                       </div>
                   </div>
@@ -394,21 +389,18 @@
                     <div class="input-group">
                         <div class="row">
                             <div class="col-sm-12">
-                                <input name="videoFile" id="videoFile" type="file" class="uploadFile" onchange="uploadData(this,'videos','#video-link')">
-                                <label for="videoFile" class="btn btn-success modal-save-button "><?php echo getTranslation("designunit:content:uploadfile", "Upload File");?></label>
-                                <div id="loadingSlides" style="width:32px;height: 32px;"></div>
-                            </div>
-                            <div class="col-sm-12">
                                 <label for="video-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                                 <input type="text" class="form-control protocontent" id="video-title" name="video-title"
                                 placeholder="Title" aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
                                 <label for="video-link"><?php echo getTranslation("designunit:content:title", "Link");?> (<?php echo getTranslation("designunit:content:videolink", "Video or Audio");?>)</label><br>
-                                <input type="text" class="form-control protocontent" id="video-link" name="video-link"
+                                <input type="text" class="form-control protocontent uplad-target" name="video-link"
                                 placeholder="http://..." aria-describedby="basic-addon1">
-
                             </label>
+                            <div class="col-sm-12">
+                                <input name="video-file" class="upload-file " type="file">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -706,6 +698,11 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
       });
 */
+
+  console.log($prototypeModalClone.find('input.upload-file'));
+      $prototypeModalClone.find('input.upload-file').on('change', function() {
+        uploadData(this,widgetConfiguration[itemIndex].widgetType)
+      })
 
       $('.modal-add-button').click(function () {
           var $qb = $('#questionBlock').html();
@@ -1084,23 +1081,23 @@ function showSuccess() {
   setTimeout(showAdvice, 1000);
 }
 
-function uploadData(handler,type,label){
+function uploadData(handler,type){
     var file_data = handler.files[0];
     var form_data = new FormData();
     form_data.append('file', file_data);
     form_data.append('type', type);
     $.ajax({
-                url: '../php/upload.php', // point to server-side PHP script
-                dataType: 'text',  // what to expect back from the PHP script, if anything
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: form_data,
-                type: 'post',
-                success: function(php_script_response){
-                    var x = handler.closest('.modal-body');
-                    x.querySelector(label).setAttribute("value",php_script_response);
-                }
+      url: '../php/upload.php', // point to server-side PHP script
+      dataType: 'text',  // what to expect back from the PHP script, if anything
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: form_data,
+      type: 'post',
+      success: function(php_script_response){
+        console.log($(handler).parents('.modal-body').find('.upload-target'))
+        $(handler).parents('.modal-body').find('.upload-target').val(php_script_response)
+      }
      });
 }
 

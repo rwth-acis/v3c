@@ -4,8 +4,12 @@
         echo 'Error: ' . $_FILES['file']['error'] . '<br>';
     }
     else {
-        move_uploaded_file($_FILES['file']['tmp_name'], '../media/'.$_POST["type"].'/' . $_FILES['file']['name']);
-        echo 'http://virtus-vet.eu/src/media/'.$_POST["type"].'/' . $_FILES['file']['name'];
+        $path = $_FILES['file']['name'];
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $filename = uniqid() . "." . $ext;
+        // $filename = $_FILES['file']['name'];
+        move_uploaded_file($_FILES['file']['tmp_name'], '../media/'.$_POST["type"].'/' . $filename);
+        echo 'http://virtus-vet.eu/src/media/'.$_POST["type"].'/' .  $filename;
     }
 
 ?>

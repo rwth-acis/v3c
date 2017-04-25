@@ -20,8 +20,8 @@ $course_lang = filter_input(INPUT_GET, 'ulang');
   <header id='head' class='secondary'>
     <div class='container'>
       <div class='row'>
-        <h1><?php echo getTranslation("editcourse:head:edit", "Edit Your Course");?>
-        </h1>
+        <h1><?php echo getTranslation("editcourse:head:edit", "Edit Your Course");?></h1>
+        <a href="editcourse.php?id=<?php echo $_GET['cid'] ?>&lang=<?php echo $_GET['ulang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a> 
     </div>
 </div>
 </header>

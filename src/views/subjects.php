@@ -64,7 +64,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <!-- /container -->
 
 <?php include("footer.php"); ?>
-?>
 
 </body>
 </html>

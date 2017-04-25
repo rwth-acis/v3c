@@ -14,6 +14,7 @@
     include '../php/tools.php';
     include '../php/access_control.php';
     $accessControl = new AccessControl();
+    $userManagement = new UserManagement();
 
 
 // The course unit id from URL parameter
@@ -25,6 +26,12 @@ if (isset($_GET["lang"])) {
 }
 
 $isLecturer = $accessControl->canUpdateCourse($course_id);
+
+$isAuthenticated= $accessControl->getAuthentication()->isAuthenticated();
+if ($isAuthenticated) {
+  $user_sub = $_SESSION['sub'];
+  $user_id = $userManagement->readUser($user_sub)->id;
+}
 
 
 // Gets course details with it's creator information
@@ -78,6 +85,37 @@ if ($success) {
 else {
   print_r( $stmt->errorInfo() );
 }
+
+// fetch progress for authenticated users
+if ($isAuthenticated) {
+  $stmt = $conn->prepare(
+    "SELECT course_units.id AS unit_id,
+          (SELECT COUNT(*) FROM course_elements, widget_data_quiz_questions
+              WHERE widget_data_quiz_questions.element_id = course_elements.id
+              AND course_elements.unit_id = course_units.id) AS total_questions,
+          (SELECT COUNT(*) FROM course_elements, widget_data_quiz_questions, widget_data_quiz_submissions
+              WHERE widget_data_quiz_questions.element_id = course_elements.id
+              AND course_elements.unit_id = course_units.id
+              AND widget_data_quiz_questions.id = widget_data_quiz_submissions.question_id
+              AND widget_data_quiz_submissions.user_id = :user_id) AS submissions
+      FROM course_units
+      WHERE course_units.course_id = :course_id
+    ");
+  $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+  $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+  if (!$stmt->execute()) {
+    print_r( $stmt->errorInfo() );
+    die();
+  }
+
+  $progress_data = $stmt->fetchAll();
+  $quiz_progress=array();
+
+  foreach ($progress_data as $key => $value) {
+    $quiz_progress[$value['unit_id']] = $value;
+  }
+}
+
 /**
  * Replaces all URLs in the given text by <a> tags
  * Taken from https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
@@ -131,9 +169,12 @@ function replaceLinks($text)
                                         <span class="glyphicon glyphicon-book margin-right"></span>
                                         <?php echo $course_unit["title"] ?>
                                         <span class="pull-right">
-                                            <span class="glyphicon glyphicon-calendar margin-right"></span>
+                                            <?php if($isAuthenticated): ?>
+                                              <span class="glyphicon glyphicon-question-sign margin-right margin-left"></span>
+                                              <?php echo $quiz_progress[$course_unit['id']]['total_questions'] == 0 ? 100 : round( 100 * ($quiz_progress[$course_unit['id']]['submissions']/ $quiz_progress[$course_unit['id']]['total_questions'])) ?>%
+                                            <?php endif; ?>
+                                            <span class="glyphicon glyphicon-calendar margin-right margin-left"></span>
                                             <?php echo $course_unit["start_date"] ?>
-                                            <!-- TODO: href to course room-->
                                             <a href="../php/role_redirect.php?space=<?php echo $course_details['space_url']; ?>&activity=<?php echo $course_unit["activity_url"]; ?>" target="_blank" class="margin-left btn btn-xs btn-warning">
                                                 <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
                                             </a>

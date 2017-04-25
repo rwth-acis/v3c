@@ -48,7 +48,7 @@ class AccessControl
      * @return Authentication Getter for $authentication which makes sure the
      * variable is not empty
      */
-    private function getAuthentication()
+    public function getAuthentication()
     {
         if (!isset ($this->authentication)) {
             $this->authentication = new Authentication();

@@ -27,8 +27,8 @@ require '../config/config.php'
   ");
   $statement->execute();
 
-  $x = array();
-  $y = array();
+  $x = array(0);
+  $y = array(0);
   
   while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
       $x[] = $row['watched'] / 6;

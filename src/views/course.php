@@ -88,6 +88,7 @@ else {
 
 // fetch progress for authenticated users
 if ($isAuthenticated) {
+  // quiz
   $stmt = $conn->prepare(
     "SELECT course_units.id AS unit_id,
           (SELECT COUNT(*) FROM course_elements, widget_data_quiz_questions
@@ -115,7 +116,24 @@ if ($isAuthenticated) {
     $quiz_progress[$value['unit_id']] = $value;
   }
 
-  // TODO user_progression
+  // time
+  $stmt = $conn->prepare(
+    "SELECT unit_id, duration
+      FROM user_progression, course_units
+      WHERE user_progression.unit_id = course_units.id AND course_units.course_id = :course_id AND user_progression.user_id = :user_id");
+  $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+  $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+  if (!$stmt->execute()) {
+    print_r( $stmt->errorInfo() );
+    die();
+  }
+
+  $progress_data = $stmt->fetchAll();
+  $time_progress=array();
+
+  foreach ($progress_data as $key => $value) {
+    $time_progress[$value['unit_id']] = $value;
+  }
 }
 
 /**
@@ -137,6 +155,8 @@ function replaceLinks($text)
     }
     return $text;
 }
+
+$point_to_time_factor = 1;
 
 ?>
 <header id='head' class='secondary'>
@@ -172,6 +192,9 @@ function replaceLinks($text)
                                         <?php echo $course_unit["title"] ?>
                                         <span class="pull-right">
                                             <?php if($isAuthenticated): ?>
+                                              <span class="glyphicon glyphicon-time margin-right margin-left"></span>
+                                              <?php echo (!$time_progress[$course_unit['id']]['duration'] ? 0 : $time_progress[$course_unit['id']]['duration']) ?>/<?php echo $course_unit['points']*$point_to_time_factor ?> min
+
                                               <span class="glyphicon glyphicon-question-sign margin-right margin-left"></span>
                                               <?php echo $quiz_progress[$course_unit['id']]['total_questions'] == 0 ? "--" : round( 100 * ($quiz_progress[$course_unit['id']]['submissions']/ $quiz_progress[$course_unit['id']]['total_questions']))."%" ?>
                                             <?php endif; ?>

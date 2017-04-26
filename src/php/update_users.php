@@ -21,7 +21,11 @@ if ($orga !== 'NULL') {
   $statement->bindParam(":orga", $orga, PDO::PARAM_INT);
 }
 else {
-  $statement->bindValue(':orga', null, PDO::PARAM_INT);
+	if($role!=='3'){
+		header('Location:../views/manage_users.php?Update=false');
+	}else{
+		$statement->bindValue(':orga', null, PDO::PARAM_INT);
+	}
 }
 $statement->bindParam(":sub", $sub, PDO::PARAM_STR);
 

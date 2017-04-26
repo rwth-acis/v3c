@@ -117,6 +117,7 @@ foreach ($user_data as $key => &$value) {
 
 ?>
 
+<p><strong><?php echo sizeof($user_data) ?></strong> participants</p>
 
 
 <div class="list-group list-group-root well">

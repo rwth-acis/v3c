@@ -54,11 +54,17 @@ while($user_progression = $stmt->fetch()) {
     );
   }
 
+  $user_progress = "--";
+  if($user_progression["points"] != 0){
+    $user_progress = round($user_progression["duration"] / ($user_progression["points"] * $point_to_time_factor) * 100);
+    ($user_progress>100)?$user_progress="100%": $user_progress."%";
+  }
+
   $user_data[$user_progression["user_id"]]["units"][$user_progression["unit_id"]] = array(
     "unit_id" => $user_progression["unit_id"],
     "actual_time" => $user_progression["duration"],
     "target_time" => $user_progression["points"] * 1,
-    "progress" => ($user_progression["points"] == 0) ? "--" : round($user_progression["duration"] / ($user_progression["points"] * $point_to_time_factor) * 100). "%"
+    "progress" => $user_progress
   );
 }
 
@@ -137,7 +143,7 @@ foreach ($user_data as $key => &$value) {
           <?php echo $unit['title'] ?>
           <span class="pull-right">
             <span class="glyphicon glyphicon-time margin-right margin-left"></span>
-            <?php echo $value['units'][$unit['unit_id']]['progress'] ?>
+            <?php echo (isset($value['units'][$unit['unit_id']]['progress']))? $value['units'][$unit['unit_id']]['progress'] : "--"; ?>
             <span class="glyphicon glyphicon-question-sign margin-right margin-left"></span>
             <?php echo $value['quizzes'][$unit['unit_id']]['progress'] ?>
           </span>

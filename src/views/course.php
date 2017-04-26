@@ -114,6 +114,8 @@ if ($isAuthenticated) {
   foreach ($progress_data as $key => $value) {
     $quiz_progress[$value['unit_id']] = $value;
   }
+
+  // TODO user_progression
 }
 
 /**

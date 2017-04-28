@@ -127,11 +127,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     function playbackVideo(videoUrl){
       // updateds "player" html element
-      jwplayer("player").setup({
+      var player = jwplayer("player").setup({
         width: "100%",
         aspectratio: "16:9",
         file: videoUrl
       });
+
+      // Monitor the duration the user is actively watching
+      var lastUpdated = new Date()
+
+      player.onTime(function () {
+        // update every 30 seconds
+        if (new Date() - lastUpdated > 30000) {
+          lastUpdated = new Date()
+          sendUserActivity('watchingVideo', videoUrl)
+        }
+      })
     }
 
     getUserLanguage(function(lang) {

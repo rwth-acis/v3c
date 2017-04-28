@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+
+    <ModulePrefs title="Role"
+		description="Manage the access rights of all the different users."
+		author="Team Boost"
+		author_email="henm1314g3@dbis.rwth-aachen.de"
+		height="450"
+		width="500">
+  	<Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+		<Service name="openapp"
+		    xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+		    openapp:service="http://purl.org/role/terms/spaceService"
+		    openapp:permitReadAppend="http://purl.org/role/terms/data">
+
+		    <Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+    </ModulePrefs>
+
+    <Content type="html">
+    <![CDATA[
+
+		<!-- We use jQuery to manipulate DOM and Bootstrap for the interface. -->
+		<script src="http://virtus-vet.eu/boost/boostDecember/js/require.js"></script>
+
+		<!-- Define CSS -->
+		<link rel="stylesheet" href="http://virtus-vet.eu/boost/boostDecember/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://virtus-vet.eu/boost/boostDecember/css/slider.css">
+		<link rel="stylesheet" href="http://virtus-vet.eu/boost/boostDecember/ladda/ladda-themeless.min.css">
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+		<!-- JavaScript Block -->
+		<script>
+
+
+			require( ['http://virtus-vet.eu/boost/boostDecember/js/config.js'], function (config){
+			require( [
+				"async",
+				"bootbox",
+				"ractive",
+				"lodash",
+			    "jquery",
+			    "bootstrap",
+			    "EmployeeManager",
+			    "spin",
+			    "ladda",
+			    "BCNManager",
+			    "AccessRightsManager",
+			    "iwc",
+			    "UserManager",
+			    "utils"
+			    ], function(a, b, r, _) {
+			    	async = a;
+			    	bootbox = b;
+			    	Ractive = r;
+					var space;
+					var iwcClient;
+					var userList;
+					var accessRights;
+					var employeesList;
+					var bcnsList;
+					var currentUser;
+
+					//Define the ractives as globals
+					var ractiveOverview;
+
+					if (openapp.param.user()) {
+						closeAutorisationWindow();
+					}
+
+					space = new openapp.oo.Resource(openapp.param.space());
+					iwcClient = new iwc.Client();
+					iwcClient.connect(iwcCallback);
+
+					//gadgets.util.registerOnLoadHandler(init);
+
+
+
+					function iwcCallback(intent){
+						if((intent.action == "BCN_CREATE") || (intent.action == "BCN_UPDATE")){
+
+							var message = "<div>Goals have changed. Please wait.</div>"
+							message = message + "<div><center><img style='margin-left:5px;' id='loader' src='http://virtus-vet.eu/boost/boostDecember/resources/loader.gif'></center></div>";
+							bootbox.dialog({
+								title : "<span style='margin-right:5px;' class='glyphicon glyphicon-refresh'></span>Goals have changed.",
+								message : message,
+								closeButton : false
+							});
+							createBCNfromUri(intent.data, function(bcn){
+								if(intent.action == "BCN_CREATE"){
+									//Add the new BCN to the local list
+									bcnsList.push(bcn);
+								}
+								else{
+									//Replace the BCN in the local list with the updated one
+									for(var i = 0; i < bcnsList.length; i++){
+										if(bcn.uri == bcnsList[i].uri)
+											bcnsList[i] = bcn;
+									}
+								}
+								bootbox.hideAll();
+							});
+						}
+					}
+
+					function publishAccessRightsChanged(){
+						var intent = {
+							component: "",
+							data: "",
+							dataType: "text/json",
+							flags :["PUBLISH_GLOBAL"],
+							action: "ACCESS_RIGHTS_CHANGED"
+						};
+
+						iwcClient.publish(intent);
+					}
+
+					function createEmployeeIfNotExist(user, accessRights, employeesList){
+						accessRights.update(function(){
+							if(accessRights.getUserAccessRights(user.uri).isEmployee){
+								var foundEmployeeData = false;
+								_.each(employeesList, function(employee){
+									if(employee.userUri == user.uri){
+										foundEmployeeData = true;
+									}
+								});
+
+								if(!foundEmployeeData){
+									createEmployeeFromUser(user, bcnsList, function(employee){
+										employeesList.push(employee);
+										publishAccessRightsChanged();
+									});
+								}
+								else{
+									publishAccessRightsChanged();
+								}
+							}
+							else{
+								publishAccessRightsChanged();
+							}
+						});
+					}
+
+					function sortUsers(users){
+						users.sort(function (a, b){
+							if(a.name.toLowerCase() < b.name.toLowerCase())
+								return -1; else return 1;
+						});
+					}
+
+					$(function(){
+
+						retrieveAllUsers(space, function(users){
+							retrieveAccessRights(function(access){
+								retrieveAllEmployees(space, function(employees){
+									retrieveAllBcns(space, function(bcns){
+
+										userList = users;
+										accessRights = access;
+										employeesList = employees;
+										bcnsList = bcns;
+
+										sortUsers(userList);
+
+										//retrieve current employee
+
+										for(var i = 0; i < userList.length; i++){
+											var user = userList[i];
+											if (user.uri == openapp.param.user()){
+												currentUser = user;
+												if (currentUser) {
+													currentUser.AccessRights = accessRights.getUserAccessRights(currentUser.uri);
+													if(currentUser.uri){
+														createEmployeeIfNotExist(currentUser, accessRights, employeesList);
+													}
+												} else {
+													currentUser = {};
+													currentUser.AccessRights.isManager = false;
+													currentUser.AccessRights.isEmployee = false;
+													currentUser.AccessRights.hasAgreedToLicense = false;
+
+												}
+
+											};
+										};
+
+
+
+										//Match all users with their access rights which are stored in the config
+										//resource
+
+										var managerExists = false;
+										var owner = null;
+										for(var i = 0; i < userList.length; i++){
+											var user = userList[i];
+											user.accessRights = accessRights.getUserAccessRights(user.uri);
+											managerExists = (user.accessRights.isManager);
+											if(user.isOwner)
+												owner = user;
+										}
+
+										//Debug
+										//owner.accessRights.hasAgreedToLicense = true;
+										if (owner)
+											owner.accessRights.isManager = true;
+
+										//Check if user has agreed to license
+										if(!accessRights.getUserAccessRights().hasAgreedToLicense){
+											showModalAcceptTermsOfUse();
+
+										} else if(!accessRights.getUserAccessRights().isManager){
+											// showModalContactManager();
+										}
+
+										ractiveOverview = new Ractive({
+											el: 'containerUserOverview',
+										    template: '#templateUserOverview',
+										    data: {
+										    	"userList" : userList,
+										    	"currentUser": currentUser
+										    },
+										    append: true
+										});
+
+										ractiveOverview.on("accessRightsChanged", function(event){
+											user = event.context;
+											createEmployeeIfNotExist(user, accessRights, employeesList);
+										});
+									});
+								});
+							});
+						});
+
+						$('#question').click(function(){
+					        $('#descriptionModal').modal({
+					        keyboard: true
+					          });
+					    });
+					});
+				});
+			});
+
+
+		</script>
+
+		<!-- HTML Block -->
+
+		<div style="overflow-y: scroll; height:450px;">
+		<div class="panel panel-primary" id="containerUserOverview">
+
+			<div class="panel-heading">
+					<button id="question" type="button" class="btn btn-default launch-modal" style="float:right; margin:-5 5 10 5px; color:#428BCA;"><span  class="glyphicon glyphicon-question-sign"></span></button>
+					<h3 class="panel-title">
+					<i class="fa fa-users" style="margin-right:5px;"></i>Access Rights
+				</h3>
+		  	</div>
+
+
+		</div>
+		</div>
+
+		<script id="templateUserOverview" type='text/ractive'>
+			{{^currentUser.AccessRights.isManager}}
+				{{#currentUser.AccessRights.isEmployee}}
+					<div class="alert alert-info" role="alert">
+						You have the role <strong>Employee</strong>. You can not change anything in this widget
+					</div>
+				{{/currentUser.AccessRights.isEmployee}}
+
+				{{^currentUser.AccessRights.isEmployee}}
+					<div class="alert alert-danger" role="alert">
+						You have <strong>NO</strong> roles now. Please, contact Manager to assign roles for you
+					</div>
+				{{/currentUser.AccessRights.isEmployee}}
+			{{/currentUser.AccessRights.isManager}}
+
+			{{#currentUser.AccessRights.isManager}}
+				<div class="alert alert-info" role="alert">
+					{{#currentUser.AccessRights.isEmployee}}
+							You have both <strong>Manager</strong> and <strong>Employee</strong> roles.
+							</br>
+					{{/currentUser.AccessRights.isEmployee}}
+
+					{{^currentUser.AccessRights.isEmployee}}
+							You have the role <strong>Manager</strong>.
+					{{/currentUser.AccessRights.isEmployee}}
+
+					To see the space as <strong>Employee</strong> or <strong>Manager</strong>, just tick or untick Employee checkbox.
+
+				</div>
+
+
+					<table class="table table-striped table-bordered" >
+					    <tbody>
+					    	<tr><th>Name</th><th style="text-align:center">Manager</th><th style="text-align:center">Employee</th></tr>
+
+							{{#userList}}
+								<tr>
+									<td>
+										<p class="{{accessRights.hasAgreedToLicense ? "" : "text-muted"}}">{{name}}
+										{{^accessRights.hasAgreedToLicense}}
+										<span title="This user needs to agree to the terms of use first." class="glyphicon glyphicon-exclamation-sign"></span>
+										{{/accessRights.hasAgreedToLicense}}
+										{{#isOwner}}
+										<span title="This is the owner of the space." class="glyphicon glyphicon-asterisk"></span>
+										{{/isOwner}}
+										</p>
+
+									</td>
+									<td align="center">
+										<label class="checkbox-inline">
+										  <input on-click="accessRightsChanged" type="checkbox" checked='{{accessRights.isManager}}' disabled={{!accessRights.hasAgreedToLicense}}>
+										</label>
+									</td>
+									<td align="center">
+										<label class="checkbox-inline">
+										  <input on-click="accessRightsChanged" type="checkbox" checked='{{accessRights.isEmployee}}' disabled={{!accessRights.hasAgreedToLicense}}>
+										</label>
+									</td>
+								</tr>
+							{{/userList}}
+					    </tbody>
+					</table>
+				{{/currentUser.AccessRights.isManager}}
+		</script>
+
+	<div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    		<h4 class="modal-title">Access Rights Help</h4>
+            </div>
+          <div class="modal-body">
+            <div class="panel-group" id="levelsdef" align="justify">
+            <p>In this widget manager can differentiate access to the BOOST widgets. Employees do not have access to the Access Rights widget.</p>
+             <ul style="padding: 10px;">
+			 <li>To assing a manager or an employee user role, check appropriate checkbox <input type="checkbox">.
+			 If you are a manager and would like to see widgets interface for the employee role, check both checkboxes.</li>
+			 	<ul style="padding: 10px;">
+
+                	<li><strong>Employee: </strong>
+                		<p>Can search through the learning repositories. Add learning resources, experts and widgets to the system.
+                		Watch own learning progress and the progress of the goals.</p></li>
+                	<li><strong>Manager: </strong>
+                		<p>Has full control over the system. Can assing access rights to the users.
+
+                		Can add/edit/delete employees and assign learning levels to them. Can specify deadlines for the goals and learning indicators.
+                		Can add/edit/delete business goals and learning indicators. Watch all employees progress/overall progress/progress over learning goals/progress over learning indicators.</li></p>
+              	</ul>
+             <li><span class="glyphicon glyphicon-asterisk"></span> This user is the owner of the space.</li>
+             <li><i class="fa fa-exclamation-circle" style="color: gray;"></i> This user has not agreed to the terms of use yet.</li>
+             </ul>
+          </div>
+          <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	]]>
+  </Content>
+</Module>

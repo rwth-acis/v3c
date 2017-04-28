@@ -125,30 +125,29 @@ foreach ($user_data as $key => &$value) {
 
 <p><strong><?php echo sizeof($user_data) ?></strong> participants</p>
 
-
 <div class="list-group list-group-root well">
-  <?php foreach ($user_data as $key => $value): ?>
-    <a href="#item-<?php echo $value['user_id'] ?>" class="list-group-item" data-toggle="collapse">
-      <?php echo $value['family_name'] ?>, <?php echo $value['given_name'] ?>
+  <?php foreach ($user_data as $value1): ?>
+    <a href="#item-<?php echo $value1['user_id'] ?>" class="list-group-item" data-toggle="collapse">
+      <?php echo $value1['family_name'] ?>, <?php echo $value1['given_name'] ?>
       <span class="pull-right">
           <span class="glyphicon glyphicon-time margin-right margin-left"></span>
-          <?php echo $value['total_unit_progress'] ?>
+          <?php echo $value1['total_unit_progress'] ?>
           <span class="glyphicon glyphicon-question-sign margin-right margin-left"></span>
-          <?php echo $value['total_quizzes_progress'] ?>
+          <?php echo $value1['total_quizzes_progress'] ?>
       </span>
     </a>
-    <div class="list-group collapse" id="item-<?php echo $value['user_id'] ?>">
+    <div class="list-group collapse" id="item-<?php echo $value1['user_id'] ?>">
       <?php foreach ($course_units as $unitkey => $unit): ?>
         <a href="#" class="list-group-item">
           <?php echo $unit['title'] ?>
           <span class="pull-right">
             <span class="glyphicon glyphicon-time margin-right margin-left"></span>
-            <?php echo (isset($value['units'][$unit['unit_id']]['progress']))? $value['units'][$unit['unit_id']]['progress'] : "--"; ?>
+            <?php echo (isset($value1['units'][$unit['unit_id']]['progress']))? $value1['units'][$unit['unit_id']]['progress']."%" : "--"; ?>
             <span class="glyphicon glyphicon-question-sign margin-right margin-left"></span>
-            <?php echo $value['quizzes'][$unit['unit_id']]['progress'] ?>
+            <?php echo $value1['quizzes'][$unit['unit_id']]['progress'] ?>
           </span>
         </a>
-      <?php endforeach ?>
+      <?php endforeach; ?>
     </div>
   <?php endforeach; ?>
 </div>

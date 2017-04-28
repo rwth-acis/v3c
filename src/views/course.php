@@ -131,6 +131,10 @@ if ($isAuthenticated) {
   $progress_data = $stmt->fetchAll();
   $time_progress=array();
 
+  foreach ($course_units as $course_unit) {
+    $time_progress[$course_unit['id']]['duration'] = "0";
+  }
+
   foreach ($progress_data as $key => $value) {
     $time_progress[$value['unit_id']] = $value;
   }

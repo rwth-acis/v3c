@@ -56,6 +56,7 @@ if (isset($access_token) && $access_token != 'null') {
             $success = $userManagement->updateUser($user, $user->role);
         }
     }
+
 }
 
 // TODO: this is not good solution to know in the frontend about user-privileges

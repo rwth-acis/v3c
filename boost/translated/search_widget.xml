@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+
+    <ModulePrefs title="Search"
+		description="Widget to search learning material."
+		author="Team Boost"
+		author_email="henm1314g3@dbis.rwth-aachen.de"
+		height="450">
+  	<Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+		<Service name="openapp"
+		    xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+		    openapp:service="http://purl.org/role/terms/spaceService"
+		    openapp:permitReadAppend="http://purl.org/role/terms/data">
+
+		    <Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+    </ModulePrefs>
+
+    <Content type="html">
+    <![CDATA[
+
+		<!-- We use jQuery to manipulate DOM and jQuery-UI for the interface. -->
+    	<script src="http://virtus-vet.eu/boost/translated/js/require.js"></script>
+
+		<!-- Define CSS -->
+		<link href="http://virtus-vet.eu/boost/translated/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- JavaScript Block -->
+		<script>
+			require( ['http://virtus-vet.eu/boost/translated/js/config.js'], function (config){
+			require( [
+				"i18n!http://virtus-vet.eu/boost/translated/js/nls/search.js",
+				"async",
+				"rivets",
+			    "bootbox",
+			    "ractive",
+			    "bootstrap",
+			    "jquery",
+			    "search_youtube",
+			    "search_slideshare",
+			    "search_scribd",
+			    "search_wikipedia",
+			    "linkify",
+			    "AccessRightsManager",
+			    "ConfigManager",
+			    "repositories",
+			    "UserManager",
+			    "iwc",
+			    "utils"
+			    ], function(tr, a, rivets, b, Ractive) {
+			    	async = a;
+			    	bootbox = b;
+			    	translations = tr;
+					var userAccessRights;
+					var userList;
+					//Globals
+					var ITEMS_PER_PAGE = 5;
+					var NUM_PAGES = 5;
+					var ITEMS_PER_SEARCH = ITEMS_PER_PAGE * NUM_PAGES;
+					var repositories = [];
+					var model = {};
+					model.selectedRepository = {};
+					model.repositories = repositories;
+					model.config = {};
+					var iwcClient;
+					var config;
+					var space;
+					var searchResultEntryTemplate =    	"<a href='#' class='list-group-item' style='min-height:150px;'>" +
+						    								"<img style='margin-right:10px; height:100px;' class='pull-left' src='#imageURL' alt=''>" +
+						    								"<h4>#title</h4>" +
+				    										"<p>" +
+				    											"#description" +
+				    										"</p>" +
+				    									"</a>";
+				    var ractiveSearchHeader;
+				    var ractiveManageRepos;
+
+
+					//gadgets.util.registerOnLoadHandler(init);
+
+
+					if (openapp.param.user()) {
+						closeAutorisationWindow();
+					}
+
+					//function init(){
+
+					space = new openapp.oo.Resource(openapp.param.space());
+					iwcClient = new iwc.Client();
+					iwcClient.connect(iwcCallback);
+
+					//Init youtube api
+					onYouTubeClientLoad();
+					retrieveConfig(space, function(configObject){
+						model.config = configObject;
+						//Add new repositories here
+						addRepository(new YoutubeSearch(ITEMS_PER_SEARCH));
+						addRepository(new SlideshareSearch(ITEMS_PER_SEARCH));
+						addRepository(new ScribdSearch(ITEMS_PER_SEARCH));
+						addRepository(new WikiSearch(1));
+
+						for(var i = 0; i < repositories.length; i++){
+							if(repositories[i].isEnabled){
+								repositories[i].activate();
+								break;
+							}
+						}
+		     		});
+					//}
+
+					function addRepository(repository){
+						var newRepository = {};
+						newRepository.activate = function(){
+							model.selectedRepository.isActive = false;
+							newRepository.isActive = true;
+							model.selectedRepository = newRepository;
+
+						}
+						newRepository.index = repositories.length;
+						newRepository.searchFunctions = repository;
+						newRepository.currentPageIndex = 0;
+						newRepository.pageOffset = 1;
+						newRepository.searchResults = [];
+						newRepository.visibleResults = [];
+						newRepository.hasNextPage = false;
+						newRepository.hasPrevPage = false;
+						newRepository.hasResults = false;
+						newRepository.searching = false;
+						if (ractiveSearchHeader) {ractiveSearchHeader.set({model: model})};
+						for(var i = 0; i < model.config.repositorySelection.length; i++){
+							var selection = model.config.repositorySelection[i];
+							if(selection.name == repository.name)
+								newRepository.isEnabled = selection.isSelected;
+						}
+						newRepository.isActive = false;
+
+						var updateVisibleResults = function(){
+							newRepository.visibleResults = [];
+							var maxIndex = newRepository.currentPageIndex * ITEMS_PER_PAGE + ITEMS_PER_PAGE;
+							if (maxIndex > newRepository.searchResults.length)
+								maxIndex = newRepository.searchResults.length;
+							for(var i = newRepository.currentPageIndex * ITEMS_PER_PAGE;
+								i < maxIndex; i++){
+								newRepository.visibleResults.push(newRepository.searchResults[i]);
+							}
+							if(ractiveSearchHeader) {ractiveSearchHeader.set({model: model})};
+						};
+
+						var createPage =  function(index, offset){
+							var page = {};
+							page.index = index;
+							page.value = index + offset;
+							page.isSelected = (index==0);
+							page.click = function(event, model){
+								newRepository.currentPageIndex = page.index;
+								page.isSelected = true;
+								for(var i = 0; i < newRepository.pages.length; i++){
+									if(i != page.index)
+										newRepository.pages[i].isSelected = false;
+								}
+								updateVisibleResults();
+								$("#content").animate({ scrollTop: 0 }, "fast");
+							}
+							return page;
+						}
+
+						var updatePagination = function(){
+							newRepository.pages = [];
+							for(var i = 0; i < NUM_PAGES ; i++){
+								newRepository.pages.push(createPage(i, newRepository.pageOffset));
+							}
+						};
+
+						newRepository.nextResultsPage = function(){
+							this.searching = true;
+							ractiveSearchHeader.set({model: model});
+							this.visibleResults = [];
+							newRepository.searchFunctions.nextResultsPage(function(results){
+								newRepository.pageOffset += ITEMS_PER_PAGE;
+								newRepository.initNewResults(results);
+								newRepository.searching = false;
+								ractiveSearchHeader.set({model: model});
+								$("#content").animate({ scrollTop: 0 }, "fast");
+							});
+						}
+						newRepository.prevResultsPage = function(){
+							this.searching = true;
+							ractiveSearchHeader.set({model: model});
+							this.visibleResults = [];
+							newRepository.searchFunctions.prevResultsPage(function(results){
+								newRepository.pageOffset -= ITEMS_PER_PAGE;
+								newRepository.initNewResults(results);
+								newRepository.searching = false;
+								ractiveSearchHeader.set({model: model});
+								$("#content").animate({ scrollTop: 0 }, "fast");
+							});
+						}
+
+						newRepository.initNewResults = function(results){
+							for(var i = 0; i < results.length; i ++){
+								results[i] = processResult(results[i]);
+							}
+							newRepository.searchResults = results;
+							newRepository.currentPageIndex = 0;
+							newRepository.hasPrevPage = newRepository.searchFunctions.hasPrevPage();
+							newRepository.hasNextPage = newRepository.searchFunctions.hasNextPage();
+							newRepository.hasResults = (results.length > 1);
+							updatePagination();
+							updateVisibleResults();
+						}
+
+						var processResult = function(result){
+							//Add a click event to the result which sends a "learning document selected" message
+							//to other widgets.
+							result.click = function(){
+								publishLearningDocumentSelected(result);
+							}
+
+							//Shorten the description of the result if it is too long
+							var maxDescriptionLength = 500;
+							if(result.description.length > maxDescriptionLength){
+								result.description = result.description.substring(0, maxDescriptionLength) + "...";
+							}
+
+							return result;
+						}
+						newRepository.search = function(query, callback){
+							this.searching = true;
+							ractiveSearchHeader.set({model: model});
+							this.visibleResults = [];
+							newRepository.searchFunctions.search(query, function(results){
+								newRepository.searching = false;
+								ractiveSearchHeader.set({model: model});
+								newRepository.pageOffset = 1;
+								newRepository.initNewResults(results);
+							});
+						}
+
+						newRepository.initNewResults([]);
+
+						//alert(JSON.stringify(newRepository));
+
+						repositories.push(newRepository);
+					}
+
+					function iwcCallback(intent){
+						if (intent.action == "CONFIG_CHANGE"){
+
+						}
+
+					}
+
+					function publishLearningDocumentSelected(learningDocument){
+						var intent = {
+							component: "",
+							data: "",
+							dataType: "text/json",
+							action: "LEARNING_DOCUMENT_SELECTED",
+							extras: learningDocument
+						};
+
+						iwcClient.publish(intent);
+					}
+
+					function publishConfigChanged(configUri){
+		                var intent = {
+		                  component: "",
+		                  data: configUri,
+		                  dataType: "text/json",
+		                  flags :["PUBLISH_GLOBAL"],
+		                  action: "CONFIG_CHANGE"
+		                };
+
+	                iwcClient.publish(intent);
+              		}
+
+					$(function(){
+
+
+						// Get the access rights:
+						retrieveAccessRights(function(accessRights){
+							userAccessRights = accessRights.getUserAccessRights();
+							agreed = userAccessRights.hasAgreedToLicense;
+							//Check if user has agreed to license
+
+							if(!agreed){
+								showModalAcceptTermsOfUse();
+							} 
+
+							ractiveSearchHeader = new Ractive({
+									el: 'containerSearch',
+									template: '#templateSearch',
+									data: {
+										accessRights: userAccessRights,
+										repositories: model.repositories,
+										model: model,
+										text: translations
+									},
+									append: true
+							});
+
+
+							// show help according to user rights
+							var ractiveHelp = new Ractive({
+								el: 'descriptionModal',
+								template: '#templateHelpModal',
+								data: {
+									accessRights: userAccessRights,
+									text: translations
+								},
+								append: true
+							});
+
+							ractiveManageRepos = new Ractive({
+									el: 'containerRepoManage',
+									template: '#templateManage',
+									data: {
+										model: model,
+										text: translations
+									},
+									append: true
+							});
+
+							ractiveManageRepos.on({
+								saveRepo: function (event){
+									model.config.update(function(){
+					                  	publishConfigChanged(model.config.uri);
+										ractiveSearchHeader.set({model: model});
+					                 	$("#manageRepoModal").modal("hide");
+					                	location.reload();
+					                });	
+								}
+							});
+
+							ractiveSearchHeader.on({
+								manageRepos: function (event){
+									ractiveManageRepos.set({model: model});
+									$("#manageRepoModal").modal();
+								},
+								activate: function (event){
+									event.context.activate();
+								},
+								searchInRepo: function (event){
+									model.selectedRepository.search($("#search_field").val(), function(){
+									});
+								},
+								pageclick: function(event){
+									event.context.click();
+								},
+								nextPage: function(event){
+									model.selectedRepository.nextResultsPage();
+								},
+								prevPage: function(event){
+									model.selectedRepository.prevResultsPage();
+								},
+								resultClick: function(event){
+									event.context.click();
+								},
+								questionModal: function(event){
+									$('#descriptionModal').modal({
+						        		keyboard: true
+						          	});
+								}
+							});
+						});  // end of the retrieveAccessRights
+
+						// help button click
+
+			    	  $('#question').click(function(){
+			        	$('#descriptionModal').modal({
+			        		keyboard: true
+			          	});
+			        	});
+
+						$("#search_field").keypress(function(event){
+							if(event.which == 13){
+								model.selectedRepository.search($("#search_field").val(), function(){
+
+							});
+							}
+						});
+
+						$("#repoIDmenu").click(function() {
+			                $("#manageRepoModal").modal();
+			              });
+					});
+
+					function renderSearchProgressBar(){
+							var progressBar =       "<div class='progress progress-striped active'>" +
+					                                    "<div class='progress-bar'  role='progressbar' aria-valuenow='1' aria-valuemin='0' aria-valuemax='1' style='width: 100%'>" +
+					                                        "<span>" + translations.STR_SEARCHING + "</span>" +
+					                                    "</div>" +
+					                                "</div>";
+					        $("#resultsFooter").empty();
+					        $("#resultsFooter").append(progressBar);
+					}
+				});
+			});
+
+
+		</script>
+
+		<!-- HTML Block -->
+		<div style="overflow-y: scroll; height:450px;" id="content">
+		<div class="panel panel-primary" id="containerSearch">
+			<script id='templateSearch' type='text/ractive'>
+			<!-- Template for the header Main widget view -->
+				<div class="panel-heading">
+					<button id="question" on-click="questionModal" type="button" class="btn btn-default launch-modal" style="float:right; margin:-5 5 10 5px; color:#428BCA;"><span  class="glyphicon glyphicon-question-sign"></span></button>
+			    	<h3 class="panel-title"><span class="glyphicon glyphicon-search" style="margin-right:5px;"></span>{{{text.STR_SEARCH_DOCUMENTS}}}</h3>
+			  	</div>
+			  	<div class="panel-body" id="panelBody">
+			  	{{^accessRights.isEmployee}}
+				  	{{#accessRights.isManager}}
+				  		<div class="btn-group">
+					 	 	<button on-click="manageRepos" type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-wrench" data-placement="top"></span></button>
+						</div>
+					{{/accessRights.isManager}}
+				{{/accessRights.isEmployee}}
+			  		<div class="input-group" style="padding-top:5px;">
+				      <input type="text" id="search_field" class="form-control" placeholder="{{{text.STR_ENTER_YOUR_SEARCH_AND_HIT_ENTER}}}">
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button" id="search_button" on-click="searchInRepo">{{{text.STR_GO}}}</button>
+				      </span>
+				    </div>
+				    <div id="selectRepositoryButtonGroup" class="btn-group" data-toggle="buttons" style="padding-top:5px;">
+					  {{#repositories}}
+						  <button on-click="activate" class='btn btn-xs btn-primary {{#isActive}}active{{/isActive}} {{^isEnabled}}disabled{{/isEnabled}}'>
+						    <input type="radio" name="opt">{{searchFunctions.name}}
+						  </button>
+					  {{/repositories}}
+					</div>
+				{{#model.selectedRepository.searching}}
+					<div id="progressbar" style="margin-top:10px;" class='progress progress-striped active'>
+	                	<div class='progress-bar'  role='progressbar' aria-valuenow='1' aria-valuemin='0' aria-valuemax='1' style='width: 100%'>
+			            	<span>{{{text.STR_SEARCHING}}}</span>
+			            </div>
+			        </div>
+			    {{/model.selectedRepository.searching}}
+				</div>
+				<div class="list-group" id="resultsList">
+					{{#model.selectedRepository.visibleResults}}
+
+						{{#contentSpecificData.wiki}}
+							<a href={{url}} target="_blank" class='list-group-item' style='min-height:150px;'>
+								<img src={{contentSpecificData.imageUrl}} style='margin-right:10px; height:50px;' class='pull-left' alt=''>
+									<h5>{{name}}</h5>
+									<p><small>{{description}}</small></p>
+							</a>
+						{{/contentSpecificData.wiki}}
+
+						{{^contentSpecificData.wiki}}
+							<a on-click="resultClick" href='#' class='list-group-item' style='min-height:150px;'>
+								<img src={{contentSpecificData.imageUrl}} style='margin-right:10px; height:50px;' class='pull-left' alt=''>
+									<h5>{{name}}</h5>
+									<p><small>{{description}}</small></p>
+							</a>
+						{{/contentSpecificData.wiki}}
+
+
+					{{/model.selectedRepository.visibleResults}}
+				</div>
+				<div class="panel-footer" id="resultsFooter"></div>
+					<center>
+						{{#model.selectedRepository.hasResults}}
+							<ul id="pagination" class='pagination' style='margin-top:5px; margin-bottom:5px;'>
+								{{#model.selectedRepository.hasPrevPage}}
+									<li><a on-click="prevPage" href='#'>&laquo;</a></li>
+								{{/model.selectedRepository.hasPrevPage}}
+
+								{{#model.selectedRepository.pages}}
+									<li class='{{#isActive}}isSelected{{/isActive}}'><a on-click="pageclick" href='#'>{{value}}</a></li>
+								{{/model.selectedRepository.pages}}
+
+								{{#model.selectedRepository.hasNextPage}}
+									<li><a on-click="nextPage" href='#'>&raquo;</a></li>
+								{{/model.selectedRepository.hasNextPage}}
+							</ul>
+						{{/model.selectedRepository.hasResults}}
+					</center>
+				</div>
+			</script>
+		</div>
+		</div>
+
+
+	<!-- Help Modal -->
+
+	<div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <script id="templateHelpModal" type="text/ractive">
+		        <div class="modal-content">
+		           	<div class="modal-header">
+		          	 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		     			<h4 class="modal-title">{{{text.STR_SEARCH_WIDGET_HELP}}}</h4>
+		            </div>
+				        <div class="modal-body">
+				            <div class="panel-group" id="levelsdef" align="justify">
+					            {{#(accessRights.isManager && !accessRights.isEmployee)}}
+							       <div class="panel-group" id="levelsdef" align="justify">
+							       		<p>{{{text.STR_THIS_WIDGET_WAS_CREATED_AS_A}}}</p>
+							       		<p>{{{text.STR_CLICK_ON_WRENCH_ICON_TO_OPEN}}}</p>
+							            <ul style="padding: 10px;">
+							            	{{{text.STR_TO_CHOOSE_LEARNING_REPOSITORY}}}
+							            </ul>
+							         </div>
+					            {{/(accessRights.isManager && !accessRights.isEmployee)}}
+					            {{#accessRights.isEmployee}}
+					            	 <div class="panel-group" id="levelsdef" align="justify">
+					            	 <p>{{{text.STR_THIS_WIDGET_WAS_CREATED_AS_A}}}</p>
+							            <ul style="padding: 10px;">
+							            	{{{text.STR_TO_CHOOSE_LEARNING_REPOSITORY}}}
+							            </ul>
+							         </div>
+					            {{/accessRights.isEmployee}}
+					        </div>
+				        </div>
+		            <div class="modal-footer">
+		                 <button type="button" class="btn btn-default" data-dismiss="modal">{{{text.STR_CLOSE}}}</button>
+		           	</div>
+		        </div>
+     		</script>
+	    </div>
+	 </div>
+
+
+    <!-- Modal to manage repositories -->
+
+	
+
+      <div class="modal fade" id="manageRepoModal" >
+        <div class="modal-dialog" id="containerRepoManage">
+		<script id='templateManage' type='text/ractive'>
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h5 class="modal-title">{{{text.STR_CHOOSE_REPOSITORIES_THAT_YOU}}}</h5>
+            </div>
+            <div class="modal-body">
+
+		        {{#model.config.repositorySelection}}
+		            <li class="list-group-item">
+		              <div class="checkbox">
+		                <label>
+		                  <input class="repositorySelection" name="repository.name" checked={{isSelected}} type="checkbox"> {{name}}
+		                </label>
+		              </div>
+		            </li>
+		        {{/model.config.repositorySelection}}
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{{text.STR_CLOSE}}}</button>
+              <button on-click="saveRepo" type="button" class="btn btn-primary">{{{text.STR_SAVE_CHANGES}}}</button>
+
+            </div>
+          </div><!-- /.modal-content -->
+		</script>        
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal
+
+	]]>
+  </Content>
+</Module>

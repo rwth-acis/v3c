@@ -1,0 +1,1356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+
+    <ModulePrefs title="Progress"
+		description="This widget gives an overview of the learning process.."
+		author="Team Boost"
+		author_email="henm1314g3@dbis.rwth-aachen.de"
+		height="450"
+		width="600"
+		>
+  	<Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+		<Service name="openapp"
+		    xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+		    openapp:service="http://purl.org/role/terms/spaceService"
+		    openapp:permitReadAppend="http://purl.org/role/terms/data">
+
+		    <Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+    </ModulePrefs>
+
+    <Content type="html">
+    <![CDATA[
+
+		<!-- We use jQuery to manipulate DOM and jQuery-UI for the interface. -->
+    	<script src="http://virtus-vet.eu/boost/translated/js/require.js"></script>
+
+		<!-- Define CSS -->
+		<link href="http://virtus-vet.eu/boost/translated/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- JavaScript Block -->
+		<script>
+			require( ['http://virtus-vet.eu/boost/translated/js/config.js'], function (config){
+			require( [
+				"i18n!http://virtus-vet.eu/boost/translated/js/nls/progress.js",
+				"async",
+				"highcharts",
+			    "bootbox",
+			    "ractive",
+			    "lodash",
+				"highcharts_exporting",
+			    "jquery",
+			    "bootstrap",
+			    "EmployeeManager",
+			    "UserManager",
+			    "BCNManager",
+			    "AccessRightsManager",
+			    "iwc",
+			    "utils"
+			    ], function(tr, a, highCharts, b, r, _) {
+			    	translations = tr;
+			    	async = a;
+			    	bootbox = b;
+			    	Highcharts =  highCharts;
+			    	Ractive = r;
+
+					var userAccessRights;
+					var userList;
+					var currentEmployee;
+
+					var colorStart = '#808080'; 	//start
+					var colorEnd = '#f5f5f5';		//end
+					var colorCurrent = '#428BCA';		//current
+
+					var iwcClient;
+					var employees;
+					var bcns;
+
+					var space;
+					var check=false;
+
+					var user = {
+						isEmployee: false,
+						isManager: false
+					};
+
+
+					//Those boolean tell us if we are currently displaying a BCN or Employee graph.
+					var isOverviewGraph={};
+					var isEmployeeOverviewGraph={};
+					var isBcnGraph={};
+					var isEmployeeGraph={};
+					var isDetailedGraph={};
+
+
+					if (openapp.param.user()) {
+						closeAutorisationWindow();
+					}
+
+					ractiveTranslate = new Ractive({
+						el: 'containerTranslation',
+					    template: '#templateTranslation',
+					    data: {
+					    	"text": translations
+					    },
+					    append: true
+					});
+
+		//			function init(){
+
+						space = new openapp.oo.Resource(openapp.param.space());
+						iwcClient = new iwc.Client();
+						iwcClient.connect(iwcCallback);
+
+						retrieveAllBcns(space, function(bcnsList){
+							bcns=bcnsList;
+
+							bcnsList.sort(function(a, b){
+							if (a.priority==b.priority) {if(a.name.toLowerCase() < b.name.toLowerCase()) return -1; else return 1;}
+							if(a.priority > b.priority)  return -1; else return 1;
+						});
+							retrieveAccessRights(function(accessRights){
+
+							var userAccessRights = accessRights.getUserAccessRights();
+
+								retrieveAllEmployees(space, function(employeesList){
+
+									for(var i = 0; i < employeesList.length; i++){
+										var employee = employeesList[i];
+										if (employee.userUri == openapp.param.user()){
+											currentEmployee = employee;
+										};
+									};
+
+									if (userAccessRights.isEmployee && currentEmployee){
+										employees = [currentEmployee];
+									} else if (userAccessRights.isManager){
+										employees = filterEmployeesBasedOnAccessRights(employeesList, accessRights);
+									}
+
+
+									employees.sort(function(a, b){if(a.name < b.name) return -1; else return 1;});
+
+									isBcnGraph.bool=false;
+									isEmployeeGraph.bool=false;
+									isOverviewGraph.bool=false;
+									isEmployeeOverviewGraph.bool=false;
+									isDetailedGraph.bool=false;
+									check=true;
+									trimEmployeeNames(employees, 25);
+									showEmployeeOverviewGraph();
+
+								});
+							});
+						});
+		//			}
+					function trimEmployeeNames(employees, num){
+						_.each(employees, function(employee){
+							employee.name = employee.name.substr(0, num)
+						});
+					}
+
+					function iwcCallback(intent){
+						if (!check){
+							return;
+						}
+
+						if (intent.action == "SHOW_OVERALL_BCN_PROGRESS"){
+							showDefaultGraph();
+						}
+
+						if (intent.action == "SHOW_OVERALL_EMPLOYEE_PROGRESS"){
+							showEmployeeOverviewGraph();
+						}
+
+						if (intent.action == "SHOW_BCN_PROGRESS"){
+							isBcnGraph.uri=intent.data;
+							showBcnGraph(intent.data);
+						}
+						if (intent.action == "SHOW_EMPLOYEE_PROGRESS"){
+							isEmployeeGraph.uri=intent.data;
+							showEmployeeGraph(intent.data);
+						}
+						if(intent.action == "BCN_CREATE"){
+							createBCNfromUri(intent.data, function(bcn){
+								bcns.push(bcn);
+								bcns.sort(function(a, b){if(a.name.toLowerCase() < b.name.toLowerCase())
+										return -1; else return 1;});
+
+								//Update employees
+								for(var i = 0; i < employees.length; i++){
+									ensureEmplyoeeBCNConsistency(employees[i], [bcn], []);
+								}
+
+								if (isEmployeeGraph.bool){
+									showEmployeeGraph(isEmployeeGraph.uri);
+								}
+								if(isOverviewGraph.bool){
+									showDefaultGraph();
+								}
+								if (isEmployeeOverviewGraph.bool){
+									showEmployeeOverviewGraph();
+								}
+							});
+						}
+
+						if(intent.action == "BCN_UPDATE"){
+							createBCNfromUri(intent.data, function(updatedBcn){
+								for(var i = 0; i < bcns.length; i++){
+									var bcn = bcns[i];
+									if(bcn.uri == intent.data)
+										bcns[i] = updatedBcn;
+								}
+
+								//Update employees
+								for(var i = 0; i < employees.length; i++){
+									ensureEmplyoeeBCNConsistency(employees[i], [updatedBcn], []);
+								}
+
+								if (isBcnGraph.bool && isBcnGraph.uri==intent.data){
+									showBcnGraph(isBcnGraph.uri);
+								}
+								if (isEmployeeGraph.bool){
+									showEmployeeGraph(isEmployeeGraph.uri);
+								}
+								if (isDetailedGraph.bool && isDetailedGraph.bcnUri==intent.data){
+									showDetailedEmployeeGraph(isDetailedGraph.employeeUri, isDetailedGraph.bcnUri);
+								}
+								if (isOverviewGraph.bool){
+									showDefaultGraph();
+								}
+								if (isEmployeeOverviewGraph.bool){
+									showEmployeeOverviewGraph();
+								}
+							});
+						}
+
+						if(intent.action == "BCN_DELETE"){
+							for(var i = 0; i < bcns.length; i++){
+								var bcn = bcns[i];
+								if(bcn.uri == intent.data)
+									bcns.splice(i, 1);
+							}
+							if (isBcnGraph.bool && isBcnGraph.uri==intent.data){
+								showDefaultGraph();
+							}
+							if (isEmployeeGraph.bool){
+								showEmployeeGraph(isEmployeeGraph.uri);
+							}
+							if (isDetailedGraph.bool && isDetailedGraph.bcnUri==intent.data){
+								showDefaultGraph();
+							}
+							if (isOverviewGraph.bool){
+								showDefaultGraph();
+							}
+							if (isEmployeeOverviewGraph.bool){
+								showEmployeeOverviewGraph();
+							}
+						}
+
+						if(intent.action == "EMPLOYEE_CREATE"){
+							createEmployeefromUri(intent.data, function(bcn){
+								employees.push(bcn);
+								employees.sort(function(a, b){if(a.name.toLowerCase() < b.name.toLowerCase())
+										return -1; else return 1;});
+								if (isBcnGraph.bool){
+									showBcnGraph(isBcnGraph.uri);
+								}
+								if (isOverviewGraph.bool){
+									showDefaultGraph();
+								}
+								if (isEmployeeOverviewGraph.bool){
+									showEmployeeOverviewGraph();
+								}
+							});
+						}
+
+						if(intent.action == "EMPLOYEE_UPDATE"){
+							createEmployeefromUri(intent.data, function(updatedEmployee){
+								for(var i = 0; i < employees.length; i++){
+									var employee = employees[i];
+									if(employee.uri == intent.data)
+										employees[i] = updatedEmployee;
+								}
+								if (isBcnGraph.bool){
+									showBcnGraph(isBcnGraph.uri);
+								}
+								if (isEmployeeGraph.bool && isEmployeeGraph.uri==intent.data){
+									showEmployeeGraph(isEmployeeGraph.uri);
+								}
+								if (isDetailedGraph.bool && isDetailedGraph.employeeUri==intent.data){
+									showDetailedEmployeeGraph(isDetailedGraph.employeeUri, isDetailedGraph.bcnUri);
+								}
+								if (isOverviewGraph.bool){
+									showDefaultGraph();
+								}
+								if (isEmployeeOverviewGraph.bool){
+									showEmployeeOverviewGraph();
+								}
+							});
+						}
+
+						if(intent.action == "EMPLOYEE_DELETE"){
+							for(var i = 0; i < employees.length; i++){
+								var employee = employees[i];
+								if(employee.uri == intent.data)
+									employees.splice(i, 1);
+							}
+							if (isBcnGraph.bool){
+								showBcnGraph(isBcnGraph.uri);
+							}
+							if (isEmployeeGraph.bool && isEmployeeGraph.uri==intent.data){
+								showDefaultGraph();
+							}
+							if (isDetailedGraph.bool && isDetailedGraph.employeeUri==intent.data){
+								showDefaultGraph();
+							}
+							if (isOverviewGraph.bool){
+								showDefaultGraph();
+							}
+							if (isEmployeeOverviewGraph.bool){
+								showEmployeeOverviewGraph();
+							}
+						}
+
+						if(intent.action == "ACCESS_RIGHTS_CHANGED"){
+							retrieveAccessRights(function(accessRights){
+
+							var userAccessRights = accessRights.getUserAccessRights();
+
+								retrieveAllEmployees(space, function(employeesList){
+									for(var i = 0; i < employeesList.length; i++){
+										var employee = employeesList[i];
+										if (employee.userUri == openapp.param.user()){
+											currentEmployee = employee;
+										};
+									};
+
+									if (userAccessRights.isEmployee && currentEmployee){
+										employees = [currentEmployee];
+									} else if (userAccessRights.isManager){
+										employees = filterEmployeesBasedOnAccessRights(employeesList, accessRights);
+									}
+
+									employees.sort(function(a, b){if(a.name < b.name) return -1; else return 1;});
+
+									isBcnGraph.bool=false;
+									isEmployeeGraph.bool=false;
+									isOverviewGraph.bool=false;
+									isEmployeeOverviewGraph.bool=false;
+									isDetailedGraph.bool=false;
+									check=true;
+									trimEmployeeNames(employees, 25);
+									showEmployeeOverviewGraph();
+								});
+							});
+						}
+					}
+
+					$(function(){
+
+						// Get the access rights:
+							retrieveAccessRights(function(accessRights){
+							userAccessRights = accessRights.getUserAccessRights();
+
+							//Check if user has agreed to license
+
+							if(!userAccessRights.hasAgreedToLicense){
+								showModalAcceptTermsOfUse();
+							} 
+
+							});  // end of the retrieveAccessRights
+
+
+					      // help button click
+
+					      $('#question').click(function(){
+					        $('#descriptionModal').modal({
+					        keyboard: true
+					          });
+					        });
+					 });
+
+					function LIprogressForBcn(bcn){
+						var liNameList=[];
+
+						for(var j = 0; j<bcn.learningIndicators.length; j++){
+
+							var liStartList=[];
+							var liCurrentList=[];
+							var liEndList=[];
+
+							var li = bcn.learningIndicators[j];
+
+							for(i=0; i<employees.length; i++){
+
+								var employee = employees[i];
+								var start = employee.learningLevels[bcn.uri][li.id].start;
+								var current = employee.learningLevels[bcn.uri][li.id].current;
+								var end = employee.learningLevels[bcn.uri][li.id].end;
+
+								if (employee.learningLevels[bcn.uri].isRelevant){
+									if(employee.learningLevels[bcn.uri][li.id].isRelevant){
+										liStartList.push(start);
+										liCurrentList.push(current);
+										liEndList.push(end);
+										liNameList.push(employee.name);
+									}
+								}
+							}
+						}
+
+						var solution=[];
+						solution[0]=[]; //value with liEndList
+						solution[1]=[];	//value with liStartList
+						solution[2]=[]; //value with liCurrentList
+
+						for (var i=0; i<liStartList.length; i++){
+							solution[0][i]= [liNameList[i], liEndList[i]];
+							solution[1][i] = [liNameList[i], liStartList[i]];
+							solution[2][i] = [liNameList[i], liCurrentList[i]];
+
+						}
+						return solution;
+					}
+
+					function averageLIProgressForBcn(bcn){
+						var liNameList=[];
+						var liStartListAvg=[];
+						var liCurrentListAvg=[];
+						var liEndListAvg=[];
+
+						for(var j = 0; j<bcn.learningIndicators.length; j++){
+
+							var liStartList=[];
+							var liCurrentList=[];
+							var liEndList=[];
+							var cont=0;
+							var li = bcn.learningIndicators[j];
+
+							liNameList.push(li.name);
+
+							for(i=0; i<employees.length; i++){
+
+								var employee = employees[i];
+								var start = employee.learningLevels[bcn.uri][li.id].start;
+								var current = employee.learningLevels[bcn.uri][li.id].current;
+								var end = employee.learningLevels[bcn.uri][li.id].end;
+
+
+								if (employee.learningLevels[bcn.uri].isRelevant){
+									if(employee.learningLevels[bcn.uri][li.id].isRelevant){
+										liStartList.push(start);
+										liCurrentList.push(current);
+										liEndList.push(end);
+										cont++;
+									}
+								}
+							}
+							if (cont>0){
+								var sumStart = liStartList.reduce(function(a, b) { return +a + +b });
+								var sumCurrent = liCurrentList.reduce(function(a, b) { return +a + +b });
+								var sumEnd = liEndList.reduce(function(a, b) { return +a + +b });
+
+								liStartListAvg.push(sumStart / liStartList.length);
+								liCurrentListAvg.push(sumCurrent / liCurrentList.length);
+								liEndListAvg.push(sumEnd / liEndList.length);
+							}
+							else{
+								liStartListAvg.push(0);
+								liCurrentListAvg.push(0);
+								liEndListAvg.push(0);
+							}
+						}
+						var solution=[];
+						solution[0]=[]; //value with liEndListAvg
+						solution[1]=[];	//value with liStartListAvg
+						solution[2]=[]; //value with liCurrentListAvg
+
+						for (var i=0; i<liStartListAvg.length; i++){
+							solution[0][i]= [liNameList[i], liEndListAvg[i]];
+							solution[1][i] = [liNameList[i], liStartListAvg[i]];
+							solution[2][i] = [liNameList[i], liCurrentListAvg[i]];
+
+						}
+						return solution;
+					}
+
+					function averageBcnProgressForEmployee(employee){
+						var liNameList=[];
+
+						var liStartListAvg=[];
+						var liCurrentListAvg=[];
+						var liEndListAvg=[];
+
+						for(i=0; i<bcns.length; i++){
+							var bcn = bcns[i];
+							var liStartList=[];
+							var liCurrentList=[];
+							var liEndList=[];
+							var cont=0;
+							for(var j = 0; j<bcn.learningIndicators.length; j++){
+								var li = bcn.learningIndicators[j];
+
+								var start = employee.learningLevels[bcn.uri][li.id].start;
+								var current = employee.learningLevels[bcn.uri][li.id].current;
+								var end = employee.learningLevels[bcn.uri][li.id].end;
+
+
+								if (employee.learningLevels[bcn.uri].isRelevant){
+									if(employee.learningLevels[bcn.uri][li.id].isRelevant){
+
+										liStartList.push(start);
+										liCurrentList.push(current);
+										liEndList.push(end);
+										cont++;
+									}
+								}
+							}
+
+							if (cont>0){
+								liNameList.push(bcn.name);
+								var sumStart = liStartList.reduce(function(a, b) { return +a + +b });
+
+								var sumCurrent = liCurrentList.reduce(function(a, b) { return +a + +b });
+
+								var sumEnd = liEndList.reduce(function(a, b) { return +a + +b });
+
+
+								liStartListAvg.push(sumStart / liStartList.length);
+								liCurrentListAvg.push(sumCurrent / liCurrentList.length);
+								liEndListAvg.push(sumEnd / liEndList.length);
+							}
+						}
+						var solution=[];
+						solution[0]=[];
+						solution[1]=[];
+						solution[2]=[];
+
+						for (var i=0; i<liStartListAvg.length; i++){
+							solution[0][i]= [liNameList[i], liEndListAvg[i]];
+							solution[1][i] = [liNameList[i], liStartListAvg[i]];
+							solution[2][i] = [liNameList[i], liCurrentListAvg[i]];
+
+
+						}
+						return solution;
+					}
+
+					// Printing the graphs
+
+					function printGraph(isOverview, employeeUri, title, subtitle, uriList, liNameList, formater, liStartListAvg, liCurrentListAvg, liEndListAvg){
+
+						//llevel is from EmployeeManager.js
+
+						var learningLevelsName = [];
+						for (var i=0; i<llevel.length; i++)
+							learningLevelsName.push(llevel[i]);
+
+						for (var i=0; i<liEndListAvg.length; i++){
+							liEndListAvg[i] = liEndListAvg[i]-liCurrentListAvg[i];
+						}
+
+						 for (var i=0; i<liCurrentListAvg.length; i++) {
+						 	liCurrentListAvg[i] = liCurrentListAvg[i] - liStartListAvg[i];
+
+						}
+
+						for(var i = 0; i < liStartListAvg.length; i++){
+							liStartListAvg[i] = {y: liStartListAvg[i], color:colorStart};
+						}
+						for(var i = 0; i < liEndListAvg.length; i++){
+							liCurrentListAvg[i] = {y: liCurrentListAvg[i], color:colorCurrent};
+						}
+						for(var i = 0; i < liEndListAvg.length; i++){
+							liEndListAvg[i] = {y: liEndListAvg[i], color:colorEnd};
+						}
+
+
+						if (isOverview.bool){
+
+							// Initialized chart
+
+							$('#container').highcharts({
+								chart: {
+									type: 'column',
+									events: {
+										click: function (event) {
+											if (isOverviewGraph.bool){
+												showEmployeeOverviewGraph();
+											//	alert ('showEmployeeOverviewGraph');
+											}
+											else if (isEmployeeOverviewGraph.bool){
+												showDefaultGraph();
+											//	alert ('showDefaultGraph');
+											}
+
+										}
+									}
+								},
+								legend: {
+									enabled: false
+								},
+
+								title: {
+									text: title,
+									style: {
+
+									},
+									useHTML: true
+								},
+								subtitle: {
+									text: subtitle,
+									useHTML: true
+								},
+								xAxis: {
+									type: 'category',
+									categories: liNameList,
+
+									labels:{
+										rotation: -25,
+										formatter: function() {
+												if (isOverviewGraph.bool) {
+												var $formater = $("formater");
+												for (var i=0; i<bcns.length; i++){
+
+															if (bcns[i].name==this.value){
+
+																var pushpin = $(formater.replace(/#{priorityPushpin}/g, priorityColors[bcns[i].priority]));
+
+																return pushpin[0].outerHTML+this.value;
+
+
+															}}
+
+												} else return formater+this.value;
+
+
+										},
+										useHTML:true
+									}
+								},
+
+
+								yAxis: {
+									endOnTick: true,
+									tickmarkPlacement:'on',
+									max: learningLevelsName.length-1,
+									categories: learningLevelsName,
+									title: {
+										text: translations.STR_LEARNING_LEVELS
+									}
+								},
+
+
+								tooltip: {
+									 formatter: function() {
+									 	if (this.series.name=="Start") {
+		                   				 return '<strong>'+ this.x +'</strong><br/>'+
+		                   				  'Started learning at ' + ': '+  Highcharts.numberFormat(100 * this.y / this.point.stackTotal,0) +' %';
+		                   				}
+		                   				if (this.series.name=="Current") {
+		                   				 return '<strong>'+ this.x +'</strong><br/>'+
+		                   				  'Learned ' + ': '+  Highcharts.numberFormat(100 * this.y / this.point.stackTotal,0) +' %';
+		                   				}
+		                   				if (this.series.name=="End") {
+		                   				 return '<strong>'+ this.x +'</strong><br/>'+
+		                   				  'Still to learn ' +': '+  Highcharts.numberFormat(100 * this.y / this.point.stackTotal,0) +' %';
+		                   				}
+		                     		//	   this.series.name +': '+ Highcharts.numberFormat(this.y,1,'.') +'<br/>'+			//round?
+		                     		//	   'Total: '+ Highcharts.numberFormat(this.point.stackTotal,1,'.');
+		                }
+								},
+
+
+								plotOptions: {
+									series: {
+										shadow:true,
+										borderColor: '#303030'
+									},
+									column: {
+										states:{
+											hover:{enabled:false}
+										},
+
+										stacking: 'normal',
+										pointPadding: 0.2,
+										allowPointSelect: true,
+										cursor: 'pointer',
+										point: {
+											events: {
+												click: function(event) {
+													if (isOverview.isBcn){
+
+														for (var i=0; i<liNameList.length; i++){
+															if (bcns[i].name==liNameList[this.x]){
+
+																showBcnGraph(bcns[i].uri);
+															//	alert("showBcnGraph average LI");
+
+															}
+														}
+
+													}
+													if(isOverview.isEmployee){
+														for (var i=0; i<liNameList.length; i++){
+															if (employees[i].name==liNameList[this.x]){
+																showEmployeeGraph(employees[i].uri);
+															//	alert("Point: showEmployeeGraph");
+															}
+														}
+													}
+
+
+
+
+												}
+											}
+										}
+									}
+								},
+
+									series: [{
+									name: 'End',
+									data: liEndListAvg,
+									uri: uriList,
+
+								}, {
+									name: 'Current',
+									data: liCurrentListAvg,
+									uri: uriList,
+								}, {
+
+									name: 'Start',
+									data: liStartListAvg,
+									uri: uriList,
+								}]
+
+							});
+						}
+		//---------------------------------------------------------------------------------------------------------------
+						else{
+								$('#container').highcharts({
+								chart: {
+									type: 'column',
+									events: {
+
+										click: function (event) {
+											if (isBcnGraph.bool){
+												showDefaultGraph();
+											//	alert ('showDefaultGraph Overall Goals View');
+											} else if (isEmployeeGraph.bool) {
+												showEmployeeOverviewGraph();
+											//	alert ('showEmployeeOverviewGraph back from goal');
+											} else if (isDetailedGraph.bool) {
+												var emplDataUri = $('#container').data('emplDataUri');
+												var bcnDataUri = $('#container').data('bcnDataUri');
+												showEmployeeGraph(emplDataUri);
+											//	alert ("back from LI");
+											}
+
+										}
+									}
+								},
+								legend: {
+									 enabled:false
+								},
+
+								title: {
+									text: title,
+									style: {
+
+									},
+									useHTML: true
+								},
+								subtitle: {
+									text: subtitle,
+									useHTML: true
+								},
+								xAxis: {
+									type: 'category',
+									categories: liNameList,
+									labels:{
+										rotation: -25,
+										formatter: function() {
+											if (isEmployeeGraph.bool) {
+												var $formater = $("formater");
+												for (var i=0; i<bcns.length; i++){
+
+															if (bcns[i].name==this.value){
+
+																var pushpin = $(formater.replace(/#{priorityPushpin}/g, priorityColors[bcns[i].priority]));
+
+																return pushpin[0].outerHTML+this.value;
+
+															}}
+											} return formater+this.value;
+										},
+										useHTML:true
+									}
+								},
+
+								yAxis: {
+									endOnTick: true,
+									tickmarkPlacement:'on',
+									max: learningLevelsName.length-1,
+									categories: learningLevelsName,
+									title: {
+										text: translations.STR_LEARNING_LEVELS
+									}
+								},
+								tooltip: {
+									  formatter: function() {
+									 	if (this.series.name=="Start") {
+		                   				 return '<strong>'+ this.x +'</strong><br/>'+
+		                   				  translations.STR_STARTED_LEARNING_AT + ': '+  Highcharts.numberFormat(100 * this.y / this.point.stackTotal,0) +' %';
+		                   				}
+		                   				if (this.series.name=="Current") {
+		                   				 return '<strong>'+ this.x +'</strong><br/>'+
+		                   				  translations.STR_LEARNED + ': '+  Highcharts.numberFormat(100 * this.y / this.point.stackTotal,0) +' %';
+		                   				}
+		                   				if (this.series.name=="End") {
+		                   				 return '<strong>'+ this.x +'</strong><br/>'+
+		                   				  translations.STR_STILL_TO_LEARN +': '+  Highcharts.numberFormat(100 * this.y / this.point.stackTotal,0) +' %';
+		                   				}
+		                      //  this.series.name +': '+ Highcharts.numberFormat(this.y,1,'.') +'<br/>'+
+		                      //  'Total: '+ Highcharts.numberFormat(this.point.stackTotal,1,'.');
+		                }
+								},
+								plotOptions: {
+									series: {
+										shadow:true,
+										borderColor: '#303030',
+										allowPointSelect: false
+									},
+									column: {
+										states:{
+											hover:{enabled:false}
+
+										},
+										stacking: 'normal',
+										pointPadding: 0.2,
+										allowPointSelect: true,
+										cursor: 'pointer',
+										point: {
+											events: {
+												click: function(event) {
+
+													if (isOverview.isLI){
+
+														for (var i=0; i<bcns.length; i++){
+
+															if (bcns[i].name==title){
+																var bcn = bcns[i];
+
+																for(var j = 0; j<bcn.learningIndicators.length; j++){
+																	var li = bcn.learningIndicators[j];
+
+																if (li.name == liNameList[this.x]) {
+																	var liClicked = liNameList[this.x];
+																	showLiGraph(bcns[i].uri, liClicked);
+																//	alert("show detailed LI graph");
+																}
+																}
+															}
+														}
+													}
+
+													if (isOverview.isEmployee){
+
+														for (var i=0; i<bcns.length; i++){
+
+															if (bcns[i].name==liNameList[this.x]){
+																$('#container').data('emplDataUri', employeeUri);
+																$('#container').data('bcnDataUri', bcns[i].uri);
+																showDetailedEmployeeGraph(employeeUri, bcns[i].uri);
+															//	alert ('Point: showDetailedEmployeeGraph');
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								},
+								series: [{
+									name: 'End',
+									data: liEndListAvg,
+								}, {
+									name: 'Current',
+									data: liCurrentListAvg,
+
+								}, {
+									name: 'Start',
+									data: liStartListAvg,
+
+								}],
+							});
+						}
+					}
+
+					function showDefaultGraph(){
+
+						isOverviewGraph.bool=true;
+						isEmployeeOverviewGraph.bool=false;
+						isBcnGraph.bool=false;
+						isEmployeeGraph.bool=false;
+						isDetailedGraph.bool=false;
+
+						var liStartListAvgTotal=[];
+						var liCurrentListAvgTotal=[];
+						var liEndListAvgTotal=[];
+
+						var liNameList=[];
+						for(var i=0; i<bcns.length; i++){
+							var liStartListAvg=[];
+							var liCurrentListAvg=[];
+							var liEndListAvg=[];
+							var bcn = bcns[i];
+							liNameList.push(bcn.name);
+							var cont=0;
+
+							for(var j = 0; j<bcn.learningIndicators.length; j++){
+
+								var liStartList=[];
+								var liCurrentList=[];
+								var liEndList=[];
+
+								var li = bcn.learningIndicators[j];
+								var cont=0;
+
+								for (var k = 0; k<employees.length; k++){
+									var employee = employees[k];
+									var start = employee.learningLevels[bcn.uri][li.id].start;
+									var current = employee.learningLevels[bcn.uri][li.id].current;
+									var end = employee.learningLevels[bcn.uri][li.id].end;
+
+
+
+									if (employee.learningLevels[bcn.uri].isRelevant){
+										if(employee.learningLevels[bcn.uri][li.id].isRelevant){
+
+										liStartList.push(start);
+										liCurrentList.push(current);
+										liEndList.push(end);
+										cont++;
+									}
+
+									}
+								}
+								if (cont>0){
+									var sumStart = liStartList.reduce(function(a, b) { return +a + +b });
+									var sumCurrent = liCurrentList.reduce(function(a, b) { return +a + +b });
+									var sumEnd = liEndList.reduce(function(a, b) { return +a + +b });
+									liStartListAvg.push(sumStart / liStartList.length);
+									liCurrentListAvg.push(sumCurrent / liCurrentList.length);
+									liEndListAvg.push(sumEnd / liEndList.length);
+								}
+							}
+
+							var sumStart = 0;
+							var sumCurrent = 0;
+							var sumEnd = 0;
+
+							if(liStartListAvg.length > 0)
+								sumStart = liStartListAvg.reduce(function(a, b) { return +a + +b });
+							if(liCurrentListAvg.length > 0)
+								sumCurrent = liCurrentListAvg.reduce(function(a, b) { return +a + +b });
+							if(liEndListAvg.length > 0)
+								sumEnd = liEndListAvg.reduce(function(a, b) { return +a + +b });
+
+
+
+							liStartListAvgTotal.push(sumStart / liStartListAvg.length);
+							liCurrentListAvgTotal.push(sumCurrent / liCurrentListAvg.length);
+							liEndListAvgTotal.push(sumEnd / liEndListAvg.length);
+						}
+						var uriBcn=[];
+						for (var i=0; i<bcns.length; i++){
+							uriBcn[i]=bcns[i].uri;
+
+						}
+						var title= 'Overall Goals View';
+						var subtitle = translations.STR_HOW_CLOSE_EMPLOYEE_ARE_TO_ACCOMPLISH;
+						var isOverview={};
+						isOverview.bool=true;
+						isOverview.isBcn=true;
+						isOverview.isEmployee=false;
+						isOverview.isLI=false;
+
+
+						var formater = '<span id="pushpin" class="glyphicon glyphicon-star" style="color:#{priorityPushpin}; margin-right: 5px"></span>';
+
+						printGraph(isOverview, 0, title, subtitle, uriBcn, liNameList, formater, liStartListAvgTotal, liCurrentListAvgTotal, liEndListAvgTotal);
+					}
+
+					function showEmployeeOverviewGraph(){
+						isOverviewGraph.bool=false;
+						isEmployeeOverviewGraph.bool=true;
+						isBcnGraph.bool=false;
+						isEmployeeGraph.bool=false;
+						isDetailedGraph.bool=false;
+
+						var liStartListAvgTotal=[];
+						var liCurrentListAvgTotal=[];
+						var liEndListAvgTotal=[];
+
+						var liNameList=[];
+
+						for (var k = 0; k<employees.length; k++){
+							var liStartListAvg=[];
+							var liCurrentListAvg=[];
+							var liEndListAvg=[];
+							var employee = employees[k];
+							liNameList.push(employee.name);
+
+							for(var i=0; i<bcns.length; i++){
+
+								var liStartList=[];
+								var liCurrentList=[];
+								var liEndList=[];
+								var bcn = bcns[i];
+								var cont=0;
+
+								for(var j = 0; j<bcn.learningIndicators.length; j++){
+
+
+									var li = bcn.learningIndicators[j];
+									var start = employee.learningLevels[bcn.uri][li.id].start;
+									var current = employee.learningLevels[bcn.uri][li.id].current;
+									var end = employee.learningLevels[bcn.uri][li.id].end;
+
+
+
+									if (employee.learningLevels[bcn.uri].isRelevant){
+										if(employee.learningLevels[bcn.uri][li.id].isRelevant){
+
+										liStartList.push(start);
+
+										liCurrentList.push(current);
+										liEndList.push(end);
+										cont++;
+										}
+									}
+								}
+								if (cont>0){
+
+									var sumStart = liStartList.reduce(function(a, b) { return +a + +b });
+									var sumCurrent = liCurrentList.reduce(function(a, b) { return +a + +b });
+									var sumEnd = liEndList.reduce(function(a, b) { return +a + +b });
+
+									liStartListAvg.push(sumStart / liStartList.length);
+									liCurrentListAvg.push(sumCurrent / liCurrentList.length);
+									liEndListAvg.push(sumEnd / liEndList.length);
+								}
+							}
+							var sumStart = 0;
+							var sumCurrent = 0;
+							var sumEnd = 0;
+
+							if(liStartListAvg.length > 0)
+								sumStart = liStartListAvg.reduce(function(a, b) { return +a + +b });
+							if(liCurrentListAvg.length > 0)
+								sumCurrent = liCurrentListAvg.reduce(function(a, b) { return +a + +b });
+							if(liEndListAvg.length > 0)
+								sumEnd = liEndListAvg.reduce(function(a, b) { return +a + +b });
+							liStartListAvgTotal.push(sumStart / liStartListAvg.length);
+							liCurrentListAvgTotal.push(sumCurrent / liCurrentListAvg.length);
+							liEndListAvgTotal.push(sumEnd / liEndListAvg.length);
+						}
+						var uriEmployee=[];
+						for (var i=0; i<employees.length; i++)
+							uriEmployee[i]=employees[i].uri;
+						var title= 'Overall Employee View';
+						var subtitle = 'How close employees are to accomplish business goals';
+						var isOverview={};
+						isOverview.bool=true;
+						isOverview.isBcn=false;
+						isOverview.isEmployee=true;
+						isOverview.isLI=false;
+
+						var formater='<span class="glyphicon glyphicon-user" style="margin-right: 5px;"></span>';
+						if (!user.isEmployee){
+						printGraph(isOverview, 0, title, subtitle, uriEmployee, liNameList, formater, liStartListAvgTotal, liCurrentListAvgTotal, liEndListAvgTotal);
+						}
+					}
+
+					//it is an average LI's over all employees
+
+					function showBcnGraph(bcnUri){
+
+						isBcnGraph.bool=true;
+						isOverviewGraph.bool=false;
+						isEmployeeOverviewGraph.bool=false;
+						isEmployeeGraph.bool=false;
+						isDetailedGraph.bool=false;
+
+						var bcn;
+						for(t=0; t<bcns.length; t++){
+							if (bcns[t].uri == bcnUri)
+								bcn=bcns[t];
+
+						}
+
+
+						var data = averageLIProgressForBcn(bcn);
+
+						var liEndListAvg=[];
+						var liCurrentListAvg=[];
+						var liStartListAvg=[];
+						var liNameList=[];
+						for (var i=0; i<data[0].length; i++){
+
+							liEndListAvg[i]=data[0][i][1];
+							liStartListAvg[i]=data[1][i][1];
+							liCurrentListAvg[i]=data[2][i][1];
+
+							liNameList[i]=data[0][i][0];
+						}
+
+						/* Added priority pushpin to the title of the goals graph */
+
+						// var template = '<span class="glyphicon glyphicon-star" style="margin-right: 5px; color:#{priorityPushpin}"></span>';
+
+						// var entry = $(template.replace(/#{priorityPushpin}/g, priorityColors[bcn.priority]));
+
+						// var title = $( document.createElement('div')).append(entry).html()+bcn.name+ '';
+
+						var title = bcn.name;
+
+						var subtitle=translations.STR_TAKING_THE_AVERAGE_EMPLOYEES;
+						var isOverview={};
+						isOverview.bool=false;
+						isOverview.isBcn=false;
+						isOverview.isEmployee=false;
+						isOverview.isLI=true;
+						var uriList=[];
+						var formater='<span class="glyphicon glyphicon-flag" style="margin-right: 5px;"></span>';
+						printGraph(isOverview, 0, title, subtitle, uriList, liNameList, formater, liStartListAvg, liCurrentListAvg, liEndListAvg);
+					}
+
+					// showLiGraph in this function we calculate avarege over all LI per User
+
+					function showLiGraph(bcnUri, liClicked){
+						isBcnGraph.bool=true;
+						isOverviewGraph.bool=false;
+						isEmployeeOverviewGraph.bool=false;
+						isEmployeeGraph.bool=false;
+						isDetailedGraph.bool=false;
+
+						var bcn;
+						for(t=0; t<bcns.length; t++){
+							if (bcns[t].uri == bcnUri)
+								bcn=bcns[t];
+
+						}
+
+						var data = LIprogressForBcn(bcn);
+
+						var liEndListAvg=[];
+						var liCurrentListAvg=[];
+						var liStartListAvg=[];
+						var liNameList=[];
+						for (var i=0; i<data[0].length; i++){
+
+							liEndListAvg[i]=data[0][i][1];
+							liStartListAvg[i]=data[1][i][1];
+							liCurrentListAvg[i]=data[2][i][1];
+
+							liNameList[i]=data[0][i][0];
+						}
+
+						for(var j = 0; j<bcn.learningIndicators.length; j++){
+
+							var li = bcn.learningIndicators[j];
+						}
+
+						var title = translations.STR_HOW_EMPLOYEES_PROCEED_OVER + liClicked;
+
+						var subtitle=translations.STR_DETAILLED_VIEW_OF_EACH_USER;
+
+						var isOverview={};
+						isOverview.bool=false;
+						isOverview.isBcn=false;
+						isOverview.isEmployee=false;
+						isOverview.isLI=false;
+
+						var formater='<span class="glyphicon glyphicon-user" style="margin-right: 5px;"></span>';
+
+
+						var uriList=[];
+						printGraph(isOverview, 0, title, subtitle, uriList, liNameList, formater, liStartListAvg, liCurrentListAvg, liEndListAvg);
+
+
+					}
+
+					function showEmployeeGraph(employeeUri){
+						isBcnGraph.bool=false;
+						isOverviewGraph.bool=false;
+						isEmployeeOverviewGraph.bool=false;
+						isEmployeeGraph.bool=true;
+						isDetailedGraph.bool=false;
+
+						var employee;
+						for(t=0; t<employees.length; t++){
+							if (employees[t].uri == employeeUri)
+								employee=employees[t];
+						}
+						var data = averageBcnProgressForEmployee(employee);
+
+						var liEndListAvg=[];
+						var liCurrentListAvg=[];
+						var liStartListAvg=[];
+						var liNameList=[];
+
+							for (var i=0; i<data[0].length; i++){
+								liEndListAvg[i]=data[0][i][1];
+								liStartListAvg[i]=data[1][i][1];
+								liCurrentListAvg[i]=data[2][i][1];
+
+								liNameList[i]=data[0][i][0];
+							}
+
+						var title= '<span class="glyphicon glyphicon-user" style="margin-right: 5px;"></span>'+employee.name+'';
+						var subtitle=translations.STR_AVERAGE_FOR_GOALS;
+						var isOverview={};
+
+						isOverview.bool=false;
+						isOverview.isBcn=false;
+						isOverview.isEmployee=true;
+						isOverview.isLI=false;
+						var uriList=[];
+						var formater = '<span id="pushpin" class="glyphicon glyphicon-star" style="color:#{priorityPushpin}; margin-right: 5px"></span>';
+
+						printGraph(isOverview, employeeUri, title, subtitle, uriList, liNameList, formater, liStartListAvg, liCurrentListAvg, liEndListAvg);
+
+					}
+
+					function showDetailedEmployeeGraph(employeeUri, bcnUri){
+						isBcnGraph.bool=false;
+						isOverviewGraph.bool=false;
+						isEmployeeOverviewGraph.bool=false;
+						isEmployeeGraph.bool=false;
+						isDetailedGraph.bool=true;
+							isDetailedGraph.employeeUri=employeeUri;
+							isDetailedGraph.bcnUri=bcnUri;
+
+						var employee;
+						for(t=0; t<employees.length; t++){
+							if (employees[t].uri == employeeUri)
+								employee=employees[t];
+						}
+						var bcn;
+						for(t=0; t<bcns.length; t++){
+							if (bcns[t].uri == bcnUri)
+								bcn=bcns[t];
+						}
+						var liStartList=[];
+						var liCurrentList=[];
+						var liEndList=[];
+						var liNameList=[];
+
+						for(var j = 0; j<bcn.learningIndicators.length; j++){
+							var li = bcn.learningIndicators[j];
+							var start = parseFloat(employee.learningLevels[bcn.uri][li.id].start);
+
+							var current = employee.learningLevels[bcn.uri][li.id].current;
+							var end = employee.learningLevels[bcn.uri][li.id].end;
+
+							//check if LI isRelevant and show only if it is true
+							if(employee.learningLevels[bcn.uri][li.id].isRelevant){
+								liNameList.push(li.name);
+
+								liStartList.push(start);
+
+								liCurrentList.push(current);
+								liEndList.push(end);
+							}
+
+						}
+
+
+						/*Added priority pushpin to the title of the employee detailled graph*/
+
+						var template = '<span class="glyphicon glyphicon-star" style="margin-right: 5px; color:#{priorityPushpin}"></span>';
+
+						var entry = $(template.replace(/#{priorityPushpin}/g, priorityColors[bcn.priority]));
+
+						var title = $( document.createElement('div')).append(entry).html()+bcn.name+ '';
+
+
+
+						var subtitle='<span class="glyphicon glyphicon-user" style="margin-right: 5px; margin-top: 5px"></span>'+employee.name+'';
+						var formater='<span class="glyphicon glyphicon-flag" style="margin-right: 5px;"></span>';
+						var isOverview={};
+						isOverview.bool=false;
+						isOverview.isBcn=false;
+						isOverview.isEmployee=false;
+						isOverview.isLI=false;
+						var uriList=[];
+						printGraph(isOverview, 0, title, subtitle, uriList, liNameList, formater, liStartList, liCurrentList, liEndList);
+					}
+				});
+			});
+
+		</script>
+
+		<!-- HTML Block -->
+
+		<div id="containerTranslation">
+		<script id="templateTranslation" type='text/ractive'>
+			<div style="overflow-y: scroll; height: 450px;">
+			<div class="panel panel-primary" style="margin-bottom: 0px">
+				<div class="panel-heading">
+				    <button id="question" type="button" class="btn btn-default launch-modal" style="float:right; margin:-5 5 10 5px; color:#428BCA;"><span  class="glyphicon glyphicon-question-sign"></span></button>
+					<h3 class="panel-title"><span class="glyphicon glyphicon-stats" style="margin-right:5px;"></span>{{{text.STR_LEARNING_PROGRESS}}}</h3>
+
+			  	</div>
+			  	<div class="panel-body">
+					<div id="container" style="min-width: 310px; height: 370px; margin: 0 auto">
+					</div>
+				</div>
+			</div>
+			</div>
+
+			 <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	      <div class="modal-dialog">
+	        <div class="modal-content">
+	          <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title">{{{text.STR_LEARNING_PROGRESS_HELP}}}</h4>
+	            </div>
+	          <div class="modal-body">
+	            <div class="panel-group" id="levelsdef" align="justify">
+	            <ul style="padding: 10px;">
+	              <li>{{{text.STR_LEARNING_PROGRESS_WIDGET_WORKS}}}</li>
+	              <li>{{{text.STR_TO_EXPORT_GRAPH_VIEW_IN_PNG_PDF}}}</li>
+
+	              <li>{{{text.STR_IF_CURRENT_VIEW_IS_OVERALL_EMPLOYEE}}}
+	              	<ul style="padding: 10px;">
+	              		{{{text.STR_CHANGE_CURRENT_VIEW_TO_THE_OVERALL}}}
+	              	</ul>
+	              </li>
+
+	              <li>{{{text.STR_IF_CURRENT_VIEW_IS_OVERALL_BUSINESS}}}
+	               <ul style="padding: 10px;">
+	               	{{{text.STR_CLICK_ON_THE_CHART_TO_CHANGE}}}
+	               <ul>
+	            </ul>
+	          </div>
+	          <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	</script>
+	</div>
+
+	]]>
+  </Content>
+</Module>

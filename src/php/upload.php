@@ -1,7 +1,7 @@
 <?php
 
     if ( 0 < $_FILES['file']['error'] ) {
-        echo 'Error: ' . $_FILES['file']['error'] . '<br>';
+        echo 'Error: ' . $_FILES['file']['error'];
     }
     else {
         $path = $_FILES['file']['name'];

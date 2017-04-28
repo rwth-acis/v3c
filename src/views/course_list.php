@@ -238,7 +238,7 @@
                                                     <?php else: ?>
                                                         <a href="editcourse.php?id=<?php echo $current_course_id; ?>&lang=<?php echo $current_course_lang; ?>" class="btn btn-edit btn-sm btn-success btn-block"><?php echo getTranslation("courselist:admin:edit", "Edit");?></a>
                                                     <?php endif; ?>
-
+                                                    
                                                 <input type="button"
                                                     data-id="<?php echo $current_course_id; ?>"
                                                     data-lang="<?php echo $current_course_lang; ?>"

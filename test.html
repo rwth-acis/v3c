@@ -1,0 +1,76 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="http://role-sandbox.eu/s/script/openapp.js"></script>
+
+    <!--TODO: Check out ROLE space <head> section for dependencies -->
+    <script>
+        var gadgets = {};
+        gadgets.config = {
+            register: function (rpc, requiredConfig, callback) {
+                // rpc === "rpc", requiredConfig is ignored here.
+                // Just call the callback (function init(...) in rpc.js)
+                // with a dummy config object.
+                callback({rpc: {parentRelayUrl: "", uselegacyProtocol: uselegacy}});
+            }
+        };
+    </script>
+    <script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
+    <script>
+
+        var spacesBaseUrl = "http://virtus-vet.eu/spaces/";
+
+        function createSpace(spaceLabel, spaceTitle) {
+            var url = spacesBaseUrl + spaceLabel;
+
+            console.log(url);
+            console.log(openapp.resource);
+
+            var deferred = $.Deferred();
+            var innerDeferred = $.Deferred();
+
+            //Delete space if already exists
+            $.get(url, function(data) {
+                if (data.uri === url) {
+                    console.log("Attempting to delete existing space.");
+                    openapp.resource.del(url, function() {
+                        innerDeferred.resolve();
+                    });
+                } else {
+                    innerDeferred.resolve();
+                }
+            });
+
+            //Create space
+            innerDeferred.then(function() {
+                openapp.resource.post(
+                    spacesBaseUrl,
+                    function(data) {
+                        deferred.resolve(data.uri);
+                    }, {
+                        "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate": "http://purl.org/role/terms/space",
+                        "http://purl.org/dc/terms/title": spaceTitle,
+                        "http://www.w3.org/2000/01/rdf-schema#label": spaceLabel
+                    }
+                );
+            });
+            return deferred.promise();
+        }
+
+        // Create a new space on click
+        function onClickHandler() {
+            spaceName = $("#role-name").val();
+            createSpace(spaceName, 'Peters test space')
+        }
+
+    </script>
+</head>
+<body>
+<label for="role-name">ROLE space name: </label><input type="text" id="role-name">
+<button onclick="onClickHandler();">
+    Create ROLE space
+</button>
+</body>
+</html>

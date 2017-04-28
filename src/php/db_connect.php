@@ -34,5 +34,5 @@ if (!mysqli_select_db($connection, $database)) {
 }
 
 $db = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $user, $password);
-
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 return $db;

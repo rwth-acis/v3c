@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+    title="Boost Administration"
+    description="Config widget."
+    author="Team Boost"
+    author_email="neulinger@dbis.rwth-aachen.de"
+    height="450">
+    <Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+    <Service name="openapp"
+        xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+        openapp:service="http://purl.org/role/terms/spaceService"
+        openapp:permitReadAppend="http://purl.org/role/terms/data">
+
+        <Request method="" url=""/>
+      <Authorization url=""/>
+      <Access method="" url=""/>
+    </Service>
+    </OAuth>
+  </ModulePrefs>
+
+  <Content type="html">
+    <![CDATA[
+
+    <script src="http://virtus-vet.eu/boost/boostFebruary/js/require.js"></script>
+
+    <!-- Define CSS -->
+   <link rel="stylesheet" href="http://virtus-vet.eu/boost/boostFebruary/css/bootstrap.min.css">
+
+    <style>
+
+        #addKeywordsModal {
+          -ms-word-break: break-all;
+
+         /* Be VERY careful with this, breaks normal words wh_erever */
+         word-break: break-all;
+
+         /* Non standard for webkit */
+         word-break: break-word;
+
+        -webkit-hyphens: auto;
+           -moz-hyphens: auto;
+                hyphens: auto;
+        }
+
+    </style>
+
+    <!-- JavaScript Block -->
+    <script>
+
+    require( ['http://virtus-vet.eu/boost/boostFebruary/js/config.js'], function (config){
+      require( [
+          "async",
+          "rivets",
+          "bootbox",
+          "repositories",
+          "ladda",
+          "jquery",
+          "bootstrap",
+          "EmployeeManager",
+          "spin",
+          "ladda",
+          "BCNManager",
+          "iwc",
+          "ConfigManager",
+          "utils"
+          ], function(a,rivets, b) {
+            async = a;
+            bootbox = b;
+            var space;
+            var iwcClient;
+            var bcnsList = new Array();
+            var selectedLI;
+            var selectedBCN;
+            var config;  //used to allow/restrict search repositories
+            var model = {};
+            model.config = [];
+
+            if (openapp.param.user()) {
+              closeAutorisationWindow();
+            }
+
+            //gadgets.util.registerOnLoadHandler(init);
+            //function init(){
+
+            space = new openapp.oo.Resource(openapp.param.space());
+            iwcClient = new iwc.Client();
+            retrieveConfig(space, function(configObject){
+              model.config = configObject;
+            });
+
+              //}
+
+            function publishConfigChanged(configUri){
+                var intent = {
+                  component: "",
+                  data: configUri,
+                  dataType: "text/json",
+                  flags :["PUBLISH_GLOBAL"],
+                  action: "CONFIG_CHANGE"
+                };
+
+                iwcClient.publish(intent);
+              }
+
+
+            $(document).ready(function(){
+
+              rivets.bind($("#manageRepoModal").get(), {model:model});
+
+              // help button click
+
+              $('#question').click(function(){
+                $('#descriptionModal').modal({
+                keyboard: true
+                  });
+                });
+
+              /* manage search repositories */
+
+            $("#saveRepoButton").click(function(){
+                model.config.update(function(){
+                  publishConfigChanged(model.config.uri);
+                  $("#manageRepoModal").modal("hide");
+                });
+             });
+
+
+              $("#repoIDmenu").click(function() {
+                $("#manageRepoModal").modal();
+              });
+
+               /* open modal to add descriptions to LI's */
+
+              $("#keywordsIDmenu").click(function() {
+                $("#addKeywordsModal").modal();
+                $("#textInput").val('');
+                $('#textInput').addClass('hide');
+                $('#disabledText').addClass('hide');
+                $('#someLI').text("");              // remove previous li label
+                $('#someGoal').text("");              // remove previous goal label
+                $('#liDropClass').addClass('hide');    // remove previous li-dropdown list
+
+             });
+
+
+              retrieveAllBcns(space, function(bcns){
+                    bcnsList = bcns;
+
+
+                    for(var i = 0; i < bcnsList.length; i++){
+                     var bcn = bcnsList[i];
+
+                     };
+                     keywordsModal();
+                  });
+
+              /* assign description to selectedBCN-LI */
+
+              $("#assignButton").click(function(){
+                if ($('#someLI').text()===""){
+                  alert ("Please choose LI");
+                } else if ($("#textInput").val()) {
+                  selectedLI.description = $("#textInput").val();
+
+                  selectedBCN.update(function(){
+                    $("#addKeywordsModal").modal('hide');
+                });
+                 } else alert("Please enter description!");
+
+              });
+
+            });
+
+            function keywordsModal() {
+
+                 /* Sort according priority index and name */
+
+                bcnsList.sort(function(a, b){
+                  if (a.priority==b.priority) {if(a.name.toLowerCase() < b.name.toLowerCase()) return -1; else return 1;}
+                  if(a.priority > b.priority)  return -1; else return 1;
+
+                });
+
+                var template =    "<table id='keywordsTable' width='100%'>" +
+                                  "<tr>" +
+                                    "<td><h5>Choose goal: </h5><h5 id='someGoal' style='color:#3677AF; font-weight:bold;'></h5></td>" +
+                                    "<td style='width:100px;' align='center'>" +
+                                         "<div id='goal-btn-group' class='btn-group'>" +
+                                         "</div>" +
+                                   "</td>" +
+                                  "</tr>" +
+                                   "<tr>" +
+                                     "<td><h5>Choose learning indicator: </h5><h5 id='someLI' style='color:#3677AF; font-weight:bold;'></h5></td>" +
+                                     "<td style='width:100px;' align='center'>" +
+                                       "<div id='li-btn-group' class='btn-group'>" +
+                                       "</div>" +
+                                     "</td>" +
+                                  "</tr>" +
+                                    "<tr>" +
+                        "<td colspan='2'><h5 id ='disabledText' class='hide'>Enter related description: </h5></td>" +
+                        "</tr>"+
+                        "<tr>" +
+                        "<td></td>" +
+                        "<td></td>" +
+                        "</tr>"+
+                        "<tr>" +
+                        "<td colspan='2'><textarea class='form-control hide' id='textInput' rows='3'></textarea></td>" +
+                        "</tr>" +
+                        "</table>";
+
+                /* add dropdown list with BCNs */
+
+                var entry = $(template);
+                var goalDropClass = $('<div id="goalDropClass" class="btn-group"></div>');
+                var goalButton = $('<button type="button" class="btn btn-default dropdown-toggle li-btn" id="goalDropDown" data-toggle="dropdown"><span class="glyphicon glyphicon-chevron-down"></span></button>');
+
+
+                goalDropClass.append(goalButton);
+
+
+                var goalDropDownMenu = $('<ul class="dropdown-menu pull-right" role="menu" aria-labelledby="goalDropDown"></ul>');
+                var goal;
+
+                for (key in bcnsList) {
+
+                  var bcn = bcnsList[key];
+
+                  goal = $('<li role="presentation"> <a style="word-wrap: break-word; white-space: normal;" role ="menuitem" " href="#" tabindex="-1">'+bcn.name+'</a></li>');
+                  goal.find("a").data("dataBCNselected", bcn);
+                  goalDropDownMenu.append(goal);
+               }
+
+             goalDropClass.append(goalDropDownMenu);
+
+             entry.find("#goal-btn-group").append(goalDropClass);
+
+            $("#bodyKeywordsModal").append(entry);
+
+              /* add dropdown list with LIs */
+
+              var liDropClass = $('<div id="liDropClass" class="btn-group"></div>');
+              var liButton = $('<button type="button" class="btn btn-default dropdown-toggle li-btn" id="liDropDown" data-toggle="dropdown"><span class="glyphicon glyphicon-chevron-down"></span></button>');
+              liDropClass.append(liButton);
+              var liDropDownMenu = $('<ul class="dropdown-menu pull-right" role="menu" aria-labelledby="liDropDown"></ul>');
+              var learningIndicator;
+
+            $('#goalDropClass li a').click(function()
+             {
+              $('#someLI').text("");              // remove previous li label
+              $('#liDropClass li a').remove();    // remove previous li from li-dropdown list
+              $('#liDropClass').removeClass('hide');
+
+              selectedBCN =  $(this).data("dataBCNselected");
+
+              $('#someGoal').text(selectedBCN.name);
+
+              for(var key in bcnsList) {
+                if (bcnsList[key].name === selectedBCN.name) {
+
+                    var temp = bcnsList[key].learningIndicators;
+
+                     for (var j=0; j<temp.length; j++) {
+                      var selectedLearningIndicator = temp[j];
+
+                       learningIndicator = $('<li role="presentation"> <a style="word-wrap: break-word; white-space: normal;" role ="menuitem" " href="#" tabindex="-1">'+selectedLearningIndicator.name+'</a></li>');
+                       liDropDownMenu.append(learningIndicator);
+                       learningIndicator.find("a").data("dataLearningIndicator", selectedLearningIndicator);
+
+                     }
+                  }
+               }
+
+              liDropClass.append(liDropDownMenu);
+              entry.find("#li-btn-group").append(liDropClass);
+
+               $('#liDropClass li a').click(function()
+                  {
+                    selectedLI = $(this).data("dataLearningIndicator");
+                    $('#someLI').text(selectedLI.name);
+                    $('#textInput').removeClass('hide');
+                    $('#disabledText').removeClass('hide');
+                   });
+             });
+
+            }
+          });
+        });
+
+  </script>
+
+    <!-- HTML Block -->
+
+    <div style="overflow-y: scroll; height:450px;">
+      <div class="panel panel-primary">
+
+        <div class="panel-heading">
+            <button id="question" type="button" class="btn btn-default launch-modal" style="float:right; margin:-5 5 10 5px; color:#428BCA;"><span  class="glyphicon glyphicon-question-sign"></span></button>
+            <h3 class="panel-title">Control Boost Resources</h3>
+        </div>
+
+        <div class="list-group list-group-flush">
+          <a href="#" id="repoIDmenu" class="list-group-item">
+            <div><span class="glyphicon glyphicon-check pull-right" style="margin-right:5px;"></span>
+               <h5 class="list-group-item-heading">Manage Learning Repositories</h5>
+               <h6 class="list-group-item-text">Allow or restrict access to the learning repositories</h6>
+            </div>
+          </a>
+          <a href="#" id="keywordsIDmenu" class="list-group-item">
+            <div><span class="glyphicon glyphicon-list-alt pull-right" style="margin-right:5px;"></span>
+               <h5 class="list-group-item-heading"> Assign description to the LI´s </h5>
+              <h6 class="list-group-item-text">Provide description to the learning indicators to help your employees search for the relevant content </h6>
+            </div>
+
+          </a>
+
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal to manage repositories -->
+
+      <div class="modal fade" id="manageRepoModal" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h5 class="modal-title">Choose repositories that you would like to access:</h5>
+            </div>
+            <div class="modal-body">
+                <li rv-each-repository="model.config.repositorySelection" class="list-group-item">
+                  <div class="checkbox">
+                    <label>
+                      <input class="repositorySelection" rv-data-name="repository.name" rv-checked="repository.isSelected" type="checkbox"> {repository.name}
+                    </label>
+                  </div>
+                </li>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button id="saveRepoButton" type="button" class="btn btn-primary">Save changes</button>
+
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
+
+      <!-- Modal to assign LI description -->
+
+      <div class="modal fade" id="addKeywordsModal">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 class="modal-title">Assign description to learning indicators:</h4>
+                  </div>
+                  <div class="modal-body" id="bodyKeywordsModal">
+
+                  </div>
+                  <div class="modal-footer">
+                    <div class="form-actions">
+                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary"  id="assignButton">Assign description</button>
+                    </div>
+                  </div><!-- /.modal-footer -->
+              </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
+      <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Boost Administration Help</h4>
+            </div>
+          <div class="modal-body">
+            <div class="panel-group" id="levelsdef" align="justify">
+            <ul style="padding: 10px;">
+              <li>To manage learning repositories click on the  <span class="glyphicon glyphicon-check pull-center"></span> icon. In the new view check in learning repositories that will be available in the <i>Boost Search</i> widget.</li>
+              <li>To add description (keywords) to learning indicators click on the <span class="glyphicon glyphicon-list-alt pull-center" ></span> icon. In the new view choose goal, then learning indicator and enter description in the text field. Save changes, by clicking on the <i>Assign description</i>button.
+              <br>Employee can read this description in the <i>Learning Repository</i> widget.
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ]]>
+  </Content>
+</Module>

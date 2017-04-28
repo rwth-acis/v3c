@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+
+    <ModulePrefs title="Welcome"
+		description="Wlcome Widget."
+		author="Team Boost"
+		author_email="henm1314g3@dbis.rwth-aachen.de"
+		height="450"
+		width="500">
+  	<Require feature="opensocial-0.8" />
+    <Require feature="openapp" />
+    <OAuth>
+		<Service name="openapp"
+		    xmlns:openapp="http://www.role-project.eu/xml/openapp/opensocialext/"
+		    openapp:service="http://purl.org/role/terms/spaceService"
+		    openapp:permitReadAppend="http://purl.org/role/terms/data">
+
+		    <Request method="" url=""/>
+			<Authorization url=""/>
+			<Access method="" url=""/>
+		</Service>
+    </OAuth>
+    </ModulePrefs>
+
+    <Content type="html">
+    <![CDATA[
+
+		<script src="http://virtus-vet.eu/boost/boostDecember/js/require.js"></script>
+
+		<!-- Define CSS -->
+
+		<link href="http://virtus-vet.eu/boost/boostDecember/css/bootstrap.min.css" rel="stylesheet">
+		<link href="http://virtus-vet.eu/boost/boostDecember/css/tree.css" rel="stylesheet">
+		<link rel="stylesheet" href="http://virtus-vet.eu/boost/boostDecember/ladda/ladda-themeless.min.css">
+
+		<!-- CSS Block -->
+
+		<style>
+			@-moz-document url-prefix() {
+	 			 fieldset { display: table-cell; }
+			}
+
+		</style>
+
+		<!-- JavaScript Block -->
+
+		<script>
+
+
+		require( ['http://virtus-vet.eu/boost/boostDecember/js/config.js'], function (config){
+			require( [
+				"async",
+				"bootbox",
+			    "jquery",
+			    "jqueryUi",
+			    "bootstrap",
+			    "tree",
+			    "spin",
+			    "ladda",
+			    "ractive",
+			    "BCNManager",
+			    "LearningDocumentsManager",
+			    "WidgetsManager",
+			    "ExpertsManager",
+			    "AccessRightsManager",
+			    "iwc",
+			    "utils"
+			    ], function(a, b) {
+			    	async = a;
+			    	bootbox = b;
+
+					var space;
+					var iwcClient;
+					var userAccessRights;
+					var agreed;
+					var accessRights;
+
+					if (openapp.param.user()) {
+						closeAutorisationWindow();
+					}
+					//gadgets.util.registerOnLoadHandler(init);
+					//function init(){
+					space = new openapp.oo.Resource(openapp.param.space());
+					iwcClient = new iwc.Client();
+					iwcClient.connect(iwcCallback);
+					//}
+
+					$(function(){
+
+						// Get the access rights:
+						retrieveAccessRights(function(access){
+						accessRights = access;
+						userAccessRights = access.getUserAccessRights();
+						agreed = userAccessRights.hasAgreedToLicense;
+						//debug
+						//agreed = false;
+
+							if (!agreed)
+								$("#agreeLisenceModal").modal();
+
+						});  // end of the retrieveAccessRights
+					});
+
+					function iwcCallback(intent){
+							if(intent.action == "WELCOME_CREATE"){}
+						}
+
+					$("#agreeButton").click(function(){
+						userAccessRights.hasAgreedToLicense = true;
+						accessRights.update(function (){
+							$("#agreeLisenceModal").modal("hide");
+						});
+					})
+
+				});
+			});
+
+
+		</script>
+
+		<!-- HTML Block -->
+	<div style="overflow-y: scroll; height:450px;">
+		<div class ="panel panel-primary">
+			<div class="panel-heading">
+				<a href="http://www.boost-project.eu/" target="_blank" style="float:right; margin:-5 0 5 5px;"><img src="http://virtus-vet.eu/boost/boostDecember/resources/small_logo.gif" alt="overall" width="40" height="30" alt="BOOST website"></a>
+				<h3 class="panel-title"><span style="margin-right:5px;"></span> Welcome to the BOOST Project </h3>
+			</div>
+
+				<table class="table table-responsive" >
+			    	<tbody>
+			    		<tr class="active">
+			    			<td><img src="http://virtus-vet.eu/boost/boostDecember/resources/LLPlogo.png" class="img-responsive img-thumbnail" alt="LLL Logo" style="width:50%;"></td>
+			    			<td><img src="http://virtus-vet.eu/boost/boostDecember/resources/boost.png" class="img-responsive img-thumbnail" alt="BOOST Logo"></td>
+						</tr>
+						<tr>
+							<td colspan=2><small><strong>BOOST</strong> stands for  <strong>B</strong>usiness perf<strong>O</strong>rmance impr<strong>O</strong>vement through individual employee <strong>S</strong>kills <strong>T</strong>raining.</small></td>
+			   		 	</tr>
+			   		 	<tr>
+			   		 		<td colspan=2><small>With BOOST you can organise, manage and monitor training process in the small and micro enterprises. Below are a few steps to help you get started.</small></td>
+						</tr>
+						<tr class="active">
+							<td colspan=2><small><strong>If you are a Manager:</strong></small></td>
+						</tr>
+						<tr>
+							<td colspan=2>
+				            		<ul style="padding: 10px;">
+				            			<li><small>Assign user roles to employees using the <strong>Access Rights</strong> widget.</small></li>
+				            			<li><small>Define business goals and add learning indicators to them using the <strong>Business Goals</strong> widget. Assign priority to the goals, specifying the most improtant with a high priority.</small></li>
+					               	  	<li><small>Monitor business goals progress and employees competence in the <strong>Learning Progress</strong> widget. It works together with <strong>Business Goals</strong> and <strong>Business Employees</strong> widgets.</small> </li>
+					                	<li><small>Edit information about employees and assign goals to them, adjust their learning levels in the <strong>Business Employees</strong> widget.</small></li>
+					              	</ul>
+					        </td>
+						</tr>
+						<tr class="active">
+							<td colspan=2><small><strong>If you are an Employee:</strong></small></td>
+						</tr>
+						<tr>
+							<td colspan=2>
+							<ul style="padding: 10px;">
+
+					                	<li><small>Use a <strong>Boost Search</strong> widget to ﬁnd learning materials.</small></li>
+					               	  	<li><small>Watch and read interesting resources using <strong>Boost Viewer</strong> widget.</small></li>
+					                	<li><small>Save and organise your learning resources in the <strong>Learning Repository:</strong>
+					                	 You can review and add new learning documents, experts and widgets assigned to the goal and learning indicators.</small></li>
+					              		<li><small>Monitor your learning progress with the <strong>Learning Progress</strong> widget.</small></li>
+					              	</ul>
+					        </td>
+						</tr>
+						<tr >
+							<td colspan=2><small>We hope this Quick Start has been helpful in showing you how to get started using BOOST quickly and easily.
+				            For more detailed information please see help information provided in each widget and the BOOST User Guide, which is accessible <a href="http://virtus-vet.eu/boost/boostDecember/resources/boostGuide.pdf" target="_blank">here</a>.</small></td>
+						</tr>
+
+			   		 </tbody>
+				</table>
+
+	</div>
+
+    <div class="modal fade" id="agreeLisenceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+  					<div class="modal-header">
+    					<h4 class="modal-title" id="myModalLabel">License agreement</h4>
+  					</div>
+  					<div class="modal-body">
+    					<form role="form">
+								<div class="form-group"  align="justify">
+									<p> Copyright (c) <2013-2014>
+									This project has been funded with support from the European Commission.This web site reflects the views only of the authors, and the Commission cannot be held responsible for any use which may be made of the information contained therein.
+									</p>
+
+									<p>Kateryna Neulinger, Advanced Community Information Systems (ACIS) Group, Chair of Computer Science 5 (Databases & Information Systems), RWTH Aachen University, Germany</p>
+									<p>Andre Tebart, Master of Software Systems, RWTH Aachen University, Germany</p>
+									<p>Seyed Ehsan Badakhshan, Master of Media Informatics, RWTH Aachen University, Germany
+									All rights reserved.</p>
+
+
+									<p>Redistribution and use in source and binary forms, with or without modification, are permitted
+
+									provided that the following conditions are met:</p>
+
+									<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and
+
+									the following disclaimer.</p>
+
+									<p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+
+									and the following disclaimer in the documentation and/or other materials provided with the
+
+									distribution.</span>
+
+									<p>3. Neither the name of the copyright holder nor the names of its contributors may be used to
+
+									endorse or promote products derived from this software without specific prior written permission.</p>
+
+									<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+
+									IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+
+									IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+
+									DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+
+									ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+
+									(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+
+									LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+
+									ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+
+									NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+
+									IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+
+								</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+				        <button id="agreeButton" type="button" data-style="zoom-out" class="btn btn-primary ladda-button"><span class="ladda-label">Agree</span></button>
+  					</div>
+				</div>
+			</div>
+	</div>
+
+
+	]]>
+  </Content>
+</Module>

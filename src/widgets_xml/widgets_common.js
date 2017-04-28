@@ -1,7 +1,12 @@
 function sendUserActivity(action, value) {
   var widget_url = getWidgetInstanceUrl();
   $.ajax({ method: 'POST',
-     url: `http://virtus-vet.eu/src/php/monitor_service.php?widget_url=${widget_url}&action=${action}&value=${value}`,
+     url: `http://virtus-vet.eu/src/php/monitor_service.php`,
+     data: {
+       "widget_url": widget_url,
+       action: action || '',
+       value: value || ''
+     },
      crossDomain: true,
      xhrFields: {
        withCredentials: true
@@ -65,9 +70,9 @@ function loadTranslations() {
 
 $( document ).ready(function() {
     $(document).on('click', 'button', function() {
-      sendUserActivity('click',$(this).attr('id'));
-  });
-  $(document).on('click', 'input', function() {
-      sendUserActivity('click',$(this).attr('id'));
-  });
+    	sendUserActivity('click',$(this).attr('id'));
+	});
+	$(document).on('click', 'input', function() {
+    	sendUserActivity('click',$(this).attr('id'));
+	});
 });

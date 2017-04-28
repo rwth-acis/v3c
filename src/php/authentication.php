@@ -99,7 +99,7 @@ class Authentication
             // if($res->bOk === false) {
             //   die('Cannot retrieve User-information!');
             // }
-            //  
+            //	
             //$userProfile = json_decode($res->sMsg);
 
             return $userProfile;

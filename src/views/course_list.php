@@ -31,6 +31,7 @@
      AND courses.domain='$subject_id' ORDER BY id ASC")->fetchAll();
 
     $course_credits = $db->query("SELECT course_id, SUM(points) as credits FROM course_units GROUP BY course_id ORDER BY course_id ASC")->fetchAll();
+    $course_start_date = $db->query("SELECT course_id, MIN(start_date) as start FROM course_units GROUP BY course_id")->fetchAll();
     $course_deletion_notice = "";
     if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
         $course_deletion_notice = "<p class='alert alert-success'>Course was deleted successfully.</p>";
@@ -183,9 +184,22 @@
                                                     <?php $i++; } ?>
                                                 </td>
                                                 <td><?php echo $courses[$initCntr]["orga"]; ?></td>
-                                                <td><?php foreach ($course_dates_array as $start_date) {
-                                                    echo $start_date . "<br>";
-                                                } ?></td>
+                                                <td>
+                                                    <?php 
+                                                        $hasUnitStartDate = false;
+                                                        foreach ($course_start_date as $unit) {
+                                                            if($unit['course_id']==$current_course_id){
+                                                                echo $unit['start'] . "<br>";
+                                                                $hasUnitStartDate=true;
+                                                            }
+                                                        }
+                                                        if(!$hasUnitStartDate){
+                                                            foreach ($course_dates_array as $start_date) {
+                                                                echo $start_date . "<br>";
+                                                            } 
+                                                        }
+                                                    ?>    
+                                                </td>
                                                 <td class="language-flag-rows">
                                                     <?php $i=0; foreach ($lang_array as $c_lang) {
                                                         ?>

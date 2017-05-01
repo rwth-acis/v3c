@@ -30,6 +30,7 @@
      AND courses.id = courses_lng.course_id
      AND courses.domain='$subject_id' ORDER BY id ASC")->fetchAll();
 
+    $course_credits = $db->query("SELECT course_id, SUM(points) as credits FROM course_units GROUP BY course_id ORDER BY course_id ASC")->fetchAll();
     $course_deletion_notice = "";
     if (isset($_GET["deleted"]) && $_GET["deleted"] == 1) {
         $course_deletion_notice = "<p class='alert alert-success'>Course was deleted successfully.</p>";
@@ -116,6 +117,7 @@
                                             <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                             <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                             <th></th>
+                                            <th><?php echo getTranslation("courselist:choose:credits", "Credits");?></th>
                                             <?php if ($isLecturer) { ?>
                                             <th></th>
                                             <th></th>
@@ -154,6 +156,12 @@
 
                                             $current_course_id = $courses[$initCntr]["id"];
                                             $current_course_url = $courses[$initCntr]["space_url"];
+                                            $current_course_credits = 0;
+                                            for ($cntc = 0; $cntc < count($course_credits); $cntc++) {
+                                                if($course_credits[$cntc]["course_id"]==$current_course_id)
+                                                    $current_course_credits = $course_credits[$cntc]["credits"];
+                                            }
+                                            
 
                                             if($displayed_course_flag){
                                                 $current_course_name = $temp_name;
@@ -191,6 +199,7 @@
                                                     }
                                                     ?>
                                                 </td>
+                                                <td><?php echo $current_course_credits; ?></td>
                                                 <?php if ($isLecturer) { ?>
                                                 <td class="rowlink-skip">
                                                     <?php

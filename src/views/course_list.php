@@ -187,9 +187,11 @@
                                                 <td>
                                                     <?php 
                                                         $hasUnitStartDate = false;
+                                                        $current_start = 0;
                                                         foreach ($course_start_date as $unit) {
                                                             if($unit['course_id']==$current_course_id){
                                                                 echo $unit['start'] . "<br>";
+                                                                $current_start = $unit['start'];
                                                                 $hasUnitStartDate=true;
                                                             }
                                                         }
@@ -267,9 +269,17 @@
                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                     class="btn btn-delete btn-sm btn-warning btn-block"
                                                     value="Delete"></td>
-                                                    <td class="rowlink-skip"><a href="../php/role_redirect.php?space=<?php echo $current_course_url; ?>" target="_blank" class="margin-left btn btn-sm btn-warning ">
+                                                    <td class="rowlink-skip">
+                                                    <?php
+                                                        if($hasUnitStartDate && time() >= strtotime($current_start) || !$hasUnitStartDate){
+                                                    ?>
+                                                    <a href="../php/role_redirect.php?space=<?php echo $current_course_url; ?>" target="_blank" class="margin-left btn btn-sm btn-warning ">
                                                         <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
-                                                    </a></td>
+                                                    </a>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                    </td>
                                                     <?php } ?>
                                                 </tr>
                                                 <tr>

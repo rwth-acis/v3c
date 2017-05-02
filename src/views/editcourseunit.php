@@ -350,12 +350,15 @@
                                 placeholder="http://..." aria-describedby="basic-addon1">
                             </div>
                             <div class="col-sm-12">
-                                <input name="slides-file" class="upload-file " type="file">
+                                <input name="slides-file" class="upload-file " type="file"><br>
+                                <div class="loader"></div>
                             </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <label style="float:left" for="slides-link"><?php echo getTranslation("designunit:content:supportedFiles", "Supported Files:");?> PDF</label>
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                     <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
                 </div>
@@ -388,12 +391,14 @@
                               placeholder="http://..." aria-describedby="basic-addon1">
                           </div>
                           <div class="col-sm-12">
-                              <input name="image-file" class="upload-file " type="file">
+                              <input name="image-file" class="upload-file " type="file"><br>
+                                <div class="loader"></div>
                           </div>
                       </div>
                   </div>
               </div>
               <div class="modal-footer">
+                  <label style="float:left" for="slides-link"><?php echo getTranslation("designunit:content:supportedFiles", "Supported Files:");?> BMP, GIF, JPG, PNG, SVG</label>
                   <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                   <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
               </div>
@@ -420,17 +425,19 @@
                             </div>
                             <div class="col-sm-12">
                                 <label for="video-link"><?php echo getTranslation("designunit:content:title", "Link");?> (<?php echo getTranslation("designunit:content:videolink", "Video or Audio");?>)</label><br>
-                                <input type="text" class="form-control protocontent uplad-target" name="video-link"
+                                <input type="text" class="form-control protocontent upload-target" name="video-link"
                                 placeholder="http://..." aria-describedby="basic-addon1">
                             </label>
                             <div class="col-sm-12">
-                                <input name="video-file" class="upload-file " type="file">
+                                <input name="video-file" class="upload-file " type="file"><br>
+                                <div class="loader"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
+            <label style="float:left" for="slides-link"><?php echo getTranslation("designunit:content:supportedFiles", "Supported Files:");?> MP4, WebM, FLV, AAC, MP3, Vorbis.</label>
                 <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                 <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
             </div>
@@ -1111,6 +1118,7 @@ function uploadData(handler,type){
     var form_data = new FormData();
     form_data.append('file', file_data);
     form_data.append('type', type);
+    $(handler).parents('.modal-body').find('.loader').addClass("loading");
     $.ajax({
       url: '../php/upload.php', // point to server-side PHP script
       dataType: 'text',  // what to expect back from the PHP script, if anything
@@ -1120,8 +1128,10 @@ function uploadData(handler,type){
       data: form_data,
       type: 'post',
       success: function(php_script_response){
+        //debugger
         console.log($(handler).parents('.modal-body').find('.upload-target'))
         $(handler).parents('.modal-body').find('.upload-target').val(php_script_response)
+        $(handler).parents('.modal-body').find('.loader').removeClass("loading");
       }
      });
 }

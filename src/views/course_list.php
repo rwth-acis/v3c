@@ -118,7 +118,6 @@
                                             <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                             <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                             <th></th>
-                                            <th><?php echo getTranslation("courselist:choose:credits", "Credits");?></th>
                                             <?php if ($isLecturer) { ?>
                                             <th></th>
                                             <th></th>
@@ -215,7 +214,6 @@
                                                     }
                                                     ?>
                                                 </td>
-                                                <td><?php echo $current_course_credits; ?></td>
                                                 <?php if ($isLecturer) { ?>
                                                 <td class="rowlink-skip">
                                                     <?php
@@ -289,7 +287,8 @@
                                                         data-target="#description-<?php echo $index; ?>"><?php echo getTranslation("courselist:choose:description", "Description");?>
                                                     </button>
                                                     <div id="description-<?php echo $index; ?>" class="collapse">
-                                                        <?php echo $current_course_description; ?>
+                                                        <?php echo $current_course_description; ?><br><br>
+                                                        <?php echo getTranslation("courselist:choose:credits", "Credits").": ".$current_course_credits; ?>
                                                     </div>
                                                 </td>
                                             </tr>

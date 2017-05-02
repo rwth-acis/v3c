@@ -31,6 +31,11 @@ if (!$success) {
     die("Error saving course.");
 }
 
+$courses = $db->prepare("INSERT INTO courses_lng (course_id, lang, name, description, profession) (SELECT :cid, :unit_lang, name, description, profession
+  FROM courses_lng WHERE course_id = :cid AND lang = (SELECT default_lang FROM courses WHERE id=:cid) AND NOT EXISTS (SELECT 1 FROM courses_lng WHERE course_id = :cid AND lang = :unit_lang))");
+$courses->bindParam(":cid", $course_id, PDO::PARAM_INT);
+$courses->bindParam(":unit_lang", $unit_lang, PDO::PARAM_STR);
+$courses->execute();
 
 $statement = $conn->prepare("REPLACE INTO course_units_lng
                               SET title = :title,

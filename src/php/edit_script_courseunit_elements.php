@@ -61,6 +61,20 @@ $storeWidgetData = array(
       die("Error saving image data.");
     }
   },
+  'feedback' => function($conn, $element_id, $lang, $data) {
+    $query = "REPLACE INTO widget_data_feedback_lng (element_id,lang,title,`text`) VALUES (:element_id, :lang, :title, :text)";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    $stmt->bindValue(":title", (isset($data['title']) ? $data['title'] : ""), PDO::PARAM_STR);
+    $stmt->bindValue(":text", (isset($data['text']) ? $data['text'] : ""), PDO::PARAM_STR);
+
+    if (!$stmt->execute()) {
+      http_response_code(400);
+      print_r($stmt->errorInfo());
+      die("Error saving feedback data.");
+    }
+  },
   'video' => function($conn, $element_id, $lang, $data) {
     $query = "REPLACE INTO widget_data_video (element_id,lang,title,link) VALUES (:element_id, :lang, :title, :link)";
     $stmt = $conn->prepare($query);
@@ -257,6 +271,26 @@ $loadWidgetData = array(
       return array(
         "title" => $data["title"],
         "link" => $data["link"]
+        );
+    }
+    else {
+      return false;
+    }
+  },
+  'feedback' => function($conn, $element_id, $lang) {
+    $stmt = $conn->prepare("SELECT * FROM widget_data_feedback_lng WHERE element_id = :element_id AND lang = :lang LIMIT 1");
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
+    if (!$stmt->execute()) {
+      echo "Error loading course.";
+    } else {
+      $data = $stmt->fetch();
+    }
+
+    if (is_array($data))  {
+      return array(
+        "title" => $data["title"],
+        "text" => $data["text"]
         );
     }
     else {

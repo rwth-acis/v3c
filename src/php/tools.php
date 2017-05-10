@@ -317,6 +317,9 @@ function getWidgetXML($widget)
         case 'image':
         return "http://virtus-vet.eu/src/widgets_xml/image_widget/widget.xml";
         break;
+        case 'feedback':
+        return "http://virtus-vet.eu/src/widgets_xml/feedback_widget/widget.xml";
+        break;
         case 'video':
         return "http://virtus-vet.eu/src/widgets_xml/video_widget/widget.xml";
         break;

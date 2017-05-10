@@ -49,7 +49,7 @@
         <div class='container'>
             <div class='row'>
                 <h1><?php echo getTranslation("designunit:head:title", "Edit Course Unit");?> "<?php echo htmlentities($course_unit['title']); ?>"</h1>
-                <a href="editcourse.php?id=<?php echo $_GET['cid'] ?>&lang=<?php echo $_GET['ulang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a> 
+                <a href="editcourse.php?id=<?php echo $_GET['cid'] ?>&lang=<?php echo $_GET['ulang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>
             </div>
         </div>
     </header>
@@ -128,6 +128,69 @@
         <div class="row virtus-pw-prototype-topbar">
             <div class="virtus-pw-name col-sm-12">
                 <?php echo getTranslation("designunit:content:imagewidget", "Image Widget");?>
+            </div>
+            <div class="virtus-pw-prototype-top-toolbar">
+                <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
+                <span class="glyphicon glyphicon glyphicon-pencil virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
+                <span class="glyphicon glyphicon rm-icon glyphicon glyphicon-remove virtus-pw-padding-sides-02rem"
+                aria-hidden="true"></span>
+            </div>
+        </div>
+        <div class="virtus-pw-content-container">
+            <div class="row virtus-pw-content-wrapper">
+                <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                        <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                        aria-label="Left Align"
+                        data-toggle="modal"
+                        data-target=".pw-modal-slideviewer">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
+                    </button>
+                    <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
+                </div>
+                <div class="virtus-pw-sliderviewer-content">
+                    <ul>
+                        <li type="square"><br>
+                            <div class="slides-question-text"> dolor</div>
+                        </li>
+                        <li type="square">
+                            <div class="slides-question-text ">Lorem ipsum dolor sit amet</div>
+                        </li>
+                        <li type="square">
+                            <div class="slides-question-text">Lorem ipor sit amet</div>
+                        </li>
+                        <li type="square">
+                            <div class="slides-question-text">Lorem ipor sit amet</div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="col-sm-12 virtus-pw-content">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon"
+                        aria-hidden="true"></span>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="slide-viewer-slideindex-style">1/20</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon"
+                        aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="virtus-pw-prototype virtus-pw-hide pw-slide-viewer pw-feedback-widget" id="prototypeFeedbackWidget">
+        <div class="row virtus-pw-prototype-topbar">
+            <div class="virtus-pw-name col-sm-12">
+                <?php echo getTranslation("designunit:content:feedbackwidget", "Feedback Widget");?>
             </div>
             <div class="virtus-pw-prototype-top-toolbar">
                 <span class="glyphicon glyphicon glyphicon glyphicon-info-sign virtus-pw-padding-sides-02rem"
@@ -406,6 +469,41 @@
       </div>
   </div>
 
+  <div class="modal fade pw-modal-feedback" tabindex="-1" role="dialog" aria-labelledby="modal"
+  id="prototypeFeedbackWidgetModal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>-->
+                <h4 class="modal-title" id="myModalLabel"><?php echo getTranslation("designunit:content:feedbackwidget", "Feedback Widget");?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="image-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
+                            <input type="text" class="form-control protocontent"
+                            name="feedback-title"
+                            placeholder="Title" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="image-link"><?php echo getTranslation("designunit:content:description", "Description");?></label><br>
+                            <input type="text" class="form-control protocontent"
+                            name="feedback-text"
+                            placeholder="Text" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <button type="button" class="btn btn-success modal-save-button"  data-dismiss="modal"><?php echo getTranslation("designunit:content:apply", "Apply");?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <div class="modal fade pw-modal-video" tabindex="-1" role="dialog" aria-labelledby="modal"
     id="prototypeVideoViewerModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" role="document">
@@ -624,7 +722,9 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     {name: '<?php echo getTranslation("designunit:content:videowidget", "Video Widget");?>', prototypeName: 'prototypeVideoViewer', modalname: 'prototypeVideoViewerModal', widgetType: 'video'},
     {name: '<?php echo getTranslation("designunit:content:quizwidget", "Quizzes Widget");?>', prototypeName: 'prototypeQuizzesViewer', modalname: 'prototypeQuizzesViewerModal', widgetType: 'quiz'},
     {name: '<?php echo getTranslation("designunit:content:hangoutwidget", "Video Conference Widget");?>', prototypeName: 'prototypeHangouts', modalname: 'prototypeHangoutsModal', widgetType: 'hangout'},
-    {name: '<?php echo getTranslation("designunit:content:imagewidget", "Image Widget");?>', prototypeName: 'prototypeImageViewer', modalname: 'prototypeImageViewerModal', widgetType: 'image'}
+    {name: '<?php echo getTranslation("designunit:content:imagewidget", "Image Widget");?>', prototypeName: 'prototypeImageViewer', modalname: 'prototypeImageViewerModal', widgetType: 'image'},
+    {name: '<?php echo getTranslation("designunit:content:feedbackwidget", "Feedback Widget");?>', prototypeName: 'prototypeFeedbackWidget', modalname: 'prototypeFeedbackWidgetModal', widgetType: 'feedback'}
+
     ];
 
     var totalWidgets = 0; //counting amount of Widgets added, without couting removals (this variable is only used for the indexing of modals within the widgets. Don't use it for something else.
@@ -893,6 +993,13 @@ function spaceToJson() {
           link: el.attr("data-image-link")
       };
     },
+    feedback: function(el) {
+      return {
+        type: "feedback",
+        title: el.attr("data-feedback-title"),
+        text: el.attr("data-feedback-text")
+      };
+    },
     video: function(el) {
       return {
         type: "video",
@@ -964,6 +1071,10 @@ function jsonToSpace(data) {
   image: function(el, data) {
     el.attr("data-image-title", data.title);
     el.attr("data-image-link", data.link);
+  },
+  feedback: function(el, data) {
+    el.attr("data-feedback-title", data.title);
+    el.attr("data-feedback-text", data.text);
   },
   video: function(el, data) {
       el.attr("data-video-title", data.title);

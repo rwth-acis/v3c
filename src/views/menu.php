@@ -81,6 +81,13 @@
                 <ul class='nav navbar-nav pull-right mainNav'>
                     <li><a href='welcome.php'><?php echo getTranslation("general:button:home", "Home");?></a></li>
                     <li><a href='subjects.php'><?php echo getTranslation("general:button:courses", "Courses");?></a></li>
+                    <?php
+                    include '../php/access_control.php';
+                    $accessControl = new AccessControl();
+                    ?>
+                    <?php if ($accessControl->canEnterLecturerMode()): ?>
+                      <li><a href='../php/phpbb_redirect.php'><?php echo getTranslation("general:button:forum", "Forum");?></a></li>
+                    <?php endif; ?>
                     <li>
                         <span id="signinButton">
                             <span class="oidc-signin"

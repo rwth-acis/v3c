@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 session_start();
 
 include '../php/db_connect.php';
@@ -10,6 +11,7 @@ include '../php/access_control.php';
 
 
 define('IN_PHPBB', true);
+define('DISABLE_V3C_REDIRECT', true);
 $phpbb_root_path = "../../forum/";
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.'.$phpEx);

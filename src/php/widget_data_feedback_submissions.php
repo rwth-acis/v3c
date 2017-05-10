@@ -38,7 +38,7 @@ $store = isset($_GET['store']);
 if ($store) {
   $inputText = file_get_contents('php://input');
 
-  $stmt = $conn->prepare("INSERT INTO widget_data_feedback_submissions (user_id, element_id, content) VALUES (:user_id, :element_id, :content)");
+  $stmt = $conn->prepare("REPLACE INTO widget_data_feedback_submissions (user_id, element_id, content) VALUES (:user_id, :element_id, :content)");
   $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
   $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
   $stmt->bindParam(":content", $inputText, PDO::PARAM_STR);

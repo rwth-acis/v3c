@@ -15,6 +15,7 @@ if ($tab == "") {
 <section class='container'>
   <ul class="nav nav-tabs">
     <li<?php echo $tab=='participants' ? ' class="active"' : '' ?>><a href="?id=<?php echo $course_id ?>&lang=<?php echo $course_lang ?>&tab=participants">Participants</a></li>
+    <li<?php echo $tab=='feedback' ? ' class="active"' : '' ?>><a href="?id=<?php echo $course_id ?>&lang=<?php echo $course_lang ?>&tab=feedback">Feedback</a></li>
     <li<?php echo $tab=='activity' ? ' class="active"' : '' ?>><a href="?id=<?php echo $course_id ?>&lang=<?php echo $course_lang ?>&tab=activity">Activity</a></li>
   </ul>
 

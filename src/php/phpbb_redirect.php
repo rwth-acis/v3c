@@ -51,7 +51,7 @@ function registerIfNotExistsToPhpBB($username, $password, $email, $given_name, $
         'username'              => $username,
         'user_password'         => phpbb_hash($password),
         'user_email'            => $email,
-        'group_id'              => (int) 4,
+        'group_id'              => (int) 2, // TODO adjust!
 //        'user_lang'             => "en",
         'user_type'             => USER_NORMAL,
     );

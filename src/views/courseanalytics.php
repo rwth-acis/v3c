@@ -14,9 +14,9 @@ $course_lang = filter_input(INPUT_GET, 'lang');
 </head>
 
 <body>
-  <?php include "menu.php"; ?>
+  <?php require_once "menu.php"; ?>
   <?php
-    $conn = require_once '../php/db_connect.php';
+    $conn = include '../php/db_connect.php';
 
     // Gets course details with it's creator information
     $stmt = $conn->prepare("SELECT courses.*, courses_lng.*, organizations.name AS orga, organizations.email AS orga_email
@@ -55,7 +55,7 @@ $course_lang = filter_input(INPUT_GET, 'lang');
 </header>
 <?php
 // Check whether the currently logged in user is allowed to edit courses
-require '../php/access_control.php';
+require_once '../php/access_control.php';
 
 
 $accessControl = new AccessControl();

@@ -40,7 +40,7 @@
 
 <?php
 // Check whether the currently logged in user is allowed to create courses
-require '../php/access_control.php';
+require_once '../php/access_control.php';
 
 $id = filter_input(INPUT_GET, 'tid');
 $lang = filter_input(INPUT_GET, 'tlang');

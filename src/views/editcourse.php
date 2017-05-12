@@ -54,7 +54,7 @@ if (!$success) {
 </header>
 <?php
 // Check whether the currently logged in user is allowed to edit courses
-require '../php/access_control.php';
+require_once '../php/access_control.php';
 
 
 $accessControl = new AccessControl();

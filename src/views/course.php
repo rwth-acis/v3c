@@ -10,9 +10,9 @@
     <?php include("menu.php"); ?>
 
     <?php
-    $conn = require_once '../php/db_connect.php';
-    include '../php/tools.php';
-    include '../php/access_control.php';
+    $conn = include '../php/db_connect.php';
+    require_once '../php/tools.php';
+    require_once '../php/access_control.php';
     $accessControl = new AccessControl();
     $userManagement = new UserManagement();
 

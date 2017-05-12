@@ -48,7 +48,7 @@ if (!$success) {
     <div class='container'>
       <div class='row'>
         <h1><?php echo getTranslation("editcourse:head:edit", "Edit Your Course");?> "<?php echo htmlentities($course['name']); ?>"</h1>
-        <a href="editcourse.php?id=<?php echo $_GET['id'] ?>&lang=<?php echo $_GET['lang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>        
+        <a href="course.php?id=<?php echo $_GET['id'] ?>&lang=<?php echo $_GET['lang'] ?>" class="tagline"><?php echo getTranslation("general:header:back", "Back");?></a>        
     </div>
 </div>
 </header>

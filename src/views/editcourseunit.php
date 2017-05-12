@@ -140,7 +140,7 @@
         </div>
         <div class="virtus-pw-content-container">
             <div class="row virtus-pw-content-wrapper">
-                <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                <div class="col-sm-12 virtus-pw-image-img-wrapper" style="height:100%;">
                     <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
                         <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
                         aria-label="Left Align"
@@ -150,38 +150,7 @@
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
-                <div class="virtus-pw-sliderviewer-content">
-                    <ul>
-                        <li type="square"><br>
-                            <div class="slides-question-text"> dolor</div>
-                        </li>
-                        <li type="square">
-                            <div class="slides-question-text ">Lorem ipsum dolor sit amet</div>
-                        </li>
-                        <li type="square">
-                            <div class="slides-question-text">Lorem ipor sit amet</div>
-                        </li>
-                        <li type="square">
-                            <div class="slides-question-text">Lorem ipor sit amet</div>
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
-            <div class="col-sm-12 virtus-pw-content">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon"
-                        aria-hidden="true"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="slide-viewer-slideindex-style">1/20</span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon"
-                        aria-hidden="true"></span>
-                    </div>
-                </div>
+                <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.png'>
             </div>
         </div>
     </div>
@@ -203,7 +172,7 @@
         </div>
         <div class="virtus-pw-content-container">
             <div class="row virtus-pw-content-wrapper">
-                <div class="col-sm-12 virtus-pw-slide-img-wrapper">
+                <div class="col-sm-12 virtus-pw-slide-img-wrapper" style="height:100%;">
                     <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
                         <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
                         aria-label="Left Align"
@@ -230,21 +199,6 @@
                     </ul>
                 </div>
 
-            </div>
-            <div class="col-sm-12 virtus-pw-content">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <span class="glyphicon glyphicon glyphicon-chevron-left slideviewer-nav-icon"
-                        aria-hidden="true"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="slide-viewer-slideindex-style">1/20</span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="glyphicon glyphicon-chevron-right slideviewer-nav-icon"
-                        aria-hidden="true"></span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

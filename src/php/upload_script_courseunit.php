@@ -3,9 +3,10 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require '../php/role_api.php';
-require '../php/tools.php';
+require '../php/role_database_sync.php';
 $conn = require '../php/db_connect.php';
+
+$role = new RoleSync();
 
 // Get input data from form
 $course_id = filter_input(INPUT_GET, "course_id", FILTER_VALIDATE_INT);
@@ -31,34 +32,7 @@ if (!$success) {
 
 $course_unit_id = $conn->lastInsertId();
 
-// get space url
-$statement = $conn->prepare("SELECT space_url
-                        FROM courses
-                        WHERE courses.id = :course_id
-                        ");
-
-$statement->bindParam(":course_id", $course_id, PDO::PARAM_INT);
-
-$success = $statement->execute();
-if ($success) {
-    $space_url = $statement->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// creating activity
-$api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
-$activity = $api->addActivityToSpace($space_url[0]['space_url'], $name);
-
-$statement = $conn->prepare("UPDATE course_units SET activity_url= :activity_url
-                             WHERE id=:id");
-$statement->bindParam(":activity_url", $activity, PDO::PARAM_STR);
-$statement->bindParam(":id", $course_unit_id, PDO::PARAM_INT);
-$success = $statement->execute();
-if (!$success) {
-    print_r($statement->errorInfo());
-    die("Error updating activity url.");
-}
-
-
+// create lang specific entry
 $stmt = $conn->prepare("INSERT INTO course_units_lng (unit_id, title, lang, description)
                              VALUES (:unit_id, :name, :lang, :description)");
 $stmt->bindParam(":name", $name, PDO::PARAM_STR);
@@ -71,6 +45,9 @@ if (!$success) {
     print_r($stmt->errorInfo());
     die("Error saving course unit.");
 }
+
+// role
+$role->createUnitActivity($course_unit_id);
 
 // After creating a course, the user is redirected to the edit page. The reason
 // for this is, that it is not possible to add models on addcourse.php. But the user

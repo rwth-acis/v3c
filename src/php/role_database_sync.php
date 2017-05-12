@@ -37,8 +37,32 @@ class RoleSync {
     }
   }
 
-  function createUnitActivity() {
-    // TODO
+  function createUnitActivity($unit_id) {
+    // get unit information
+    $statement = $this->conn->prepare(
+      "SELECT space_url, course_units_lng.title
+      FROM courses, course_units, course_units_lng
+      WHERE course_units.id = :unit_id AND
+            courses.id = course_units.course_id AND
+            course_units.id = course_units_lng.unit_id AND course_units.default_lang = course_units_lng.lang");
+    $statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+      print_r($statement->errorInfo());
+      die("Error fetching activity information.");
+    }
+    $unit_data = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // create activity
+    $activity = $this->api->addActivityToSpace($unit_data['space_url'], $unit_data['title']);
+
+    // add to database
+    $statement = $this->conn->prepare("UPDATE course_units SET activity_url= :activity_url WHERE id=:unit_id");
+    $statement->bindParam(":activity_url", $activity, PDO::PARAM_STR);
+    $statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+        print_r($statement->errorInfo());
+        die("Error updating activity url.");
+    }
   }
 
   function destroyUnitActivity() {

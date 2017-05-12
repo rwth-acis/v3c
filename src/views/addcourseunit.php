@@ -21,7 +21,7 @@
 <?php
 
 // Check whether the currently logged in user is allowed to create courses
-require '../php/access_control.php';
+require_once '../php/access_control.php';
 $accessControl = new AccessControl();
 $course_id = filter_input(INPUT_GET, 'courseid', FILTER_VALIDATE_INT);
 $course_lang = filter_input(INPUT_GET, 'lang');

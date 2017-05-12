@@ -52,7 +52,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 <div id="table-container">
     <?php
     include '../php/db_connect.php';
-    include '../php/tools.php';
+    require_once '../php/tools.php';
 
     $query = $db->query("SELECT * FROM subjects");
     $result = $query->fetchAll();

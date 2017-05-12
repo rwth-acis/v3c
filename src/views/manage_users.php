@@ -16,8 +16,8 @@ include("menu.php");
 // Get all entries from the user table in the database
 
 include '../php/db_connect.php';
-include '../php/tools.php';
-include '../php/access_control.php';
+require_once '../php/tools.php';
+require_once '../php/access_control.php';
 
 $accessControl = new AccessControl();
 $isAdmin = $accessControl->isAdmin();

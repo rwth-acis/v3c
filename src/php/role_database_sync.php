@@ -103,6 +103,13 @@ class RoleSync {
       print_r($stmt->errorInfo());
       die("Error updating activity url.");
     }
+
+    $stmt = $this->conn->prepare("UPDATE course_elements SET widget_role_url=NULL WHERE unit_id = :unit_id");
+    $stmt->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
+    if (!$stmt->execute()) {
+      print_r($stmt->errorInfo());
+      die("Error updating widget urls.");
+    }
   }
 
   function createElementWidget($element_id) {
@@ -202,6 +209,63 @@ class RoleSync {
 
     // update space
     $this->api->moveWidgets($unit_data['space_url'],$unit_data['activity_url'], $widget_data);
+  }
+
+  function recreateRole() {
+    /*
+    * Note that the ROLE instance must be emtpy to perform this operation!
+    */
+
+    // recreate spaces
+    $statement = $this->conn->prepare("SELECT id FROM courses");
+    if (!$statement->execute()) {
+      print_r($statement->errorInfo());
+      die("Error fetching course information.");
+    }
+    while($course = $statement->fetch(PDO::FETCH_ASSOC)) {
+      $this->recreateCourseSpace($course['id']);
+    }
+  }
+
+  function recreateCourseSpace($course_id) {
+    /*
+    * Note that if there are "lost" activities without any reference from the database,
+    * they will still resist after recreation, because a space cannot be completely destroyed
+    */
+
+    // create if not exists
+    $this->createCourseSpace($course_id);
+
+    // recreate activities
+    $statement = $this->conn->prepare("SELECT id FROM course_units WHERE course_id = :course_id");
+    $statement->bindParam(":course_id", $course_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+      print_r($statement->errorInfo());
+      die("Error fetching unit information.");
+    }
+    while($unit = $statement->fetch(PDO::FETCH_ASSOC)) {
+      $this->recreateUnitActivity($unit['id']);
+    }
+  }
+
+  function recreateUnitActivity($unit_id) {
+    // clean / recreate activity
+    $this->destroyUnitActivity($unit_id);
+    $this->createUnitActivity($unit_id);
+
+    // recreate widgets
+    $statement = $this->conn->prepare("SELECT id FROM course_elements WHERE unit_id = :unit_id");
+    $statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+      print_r($statement->errorInfo());
+      die("Error fetching element information.");
+    }
+    while($element = $statement->fetch(PDO::FETCH_ASSOC)) {
+      $this->createElementWidget($element['id']);
+    }
+
+    // rearrange them
+    $this->updateUnitActivityWidgets($unit_id);
   }
 }
 ?>

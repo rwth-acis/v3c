@@ -47,9 +47,7 @@ class RoleAPI {
           preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $result, $matches);
           if(sizeof($matches[1])>0){
             $this->cookie = $matches[1][0];
-            $c = explode("=",$matches[1][0]);
-            setcookie('conserve_session',$c[1],time()+60*10, '/');
-            header("Cookie: ".$matches[1][0]);
+
             return true;
           }
           break;
@@ -60,6 +58,12 @@ class RoleAPI {
       }
         //return ($info['response_code'] == 200);
       curl_close($ch);
+    }
+
+    public function login_cookie() {
+      $c = explode("=",$this->cookie);
+      setcookie('conserve_session',$c[1],time()+60*10, '/');
+      header("Cookie: ".$this->cookie);
     }
 
     private function get_string_between($string, $start, $end){

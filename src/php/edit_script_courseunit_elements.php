@@ -10,8 +10,10 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Create database connection
 $conn = require '../php/db_connect.php';
-require '../php/tools.php';
-require '../php/role_api.php';
+// require '../php/tools.php';
+
+require '../php/role_database_sync.php';
+$role = new RoleSync();
 
 
 
@@ -400,19 +402,10 @@ if ($store) { // store to db
 
   $current_ids = array();
 
-  // role api
-  $api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
-  $widgets = array();
   foreach ($input as $element) {
     $element_id = -1;
     if (!isset($element['element_id'])) { // create course element
-
-      // Add widget to activity in role space
-      // creating activity
-      $widgetXML = getWidgetXML($element['widget']['type']);
-
-      $widget_role_url = $api->addWidgetToSpace($course['space_url'], $unit['activity_url'],$widgetXML);
-
+      // store to DB
       $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang, widget_role_url, unit_id) VALUES (:type, :x, :y, :width, :height, :lang, :widget_role_url, :unit_id)");
       $stmt->bindParam(":type", $element['widget']['type'], PDO::PARAM_STR);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
@@ -431,11 +424,10 @@ if ($store) { // store to db
       }
 
       $element_id = $conn->lastInsertId();
-
-      $element['xml'] = $widget_role_url;
-      array_push($widgets, $element);
-
       $current_ids[] = $element_id;
+
+      // create widget
+      $role->createElementWidget($element_id);
     }
     else { // update course element
       $widget = getSingleDatabaseEntryByValue('course_elements','id',$element['element_id']);
@@ -448,9 +440,6 @@ if ($store) { // store to db
       $stmt->bindParam(":height", $element['height'], PDO::PARAM_INT);
       // widget type cannot be changed
 
-      $element['xml'] = $widget['widget_role_url'];
-      array_push($widgets, $element);
-
       $success = $stmt->execute();
       if (!$success) {
         http_response_code(400);
@@ -459,7 +448,6 @@ if ($store) { // store to db
       }
 
       $element_id = $element['element_id'];
-
       $current_ids[] = $element['element_id'];
     }
 
@@ -467,36 +455,31 @@ if ($store) { // store to db
     $storeWidgetData[$element['widget']['type']]($conn, $element_id, $unit_lang, $element['widget']);
   }
 
-
-  // delete course elements
+  // destroy widgets
   $query_str = "";
   foreach ($current_ids as $id) {
     $query_str .= " AND id != " . $id;
   }
-
-  $stmt = $conn->prepare("SELECT * FROM course_elements WHERE unit_id = $unit_id " . $query_str);
+  $stmt = $conn->prepare("SELECT id FROM course_elements WHERE unit_id = $unit_id " . $query_str);
   if (!$stmt->execute()) {
-    echo "Error.";
-  } else {
-    $data = $stmt->fetchAll();
+    http_response_code(400);
+    print_r($stmt->errorInfo());
+    die("Error.");
   }
-  foreach ($data as $w) {
-    $api->removeWidgetFromSpace($w['widget_role_url']);
+  while ($w = $stmt->fetch()) {
+    $role->destroyElementWidget($w['id']);
   }
 
-
-  $api->moveWidgets($course['space_url'],$unit['activity_url'], $widgets);
-
-
-
+  // delete elements from DB
   $stmt = $conn->prepare("DELETE FROM course_elements WHERE unit_id = $unit_id " . $query_str);
-
-  $success = $stmt->execute();
-  if (!$success) {
+  if (!$stmt->execute()) {
     http_response_code(400);
     print_r($stmt->errorInfo());
     die("Error deleting course elements.");
   }
+
+  // move widgets in space
+  $role->updateUnitActivityWidgets($unit_id);
 }
 
 // load from db

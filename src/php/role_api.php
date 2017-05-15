@@ -348,7 +348,7 @@ class RoleAPI {
       $post = '{"'.$activity.'":{"http://purl.org/role/terms/layout":[{"type":"literal","value":"{';
 
       foreach ($widgets as $widget) {
-        $widgetID = $this->get_string_between($result, '<'.$widget['xml'].'> widget:moduleId "','"^^<http://www.w3.org/2001/XMLSchema#long>');
+        $widgetID = $this->get_string_between($result, '<'.$widget['widget_role_url'].'> widget:moduleId "','"^^<http://www.w3.org/2001/XMLSchema#long>');
         $post .= "\\\"".$widgetID."\\\":{\\\"o\\\":\\\"".$i."\\\",\\\"w\\\":\\\"".(intval($widget['width'])*125)."\\\",\\\"h\\\":\\\"".(intval($widget['height'])*125)."\\\"},";
         $i++;
       }

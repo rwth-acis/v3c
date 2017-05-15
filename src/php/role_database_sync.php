@@ -91,8 +91,7 @@ class RoleSync {
     if ($activity_url == null) return;
 
     // delete from space
-    $api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
-    $result = $api->removeActivityFromSpace($activity_url);
+    $result = $this->api->removeActivityFromSpace($activity_url);
     if ($result == -1) {
         die("Cannot remove activity from space!");
     }
@@ -106,16 +105,103 @@ class RoleSync {
     }
   }
 
-  function createElementWidget() {
-    // TODO edit_script_courseunit_elements.php ...
+  function createElementWidget($element_id) {
+    // get element information
+    $statement = $this->conn->prepare(
+      "SELECT space_url, activity_url, widget_role_url, widget_type
+      FROM courses, course_units, course_elements
+      WHERE course_elements.id = :element_id AND
+            course_units.id = course_elements.unit_id AND
+            courses.id = course_units.course_id");
+    $statement->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+      print_r($statement->errorInfo());
+      die("Error fetching element information.");
+    }
+    $element_data = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // check if already created
+    if ($element_data['widget_role_url'] != null) return;
+
+    // create widget
+    $widget_xml = getWidgetXML($element_data['widget_type']);
+    $widget_role_url = $this->api->addWidgetToSpace($element_data['space_url'], $element_data['activity_url'], $widget_xml);
+    if ($widget_role_url == -1) {
+      die("Cannot create widget!");
+    }
+
+    // add to database
+    $statement = $this->conn->prepare("UPDATE course_elements SET widget_role_url= :widget_role_url WHERE id=:element_id");
+    $statement->bindParam(":widget_role_url", $widget_role_url, PDO::PARAM_STR);
+    $statement->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+        print_r($statement->errorInfo());
+        die("Error updating widget url.");
+    }
   }
 
-  function updateElementWidget() {
-    // TODO edit_script_courseunit_elements.php ...
+  function destroyElementWidget($element_id) {
+    // get element url
+    $stmt = $this->conn->prepare("SELECT widget_role_url FROM course_elements WHERE course_elements.id = :element_id");
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    if (!$stmt->execute()) {
+      print_r($stmt->errorInfo());
+      die("Error fetching element information.");
+    }
+    $widget_role_url = $stmt->fetch()[0];
+
+    // check if actually exists
+    if ($widget_role_url == null) return;
+
+    // delete from space
+    $result = $this->api->removeWidgetFromSpace($widget_role_url);
+    if ($result == -1) {
+        die("Cannot remove widget from activity!");
+    }
+
+    // delete from db
+    $stmt = $this->conn->prepare("UPDATE course_elements SET widget_role_url=NULL WHERE course_elements.id = :element_id");
+    $stmt->bindParam(":element_id", $element_id, PDO::PARAM_INT);
+    if (!$stmt->execute()) {
+      print_r($stmt->errorInfo());
+      die("Error updating widget url.");
+    }
   }
 
-  function destroyElementWidget() {
-    // TODO edit_script_courseunit_elements.php ...
+  /**
+  * Rearranges widgets in the activity.
+  */
+  function updateUnitActivityWidgets($unit_id) {
+    // get unit information
+    $statement = $this->conn->prepare(
+      "SELECT space_url, activity_url
+      FROM courses, course_units
+      WHERE course_units.id = :unit_id AND
+            courses.id = course_units.course_id");
+    $statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+      print_r($statement->errorInfo());
+      die("Error fetching activity information.");
+    }
+    $unit_data = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // check if activity exists
+    if ($unit_data['space_url'] == null || $unit_data['activity_url'] == null) return;
+
+    // get widget information
+    $statement = $this->conn->prepare(
+      "SELECT id, width, height, x, y, widget_role_url
+      FROM course_elements
+      WHERE unit_id = :unit_id");
+    $statement->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
+    if (!$statement->execute()) {
+      print_r($statement->errorInfo());
+      die("Error fetching widget information.");
+    }
+    $widget_data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    // update space
+    $this->api->moveWidgets($unit_data['space_url'],$unit_data['activity_url'], $widget_data);
   }
 }
 ?>

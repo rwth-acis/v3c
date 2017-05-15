@@ -5,8 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 $conn = require '../php/db_connect.php';
-require '../php/tools.php';
-require '../php/role_api.php';
+require '../php/role_database_sync.php';
+$role = new RoleSync();
 
 //Get input data from form
 $unit_id = filter_input(INPUT_GET, 'unit_id');
@@ -15,19 +15,8 @@ $course_lang = filter_input(INPUT_GET, 'course_lang');
 
 // TODO: Check whether user is creator of this course, only the creator can delete the unit
 
-// get activity url
-$stmt = $conn->prepare("SELECT activity_url FROM course_units WHERE course_units.id = :unit_id");
-$stmt->bindParam(":unit_id", $unit_id, PDO::PARAM_INT);
-
-$success = $stmt->execute();
-$activity_url = "";
-if ($success) {
-	$activity_url = $stmt->fetch()[0];
-}
-
-// delete from space
-$api = new RoleAPI("http://virtus-vet.eu:8081/", getAdminToken());
-$api->removeActivityFromSpace($activity_url);
+// destroy activity
+$role->destroyUnitActivity($unit_id);
 
 // delete from db
 $stmt = $conn->prepare("DELETE FROM course_units WHERE course_units.id = :unit_id");

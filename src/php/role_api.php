@@ -29,8 +29,8 @@ class RoleAPI {
 
   public function login() {
     $ch = curl_init();
-    
-    
+
+
 
       //set the url, number of POST vars, POST data
     curl_setopt($ch,CURLOPT_URL, $this->url . "o/oauth2/authorizeImplicit?userinfo_endpoint=https://api.learning-layers.eu/o/oauth2/userinfo");
@@ -61,7 +61,7 @@ class RoleAPI {
         //return ($info['response_code'] == 200);
       curl_close($ch);
     }
-    
+
     private function get_string_between($string, $start, $end){
       $string = ' ' . $string;
       $ini = strpos($string, $start);
@@ -72,7 +72,7 @@ class RoleAPI {
     }
 
     public function createSpace($name){
-      if(!$this->login()) return 403;
+      if(!$this->login()) return -1;
 
       $ch = curl_init();
 
@@ -110,7 +110,7 @@ class RoleAPI {
     }
 
     public function joinSpace($name) {
-      if(!$this->login()) return 403;
+      if(!$this->login()) return -1;
 
       $ch = curl_init();
 
@@ -122,7 +122,7 @@ class RoleAPI {
       $result = curl_exec($ch);
 
       $user = $this->get_string_between($result, 'rdfs:seeAlso <','/:representation>');
-      
+
   		//set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $this->url."spaces/".$name."/:;http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23type=http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FPerson;http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23seeAlso=".urlencode($user).";predicate=http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2Fmember");
       curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
@@ -149,11 +149,11 @@ class RoleAPI {
     }
 
     public function addActivityToSpace($space, $name) {
-      if(!$this->login()) return 403;
+      if(!$this->login()) return -1;
 
       $ch = curl_init();
       //open connection
-      
+
 
       //set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $this->url."spaces/".$space."/:;predicate=http%3A%2F%2Fpurl.org%2Frole%2Fterms%2Factivity");
@@ -173,20 +173,21 @@ class RoleAPI {
           return $location;
           break;
           default:
-          return "";
+          return -1;
         }
       }
       curl_close($ch);
+      return -1;
     }
 
     public function setActivityName($activity,$name){
-      if(!$this->login()) return 403;
+      if(!$this->login()) return -1;
 
       $ch = curl_init();
 
         //http_post_data($this->url . "/spaces", $data, array('headers' => array('Content-Type' => 'application/x-www-form-urlencoded')), $info);
       //open connection
-      
+
 
       //set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $activity."/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata");
@@ -204,10 +205,10 @@ class RoleAPI {
     }
 
     public function removeActivityFromSpace($activity) {
-      if(!$this->login()) return 403;
+      if(!$this->login()) return -1;
 
       $ch = curl_init();
-      
+
 
       //set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $activity);
@@ -222,17 +223,20 @@ class RoleAPI {
       //print "curl response is:" . $response;
       if (!curl_errno($ch)) {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        return ($http_code==200);
+        //return ($http_code==200);
+        if ($http_code != 200) return -1;
+        return 1;
       }else{
-        echo curl_errno($ch);
+        //echo curl_errno($ch);
         //return ($info['response_code'] == 200);
+        return -1;
       }
       curl_close($ch);
     }
 
     public function addWidgetToSpace($space, $activity, $widgetUrl) {
-      if(!$this->login()) return 403;
-      
+      if(!$this->login()) return -1;
+
       $uri = $this->url . 'spaces/' . $space . '/:;';
       $uri .= urlencode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type').'='.urlencode('http://purl.org/role/terms/OpenSocialGadget').';';
       $uri .= urlencode('http://www.w3.org/2000/01/rdf-schema#seeAlso').'='.urlencode($widgetUrl).';';
@@ -258,18 +262,19 @@ class RoleAPI {
           return $location;
           break;
           default:
-          echo 'Unerwarter HTTP-Code: ', $http_code, "\n";
+          //echo 'Unerwarter HTTP-Code: ', $http_code, "\n";
+          return -1;
         }
       }
         //return ($info['response_code'] == 200);
       curl_close($ch);
-
+      return -1;
     }
 
     public function removeWidgetFromSpace($widget) {
-      $this->login();
+      if(!$this->login()) return -1;
       $ch = curl_init();
-      
+
 
       //set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $widget);
@@ -284,23 +289,26 @@ class RoleAPI {
       //print "curl response is:" . $response;
       if (!curl_errno($ch)) {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        return ($http_code==200);
+        //return ($http_code==200);
+        if ($http_code != 200) return -1;
+        return 1;
       }else{
-        echo curl_errno($ch);
+        //echo curl_errno($ch);
         //return ($info['response_code'] == 200);
+        return -1;
       }
       curl_close($ch);
 
     }
 
     public function setWidgetMetaData($widgetUrl, $title, $description){
-      if(!$this->login()) return 403;
+      if(!$this->login()) return -1;
 
       $ch = curl_init();
 
         //http_post_data($this->url . "/spaces", $data, array('headers' => array('Content-Type' => 'application/x-www-form-urlencoded')), $info);
       //open connection
-      
+
 
       //set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $widgetUrl."/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata");
@@ -319,7 +327,7 @@ class RoleAPI {
 
 
     public function moveWidgets($space, $activity, $widgets){
-      if(!$this->login()) return 403;
+      if(!$this->login()) return -1;
 
       $ch = curl_init();
 
@@ -350,7 +358,7 @@ class RoleAPI {
         //http_post_data($this->url . "/spaces", $data, array('headers' => array('Content-Type' => 'application/x-www-form-urlencoded')), $info);
       //open connection
 
-      
+
       //set the url, number of POST vars, POST data
       curl_setopt($ch,CURLOPT_URL, $activity.'/:;predicate=http%3A%2F%2Fpurl.org%2Fopenapp%2Fmetadata');
       curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
@@ -362,7 +370,7 @@ class RoleAPI {
       curl_setopt($ch,CURLOPT_HEADER, true);
 
       $result = curl_exec($ch);
-      
+
       curl_close($ch);
     }
 

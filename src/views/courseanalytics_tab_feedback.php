@@ -71,11 +71,11 @@ foreach ($user_data as $key => &$value) {
     die();
   }
 
-  while ($data = $stmt->fetch()) {
-    if (!array_key_exists($data['unit_id'], $value["submissions"])) {
-      $value["submissions"][$data['unit_id']] = array();
-    }
+  foreach ($course_units as $unitkey => $unit) {
+    $value["submissions"][$unit['unit_id']] = array();
+  }
 
+  while ($data = $stmt->fetch()) {
     $value["submissions"][$data['unit_id']][$data['element_id']] = array(
       "title" => $data['title'],
       "content" => $data['content']
@@ -101,7 +101,7 @@ foreach ($user_data as $key => &$value) {
           <?php foreach ($value1['submissions'][$unit['unit_id']] as $elementkey => $element): ?>
             <a href="#" class="list-group-item">
               <b><?php echo $element['title'] ?></b><br />
-              <?php echo $element['content'] ?>
+              <textarea readonly><?php echo $element['content'] ?></textarea>
             </a>
           <?php endforeach; ?>
         </div>

@@ -79,7 +79,26 @@ foreach ($user_data as $key => &$value) {
               WHERE widget_data_quiz_questions.element_id = course_elements.id
               AND course_elements.unit_id = course_units.id
               AND widget_data_quiz_questions.id = widget_data_quiz_submissions.question_id
-              AND widget_data_quiz_submissions.user_id = :user_id) AS submissions
+              AND widget_data_quiz_submissions.user_id = :user_id) AS submissions,
+          (SELECT COUNT(*) FROM course_elements, widget_data_quiz_questions, widget_data_quiz_submissions, widget_data_quiz_answers, widget_data_quiz_submissions_answers
+              WHERE widget_data_quiz_questions.element_id = course_elements.id
+              AND course_elements.unit_id = course_units.id
+              AND widget_data_quiz_questions.id = widget_data_quiz_submissions.question_id
+              AND widget_data_quiz_submissions.user_id = :user_id
+              AND widget_data_quiz_answers.question_id = widget_data_quiz_questions.id
+              AND widget_data_quiz_submissions_answers.answer_id = widget_data_quiz_answers.id
+              AND widget_data_quiz_answers.correct = widget_data_quiz_submissions_answers.checked
+              AND widget_data_quiz_submissions_answers.user_id = :user_id
+            ) AS correct,
+            (SELECT COUNT(*) FROM course_elements, widget_data_quiz_questions, widget_data_quiz_submissions, widget_data_quiz_answers, widget_data_quiz_submissions_answers
+                WHERE widget_data_quiz_questions.element_id = course_elements.id
+                AND course_elements.unit_id = course_units.id
+                AND widget_data_quiz_questions.id = widget_data_quiz_submissions.question_id
+                AND widget_data_quiz_submissions.user_id = :user_id
+                AND widget_data_quiz_answers.question_id = widget_data_quiz_questions.id
+                AND widget_data_quiz_submissions_answers.answer_id = widget_data_quiz_answers.id
+                AND widget_data_quiz_submissions_answers.user_id = :user_id
+              ) AS answers
       FROM course_units
       WHERE course_units.course_id = :course_id
     ");
@@ -95,7 +114,8 @@ foreach ($user_data as $key => &$value) {
       "unit_id" => $quiz_progress["unit_id"],
       "total_questions" => $quiz_progress["total_questions"],
       "submissions" => $quiz_progress["submissions"],
-      "progress" => ($quiz_progress["total_questions"] == 0) ? "--" : round($quiz_progress["submissions"] / $quiz_progress["total_questions"] * 100). "%"
+      "progress" => ($quiz_progress["total_questions"] == 0) ? "--" : round($quiz_progress["submissions"] / $quiz_progress["total_questions"] * 100). "%",
+      "correct" => ($quiz_progress["total_questions"] == 0) ? "--" : $quiz_progress["correct"].'/'.$quiz_progress["answers"]
     );
   }
 }
@@ -138,15 +158,63 @@ foreach ($user_data as $key => &$value) {
     </a>
     <div class="list-group collapse" id="item-<?php echo $value1['user_id'] ?>">
       <?php foreach ($course_units as $unitkey => $unit): ?>
-        <a href="#" class="list-group-item">
+        <a href="#quizz-<?php echo $value1['user_id'].'-'.$unit['unit_id'] ?>" class="list-group-item" data-toggle="collapse">
           <?php echo $unit['title'] ?>
           <span class="pull-right">
             <span class="glyphicon glyphicon-time margin-right margin-left"></span>
             <?php echo (isset($value1['units'][$unit['unit_id']]['progress']))? $value1['units'][$unit['unit_id']]['progress']."%" : "--"; ?>
             <span class="glyphicon glyphicon-question-sign margin-right margin-left"></span>
             <?php echo $value1['quizzes'][$unit['unit_id']]['progress'] ?>
+            <span class="glyphicon glyphicon-ok margin-right margin-left"></span>
+            <?php echo $value1['quizzes'][$unit['unit_id']]['correct'] ?>
           </span>
         </a>
+        <div class="list-group collapse" id="quizz-<?php echo $value1['user_id'].'-'.$unit['unit_id'] ?>">
+          <a href="#" class="list-group-item">
+            <table style="vertical-align: top">
+              <?php
+                // compute all questions
+                $stmt = $conn->prepare(
+                  "SELECT widget_data_quiz_questions_lng.title as title,
+                          GROUP_CONCAT(widget_data_quiz_answers_lng.title SEPARATOR '|||') as questions,
+                          GROUP_CONCAT(widget_data_quiz_submissions_answers.checked SEPARATOR '|||') as checked,
+                          GROUP_CONCAT(widget_data_quiz_answers.correct SEPARATOR '|||') as correct
+                    FROM course_elements
+                    INNER JOIN widget_data_quiz_questions on widget_data_quiz_questions.element_id = course_elements.id
+                    INNER JOIN widget_data_quiz_questions_lng on widget_data_quiz_questions.id = widget_data_quiz_questions_lng.question_id
+                    INNER JOIN widget_data_quiz_answers on widget_data_quiz_answers.question_id = widget_data_quiz_questions.id
+                    INNER JOIN widget_data_quiz_answers_lng on widget_data_quiz_answers_lng.answer_id = widget_data_quiz_answers.id
+                    INNER JOIN widget_data_quiz_submissions_answers on widget_data_quiz_submissions_answers.answer_id = widget_data_quiz_answers.id
+                    WHERE course_elements.unit_id = :unit_id and
+                          widget_data_quiz_questions_lng.lang = 'en' and
+                          widget_data_quiz_answers_lng.lang = 'en' and
+                          widget_data_quiz_submissions_answers.user_id = :user_id
+                    GROUP BY widget_data_quiz_questions_lng.title
+                  ");
+                $stmt->bindParam(":unit_id", $unit['unit_id'], PDO::PARAM_INT);
+                $stmt->bindParam(":user_id", $value1['user_id'], PDO::PARAM_INT);
+                $stmt->execute();
+                while ($quiz = $stmt->fetch()): ?>
+                  <tr>
+                    <th colspan="12"><h4><?php print $quiz["title"] ?></h4></th>
+
+                  </tr>
+                  <tr>
+                    <?php
+                      $questions = explode("|||", $quiz["questions"]);
+                      $checked = explode("|||", $quiz["checked"]);
+                      $correct = explode("|||", $quiz["correct"]);
+                      foreach ($questions as $i => $question): ?>
+                        <td style="color: <?php if ($correct[$i]) { print 'green'; } else { print 'red'; } ?>">
+                          <input type="checkbox" <?php if ($checked[$i]) { print 'checked'; } ?> disabled />
+                          <?php print $question ?></td>
+                    <?php endforeach; ?>
+                  </tr>
+                <?php endwhile;
+              ?>
+            </table>
+          </a>
+        </div>
       <?php endforeach; ?>
     </div>
   <?php endforeach; ?>

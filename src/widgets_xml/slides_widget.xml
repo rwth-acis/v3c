@@ -74,7 +74,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     h3 {
       margin: 0;
       padding: 1em;
-      background:#222;
+      background:#659D32;
       color:white;
     }
 

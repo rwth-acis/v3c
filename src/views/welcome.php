@@ -69,6 +69,7 @@
                         <h3><?php echo getTranslation("main:welcome:courses", "Courses");?></h3>
                         <p><?php echo getTranslation("main:welcome:listcourses", "Check for the list of all the courses available here.");?></p>
                     </div>
+                  </a>
                 </div>
                 <!--<div class="temp">
                     <a href="arrwidgetmockup.php">mockup</a>
@@ -77,8 +78,6 @@
         </div>
     </div>
 </div>
-<div class="featured-box">
-
 
 <? include("../php/create_user_session.php"); ?>
 <?php include("footer.php"); ?>

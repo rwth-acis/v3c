@@ -60,7 +60,7 @@
 
  <?php
 // Check whether the currently logged in user is allowed to delete courses
- require '../php/access_control.php';
+ require_once '../php/access_control.php';
 
  $accessControl = new AccessControl();
  $canDeleteCourse = $accessControl->canDeleteCourse($course_id);

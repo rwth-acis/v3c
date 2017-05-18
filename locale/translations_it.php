@@ -22,6 +22,7 @@ function getLanguage()
 
         "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
         "general:footer:reach" => "Per raggiungerci a: ",
+        "general:footer:erasmus" => "Il presente progetto è finanziato con il sostegno della Commissione europea. L’autore è il solo responsabile di questa pubblicazione e la Commissione declina ogni responsabilità sull’uso che potrà essere fatto delle informazioni in essa contenute. ",
 
         "main:welcome:headline" => "Benvenuti al Progetto V3C!",
         "main:welcome:v3cgoal" => "Il “Virtual Vocational Education and Training – VIRTUS” progetto svilupperà un innovativo, perfettamente funzionante professionale centro di istruzione e di formazione virtuale, che fornirà opportunamente progettato corsi certificati modulari componibili occupabili Skills (MES), corrispondente ad una vasta gamma di circostanze come potenziale regionale di crescita e / o ristrutturazione aziendale e l'obiettivo di aumentare il tasso di partecipazione dei discenti adulti in materia di istruzione e formazione professionale.",

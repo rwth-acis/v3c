@@ -22,6 +22,9 @@ function getLanguage()
 
         "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
         "general:footer:reach" => "Llámenos a: ",
+        "general:footer:erasmus" => "
+
+    El presente proyecto ha sido financiado con el apoyo de la Comisión Europea. Esta publicación es responsabilidad exclusiva de su autor. La Comisión no es responsable del uso que pueda hacerse de la información aquí difundida.",
 
         "main:welcome:courses" => "Cursos",
         "main:welcome:headline" => "¡Bienvenido de V3C proyecto!",

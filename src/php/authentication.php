@@ -46,19 +46,19 @@ class Authentication
                 curl_setopt($ch,CURLOPT_HEADER, 1);
                 $result = curl_exec($ch);
                 if (!curl_errno($ch)) {
-                  switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
-                      case 200:  # OK
-                        return true;
-                      break;
-                      default:
-                      session_destroy();
-                      return false;
+                    switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+                        case 200:  # OK
+                            return true;
+                            break;
+                        default:
                     }
-                    session_destroy();
-                    return false;
-                  }
-                  curl_close($ch);
-                return true;
+                }
+                if (!$_SESSION) {
+                    session_start();
+                }
+                session_destroy();
+                curl_close($ch);
+                return false;
             } else {
                 return false;
             }

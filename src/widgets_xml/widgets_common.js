@@ -111,19 +111,39 @@ function initWidgetFlow() {
     }
 
     if (data.next_widget != null) {
-      showButton(data.next_widget, data.next_type)
+      showButton(data.next_widget, data.next_type, data.next_id)
     }
   })
 }
 
-function showButton(nextWidgetUrl, nextWidgetType) {
-  $('body').append('<div class="flowlink"><button data-widget="'+nextWidgetUrl+'" onclick="unlockRemoteWidget(\''+nextWidgetUrl+'\')"><span data-lang-key="widget:general:unlock">Unlock</span> <span data-lang-key="widget:type:' + nextWidgetType + '">widget</span></button></div>');
+function showButton(nextWidgetUrl, nextWidgetType, nextWidgetId) {
+  $('body').append('<div class="flowlink"><button data-widget="'+nextWidgetUrl+'" onclick="unlockRemoteWidget(\''+nextWidgetUrl + '\',\''+ nextWidgetId+'\')"><span data-lang-key="widget:general:unlock">Unlock</span> <span data-lang-key="widget:type:' + nextWidgetType + '">widget</span></button></div>');
   loadTranslations();
+
+  var widgetUrl = nextWidgetUrl;
+  $.ajax({
+   url: "http://virtus-vet.eu/src/php/widget_flow_unlocked.php?element_id=" + nextWidgetId,
+   crossDomain: true,
+   xhrFields: {
+     withCredentials: true
+   }
+  })
+  .done(function(data) {
+    var data = JSON.parse(data)
+    if (data.unlocked) {
+      activateRemoteWidget(widgetUrl)
+    }
+  })
 
   // TODO get button status
 }
 
-function unlockRemoteWidget(widgetUrl) {
+function unlockRemoteWidget(widgetUrl, nextWidgetId) {
+  sendUserActivity('unlockWidget', nextWidgetId)
+  activateRemoteWidget(widgetUrl)
+}
+
+function activateRemoteWidget(widgetUrl) {
   iwcClient.publish({
     "action": "UNLOCK_WIDGET",
     "data": widgetUrl,

@@ -1,0 +1,27 @@
+.widgetinactive {
+  text-align: center;
+  font-size:1.2em;
+  padding: 3em 1em;
+  box-sizing: border-box;
+  position: absolute;
+  width:100%;
+  height:100%;
+  background:rgba(0, 0, 0, 0.8);
+  color:white;
+  z-index:9;
+  top:0;
+  left:0;
+}
+
+.flowlink {
+  position: absolute;
+  bottom:0;
+  left:0;
+  background:#659D32;
+  color:#fff;
+  padding:0.5em;
+}
+
+.flowlink button {
+  
+}

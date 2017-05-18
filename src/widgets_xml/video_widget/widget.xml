@@ -67,18 +67,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <!-- Bootstrap stylesheet import -->
-  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <!-- import jQuery for AJAX calls -->
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <!-- import Bootstrap for responsive UI -->
-  <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   <!-- OpenApp import -->
   <script type="text/javascript" src="http://open-app.googlecode.com/files/openapp.js"></script>
   <!-- additional widget specific imports (put your own imports here as well) -->
   <script src="http://virtus-vet.eu/src/widgets_xml/video_widget/js/jwplayer/jwplayer.js"></script>
 
   <script src="http://virtus-vet.eu/src/widgets_xml/widgets_common.js"></script>
+  <link href="http://virtus-vet.eu/src/widgets_xml/widgets_common.css" rel="stylesheet">
+
+    <script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
 
   <style>
     h3 {

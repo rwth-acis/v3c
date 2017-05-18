@@ -123,5 +123,17 @@ function getLanguage()
         "widget:quiz:start" => "Start",
         "widget:quiz:submit" => "Submit",
         "widget:chat:join" => "Join Room",
+        "widget:feedback:submit" => "Submit",
+        "widget:feedback:submitted" => "Answer submitted!",
+
+        "widget:general:deactivated" => "This widget is locked. Please work on the other widgets to unlock this widget.",
+        "widget:general:unlock" => "Unlock",
+
+        "widget:type:quiz" => "quiz",
+        "widget:type:image" => "image",
+        "widget:type:slides" => "slides",
+        "widget:type:video" => "video",
+        "widget:type:hangout" => "video conference",
+        "widget:type:feedback" => "feedback form",
     );
 }

@@ -73,8 +73,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <script type="text/javascript" src="http://open-app.googlecode.com/files/openapp.js"></script>
 
   <script src="http://virtus-vet.eu/src/widgets_xml/widgets_common.js"></script>
+  <link href="http://virtus-vet.eu/src/widgets_xml/widgets_common.css" rel="stylesheet">
   <script src="http://virtus-vet.eu/src/widgets_xml/quiz_widget/widget.js"></script>
   <link rel="stylesheet" href="http://virtus-vet.eu/src/widgets_xml/quiz_widget/widget.css">
+
+    <script src="http://dbis.rwth-aachen.de/gadgets/iwc/lib/iwc.js"></script>
 
 </head>
 <body>

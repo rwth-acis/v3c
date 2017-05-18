@@ -14,9 +14,11 @@ require '../config/config.php'
 
 <script>
   <?php
+  /*
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
+  */
 
   //create database connection (needs to be done before mysql_real_escape_string)
   $conn = require '../php/db_connect.php';

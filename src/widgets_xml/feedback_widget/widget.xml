@@ -67,12 +67,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <!-- Bootstrap stylesheet import -->
-  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <!-- import jQuery for AJAX calls -->
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <!-- import Bootstrap for responsive UI -->
-  <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   <!-- OpenApp import -->
   <script type="text/javascript" src="http://open-app.googlecode.com/files/openapp.js"></script>
 
@@ -88,9 +84,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       color:white;
     }
 
+    .text {
+      margin: 0;
+      padding: 1em;
+      background:#444;
+      color:white;
+    }
+
+    .buttons {
+      margin: 0;
+      padding: 1em;
+      background:#222;
+      color:white;
+    }
+
     .expand {
       width:100%;
-      height:90%;
+      height:50%;
     }
 
     #viewer img {
@@ -115,8 +125,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="container" id="main-content">
     <h3 class="title"></h3>
     <p class="text">Loading...</p>
-    <textarea class="submission"></textarea>
-    <button class="submit" data-lang-key="widget:feedback:submit" onclick="postSubmission()">Submit</button>
+    <textarea class="submission expand"></textarea>
+    <div class="buttons">
+      <button class="submit" data-lang-key="widget:feedback:submit" onclick="postSubmission()">Submit</button> <span class="message" data-lang-key="widget:feedback:submitted" hidden>Answer submitted!</span>
+    </div>
   </div>
 
   <script>
@@ -146,7 +158,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       }
      } )
      .done(function(data) {
-       $('.submission').val(data);
+      renderSubmission(data)
      })
      .fail(function(xhr) {
         if (xhr.status == 403) {
@@ -169,11 +181,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         data: $('.submission').val()
       })
       .done(function(data) {
-        $('.submission').val(data);
+        renderSubmission(data)
       })
       .fail(function() {
         $("#main-content").html("Could not store submission.")
       });
+    }
+
+    function renderSubmission(data) {
+      $('.submission').val(data);
+      if (data != "") {
+        $('.submission').prop('disabled', true);
+        $('.submit').prop('disabled', true);
+        $('.message').prop('hidden', false);
+      }
     }
 
     getUserLanguage(function(lang) {

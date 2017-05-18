@@ -1,9 +1,10 @@
 <?php
 // This script is included in phpBBs common.php and redirects to the Virtus Website if the user is not authenticated
-
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+*/
 
 $request->enable_super_globals();
 $url =  $_SERVER['REQUEST_URI'];

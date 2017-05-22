@@ -7,7 +7,7 @@ $conn = require '../php/db_connect.php';
 
 $widget_role_url = filter_input(INPUT_GET, 'widget_role_url');
 
-$stmt = $conn->prepare("SELECT this.widget_flow_order AS this_order, next.widget_role_url AS next_widget, next.widget_type AS next_type, next.id AS next_id
+$stmt = $conn->prepare("SELECT  this.id AS this_id, this.widget_flow_order AS this_order, next.widget_role_url AS next_widget, next.widget_type AS next_type, next.id AS next_id
                         FROM course_elements AS this
                         LEFT JOIN course_elements AS next ON next.widget_flow_order = (this.widget_flow_order + 1)
                         WHERE this.widget_role_url = :widget_role_url");
@@ -20,6 +20,7 @@ if (!$stmt->execute()) {
 $res = $stmt->fetch();
 
 echo json_encode(array(
+  "id" => $res['this_id'],
   "order" => $res['this_order'],
   "next_widget" => $res['next_widget'],
   "next_type" => $res['next_type'],

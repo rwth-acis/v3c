@@ -113,6 +113,24 @@ function initWidgetFlow() {
     if (data.next_widget != null) {
       showButton(data.next_widget, data.next_type, data.next_id)
     }
+
+    checkIfLocked(data.id)
+  })
+}
+
+function checkIfLocked(thisWidgetId) {
+  $.ajax({
+   url: "http://virtus-vet.eu/src/php/widget_flow_unlocked.php?element_id=" + thisWidgetId,
+   crossDomain: true,
+   xhrFields: {
+     withCredentials: true
+   }
+  })
+  .done(function(data) {
+    var data = JSON.parse(data)
+    if (data.unlocked) {
+      activateWidget()
+    }
   })
 }
 
@@ -134,8 +152,6 @@ function showButton(nextWidgetUrl, nextWidgetType, nextWidgetId) {
       activateRemoteWidget(widgetUrl)
     }
   })
-
-  // TODO get button status
 }
 
 function unlockRemoteWidget(widgetUrl, nextWidgetId) {

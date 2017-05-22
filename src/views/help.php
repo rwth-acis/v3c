@@ -54,7 +54,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     <div class="row">
         <!-- main content -->
         <section class="col-sm-8 maincontent">
-              <h3>Nothing to see here</h3>
+              <h4>Work in progress. <br>See <a href="http://virtus-project.eu/">http://virtus-project.eu</a>.</h4>
         </section>
         <!-- /main -->
 

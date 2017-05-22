@@ -406,11 +406,39 @@ if ($store) { // store to db
 
   $current_ids = array();
 
+  // calculate widget flow order
+  $y_values = array();
+  $x_values = array();
+  $element_map = array();
+  foreach ($input as &$element) { // because PHP is shit
+    if ($element['flow'] == "true") {
+      if (!in_array($element["y"], $y_values)) {
+        $y_values[] = $element["y"];
+        $x_values[$element["y"]] = array();
+        $element_map[$element["y"]] = array();
+      }
+      $x_values[$element["y"]][] = $element["x"];
+      $element_map[$element["x"]][$element["y"]] = &$element; // insert by reference
+    }
+    $element['flow_order'] = null;
+  }
+  $current_order = 0;
+  sort($y_values);
+  foreach ($y_values as $y) {
+    sort($x_values[$y]);
+    foreach ($x_values[$y] as $x) {
+      $element_map[$x][$y]['flow_order'] = $current_order;
+      $current_order++;
+    }
+  }
+  unset($element); // because PHP is a huge pile of shit
+
+  // store elements
   foreach ($input as $element) {
     $element_id = -1;
     if (!isset($element['element_id'])) { // create course element
       // store to DB
-      $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang, widget_role_url, unit_id) VALUES (:type, :x, :y, :width, :height, :lang, :widget_role_url, :unit_id)");
+      $stmt = $conn->prepare("INSERT INTO course_elements (widget_type, x, y, width, height, default_lang, widget_role_url, unit_id, widget_flow_order) VALUES (:type, :x, :y, :width, :height, :lang, :widget_role_url, :unit_id, :widget_flow_order)");
       $stmt->bindParam(":type", $element['widget']['type'], PDO::PARAM_STR);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
       $stmt->bindParam(":y", $element['y'], PDO::PARAM_INT);
@@ -419,6 +447,7 @@ if ($store) { // store to db
       $stmt->bindParam(":lang", $unit_lang, PDO::PARAM_INT);
       $stmt->bindParam(":widget_role_url", $widget_role_url, PDO::PARAM_STR);
       $stmt->bindParam(":unit_id", $unit_id);
+      $stmt->bindParam(":widget_flow_order", $element['flow_order'], PDO::PARAM_INT);
 
       $success = $stmt->execute();
       if (!$success) {
@@ -436,12 +465,13 @@ if ($store) { // store to db
     else { // update course element
       $widget = getSingleDatabaseEntryByValue('course_elements','id',$element['element_id']);
 
-      $stmt = $conn->prepare("UPDATE course_elements SET x = :x, y = :y, width = :width, height = :height WHERE id = :id");
+      $stmt = $conn->prepare("UPDATE course_elements SET x = :x, y = :y, width = :width, height = :height, widget_flow_order = :widget_flow_order WHERE id = :id");
       $stmt->bindParam(":id", $element['element_id'], PDO::PARAM_INT);
       $stmt->bindParam(":x", $element['x'], PDO::PARAM_INT);
       $stmt->bindParam(":y", $element['y'], PDO::PARAM_INT);
       $stmt->bindParam(":width", $element['width'], PDO::PARAM_INT);
       $stmt->bindParam(":height", $element['height'], PDO::PARAM_INT);
+      $stmt->bindParam(":widget_flow_order", $element['flow_order'], PDO::PARAM_INT);
       // widget type cannot be changed
 
       $success = $stmt->execute();
@@ -504,7 +534,7 @@ foreach ($elements as $el) {
     "width" => $el['width'],
     "height" => $el['height'],
     "widget" => $widget_data,
-    "flow" => "true" // TODO
+    "flow" => ($el['widget_flow_order'] != null)
     );
 }
 

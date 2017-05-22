@@ -850,6 +850,8 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
       console.log($prototypeClone.find(".btn-addtoflow"))
 
+      $prototypeClone.find(".btn-addtoflow").removeClass('hidden')
+
       $prototypeClone.find(".btn-addtoflow").click(function() {
         item.attr("data-flow", "true")
         item.find(".btn-addtoflow").toggleClass('hidden')
@@ -1020,10 +1022,12 @@ function createSidebarElement(name, index) {
 
         // flow buttons
         if ($widget.parent().parent().attr("data-flow") == "true") {
-          $widget.find('.btn-removefromflow').toggleClass('hidden')
+          $widget.find('.btn-removefromflow').removeClass('hidden')
+          $widget.find('.btn-addtoflow').addClass('hidden')
         }
         else {
-          $widget.find('.btn-addtoflow').toggleClass('hidden')
+          $widget.find('.btn-removefromflow').addClass('hidden')
+          $widget.find('.btn-addtoflow').removeClass('hidden')
         }
 
         // set input values

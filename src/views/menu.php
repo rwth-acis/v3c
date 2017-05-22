@@ -82,7 +82,7 @@
                     <li><a href='welcome.php'><?php echo getTranslation("general:button:home", "Home");?></a></li>
                     <li><a href='subjects.php'><?php echo getTranslation("general:button:courses", "Courses");?></a></li>
                     <?php
-                    include '../php/access_control.php';
+                    require_once '../php/access_control.php';
                     $accessControl = new AccessControl();
                     ?>
                     <?php if ($accessControl->canEnterLecturerMode()): ?>

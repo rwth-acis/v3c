@@ -9,7 +9,7 @@
 function getLanguage()
 {
     return array(
-        "general:button:home" => "Σπίτι",
+        "general:button:home" => "ΑΡΧΙΚΗ",
         "general:button:courses" => "μαθήματα",
         "general:button:signin" => "Συνδεθείτε",
         "general:button:save" => "Αποθηκεύσετε",
@@ -44,8 +44,8 @@ function getLanguage()
         "addcourse:content:desription" => "Περιγραφή:",
         "addcourse:placeholder:description" => "Εισάγετε περιγραφή του μαθήματος",
 
-        "course:content:courseunits" => "Μονάδες γκολφ",
-        "course:content:enterroom" => "Εισάγετε γκολφ Δωμάτιο",
+        "course:content:courseunits" => "ΕΝΟΤΗΤΕΣ ΜΑΘΗΜΑΤΩΝ",
+        "course:content:enterroom" => "ΕΙΣΟΔΟΣ ΣΤΟ ΜΑΘΗΜΑ",
         "course:content:createdby" > "Δημιουργήθηκε από:",
         "course:content:domain" => "Πεδίο ορισμού:",
         "course:content:profession" => "Επάγγελμα:",

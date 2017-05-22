@@ -4,7 +4,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 */
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -66,7 +65,8 @@ foreach ($data2 as $q) {
   foreach ($data1 as $a) {
     $answers[$a["order"]] = array(
       "id" => $a["id"],
-      "title" => $a["title"] //,
+      "title" => $a["title"],
+      "img" => $a["img"] //,
       // "correct" => ($a["correct"] ? "correct" : "")
     );
   }
@@ -74,6 +74,7 @@ foreach ($data2 as $q) {
   $questions[$q["order"]] = array(
     "id" => $q["id"],
     "title" => $q["title"],
+    "img" => $q["img"],
     "answers" => $answers
   );
 }

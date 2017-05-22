@@ -55,7 +55,9 @@ $user_update_notice = "";
                     <form id="fsearch" class="navbar-form navbar-left" role="search">
                         <div class="row">
                             <input id="searchString" name="searched" type="text" class="form-control"
-                                   placeholder="Search by Name"
+                                   placeholder="<?php
+                echo getTranslation("usermanagement:search:name", "Search by Name");
+                ?>"
                                    onkeyup="filter()">
                             <br/>
                         </div>

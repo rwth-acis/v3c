@@ -503,7 +503,8 @@ foreach ($elements as $el) {
     "y" => $el['y'],
     "width" => $el['width'],
     "height" => $el['height'],
-    "widget" => $widget_data
+    "widget" => $widget_data,
+    "flow" => "true" // TODO
     );
 }
 

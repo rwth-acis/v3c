@@ -78,11 +78,21 @@
                 <div class="row virtus-pw-content-wrapper">
                     <div class="col-sm-12 virtus-pw-slide-img-wrapper">
                         <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                          <button type="button" class="btn btn-success btn-sm hidden btn-addtoflow"
+                              aria-label="Left Align">
+                              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addtoflow", "Add to flow");?>
+                          </button>
+
+                          <button type="button" class="btn btn-danger btn-sm hidden btn-removefromflow"
+                              aria-label="Left Align">
+                              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:removefromflow", "Remove from flow");?>
+                          </button>
+
                             <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
                             aria-label="Left Align"
                             data-toggle="modal"
                             data-target=".pw-modal-slideviewer">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                         </button>
                         <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                     </div>
@@ -142,11 +152,21 @@
             <div class="row virtus-pw-content-wrapper">
                 <div class="col-sm-12 virtus-pw-image-img-wrapper" style="height:100%;">
                     <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                      <button type="button" class="btn btn-success btn-sm hidden btn-addtoflow"
+                            aria-label="Left Align">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addtoflow", "Add to flow");?>
+                        </button>
+
+                        <button type="button" class="btn btn-danger btn-sm hidden btn-removefromflow"
+                            aria-label="Left Align">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:removefromflow", "Remove from flow");?>
+                        </button>
+
                         <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
                         aria-label="Left Align"
                         data-toggle="modal"
                         data-target=".pw-modal-slideviewer">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
@@ -174,11 +194,21 @@
             <div class="row virtus-pw-content-wrapper">
                 <div class="col-sm-12 virtus-pw-slide-img-wrapper" style="height:100%;">
                     <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                      <button type="button" class="btn btn-success btn-sm hidden btn-addtoflow"
+                            aria-label="Left Align">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addtoflow", "Add to flow");?>
+                        </button>
+
+                        <button type="button" class="btn btn-danger btn-sm hidden btn-removefromflow"
+                            aria-label="Left Align">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:removefromflow", "Remove from flow");?>
+                        </button>
+
                         <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
                         aria-label="Left Align"
                         data-toggle="modal"
                         data-target=".pw-modal-slideviewer">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
@@ -220,8 +250,20 @@
         </div>
         <div class="virtus-pw-content-container">
             <div class="row virtus-pw-content-wrapper">
-                <div class="col-sm-12 virtus-pw-slide-img-wrapper-full">
-                    <img class="virtus-pw-hangouts-img" src='../images/widgetsPrototypes/hangouts-mockup.png'>
+                <div class="col-sm-12 virtus-pw-image-img-wrapper" style="height:100%;">
+                    <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                      <button type="button" class="btn btn-success btn-sm hidden btn-addtoflow"
+                      aria-label="Left Align">
+                          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addtoflow", "Add to flow");?>
+                      </button>
+
+                      <button type="button" class="btn btn-danger btn-sm hidden btn-removefromflow"
+                          aria-label="Left Align">
+                          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:removefromflow", "Remove from flow");?>
+                      </button>
+                    </div>
+
+                    <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/hangouts-mockup.png'>
                 </div>
             </div>
         </div>
@@ -246,12 +288,22 @@
             <div class="row virtus-pw-content-wrapper">
                 <div class="col-sm-12 virtus-pw-slide-img-wrapper">
                     <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+                      <button type="button" class="btn btn-success btn-sm hidden btn-addtoflow"
+                          aria-label="Left Align">
+                          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addtoflow", "Add to flow");?>
+                      </button>
+
+                      <button type="button" class="btn btn-danger btn-sm hidden btn-removefromflow"
+                          aria-label="Left Align">
+                          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:removefromflow", "Remove from flow");?>
+                      </button>
+
                         <!--<span class="pw-alert-color"></span>-->
                         <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
                         aria-label="Left Align"
                         data-toggle="modal"
                         data-target=".pw-modal-videoviewer">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
                     </button>
                     <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
                 </div>
@@ -300,15 +352,26 @@
     <div class="virtus-pw-content-container">
         <div class="row virtus-pw-content-wrapper">
             <div class="col-sm-12 virtus-pw-quizzes-img-wrapper">
-                <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
-                    <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
-                    aria-label="Left Align"
-                    data-toggle="modal"
-                    data-target=".pw-modal-quizzes">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
-                </button>
-                <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
-            </div>
+              <div class="col-sm-12 virtus-pw-content-toolbox-wrapper pw-right-alignement">
+
+                  <button type="button" class="btn btn-success btn-sm hidden btn-addtoflow"
+                      aria-label="Left Align">
+                      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addtoflow", "Add to flow");?>
+                  </button>
+
+                  <button type="button" class="btn btn-danger btn-sm hidden btn-removefromflow"
+                      aria-label="Left Align">
+                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:removefromflow", "Remove from flow");?>
+                  </button>
+
+                  <button type="button" class="btn btn-warning btn-sm modal-toggler-button"
+                      aria-label="Left Align"
+                      data-toggle="modal"
+                      data-target=".pw-modal-quizzes">
+                      <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <?php echo getTranslation("designunit:content:addcontent", "Add Content");?>
+                  </button>
+                  <!--<span class="glyphicon glyphicon-pencil pw-alert-color" aria-hidden="true"></span>-->
+              </div>
             <img class="virtus-pw-sliderviewer-img" src='../images/widgetsPrototypes/quizzes-mockup.png'>
         </div>
         <div class="col-sm-12 quizzes-question-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
@@ -771,6 +834,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
       $prototypeClone.attr("id", widgetConfiguration[itemIndex].prototypeName + "-" + totalWidgets);
       $prototypeClone.find(".modal-toggler-button").attr("data-target", "#" + widgetConfiguration[itemIndex].modalname + "-" + totalWidgets);
       (item).attr("data-widget-type", widgetConfiguration[itemIndex].widgetType);
+      item.attr("data-flow", "false")
       $item.append($prototypeClone);
 
       var $prototypeModal = $('#' + widgetConfiguration[itemIndex].modalname);
@@ -784,6 +848,20 @@ if (filter_input(INPUT_GET, "widget") == "true") {
           appendDataAttributes(prototypeWidgetId, prototypeWidgetModalId);
       });
 
+      console.log($prototypeClone.find(".btn-addtoflow"))
+
+      $prototypeClone.find(".btn-addtoflow").click(function() {
+        item.attr("data-flow", "true")
+        item.find(".btn-addtoflow").toggleClass('hidden')
+        item.find(".btn-removefromflow").toggleClass('hidden')
+      })
+
+      $prototypeClone.find(".btn-removefromflow").click(function() {
+        item.attr("data-flow", "false")
+        item.find(".btn-addtoflow").toggleClass('hidden')
+        item.find(".btn-removefromflow").toggleClass('hidden')
+      })
+
 /*
       $prototypeModalClone.on('hidden.bs.modal', function (e) {
           // does not work -> backdrock set to static and dismiss buttons removed
@@ -791,7 +869,6 @@ if (filter_input(INPUT_GET, "widget") == "true") {
       });
 */
 
-      console.log($prototypeModalClone.find('input.upload-file'));
       $prototypeModalClone.find('input.upload-file').on('change', function() {
         uploadData(this,widgetConfiguration[itemIndex].widgetType)
       })
@@ -941,6 +1018,15 @@ function createSidebarElement(name, index) {
           }
         }
 
+        // flow buttons
+        if ($widget.parent().parent().attr("data-flow") == "true") {
+          $widget.find('.btn-removefromflow').toggleClass('hidden')
+        }
+        else {
+          $widget.find('.btn-addtoflow').toggleClass('hidden')
+        }
+
+        // set input values
         $inputObj = $modal.find(".modal-body").find(".protocontent");
         $inputObj.each(function (index) {
           if ($(this).is(':checkbox')) {
@@ -1029,6 +1115,7 @@ $("#grid1").find(".grid-stack-item").each(function(idx,el) {
     result.push({
       "element_id": $(el).attr("data-element-id"),
       "widget": widgetSerializer[$(el).attr("data-widget-type")]($(el)),
+      "flow": $(el).attr("data-flow"),
       "x": $(el).attr("data-gs-x"),
       "y": $(el).attr("data-gs-y"),
       "width": $(el).attr("data-gs-width"),
@@ -1109,6 +1196,7 @@ function jsonToSpace(data) {
          // set data attributes
          widget.attr("data-element-id", el.element_id);
          widget.attr("data-widget-type", el.widget.type);
+         widget.attr("data-flow", el.flow);
          widgetDeserializer[el.widget.type](widget, el.widget);
 
          // set state

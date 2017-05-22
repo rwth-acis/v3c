@@ -546,6 +546,9 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
             <input type="text" class="form-control protocontent"
             name="quizzes-answer_0_0" class="protocontent"
             placeholder="Answer" aria-describedby="basic-addon1">
+            <input type="text" class="form-control protocontent"
+            name="quizzes-answer-img_0_0" class="protocontent"
+            placeholder="Image URL" aria-describedby="basic-addon1">
             <span class="input-group-btn">
                 <button class="btn btn-secondary remove-answer" type="button">-</button>
             </span>
@@ -567,6 +570,9 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
                     <input type="text" class="form-control protocontent"
                     name="quizzes-question_0"
                     placeholder="Question" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control protocontent"
+                    name="quizzes-question-img_0"
+                    placeholder="Image URL" aria-describedby="basic-addon1">
                     <input type="hidden" name="quizzes-question-id_0" class="protocontent" value="">
                 </div>
                 <label class="col-sm-12"><?php echo getTranslation("designunit:content:answers", "Answers");?>:</label>
@@ -785,29 +791,40 @@ if (filter_input(INPUT_GET, "widget") == "true") {
       });
 */
 
-  console.log($prototypeModalClone.find('input.upload-file'));
+      console.log($prototypeModalClone.find('input.upload-file'));
       $prototypeModalClone.find('input.upload-file').on('change', function() {
         uploadData(this,widgetConfiguration[itemIndex].widgetType)
       })
 
-      $('.modal-add-button').click(function () {
-          var $qb = $('#questionBlock').html();
-          var count = $(this).parents(".modal-content").find(".qa-block-container").find(".question-title-counter")
-          var aNum = count.length + 1;
+      $('.modal-add-button').each(function (i, el) {
+        el.onclick = addQuestion
+      })
+      function addQuestion (event) {
+        var $qb = $('#questionBlock').html();
+        var count = $(this).parents(".modal-content").find(".qa-block-container").find(".question-title-counter")
+        var aNum = count.length + 1;
 
-          $(this).parents(".modal-content").find(".qa-block-container").append($qb);
-          var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
-          $elem.find(".question-title-counter").text("Question " + aNum);
+        $(this).parents(".modal-content").find(".qa-block-container").append($qb);
+        var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
+        $elem.find(".question-title-counter").text("Question " + aNum);
 
-          var qorder = parseInt( $elem.parents(".modal").attr("data-question-ctr") );
-          $elem.parents(".modal").attr("data-question-ctr", qorder+1);
+        var qorder = parseInt( $elem.parents(".modal").attr("data-question-ctr") );
+        $elem.parents(".modal").attr("data-question-ctr", qorder+1);
 
-          $elem.find("[name=quizzes-question_0]").attr("name", "quizzes-question_" + qorder);
-          $elem.find("[name=quizzes-question-id_0]").attr("name", "quizzes-question-id_" + qorder);
-          $elem.attr("data-question-id", qorder);
+        $elem.find("[name=quizzes-question_0]").attr("name", "quizzes-question_" + qorder);
+        $elem.find("[name=quizzes-question-id_0]").attr("name", "quizzes-question-id_" + qorder);
+        $elem.find("[name=quizzes-question-img_0]").attr("name", "quizzes-question-img_" + qorder);
+        $elem.attr("data-question-id", qorder);
 
-          quizzesButtonFunc($elem);
-      });
+        quizzesButtonFunc($elem)
+
+        setTimeout(function () {
+          // if there is still no answer after 100ms, insert a default question
+          if ($elem[0].querySelector('.single-answer-block') == null) {
+            $elem.find(".btn-add-answer").click()
+          }
+        }, 0)
+      }
 
       totalWidgets++;
   }
@@ -831,6 +848,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
         $(template).find("[name=quizzes-answer_0_0]").attr("name", "quizzes-answer_" + qorder + "_" + aorder);
         $(template).find("[name=quizzes-answer-id_0_0]").attr("name", "quizzes-answer-id_" + qorder + "_" + aorder);
+        $(template).find("[name=quizzes-answer-img_0_0]").attr("name", "quizzes-answer-img_" + qorder + "_" + aorder);
         $(template).find("[name=quizzes-answer-correct_0_0]").attr("name", "quizzes-answer-correct_" + qorder + "_" + aorder);
 
             //qa-div
@@ -914,8 +932,11 @@ function createSidebarElement(name, index) {
           for (var i = 0; i < parseInt($widget.parent().parent().attr("data-tmp-question-count")); i++) {
             $modal.find(".modal-add-button").click();
             var $question = $modal.find(".panel-default").last();
-            for (var j = 0; j < parseInt($widget.parent().parent().attr("data-tmp-answer-count_" + i)); j++) {
-              $question.find(".btn-add-answer").click();
+            //  add at least one answer!
+            var numberOfAnswers = parseInt($widget.parent().parent().attr("data-tmp-answer-count_" + i))
+            if (numberOfAnswers <= 0) numberOfAnswers = 1
+            for (var j = 0; j < numberOfAnswers; j++) {
+              $question.find(".btn-add-answer").click()
             }
           }
         }
@@ -971,6 +992,7 @@ function spaceToJson() {
             questions[nameSplit[1]] = {
               id: el.attr("data-quizzes-question-id_" + nameSplit[1]),
               title: el.attr("data-quizzes-question_" + nameSplit[1]),
+              img: el.attr("data-quizzes-question-img_" + nameSplit[1]),
               answers: {}
             }
           }
@@ -984,6 +1006,7 @@ function spaceToJson() {
             questions[nameSplit[1]].answers[nameSplit[2]] =  {
               id: el.attr("data-quizzes-answer-id_" + nameSplit[1]+ "_" + nameSplit[2]),
               title: el.attr("data-quizzes-answer_" + nameSplit[1]+ "_" + nameSplit[2]),
+              img: el.attr("data-quizzes-answer-img_" + nameSplit[1]+ "_" + nameSplit[2]),
               correct: el.attr("data-quizzes-answer-correct_" + nameSplit[1]+ "_" + nameSplit[2])
           }
         }
@@ -1047,6 +1070,7 @@ function jsonToSpace(data) {
 
         el.attr("data-quizzes-question_" + qid, question.title);
         el.attr("data-quizzes-question-id_" + qid, question.id);
+        el.attr("data-quizzes-question-img_" + qid, question.img);
 
         el.attr("data-tmp-answer-count_" + qid, Object.keys(question.answers).length);
 
@@ -1056,6 +1080,7 @@ function jsonToSpace(data) {
 
           el.attr("data-quizzes-answer_" + qid + "_" + aid, answer.title);
           el.attr("data-quizzes-answer-id_" + qid + "_" + aid, answer.id);
+          el.attr("data-quizzes-answer-img_" + qid + "_" + aid, answer.img);
           el.attr("data-quizzes-answer-correct_" + qid + "_" + aid, answer.correct);
       }
     }

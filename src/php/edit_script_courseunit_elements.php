@@ -142,11 +142,12 @@ $storeWidgetData = array(
 
        $current_question_ids[] = $question_id;
 
-       $query = "REPLACE INTO widget_data_quiz_questions_lng (question_id,lang,title) VALUES (:question_id, :lang, :question)";
+       $query = "REPLACE INTO widget_data_quiz_questions_lng (question_id,lang,title,img) VALUES (:question_id, :lang, :question, :img)";
        $stmt = $conn->prepare($query);
        $stmt->bindParam(":question_id", $question_id, PDO::PARAM_INT);
        $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
        $stmt->bindValue(":question", (isset($question['title']) ? $question['title'] : ""), PDO::PARAM_STR);
+       $stmt->bindValue(":img", (isset($question['img']) ? $question['img'] : ""), PDO::PARAM_STR);
 
        if (!$stmt->execute()) {
          http_response_code(400);
@@ -192,11 +193,12 @@ $storeWidgetData = array(
 
          $current_answer_ids[] = $answer_id;
 
-         $query = "REPLACE INTO widget_data_quiz_answers_lng (answer_id,lang,title) VALUES (:answer_id, :lang, :answer)";
+         $query = "REPLACE INTO widget_data_quiz_answers_lng (answer_id,lang,title,img) VALUES (:answer_id, :lang, :answer, :img)";
          $stmt = $conn->prepare($query);
          $stmt->bindParam(":answer_id", $answer_id, PDO::PARAM_INT);
          $stmt->bindParam(":lang", $lang, PDO::PARAM_STR);
          $stmt->bindValue(":answer", (isset($answer['title']) ? $answer['title'] : ""), PDO::PARAM_STR);
+         $stmt->bindValue(":img", (isset($answer['img']) ? $answer['img'] : ""), PDO::PARAM_STR);
 
          if (!$stmt->execute()) {
            http_response_code(400);
@@ -364,6 +366,7 @@ $loadWidgetData = array(
           $answers[$a["order"]] = array(
             "id" => $a["id"],
             "title" => $a["title"],
+            "img" => $a["img"],
             "correct" => ($a["correct"] ? "correct" : "")
           );
         }
@@ -371,6 +374,7 @@ $loadWidgetData = array(
         $questions[$q["order"]] = array(
           "id" => $q["id"],
           "title" => $q["title"],
+          "img" => $q["img"],
           "answers" => $answers
         );
       }

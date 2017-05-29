@@ -20,14 +20,31 @@
 
 // Delete session cookie and session
 // Taken from http://php.net/manual/de/function.session-destroy.php
+session_start();
+
+require_once '../config/config.php';
+$currentPage = $baseUrl . '/src/views/welcome.php';
+if (isset($_SESSION["currentPage"])) {
+    $currentPage = $_SESSION["currentPage"];
+}
+
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(session_name(), '', time() - 42000, $params["path"],
         $params["domain"], $params["secure"], $params["httponly"]
     );
 }
-
-// return JSON encoded result to client (always "ok" at the moment)
-$result = array('result' => 'ok');
-echo json_encode($result);
+if (isset($_SERVER['HTTP_COOKIE'])) {
+    $cookies = explode(';', $_SERVER['HTTP_COOKIE']);
+    foreach($cookies as $cookie) {
+        $parts = explode('=', $cookie);
+        $name = trim($parts[0]);
+        setcookie($name, '', time()-1000);
+        setcookie($name, '', time()-1000, '/');
+    }
+}
 ?>
+<script>
+window.localStorage.clear();
+window.location.href = "<?php echo $currentPage;?>";
+</script>

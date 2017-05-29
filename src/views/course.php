@@ -204,7 +204,7 @@ $point_to_time_factor = 1;
                                             <?php endif; ?>
                                             <span class="glyphicon glyphicon-calendar margin-right margin-left"></span>
                                             <?php echo $course_unit["start_date"] ?>
-                                            <a href="../php/role_redirect.php?space=<?php echo $course_details['space_url']; ?>&activity=<?php echo $course_unit["activity_url"]; ?>" target="_blank" class="margin-left btn btn-xs btn-warning">
+                                            <a href="../php/role_redirect.php?space=<?php echo $course_details['space_url']; ?>&activity=<?php echo $course_unit["activity_url"]; ?>&lang=<?php echo $course_lang; ?>" target="_blank" class="margin-left btn btn-xs btn-warning">
                                                 <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
                                             </a>
                                         </span>

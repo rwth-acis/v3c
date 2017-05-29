@@ -14,17 +14,19 @@ function getLanguage()
         "general:button:signin" => "Registrarse",
         "general:button:save" => "Salvar",
         "general:button:delete" => "Borrar",
+        "general:button:remove" => "Remove",
         "general:button:edit" => "Editar",
         "general:button:yes" => "Sí",
         "general:button:no" => "No",
         "general:button:description" => "Descripción",
         "general:button:help" => "Ayuda",
+        "general:button:manageUsers" => "Manage Users",
+
+        "general:header:back" => "Back",
 
         "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
         "general:footer:reach" => "Llámenos a: ",
-        "general:footer:erasmus" => "
-
-    El presente proyecto ha sido financiado con el apoyo de la Comisión Europea. Esta publicación es responsabilidad exclusiva de su autor. La Comisión no es responsable del uso que pueda hacerse de la información aquí difundida.",
+        "general:footer:erasmus" => "El presente proyecto ha sido financiado con el apoyo de la Comisión Europea. Esta publicación es responsabilidad exclusiva de su autor. La Comisión no es responsable del uso que pueda hacerse de la información aquí difundida.",
 
         "main:welcome:courses" => "Cursos",
         "main:welcome:headline" => "¡Bienvenido de V3C proyecto!",
@@ -38,6 +40,7 @@ function getLanguage()
         "addcourse:add:create" => "Crear un nuevo curso",
         "addcourse:content:name" => "Nombre del curso:",
         "addcourse:placeholder:name" => "Ingrese el nombre de su curso",
+        "addcourse:content:language" => "Default language",
         "addcourse:content:domain" => "Dominio del curso:",
         'addcourse:placeholder:domain' => 'Ingrese el dominio de su curso',
         "addcourse:content:profession" => "Curso Profesión:",
@@ -61,10 +64,16 @@ function getLanguage()
         "courselist:head:subcourses" => "{SUBJECT} cursos",
         "courselist:head:subcourses_tmp" => " cursos",
         "courselist:head:add" => "Agregar nuevo curso",
+        "courselist:head:search" => "Search",
         "courselist:choose:choose" => "Elija el curso",
         "courselist:choose:name" => "Nombre del curso",
         "courselist:choose:creator" => "Creado por",
         "courselist:choose:start" => "Fechas de Inicio",
+        "courselist:choose:description" => "Description",
+
+        "courselist:admin:translate" => "Translate to",
+        "courselist:admin:edit" => "Edit",
+        "courselist:admin:delete" => "Delete",
 
         "editcourse:head:edit" => "Editar su curso",
         "editcourse:edit:name" => "Nombre del curso:",
@@ -72,7 +81,69 @@ function getLanguage()
         "editcourse:edit:profession" => "Profesión del curso:",
         "editcourse:edit:description" => "Descripción:",
         "editcourse:edit:design" => "Diseñar un entorno de aprendizaje",
+        "editcourse:units:add" => "Add Course Unit",
 
-        "overview:head:gallery" => "Galería"
+        "editcourseunit:edit:name" => "Course unit name:",
+        "editcourseunit:edit:points" => "ECVET Points:",
+        "editcourseunit:edit:startdate" => "Start Date:",
+        "editcourseunit:edit:description" => "Description:",
+
+        "overview:head:gallery" => "Galería",
+
+        "usermanagement:choose:family_name" => "Family Name",
+        "usermanagement:choose:given_name" => "Given Name",
+        "usermanagement:choose:role" => "Role",
+        "usermanagment:choose:affiliation" => "Affiliation",
+        "usermanagement:button:update" => "Update User",
+        "usermanagement:search:name" => "Search by name",
+
+        "designunit:head:title" => "Edit Course Unit",
+        "designunit:content:addcontent" => "Add Content",
+        "designunit:content:uploadfile" => "Upload File",
+        "designunit:content:apply" => "Apply",
+        "designunit:content:slideswidget" => "Slides Widget",
+        "designunit:content:videowidget" => "Video Widget",
+        "designunit:content:imagewidget" => "Image Widget",
+        "designunit:content:hangoutwidget" => "Video Conference Widget",
+        "designunit:content:quizwidget" => "Quizzes Widget",
+        "designunit:content:title" => "Title",
+        "designunit:content:link" => "Link",
+        "designunit:content:videolink" => "Video or Audio",
+        "designunit:content:questions" => "Questions",
+        "designunit:content:addquestion" => "Add Question",
+        "designunit:content:question" => "Question",
+        "designunit:content:answers" => "Answers",
+        "designunit:content:answer" => "Answer",
+        "designunit:content:addanswer" => "Add Answer",
+        "designunit:content:save" => "Save Changes",
+        "designunit:content:toolbox" => "Toolbox",
+        "designunit:content:rolespace" => "ROLE Space",
+        "designunit:content:addtoflow" => "Add to flow",
+        "designunit:content:removefromflow" => "Remove from flow",
+        "designunit:content:imageURL" => "Image URL",
+
+        "designunit:message:inprogress" => "Please wait...",
+        "designunit:message:stored" => "Saved successfully!",
+        "designunit:message:error" => "An error ocurred. Please refresh.",
+        "designunit:message:advice" => "Changes to widget arrangements and widget contents are only applied after clicking this button!",
+
+        "widget:quiz:overview" => "Overview",
+        "widget:quiz:submittedanswers" => "Submitted answers",
+        "widget:quiz:correctanswers" => "Correct answers",
+        "widget:quiz:start" => "Start",
+        "widget:quiz:submit" => "Submit",
+        "widget:chat:join" => "Join Room",
+        "widget:feedback:submit" => "Submit",
+        "widget:feedback:submitted" => "Answer submitted!",
+
+        "widget:general:deactivated" => "This widget is locked. Please work on the other widgets to unlock this widget.",
+        "widget:general:unlock" => "Unlock",
+
+        "widget:type:quiz" => "quiz",
+        "widget:type:image" => "image",
+        "widget:type:slides" => "slides",
+        "widget:type:video" => "video",
+        "widget:type:hangout" => "video conference",
+        "widget:type:feedback" => "feedback form"
     );
 }

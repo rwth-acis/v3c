@@ -28,12 +28,13 @@
       die("error");
     }
 ?>
+<?php include("menu.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widget arrangement</title>
+    <title><?php echo getTranslation("designunit:head:title", "Edit Course Unit");?></title>
 
     <link rel="stylesheet" href="../external/redacted/fonts/stylesheet.css"/>
     <link rel="stylesheet" href="../external/jasny-bootstrap/dist/css/jasny-bootstrap.min.css"/>
@@ -44,7 +45,6 @@
 </head>
 
 <body>
-    <?php include("menu.php"); ?>
     <header id='head' class='secondary'>
         <div class='container'>
             <div class='row'>
@@ -574,7 +574,7 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
                         <div class="col-sm-10 col-sm-offset-1">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <label for="video-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
+                                    <label for="quizzes-title"><?php echo getTranslation("designunit:content:title", "Title");?></label>
                                     <input type="text" class="form-control protocontent"
                                     name="quizzes-title"
                                     placeholder="Title" aria-describedby="basic-addon1">
@@ -608,12 +608,11 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
             </span>
             <input type="text" class="form-control protocontent"
             name="quizzes-answer_0_0" class="protocontent"
-            placeholder="Answer" aria-describedby="basic-addon1">
+            placeholder="<?php echo getTranslation("designunit:content:answer", "Answer");?>" aria-describedby="basic-addon1">
             <input type="text" class="form-control protocontent"
             name="quizzes-answer-img_0_0" class="protocontent"
-            placeholder="Image URL" aria-describedby="basic-addon1">
+            placeholder="<?php echo getTranslation("designunit:content:imageURL", "Image URL");?>" aria-describedby="basic-addon1">
             <span class="input-group-btn">
-                <button class="btn btn-secondary remove-answer" type="button">-</button>
             </span>
         </div>
     </div>
@@ -632,10 +631,10 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
                     <label for="quizzes-question_0"><?php echo getTranslation("designunit:content:question", "Question");?>:</label>
                     <input type="text" class="form-control protocontent"
                     name="quizzes-question_0"
-                    placeholder="Question" aria-describedby="basic-addon1">
+                    placeholder="<?php echo getTranslation("designunit:content:question", "Question");?>" aria-describedby="basic-addon1">
                     <input type="text" class="form-control protocontent"
                     name="quizzes-question-img_0"
-                    placeholder="Image URL" aria-describedby="basic-addon1">
+                    placeholder="<?php echo getTranslation("designunit:content:imageURL", "Image URL");?>" aria-describedby="basic-addon1">
                     <input type="hidden" name="quizzes-question-id_0" class="protocontent" value="">
                 </div>
                 <label class="col-sm-12"><?php echo getTranslation("designunit:content:answers", "Answers");?>:</label>
@@ -885,7 +884,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
 
         $(this).parents(".modal-content").find(".qa-block-container").append($qb);
         var $elem = $(this).parents(".modal-content").find(".qa-block-container").find('.panel-default').last();
-        $elem.find(".question-title-counter").text("Question " + aNum);
+        $elem.find(".question-title-counter").text("<?php echo getTranslation("designunit:content:question","Question");?> " + aNum);
 
         var qorder = parseInt( $elem.parents(".modal").attr("data-question-ctr") );
         $elem.parents(".modal").attr("data-question-ctr", qorder+1);

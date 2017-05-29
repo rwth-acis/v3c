@@ -98,7 +98,7 @@
                                         </select>
                                     </div>
                                     <div class="row col-sm-6">
-                                        <input id ="searchString" name="searched" type="text" class="form-control" placeholder="Search"
+                                        <input id ="searchString" name="searched" type="text" class="form-control" placeholder="<?php echo getTranslation("courselist:head:search", "Search");?>"
                                         onkeyup="filter()">
                                         <br/>
                                     </div>
@@ -266,7 +266,7 @@
                                                     data-id="<?php echo $current_course_id; ?>"
                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                     class="btn btn-delete btn-sm btn-warning btn-block"
-                                                    value="Delete"></td>
+                                                    value="<?php echo getTranslation("courselist:admin:delete", "Delete");?>"></td>
                                                     <td class="rowlink-skip">
                                                     <?php
                                                         if($hasUnitStartDate && time() >= strtotime($current_start) || !$hasUnitStartDate){

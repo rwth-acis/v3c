@@ -20,6 +20,9 @@ function getLanguage()
         "general:button:no" => "No",
         "general:button:description" => "Description",
         "general:button:help" => "Help",
+        "general:button:manageUsers" => "Manage Users",
+
+        "general:header:back" => "Back",
 
         "general:footer:virtus" => "VIRTUS Virtual Vocational Training Centre",
         "general:footer:reach" => "Reach us at: ",
@@ -38,6 +41,7 @@ function getLanguage()
         "addcourse:add:create" => "Create a new course",
         "addcourse:content:name" => "Course name:",
         "addcourse:placeholder:name" => "Enter your course name",
+        "addcourse:content:language" => "Default language",
         "addcourse:content:domain" => "Course Domain:",
         "addcourse:placeholder:domain" => "Enter your course domain",
         "addcourse:content:profession" => "Course Profession:",
@@ -61,6 +65,7 @@ function getLanguage()
         "courselist:head:subcourses" => "{SUBJECT} courses",
         "courselist:head:subcourses_tmp" => " courses",
         "courselist:head:add" => "Add new course",
+        "courselist:head:search" => "Search",
         "courselist:choose:choose" => "Choose course",
         "courselist:choose:name" => "Course name",
         "courselist:choose:creator" => "Created by",
@@ -69,6 +74,7 @@ function getLanguage()
 
         "courselist:admin:translate" => "Translate to",
         "courselist:admin:edit" => "Edit",
+        "courselist:admin:delete" => "Delete",
 
         "editcourse:head:edit" => "Edit Your Course",
         "editcourse:edit:name" => "Course name:",
@@ -90,6 +96,7 @@ function getLanguage()
         "usermanagement:choose:role" => "Role",
         "usermanagment:choose:affiliation" => "Affiliation",
         "usermanagement:button:update" => "Update User",
+        "usermanagement:search:name" => "Search by name",
 
         "designunit:head:title" => "Edit Course Unit",
         "designunit:content:addcontent" => "Add Content",
@@ -107,10 +114,14 @@ function getLanguage()
         "designunit:content:addquestion" => "Add Question",
         "designunit:content:question" => "Question",
         "designunit:content:answers" => "Answers",
+        "designunit:content:answer" => "Answer",
         "designunit:content:addanswer" => "Add Answer",
         "designunit:content:save" => "Save Changes",
         "designunit:content:toolbox" => "Toolbox",
         "designunit:content:rolespace" => "ROLE Space",
+        "designunit:content:addtoflow" => "Add to flow",
+        "designunit:content:removefromflow" => "Remove from flow",
+        "designunit:content:imageURL" => "Image URL",
 
         "designunit:message:inprogress" => "Please wait...",
         "designunit:message:stored" => "Saved successfully!",

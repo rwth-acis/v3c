@@ -612,6 +612,7 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
             <input type="text" class="form-control protocontent"
             name="quizzes-answer-img_0_0" class="protocontent"
             placeholder="<?php echo getTranslation("designunit:content:imageURL", "Image URL");?>" aria-describedby="basic-addon1">
+            <input name="answer-file" class="upload-file " type="file">
             <span class="input-group-btn">
             </span>
         </div>
@@ -635,6 +636,7 @@ id="prototypeQuizzesViewerModal" data-question-ctr="0" data-backdrop="static" da
                     <input type="text" class="form-control protocontent"
                     name="quizzes-question-img_0"
                     placeholder="<?php echo getTranslation("designunit:content:imageURL", "Image URL");?>" aria-describedby="basic-addon1">
+                    <input name="querstion-file" class="upload-file " type="file">
                     <input type="hidden" name="quizzes-question-id_0" class="protocontent" value="">
                 </div>
                 <label class="col-sm-12"><?php echo getTranslation("designunit:content:answers", "Answers");?>:</label>
@@ -894,6 +896,10 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         $elem.find("[name=quizzes-question-img_0]").attr("name", "quizzes-question-img_" + qorder);
         $elem.attr("data-question-id", qorder);
 
+        $elem.find('input.upload-file').on('change', function() {
+            uploadQA(this,$elem.find("[name=quizzes-question-img_"+qorder+"]"));
+        })
+
         quizzesButtonFunc($elem)
 
         setTimeout(function () {
@@ -928,6 +934,10 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         $(template).find("[name=quizzes-answer-id_0_0]").attr("name", "quizzes-answer-id_" + qorder + "_" + aorder);
         $(template).find("[name=quizzes-answer-img_0_0]").attr("name", "quizzes-answer-img_" + qorder + "_" + aorder);
         $(template).find("[name=quizzes-answer-correct_0_0]").attr("name", "quizzes-answer-correct_" + qorder + "_" + aorder);
+
+        $(template).find('input.upload-file').on('change', function() {
+            uploadQA(this,$(template).find("[name=quizzes-answer-img_"+qorder+"_"+aorder+"]"));
+        })
 
             //qa-div
             $(template).find('.remove-answer').click(function () {
@@ -1312,6 +1322,29 @@ function uploadData(handler,type){
         //debugger
         console.log($(handler).parents('.modal-body').find('.upload-target'))
         $(handler).parents('.modal-body').find('.upload-target').val(php_script_response)
+        $(handler).parents('.modal-body').find('.loader').removeClass("loading");
+      }
+     });
+}
+
+function uploadQA(handler, elem){
+    var file_data = handler.files[0];
+    var form_data = new FormData();
+    form_data.append('file', file_data);
+    form_data.append('type', "image");
+    $(handler).parents('.modal-body').find('.loader').addClass("loading");
+    $.ajax({
+      url: '../php/upload.php', // point to server-side PHP script
+      dataType: 'text',  // what to expect back from the PHP script, if anything
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: form_data,
+      type: 'post',
+      success: function(php_script_response){
+        //debugger
+        console.log($(handler).parents('.modal-body').find('.upload-target'))
+        elem.val(php_script_response)
         $(handler).parents('.modal-body').find('.loader').removeClass("loading");
       }
      });

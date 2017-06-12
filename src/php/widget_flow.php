@@ -9,7 +9,7 @@ $widget_role_url = filter_input(INPUT_GET, 'widget_role_url');
 
 $stmt = $conn->prepare("SELECT  this.id AS this_id, this.widget_flow_order AS this_order, next.widget_role_url AS next_widget, next.widget_type AS next_type, next.id AS next_id
                         FROM course_elements AS this
-                        LEFT JOIN course_elements AS next ON next.widget_flow_order = (this.widget_flow_order + 1)
+                        LEFT JOIN course_elements AS next ON next.widget_flow_order = (this.widget_flow_order + 1)  AND next.unit_id = this.unit_id
                         WHERE this.widget_role_url = :widget_role_url");
 $stmt->bindParam(":widget_role_url", $widget_role_url, PDO::PARAM_STR);
 if (!$stmt->execute()) {

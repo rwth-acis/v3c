@@ -27,7 +27,7 @@ class RoleSync {
     if ($course_data['space_url'] != null && !$force) return;
 
     // create role space
-    $space_name = $course_id . strtolower(urlencode(str_replace(' ', '',$course_data['name'])));
+    $space_name = $course_id . strtolower(str_replace('%26','',rawurlencode(str_replace(' ', '',removeNonAlphaNumeric($course_data['name'])))));
     $space_url = $this->api->createSpace($space_name);
     if ($space_url == -1) {
       die("Cannot create space!");

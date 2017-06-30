@@ -5,8 +5,8 @@
 * Also, single courses and units can be repopulated in case if an error occurred.
 * Use with caution!
 *
-* Recreate whole DB: php role_cli_tool.php database
-* Recreate course: php role_cli_tool.php course <id>
+* Recreate whole DB: php role_cli_tool.php database [Empty role instance]
+* Recreate course: php role_cli_tool.php course <id> [Course space needs to be empty]
 * Recreate unit:  php role_cli_tool.php unit <id>
 */
 

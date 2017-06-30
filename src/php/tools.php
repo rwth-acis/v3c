@@ -336,6 +336,10 @@ function get_string_between($string, $start, $end){
     return substr($string, $ini, $len);
 }
 
+function removeNonAlphaNumeric( $str )
+{
+    return preg_replace("/[^A-Za-z0-9 ]/", '', $str);
+}
 
 
 function getAdminToken(){

@@ -79,8 +79,8 @@ if ($success) {
 
                     <!-- COURSE NAME -->
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="targetName"><?php echo getTranslation("editcourse:edit:name", "Course name:");?></label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label" for="targetName"><?php echo getTranslation("editcourse:edit:name", "Course name:");?></label>
+                        <div class="col-sm-9">
                             <input type="hidden" name="targetId" value="<?php echo $course_id; ?>">
                             <input type="text" class="form-control" name="name" id="targetName"
                             value="<?php echo htmlentities($course['name']); ?>" required>
@@ -89,8 +89,8 @@ if ($success) {
 
                     <!-- COURSE DOMAIN-->
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label" for="targetDomain"><?php echo getTranslation("editcourse:edit:domain", "Course Domain:");?></label>
+                        <div class="col-sm-9">
                             <select class="form-control" name="domain" id="domain">
                                 <?php
                                     // Get subjects
@@ -109,8 +109,8 @@ if ($success) {
 
                     <!-- COURSE PROFESSION -->
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="targetProfession"><?php echo getTranslation("editcourse:edit:profession", "Course Profession:");?></label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label" for="targetProfession"><?php echo getTranslation("editcourse:edit:profession", "Course Profession:");?></label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" name="profession" id="targetProfession"
                             value="<?php echo htmlentities($course['profession']); ?>" required>
                         </div>
@@ -118,8 +118,8 @@ if ($success) {
 
                     <!-- COURSE DESCRIPTION -->
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="targetText"><?php echo getTranslation("editcourse:edit:description", "Description:");?></label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-3 control-label" for="targetText"><?php echo getTranslation("editcourse:edit:description", "Description:");?></label>
+                        <div class="col-sm-9">
                             <textarea class="form-control" rows="3" name="description" id="description"
                             placeholder="Enter course description"><?php echo htmlentities($course['description']); ?></textarea>
                         </div>

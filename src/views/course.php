@@ -65,7 +65,8 @@ $course_subject_details = $conn->query("SELECT subjects.* FROM subjects WHERE id
 
 
 // Get course units
-$stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*
+$stmt = $conn->prepare("SELECT course_units.*, course_units_lng.*, CASE WHEN (SELECT lang FROM course_units_lng
+    WHERE course_units_lng.unit_id = course_units.id AND course_units_lng.lang = :course_lang) IS NULL THEN 'False' ELSE 'True' END AS translated
     FROM course_units, course_units_lng
     WHERE course_units.course_id = :course_id
     AND course_units.id = course_units_lng.unit_id
@@ -193,7 +194,9 @@ $point_to_time_factor = 1;
                                 <?php foreach($course_units as $course_unit):?>
                                     <li data-toggle="collapse" data-target="#<?php echo $course_unit["id"] ?>" href="#" class="hover-click list-group-item clearfix">
                                         <span class="glyphicon glyphicon-book margin-right"></span>
-                                        <?php echo $course_unit["title"] ?>
+                                        <?php echo $course_unit["title"];
+                                          if($course_unit['translated']=="False") echo " <div style='margin-left:5px;display:inline;color:#b92c28;'>[Not Translated]</div>";
+                                         ?> 
                                         <span class="pull-right">
                                             <?php if($isAuthenticated): ?>
                                               <span class="glyphicon glyphicon-time margin-right margin-left"></span>

@@ -6,7 +6,7 @@ $unit_id = filter_input(INPUT_GET, 'uid', FILTER_VALIDATE_INT);
 $course_lang = filter_input(INPUT_GET, 'ulang');
 
 // Get course info
-$statement = $conn->prepare("SELECT *
+$statement = $conn->prepare("SELECT *, CASE WHEN (SELECT lang FROM course_units_lng WHERE lang = :unit_lang AND unit_id = :unit_id) IS NULL THEN 'False' ELSE 'True' END AS translated
     FROM course_units, course_units_lng
     WHERE course_units.id = :unit_id
     AND course_units.id = course_units_lng.unit_id

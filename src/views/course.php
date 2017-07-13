@@ -198,7 +198,8 @@ $point_to_time_factor = 1;
                                           if($course_unit['translated']=="False") echo " <div style='margin-left:5px;display:inline;color:#b92c28;'>[Not Translated]</div>";
                                          ?> 
                                         <span class="pull-right">
-                                            <?php if($isAuthenticated): ?>
+                                            <?php if($isAuthenticated):
+											?>
                                               <span class="glyphicon glyphicon-time margin-right margin-left"></span>
                                               <?php echo (!$time_progress[$course_unit['id']]['duration'] ? 0 : $time_progress[$course_unit['id']]['duration']) ?>/<?php echo $course_unit['points']*$point_to_time_factor ?> min
 
@@ -207,9 +208,14 @@ $point_to_time_factor = 1;
                                             <?php endif; ?>
                                             <span class="glyphicon glyphicon-calendar margin-right margin-left"></span>
                                             <?php echo $course_unit["start_date"] ?>
+											<?php if((time() >= strtotime($course_unit["start_date"]) && $isAuthenticated) || $isLecturer){
+											?>
                                             <a href="../php/role_redirect.php?space=<?php echo $course_details['space_url']; ?>&activity=<?php echo $course_unit["activity_url"]; ?>&lang=<?php echo $course_lang; ?>" target="_blank" class="margin-left btn btn-xs btn-warning">
                                                 <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
                                             </a>
+											<?php
+												}
+											?>
                                         </span>
                                     </li>
                                     <div id="<?php echo $course_unit["id"] ?>" class="collapse">

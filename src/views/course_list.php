@@ -21,6 +21,7 @@
 
     $accessControl = new AccessControl();
     $isLecturer = $accessControl->canCreateCourse();
+	$isAuthenticated = $accessControl->getAuthentication()->isAuthenticated();
 
     $subject_id = filter_input(INPUT_GET, "id");
 
@@ -118,10 +119,18 @@
                                             <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                             <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                             <th></th>
-                                            <?php if ($isLecturer) { ?>
+                                            <?php 
+												if ($isLecturer) { 
+											?>
                                             <th></th>
+                                            <?php 
+												} 
+												if ( $isAuthenticated ) { 
+											?>
                                             <th></th>
-                                            <?php } ?>
+                                            <?php 
+												} 
+											?>
                                         </tr>
                                     </thead>
                                     <tbody data-link="row" class="rowlink">
@@ -267,18 +276,20 @@
                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                     class="btn btn-delete btn-sm btn-warning btn-block"
                                                     value="<?php echo getTranslation("courselist:admin:delete", "Delete");?>"></td>
-                                                    <td class="rowlink-skip">
-                                                    <?php
-                                                        if($hasUnitStartDate && time() >= strtotime($current_start) || !$hasUnitStartDate){
+													<?php
+														}													
+													?>
+													<?php
+                                                        if((($hasUnitStartDate && time() >= strtotime($current_start) || !$hasUnitStartDate) && $isAuthenticated) || $isLecturer){
                                                     ?>
+                                                    <td class="rowlink-skip">
                                                     <a href="../php/role_redirect.php?space=<?php echo $current_course_url; ?>" target="_blank" class="margin-left btn btn-sm btn-warning ">
                                                         <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
                                                     </a>
+                                                    </td>
                                                     <?php
                                                         }
                                                     ?>
-                                                    </td>
-                                                    <?php } ?>
                                                 </tr>
                                                 <tr>
                                                     <!-- Collapse div for course description -->

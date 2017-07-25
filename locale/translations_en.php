@@ -55,6 +55,8 @@ function getLanguage()
         "course:content:domain" => "Domain:",
         "course:content:profession" => "Profession:",
         "course:content:description" => "Description:",
+        "course:content:notstarted" => "Module has not yet started",
+        "course:content:unitnotstarted" => "Unit has not yet started",
 
         "coursedel:head:name" => "Delete course {COURSENAME}",
         "coursedel:head:name_tmp" => "Delete module ",

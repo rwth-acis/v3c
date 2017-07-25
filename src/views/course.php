@@ -196,7 +196,7 @@ $point_to_time_factor = 1;
                                         <span class="glyphicon glyphicon-book margin-right"></span>
                                         <?php echo $course_unit["title"];
                                           if($course_unit['translated']=="False") echo " <div style='margin-left:5px;display:inline;color:#b92c28;'>[Not Translated]</div>";
-                                         ?> 
+                                         ?>
                                         <span class="pull-right">
                                             <?php if($isAuthenticated):
 											?>
@@ -215,6 +215,9 @@ $point_to_time_factor = 1;
                                             </a>
 											<?php
 												}
+                        else {
+                          echo "&nbsp;&nbsp;&nbsp;&nbsp;".getTranslation("course:content:unitnotstarted", "Unit has not yet started");
+                        }
 											?>
                                         </span>
                                     </li>

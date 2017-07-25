@@ -119,17 +119,17 @@
                                             <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                             <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
                                             <th></th>
-                                            <?php 
-												if ($isLecturer) { 
+                                            <?php
+												if ($isLecturer) {
 											?>
                                             <th></th>
-                                            <?php 
-												} 
-												if ( $isAuthenticated ) { 
+                                            <?php
+												}
+												if ( $isAuthenticated ) {
 											?>
                                             <th></th>
-                                            <?php 
-												} 
+                                            <?php
+												}
 											?>
                                         </tr>
                                     </thead>
@@ -170,7 +170,7 @@
                                                 if($course_credits[$cntc]["course_id"]==$current_course_id)
                                                     $current_course_credits = $course_credits[$cntc]["credits"];
                                             }
-                                            
+
 
                                             if($displayed_course_flag){
                                                 $current_course_name = $temp_name;
@@ -193,7 +193,7 @@
                                                 </td>
                                                 <td><?php echo $courses[$initCntr]["orga"]; ?></td>
                                                 <td>
-                                                    <?php 
+                                                    <?php
                                                         $hasUnitStartDate = false;
                                                         $current_start = 0;
                                                         foreach ($course_start_date as $unit) {
@@ -206,9 +206,9 @@
                                                         if(!$hasUnitStartDate){
                                                             foreach ($course_dates_array as $start_date) {
                                                                 echo $start_date . "<br>";
-                                                            } 
+                                                            }
                                                         }
-                                                    ?>    
+                                                    ?>
                                                 </td>
                                                 <td class="language-flag-rows">
                                                     <?php $i=0; foreach ($lang_array as $c_lang) {
@@ -270,14 +270,14 @@
                                                     <?php else: ?>
                                                         <a href="editcourse.php?id=<?php echo $current_course_id; ?>&lang=<?php echo $current_course_lang; ?>" class="btn btn-edit btn-sm btn-success btn-block"><?php echo getTranslation("courselist:admin:edit", "Edit");?></a>
                                                     <?php endif; ?>
-                                                    
+
                                                 <input type="button"
                                                     data-id="<?php echo $current_course_id; ?>"
                                                     data-lang="<?php echo $current_course_lang; ?>"
                                                     class="btn btn-delete btn-sm btn-warning btn-block"
                                                     value="<?php echo getTranslation("courselist:admin:delete", "Delete");?>"></td>
 													<?php
-														}													
+														}
 													?>
 													<?php
                                                         if((($hasUnitStartDate && time() >= strtotime($current_start) || !$hasUnitStartDate) && $isAuthenticated) || $isLecturer){
@@ -286,6 +286,13 @@
                                                     <a href="../php/role_redirect.php?space=<?php echo $current_course_url; ?>" target="_blank" class="margin-left btn btn-sm btn-warning ">
                                                         <?php echo getTranslation("course:content:enterroom", "Enter Course Room");?>
                                                     </a>
+                                                    </td>
+                                                    <?php
+                                                        }
+                                                        else {
+                                                    ?>
+                                                    <td class="rowlink-skip">
+                                                        <?php echo getTranslation("course:content:notstarted", "Course has not yet started");?>
                                                     </td>
                                                     <?php
                                                         }

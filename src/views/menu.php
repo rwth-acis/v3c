@@ -88,7 +88,9 @@
                     <?php if ($accessControl->canEnterLecturerMode()): ?>
                       <li><a href='../php/phpbb_redirect.php'><?php echo getTranslation("general:button:forum", "Forum");?></a></li>
                     <?php endif; ?>
-                    <li><a href='../php/logout.php'><?php echo getTranslation("general:button:logout", "Logout");?></a></li>
+                    <?php if (isset($_SESSION['access_token'])): ?>
+                      <li><a href='../php/logout.php'><?php echo getTranslation("general:button:logout", "Logout");?></a></li>
+                    <?php endif; ?>
                     <li>
                         <span id="signinButton">
                             <span class="oidc-signin"

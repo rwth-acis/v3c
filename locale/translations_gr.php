@@ -55,6 +55,8 @@ function getLanguage()
         "course:content:domain" => "Πεδίο ορισμού::",
         "course:content:profession" => "Επάγγελμα:",
         "course:content:description" => "Περιγραφή:",
+        "course:content:notstarted" => "Το module δεν έχει ξεκινήσει ακόμα",
+        "course:content:unitnotstarted" => "Η υποενότητα/κεφάλαιο δεν έχει ξεκινήσει ακόμα",
 
         "coursedel:head:name" => "Διαγραφή μαθήματος {COURSENAME}",
         "coursedel:head:name_tmp" => "Διαγραφή μαθήματος",

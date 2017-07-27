@@ -54,6 +54,8 @@ function getLanguage()
         "course:content:domain" => "Dominio:",
         "course:content:profession" => "Profesión:",
         "course:content:description" => "Descripción:",
+        "course:content:notstarted" => "El módulo no ha comenzado",
+        "course:content:unitnotstarted" => "La unidad no ha comenzado",
 
         "coursedel:head:name" => "Eliminar módulo {COURSENAME}",
         "coursedel:head:name_tmp" => "Eliminar módulo ",

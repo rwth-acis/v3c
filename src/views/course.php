@@ -215,7 +215,7 @@ $point_to_time_factor = 1;
                                             </a>
 											<?php
 												}
-                        else {
+                        else if($isAuthenticated){
                           echo "&nbsp;&nbsp;&nbsp;&nbsp;".getTranslation("course:content:unitnotstarted", "Unit has not yet started");
                         }
 											?>

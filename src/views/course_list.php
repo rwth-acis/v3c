@@ -289,7 +289,7 @@
                                                     </td>
                                                     <?php
                                                         }
-                                                        else {
+                                                        else if($isAuthenticated){
                                                     ?>
                                                     <td class="rowlink-skip">
                                                         <?php echo getTranslation("course:content:notstarted", "Course has not yet started");?>

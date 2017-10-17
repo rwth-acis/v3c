@@ -28,7 +28,7 @@ if (!$stmt->execute()) {
 $course_units = $stmt->fetchAll();
 
 // get user progression
-$stmt = $conn->prepare("SELECT user_id, unit_id, duration, points, given_name, family_name
+$stmt = $conn->prepare("SELECT user_id, unit_id, duration, points, given_name, family_name, email
   FROM user_progression, course_units, users
   WHERE user_progression.unit_id = course_units.id AND course_units.course_id = :course_id AND user_progression.user_id = users.id");
 
@@ -47,6 +47,7 @@ while($user_progression = $stmt->fetch()) {
       "user_id" => $user_progression["user_id"],
       "given_name" => $user_progression["given_name"],
       "family_name" => $user_progression["family_name"],
+      "email" => $user_progression["email"],
       "units" => array(),
       "quizzes" => array(),
       "total_unit_progress" => "0%",
@@ -148,7 +149,7 @@ foreach ($user_data as $key => &$value) {
 <div class="list-group list-group-root well">
   <?php foreach ($user_data as $value1): ?>
     <a href="#item-<?php echo $value1['user_id'] ?>" class="list-group-item" data-toggle="collapse">
-      <?php echo $value1['family_name'] ?>, <?php echo $value1['given_name'] ?>
+      <?php echo $value1['family_name'] ?>, <?php echo $value1['given_name'] ?> (<?php echo $value1['email']; ?>)
       <span class="pull-right">
           <span class="glyphicon glyphicon-time margin-right margin-left"></span>
           <?php echo $value1['total_unit_progress'] ?>

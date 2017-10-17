@@ -118,9 +118,9 @@
                                             <th><?php echo getTranslation("courselist:choose:name", "Course name");?></th>
                                             <th><?php echo getTranslation("courselist:choose:creator", "Created by");?></th>
                                             <th><?php echo getTranslation("courselist:choose:start", "Start Dates");?></th>
-                                            <th></th>
+                                            <th style="min-width: 50px;"></th>
                                             <?php
-												if ($isLecturer) {
+												if ($isAuthenticated) {
 											?>
                                             <th></th>
                                             <?php
@@ -183,7 +183,7 @@
                                             }
 
                                             ?>
-                                            <tr>
+                                            <tr id="<?php echo $courses[$initCntr]["id"];?>" class="c">
                                                 <td>
                                                     <a href="course.php?id=<?php echo $current_course_id . "&lang=" . $current_course_lang; ?>"><?php echo $current_course_name; ?></a>
 
@@ -298,7 +298,7 @@
                                                         }
                                                     ?>
                                                 </tr>
-                                                <tr>
+                                                <tr  id="<?php echo $courses[$initCntr]["id"]."-desc";?>" >
                                                     <!-- Collapse div for course description -->
                                                     <td colspan="8">
                                                         <button type="button" class="btn btn-info" data-toggle="collapse"

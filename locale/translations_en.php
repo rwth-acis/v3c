@@ -21,6 +21,7 @@ function getLanguage()
         "general:button:description" => "Description",
         "general:button:help" => "Help",
         "general:button:manageUsers" => "Manage Users",
+        "general:button:LoginToECQA" => "Login to ECQA",
 
         "general:header:back" => "Back",
 

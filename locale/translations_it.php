@@ -21,6 +21,7 @@ function getLanguage()
         "general:button:description" => "Descrizione",
         "general:button:help" => "Aiuto",
         "general:button:manageUsers" => "Gestisci utenti",
+        "general:button:LoginToECQA" => "Login to ECQA",
 
         "general:header:back" => "Indietro",
 
@@ -64,9 +65,9 @@ function getLanguage()
 
         "courselist:head:subcourses" => "{SUBJECT} moduli",
         "courselist:head:subcourses_tmp" => " corsi",
-        "courselist:head:add" => "Aggiungi nuovo modulo",
+        "courselist:head:add" => "Aggiungi un nuovo modulo",
         "courselist:head:search" => "Cerca",
-        "courselist:choose:choose" => "Scegli modulo",
+        "courselist:choose:choose" => "Scegli il modulo",
         "courselist:choose:name" => "Nome del modulo",
         "courselist:choose:creator" => "Creato da",
         "courselist:choose:start" => "Date d'inizio",

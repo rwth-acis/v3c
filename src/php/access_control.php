@@ -67,6 +67,16 @@ class AccessControl
     }
 
     /**
+     * @return Object object with property names that correspond to the column
+     * names of our users table for the user of the current session
+     */
+    public function getUserOrganization()
+    {
+        $userManagement = new UserManagement();
+        return $userManagement->getOrganization($_SESSION['sub']);
+    }
+
+    /**
      * Evaluates the status of a authenticated user further (is it a tutor or not?)
      * @param Object $user A user object from our database
      * @return int The status of the authenticated user

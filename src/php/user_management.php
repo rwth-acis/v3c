@@ -50,6 +50,22 @@ class UserManagement
     }
 
     /**
+     * Read a users organization
+     * @param String $sub The Open ID Connect SUB
+     * @return Object object with property names that correspond to the column
+     * names of our users table
+     */
+    public function getOrganization($sub)
+    {
+        $sqlSelect = "SELECT organizations.id, organizations.name FROM `users`, `organizations` WHERE users.openIdConnectSub='" . $sub . "' AND users.affiliation=organizations.id";
+        // This will escape symbols in the SQL statement (also supposed to prevent
+        // SQL injection attacks). Returns a PDOStatement
+        $stmt = $this->db->prepare($sqlSelect);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+    /**
      * Create a user entry in our database
      * @param type $userProfile Object with properties email, sub, given_name,
      * family_name
@@ -64,7 +80,7 @@ class UserManagement
                           VALUES (:email, :sub, :given_name, :family_name, :role)");
         echo $stmt->bindParam(":email", $userProfile->email, PDO::PARAM_STR);
         echo $stmt->bindParam(":sub", $userProfile->sub, PDO::PARAM_STR);
-        echo $stmt->bindParam(":given_name", $userProfile->given_name, PDO::PARAM_STR);
+        echo $stmt->bindParam(":given_name", $userProfile->given_name, PDO::PARAM_STR); 
         echo $stmt->bindParam(":family_name", $userProfile->family_name, PDO::PARAM_STR);
         echo $stmt->bindParam(":role", $role, PDO::PARAM_INT);
 

@@ -17,16 +17,16 @@ $sub = filter_input(INPUT_POST, 'sub');
 $sql = "UPDATE users SET role = :role, affiliation = :orga WHERE openIdConnectSub = :sub";
 $statement = $db->prepare($sql);
 $statement->bindParam(":role", $role, PDO::PARAM_INT);
-if ($orga !== 'NULL') {
+//if ($orga !== 'NULL') {
   $statement->bindParam(":orga", $orga, PDO::PARAM_INT);
-}
+/*}
 else {
 	if($role!='3'){
 		header('Location:../views/manage_users.php?Update=false');
 	}else{
 		$statement->bindValue(':orga', null, PDO::PARAM_INT);
 	}
-}
+}*/
 $statement->bindParam(":sub", $sub, PDO::PARAM_STR);
 
 $success = $statement->execute();

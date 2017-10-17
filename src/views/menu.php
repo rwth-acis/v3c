@@ -89,7 +89,12 @@
                       <li><a href='../php/phpbb_redirect.php'><?php echo getTranslation("general:button:forum", "Forum");?></a></li>
                     <?php endif; ?>
                     <?php if (isset($_SESSION['access_token'])): ?>
-                      <li><a href='../php/logout.php'><?php echo getTranslation("general:button:logout", "Logout");?></a></li>
+                        <form method="post" target="_blank" id="formID" style="float:left;" action="https://www.iscn.com/projects/piconew_skill_portal/capadv/virtus_login.php?oidc=<?php echo $_SESSION["access_token"]; ?>&org=<?php echo $accessControl->getUserOrganization()->name;?>" >
+                            <li><a href="javascript:void(0);" onclick="$(this).closest('form').submit();"><?php echo getTranslation("general:button:LoginToECQA", "Login to ECQA");?></a></li>
+                        </form>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['access_token'])): ?>
+                      <li><a id="logout" href='../php/logout.php'><?php echo getTranslation("general:button:logout", "Logout");?></a></li>
                     <?php endif; ?>
                     <li>
                         <span id="signinButton">
@@ -120,6 +125,20 @@
 </div>
 
 <script type="text/javascript">
+    $('#logout').click(function(){ 
+        // Change to variable URL
+        var wnd = window.open("https://api.learning-layers.eu/o/oauth2/logout");
+        var timer = setInterval(function() {   
+            if(wnd.location.href = "https://api.learning-layers.eu/o/oauth2/") {  
+                clearInterval(timer);  
+                wnd.close();
+                window.location = "../php/logout.php";
+            }  
+        }, 100);
+        return false; 
+    });
+
+
     function updateQueryStringParameter(uri, key, value) {
         var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
         var separator = uri.indexOf('?') !== -1 ? "&" : "?";

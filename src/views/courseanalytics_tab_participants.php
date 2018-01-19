@@ -28,9 +28,9 @@ if (!$stmt->execute()) {
 $course_units = $stmt->fetchAll();
 
 // get user progression
-$stmt = $conn->prepare("SELECT user_id, unit_id, duration, points, given_name, family_name, email
-  FROM user_progression, course_units, users
-  WHERE user_progression.unit_id = course_units.id AND course_units.course_id = :course_id AND user_progression.user_id = users.id");
+$stmt = $conn->prepare("SELECT user_id, unit_id, duration, points, given_name, family_name, users.email, organizations.name as affliation 
+  FROM user_progression, course_units, users, organizations
+  WHERE users.affiliation = organizations.id AND user_progression.unit_id = course_units.id AND course_units.course_id = :course_id AND user_progression.user_id = users.id");
 
 $stmt->bindParam(":course_id", $course_id, PDO::PARAM_INT);
 
@@ -48,6 +48,7 @@ while($user_progression = $stmt->fetch()) {
       "given_name" => $user_progression["given_name"],
       "family_name" => $user_progression["family_name"],
       "email" => $user_progression["email"],
+      "affliation" => $user_progression["affliation"],
       "units" => array(),
       "quizzes" => array(),
       "total_unit_progress" => "0%",
@@ -58,7 +59,7 @@ while($user_progression = $stmt->fetch()) {
   $user_progress = "--";
   if($user_progression["points"] != 0){
     $user_progress = round($user_progression["duration"] / ($user_progression["points"] * $point_to_time_factor) * 100);
-    ($user_progress>100)?$user_progress="100%": $user_progress."%";
+    ($user_progress>100)?$user_progress="100": $user_progress;
   }
 
   $user_data[$user_progression["user_id"]]["units"][$user_progression["unit_id"]] = array(
@@ -144,11 +145,38 @@ foreach ($user_data as $key => &$value) {
 
 ?>
 
-<p><strong><?php echo sizeof($user_data) ?></strong> participants</p>
+<p>
 
-<div class="list-group list-group-root well">
+                    <?php echo $user_update_notice;
+                    //DEBUG print_r($_SESSION);
+
+                    ?>
+
+                    <form id="fsearch" role="search">
+                        <div class="row">
+                            <input id="searchString" name="searched" type="text" class="form-control"
+                                   placeholder="<?php
+                echo getTranslation("usermanagement:search", "Search by");
+                ?>"
+                                   onkeyup="selectFilter();" style="width:150px;float:left;">
+                                   <select name='searchType' id="searchType" onchange="selectFilter()" style="margin-left: 3px;">
+                                       <option value="0">Name</option>
+                                       <option value="1">Email</option>
+                                       <option value="4">Affliation</option>
+                                   </select>
+                                   <div style="display:inline;margin-left: 3px;"><div id="userCount" style="display:inline;"><strong><?php echo sizeof($user_data) ?></strong></div> participants</div>
+                            <br/>
+                        </div>
+                    </form><br>
+                    Sort By: <a href="#" onclick="sortDivs('0');">Name</a> | <a href="#" onclick="sortDivs('1');">Email</a> | <a href="#" onclick="sortDivs('4');">Affliation</a>
+</p>
+<div class="list-group list-group-root well" id="userlist">
   <?php foreach ($user_data as $value1): ?>
-    <a href="#item-<?php echo $value1['user_id'] ?>" class="list-group-item" data-toggle="collapse">
+    <div class="userlistitem">
+    <a href="#item-<?php echo $value1['user_id'] ?>" class="list-group-item useritem" data-toggle="collapse">
+      <input type="hidden" name="name" value="<?php echo $value1['family_name'].', '.$value1['given_name'] ?>"\>
+      <input type="hidden" name="email" value="<?php echo $value1['email'] ?>"\>
+      <input type="hidden" name="affliation" value="<?php echo $value1['affliation'] ?>"\>
       <?php echo $value1['family_name'] ?>, <?php echo $value1['given_name'] ?> (<?php echo $value1['email']; ?>)
       <span class="pull-right">
           <span class="glyphicon glyphicon-time margin-right margin-left"></span>
@@ -218,5 +246,115 @@ foreach ($user_data as $key => &$value) {
         </div>
       <?php endforeach; ?>
     </div>
+    </div>
   <?php endforeach; ?>
 </div>
+
+<script>
+  function selectFilter(){
+    var el = document.getElementById('searchType');
+    var i = el.options[el.selectedIndex].value;
+    filter(i);
+    var rows = document.getElementsByClassName("useritem").length;
+    var hidden = $('.useritem').filter(":hidden").size();
+    $("#userCount").html(rows-hidden); 
+  }
+
+  function filter(type){
+    var x = document.getElementsByClassName("useritem");
+    for (i = 0; i < x.length; i++) {
+      $(x[i]).show();
+      if(type==0){
+              var inputs = $(x[i]).find("input[name='name']");
+              var searchInput = document.getElementById("searchString");
+              if(inputs[0].value.toLowerCase().indexOf(searchInput.value.toLowerCase()) == -1){
+                $(x[i]).hide();
+              }
+      }else if(type==1){
+              var inputs = $(x[i]).find("input[name='email']");
+              var searchInput = document.getElementById("searchString");
+              if(inputs[0].value.toLowerCase().indexOf(searchInput.value.toLowerCase()) == -1){
+                $(x[i]).hide();
+              }
+      }else if(type==4){
+              var inputs = $(x[i]).find("input[name='affliation']");
+              var searchInput = document.getElementById("searchString");
+              if(inputs[0].value.toLowerCase().indexOf(searchInput.value.toLowerCase()) == -1){
+                $(x[i]).hide();
+              }
+      }else{
+              var inputs = $(x[i]).find("input[name='name']"); 
+              var searchInput = document.getElementById("searchString");
+              if(inputs[0].value.toLowerCase().indexOf(searchInput.value.toLowerCase()) == -1){
+                $(x[i]).hide();
+              }
+      }
+    }
+  }
+
+  var lastSortN = false;
+  var lastSortE = false;
+  var lastSortA = false;
+
+  function sortDivs(type){
+    var userlist = $('div .userlistitem');
+    var res = $(userlist).sort(function (a, b) {
+      if(type==0){
+        var contentA = $(a).find("input[name='name']").val(); 
+        var contentB = $(b).find("input[name='name']").val(); 
+        var t = (contentA.localeCompare(contentB));
+        if(lastSortN){
+          t  = t*-1;
+        }
+        return t;
+      }else if(type==1){
+        var contentA = $(a).find("input[name='email']").val(); 
+        var contentB = $(b).find("input[name='email']").val(); 
+        var t = (contentA.localeCompare(contentB));
+        if(lastSortE){
+          t  = t*-1;
+        }
+        return t;
+      }else if(type==4){
+        var contentA = $(a).find("input[name='affliation']").val(); 
+        var contentB = $(b).find("input[name='affliation']").val(); 
+
+        var contentAA = $(a).find("input[name='name']").val(); 
+        var contentBB = $(b).find("input[name='name']").val(); 
+        var t = (contentA.localeCompare(contentB));
+        if(lastSortA){
+          t  = t*-1;
+        }
+        if (t==0) return (contentAA.localeCompare(contentBB));
+        return t;
+      }else{
+        var contentA = $(a).find("input[name='name']").val(); 
+        var contentB = $(b).find("input[name='name']").val(); 
+        return (contentA.localeCompare(contentB));
+      }
+      
+   });
+  if(type==0){
+    if(lastSortN){
+      lastSortN = false;
+    }else{
+      lastSortN = true;
+    }
+  }else if(type==1){
+    if(lastSortE){
+      lastSortE = false;
+    }else{
+      lastSortE = true;
+    }
+  }else if(type==4){
+    if(lastSortA){
+      lastSortA = false;
+    }else{
+      lastSortA = true;
+    }
+  }
+  $("#userlist").html(res);
+  }
+</script>
+
+

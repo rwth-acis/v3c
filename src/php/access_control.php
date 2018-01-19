@@ -76,6 +76,12 @@ class AccessControl
         return $userManagement->getOrganization($_SESSION['sub']);
     }
 
+    public function getUser()
+    {
+        $userManagement = new UserManagement();
+        return $userManagement->readUser($_SESSION['sub']);
+    }
+
     /**
      * Evaluates the status of a authenticated user further (is it a tutor or not?)
      * @param Object $user A user object from our database

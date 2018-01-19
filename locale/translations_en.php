@@ -149,5 +149,13 @@ function getLanguage()
         "widget:type:video" => "video",
         "widget:type:hangout" => "video conference",
         "widget:type:feedback" => "feedback form",
+
+        "help:help" => "Help",
+        "help:importantLinks" => "Important Links",
+        "help:coursesDesc" => "A list of all the courses available.", 
+        "help:info" => "For more information visit",
+        "help:handbook" => "Handbook",
+        "help:handbookLink" => "EN",
+        "help:handbookDesc" => "A trainee handbook.",
     );
 }

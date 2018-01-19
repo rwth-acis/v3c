@@ -149,5 +149,13 @@ function getLanguage()
         "widget:type:video" => "video",
         "widget:type:hangout" => "Τηλεδιάσκεψη",
         "widget:type:feedback" => "Έντυπο ανατροφοδότησης",
+
+        "help:help" => "Βοήθεια",
+        "help:importantLinks" => "Σημαντικοί σύνδεσμοι",
+        "help:coursesDesc" => "Μια λίστα με όλα τα διαθέσιμα μαθήματα.", 
+        "help:info" => "Για περισσότερες πληροφορίες επισκεφθείτε",
+        "help:handbook" => "Εγχειρίδιο",
+        "help:handbookLink" => "GR",
+        "help:handbookDesc" => "Εγχειρίδιο Εκπαιδευόμενου.",
     );
 }

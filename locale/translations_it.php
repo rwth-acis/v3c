@@ -146,7 +146,15 @@ function getLanguage()
         "widget:type:slides" => "slides",
         "widget:type:video" => "video",
         "widget:type:hangout" => "video conferenza",
-        "widget:type:feedback" => "Modulo di feedback"
+        "widget:type:feedback" => "Modulo di feedback",
+
+        "help:help" => "Aiuto",
+        "help:importantLinks" => "Collegamenti importanti",
+        "help:coursesDesc" => "Un elenco di tutti i corsi disponibili.", 
+        "help:info" => "Per maggiori informazioni visita",
+        "help:handbook" => "Manuale",
+        "help:handbookLink" => "IT",
+        "help:handbookDesc" => "Manuale per i partecipanti.",
 
     );
 }

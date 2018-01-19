@@ -30,8 +30,8 @@ function getLanguage()
         "general:footer:erasmus" => "This project has been funded with support from the European Commission. This publication reflects the views only of the author, and the Commission cannot be held responsible for any use which may be made of the information contained therein.",
 
         "main:welcome:headline" => "Welcome to the V3C Project!",
-        "main:welcome:v3cgoal" => "The “Virtual Vocational Education and Training – VIRTUS” project will develop an innovative, fully functional virtual vocational education and training centre, which will provide appropriately designed modular certified courses in Modular Employable Skills (MES), corresponding to a wide range of circumstances such as regional growth potential and/or company restructuring and aiming at increasing the participation rate of adult learners in vocational education and training.",
-        "main:welcome:v3ccourses" => "In particular, the virtual VET center will provide two modular certified courses on:",
+        "main:welcome:v3cgoal" => "The “Virtual Vocational Education and Training – VIRTUS” project has developed an innovative, fully functional virtual vocational education and training centre, which provides appropriately designed modular certified courses in Modular Employable Skills (MES), corresponding to a wide range of circumstances such as regional growth potential and/or company restructuring and aims at increasing the participation rate of adult learners in vocational education and training.",
+        "main:welcome:v3ccourses" => "In particular, the virtual VET centre provides two modular certified courses on:",
         "main:welcome:tourism" => "Tourism and Hospitality Services",
         "main:welcome:social" => "Social Entrepreneurship",
         "main:welcome:courses" => "Courses",

@@ -89,7 +89,7 @@
                       <li><a href='../php/phpbb_redirect.php'><?php echo getTranslation("general:button:forum", "Forum");?></a></li>
                     <?php endif; ?>
                     <?php if (isset($_SESSION['access_token'])): ?>
-                        <form method="post" target="_blank" id="formID" style="float:left;" action="https://www.iscn.com/projects/piconew_skill_portal/capadv/virtus_login.php?oidc=<?php echo $_SESSION["access_token"]; ?>&org=<?php echo $accessControl->getUserOrganization()->name;?>" >
+                        <form method="post" target="_blank" id="formID" style="float:left;" action="https://www.iscn.com/projects/piconew_skill_portal/capadv/virtus_login.php?oidc=<?php echo $_SESSION["access_token"]; ?>&org=<?php echo $accessControl->getUserOrganization()->name;?>&firstname=<?php echo $accessControl->getUser()->given_name;?>&lastname=<?php echo $accessControl->getUser()->family_name;?>&email=<?php echo $accessControl->getUser()->email;?>" >
                             <li><a href="javascript:void(0);" onclick="$(this).closest('form').submit();"><?php echo getTranslation("general:button:LoginToECQA", "Login to ECQA");?></a></li>
                         </form>
                     <?php endif; ?>

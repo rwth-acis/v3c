@@ -39,7 +39,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-8">
-                            <h1>Help</h1>
+                            <h1>'.getTranslation("help:help", "Help").'</h1>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@ if (filter_input(INPUT_GET, "widget") == "true") {
     <div class="row">
         <!-- main content -->
         <section class="col-sm-8 maincontent">
-              <h4>Work in progress. <br>See <a href="http://virtus-project.eu/">http://virtus-project.eu</a>.</h4>
+              <h4><iframe width="728" height="410" src="https://www.youtube.com/embed/VyAjm3S7OdQ?rel=0" frameborder="0" allowfullscreen></iframe> <br><?php echo getTranslation("help:info", "For more information visit");?> <a href="http://virtus-project.eu/">http://virtus-project.eu</a>.</h4>
         </section>
         <!-- /main -->
 
@@ -62,18 +62,20 @@ if (filter_input(INPUT_GET, "widget") == "true") {
         <aside class="col-sm-4 sidebar sidebar-right">
 
             <div class="panel">
-                <h4>Important Links</h4>
+                <h4><?php echo getTranslation("help:importantLinks", "Important Links");?></h4>
                 <ul class="list-unstyled list-spaces">
                     <?php
                     //Decide if this site is inside a separate widget
                     if (filter_input(INPUT_GET, "widget") == "true") {
                         ?>
-                        <li><a href="subjects.php?widget=true">Courses</a><br>
-                            <span class="small text-muted">A list of all the courses available</span></li>
+                        <li><a href="subjects.php?widget=true"><?php echo getTranslation("general:button:courses", "Courses");?></a><br>
+                            <span class="small text-muted"><?php echo getTranslation("help:coursesDesc", "A list of all the courses available");?></span></li>
                     <?php } else { ?>
-                        <li><a href="subjects.php">Courses</a><br>
-                            <span class="small text-muted">A list of all the courses available</span></li>
+                        <li><a href="subjects.php"><?php echo getTranslation("general:button:courses", "Courses");?></a><br>
+                            <span class="small text-muted"><?php echo getTranslation("help:coursesDesc", "A list of all the courses available.");?></span></li>
                     <?php } ?>
+                    <li><a href="../media/slides/VIRTUS_R4.5_handbook_<?php echo getTranslation("help:handbookLink", "EN");?>.pdf"><?php echo getTranslation("help:handbook", "Handbook");?></a><br>
+                            <span class="small text-muted"><?php echo getTranslation("help:handbookDesc", "A trainee handbook.");?></span></li>
                 </ul>
             </div>
 

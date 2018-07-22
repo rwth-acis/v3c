@@ -167,7 +167,7 @@ class RoleAPI {
       $location = trim($this->get_string_between($result."\n","Location: ","\n"));
       if (!curl_errno($ch)) {
         switch ($http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
-          case 201:  # OK
+          case 200:  # OK
           $this->setActivityName($location,$name);
           return $location;
           break;
